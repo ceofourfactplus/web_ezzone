@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Payer, Stock, Invoice, OrderToBuy, Supplier, Unit, StockTrance, InvoiceDetail
+from .models import Category, Payer, Stock, Invoice, Supplier, Unit, StockTrance, InvoiceDetail
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -76,15 +76,3 @@ class InvoiceDetailSerializer(serializers.ModelSerializer):
         model = InvoiceDetail
         fields = ['id', 'invoice_id', 'stock_id', 'price', 'total_price', 'amount', 'remark', 'discount', 'create_at',
                   'create_by_id', 'update_at', 'update_by_id', 'supplier_id', 'supplier_set', 'invoice_set', 'stock_set']
-
-
-class OrderToBuySerializer(serializers.ModelSerializer):
-    stock_id = serializers.IntegerField()
-    stock_set = StockSerializer(read_only=True, source="stock")
-    invoice_id = serializers.IntegerField()
-    invoice_set = InvoiceSerializer(read_only=True, source="inovice")
-
-    class Meta:
-        model = OrderToBuy
-        fields = ['id', 'stock_id', 'stock_set', 'invoice_id',
-                  'invoice_set', 'amount', 'min_price', 'max_price']

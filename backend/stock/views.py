@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import Category, Invoice, OrderToBuy, Payer, Stock, StockTrance, Supplier, Unit, StockTrance, InvoiceDetail
-from .serializers import CategorySerializer, InvoiceSerializer, OrderToBuySerializer, PayerSerializer, StockSerializer, SupplierSerializer, StockTranceSerializer, UnitSerializer, InvoiceDetailSerializer
+from .models import Category, Invoice, Payer, Stock, StockTrance, Supplier, Unit, StockTrance, InvoiceDetail
+from .serializers import CategorySerializer, InvoiceSerializer, PayerSerializer, StockSerializer, SupplierSerializer, StockTranceSerializer, UnitSerializer, InvoiceDetailSerializer
 # Create your views here.
 
 
@@ -58,22 +58,23 @@ class StockListAPIView(APIView):
 
     def post(self, request):
         if Category.objects.filter(name=request.data['category']).exists():
-            category_id = Category.objects.get(name = request.data['category']).id
+            category_id = Category.objects.get(
+                name=request.data['category']).id
         else:
             new_category = Category.objects.create(
-                name = request.data['category']
+                name=request.data['category']
             )
             print(new_category.id)
             category_id = new_category.id
-        if Unit.objects.filter(unit = request.data['unit']).exists():
+        if Unit.objects.filter(unit=request.data['unit']).exists():
             unit_id = Unit.objects.get(unit=request.data['unit']).id
         else:
             new_unit = Unit.objects.create(unit=request.data['unit'])
-            print(new_unit) 
+            print(new_unit)
             unit_id = new_unit.id
 
-        if Stock.objects.filter(code = request.data['code']).exists():
-            return Response('has been taked ',status=400)
+        if Stock.objects.filter(code=request.data['code']).exists():
+            return Response('has been taked ', status=400)
         request.data['unit_id'] = unit_id
         request.data['category_id'] = category_id
         serializer = StockSerializer(data=request.data)
@@ -278,49 +279,6 @@ class StockTranceDetailAPIView(APIView):
         stock_trance.delete()
         return Response(status=204)
 
-
-class OrderToBuyListAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        ordertobuy = OrderToBuy.objects.all()
-        serializer = OrderToBuySerializer(ordertobuy, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = OrderToBuySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-class OrderToBuyDetailAPIView(APIView):
-    def get_object(self, pk):
-        try:
-            return OrderToBuy.objects.get(pk=pk)
-        except OrderToBuy.DoesNotExist:
-            raise 404
-
-    def get(self, request, pk):
-        order_to_buy = self.get_object(pk)
-        serializer = OrderToBuySerializer(order_to_buy)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        order_to_buy = self.get_object(pk)
-        serializer = OrderToBuySerializer(order_to_buy, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
-    def delete(self, request, pk):
-        order_to_buy = self.get_object(pk)
-        order_to_buy.delete()
-        return Response(status=204)
-
-
 class InvoiceDetailListAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -383,7 +341,6 @@ class DeleteAllDataAPIView(APIView):
         Payer.objects.all().delete()
         Invoice.objects.all().delete()
         InvoiceDetail.objects.all().delete()
-        OrderToBuy.objects.all().delete()
         return Response('ok')
 
 
@@ -407,16 +364,32 @@ class CategoryFilter(APIView):
             category = Category.objects.filter(name__contains=q)
         else:
             category = Category.objects.all()[:5]
-        serializer = CategorySerializer(category,many=True)
+        serializer = CategorySerializer(category, many=True)
         print(serializer.data)
         return Response(serializer.data)
-    
+
+
 class UnitFil(APIView):
-    def get(self,request,q):
+    def get(self, request, q):
         if Unit.objects.filter(unit__contains=q).exists:
             unit = Unit.objects.filter(unit__contains=q)
-        else: 
+        else:
             unit = Unit.objects.all()
 
-        serializer = UnitSerializer(unit,many=True)
+        serializer = UnitSerializer(unit, many=True)
+        return Response(serializer.data)
+
+
+class StockFrequency(APIView):
+    def get(self, request, stock_id):
+            stocktrance = StockTrance.objects.filter(
+            create_at__month__gte=1, stock_id=stock_id)
+            serializer = StockTranceSerializer(stocktrance, many=True)
+            return Response(serializer.data)
+
+from django.db.models import F
+class ToBuyStock(APIView):
+    def get(self, request):
+        all_stock = Stock.objects.filter(balance__lte=F('minstock'))
+        serializer = StockSerializer(all_stock,many=True)
         return Response(serializer.data)

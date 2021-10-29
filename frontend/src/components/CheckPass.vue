@@ -42,7 +42,6 @@
                     v-model="username"
                     class="form-control"
                     id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
                   />
                 </div>
               </div>

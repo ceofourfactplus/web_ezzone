@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 import axios from "axios";
 import auth from "./modules/auth"
-
+import stock from "./modules/stock"
 export default createStore({
   state: {
     stock_data: [],
@@ -10,10 +10,22 @@ export default createStore({
     payer_data: [],
     OrderToBuy: [],
     stock_select:{
-      name: true
+      name: true,
+      minstock: true,
+      balance: true,
+      avg_price: true,
+      max_price: true,
+      min_price: true,
+      code: true,
+      category_set:{
+        name: true,
+      },
+      id:1,
     },
     confirm_pass:false,
     modal_id:'',
+    chart_pickup_data: [],
+    chart_dates_data: [],
   },
   mutations: {
     updateStock(state, { stock }) {
@@ -61,5 +73,6 @@ getters: {
   },
   modules: {
     auth,
+    stock
   },
 });

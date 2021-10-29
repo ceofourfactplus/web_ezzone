@@ -8,6 +8,7 @@ class ProductCategoryList(APIView):
     def get(self, request):
         category = ProductCategory.objects.all()
         serializer = ProductCategorySerializer(category, many=True)
+        print(serializer.data)
         return Response(serializer.data)
 
     def post(self, request):

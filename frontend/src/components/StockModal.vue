@@ -310,7 +310,6 @@ export default {
           this.query_unit = response.data;
         });
       }
-      console.log(this.category);
     },
   },
 };

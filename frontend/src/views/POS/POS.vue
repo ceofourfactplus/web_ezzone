@@ -1,74 +1,40 @@
 <template>
-  <div class="home">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">EZ zone</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">see order</a>
-            </li>
-            <li class="nav-item">
-              <div
-                data-bs-spy="scroll"
-                data-bs-offset="0"
-                class="scrollspy-example"
-                tabindex="0"
-                v-for="category in categories"
-                :key="category.id"
-              >
-                <button class="btn-warning btn">{{ category.category }}</button>
-              </div>
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
+  <div class="container" id="sd">
+    <NavbarPOS />
+    <div class="row" style="background-color: rgb(253, 255, 151); height: 20vw">
+      <div class="col-7" style="background-color: rgb(32, 2, 221)">
+        <div class="card m-2" style="width: 17vw">
+          <img src="" class="card-img-top" alt="" />
+          <div class="card-body">
+            <h5 class="card-title">ชานมไข่มุก</h5>
+            <p id="price" class="card-text">
+              <span>ราคา</span> <span>19.00บาท</span>
+            </p>
+            <div class="btn-group" style="width: 100%;">
+              <button class="btn btn-warning">add</button>
+              <button class="btn btn-success">topping</button>
+            </div>
+          </div>
         </div>
+        <card-product/>
       </div>
-    </nav>
-    
+      <div class="col-5" style="background-color: rgb(253, 25, 11)"></div>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from "axios"
+import CardProduct from '../../components/CardProduct.vue';
+import NavbarPOS from "../../components/NavPOS.vue";
 
 export default {
-  name: "Home",
-  data() {
-    return {
-      categories:[]
-    };
-  },
-  methods:{
-    getCategory(){
-      axios.get('http://127.0.0.1:8000/product/category/').then((response)=>{
-        this.category = response.data
-      })
-    }
-  },
-  moundted(){
-    this.getCategory()
-  }
+  components: { NavbarPOS, CardProduct },
+  name: "POS",
 };
 </script>
+
+<style scoped>
+#price{
+  white-space: nowrap;
+}
+</style>

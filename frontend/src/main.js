@@ -5,7 +5,6 @@ import store from "./store"
 import 'bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons';
 
-
 createApp(App)
   .use(store)
   .use(router)

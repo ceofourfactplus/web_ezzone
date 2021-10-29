@@ -81,6 +81,7 @@ class Product(models.Model):
         (ABLE,'able'),
         (DISABLE,'disable')
     )
+    img = models.FileField(upload_to='images/',null=True,blank=True)
     status = models.IntegerField(choices=STATUS,default=ABLE)
     number = models.IntegerField(),
     name = models.CharField(max_length=100)

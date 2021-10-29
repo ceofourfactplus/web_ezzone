@@ -53,7 +53,6 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="name"
                   placeholder="name@example.com"
                   v-model="name"
                 />

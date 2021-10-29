@@ -100,11 +100,3 @@ class InvoiceDetail(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="invoice_detail_create_by")
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="invoice_detail_update_by", blank=True)
-
-
-class OrderToBuy(models.Model):
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-    amount = models.IntegerField()
-    min_price = models.DecimalField(max_digits=10, decimal_places=2)
-    max_price = models.DecimalField(max_digits=10, decimal_places=2)

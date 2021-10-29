@@ -1,4 +1,5 @@
 <template>
+<div>
   <nav
     class="
       navbar navbar-expand-lg navbar-dark
@@ -159,12 +160,31 @@
       </div>
     </div>
   </nav>
+  <modal-invoice />
+    <modal-inventory />
+    <modal-supplier />
+    <modal-payer />
+    <unit-modal />
+</div>
+  
 </template>
 
 <script>
+import ModalInvoice from "./InvoiceModal.vue";
+import ModalInventory from "./StockModal.vue";
+import ModalSupplier from "./SupplierModal.vue";
+import ModalPayer from "./PayerModal.vue";
+import UnitModal from "./UnitModal.vue";
 import {mapState} from 'vuex'
 export default {
   name: "NavbarStock",
-  computed: mapState(["auth"])
+  computed: mapState(["auth"]),
+  components: {
+    ModalInvoice,
+    ModalInventory,
+    ModalSupplier,
+    ModalPayer,
+    UnitModal,
+  },
 };
 </script>

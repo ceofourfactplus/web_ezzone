@@ -94,17 +94,6 @@ export default {
                     );
                   });
                 axios
-                  .get("http://127.0.0.1:8000/stock/order-to-buy/", headers)
-                  .then((response) => {
-                    context.commit(
-                      "updateOrderToBuy",
-                      {
-                        order: response.data,
-                      },
-                      { root: true }
-                    );
-                  });
-                axios
                   .get("http://127.0.0.1:8000/stock/supplier/", headers)
                   .then((response) => {
                     context.commit(
