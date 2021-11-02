@@ -2,7 +2,13 @@ from product.models import ProductCategory,SaleChannel,Topping,TypeTopping,Price
 from product.serializers import ProductCategorySerializer,SaleChannelSerializer,ToppingSerializer,TypeToppingSerializer,PriceToppingSerializer,TableToppingSerializer,PriceProductSerializer,ProductSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+# from rest_framework import status
+from django.core.files.storage import FileSystemStorage
+import os
+# from django.conf import settings
+import urllib
+
+from .forms import *
 
 class ProductCategoryList(APIView):
     def get(self, request):
@@ -274,10 +280,11 @@ class PriceProductDetail(APIView):
 class ProductList(APIView):
     def get(self, request):
         object = Product.objects.all()
+
         serializer = ProductSerializer(object, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request): 
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -308,3 +315,38 @@ class ProductDetail(APIView):
         object = self.get_object(pk)
         object.delete()
         return Response(status=204)
+
+
+# class SaveImg(APIView):
+#     def post(self, request):
+#         print(request.data['name'])
+#         deliname = request.data['name']
+#         file = request.FILES.get('file')
+#         print(file.name)
+#         # file.name = file.name.replace(file.name.split('.')[0], deliname)
+#         fss = FileSystemStorage()
+#         # file_not_found = True
+#         names = []
+#         lastname = []
+#         for img_file in os.listdir('media'):
+#             if os.path.isfile(os.path.join('media', img_file)):
+#                 names.append(img_file.split('.')[0])
+#                 lastname.append(img_file.split('.')[1])
+#             if deliname in names:
+#                 # os.remove(os.path.join(settings.MEDIA_ROOT,
+#                 #                     urllib.parse.unquote(deliname) + '.' + lastname[names.index(deliname)]))
+#                 # filename = fss.save(urllib.parse.unquote(file.name.split('.')[
+#                 #     0] + '.' + file.name.split('.')[1]), file)
+#                 # url = fss.url(filename)
+#                 # maping = Product.objects.get(delivery_locate=deliname)
+#                 # maping.image = url
+#                 # maping.save()
+#                 # file_not_found = False
+#                 return Response('this img name is already')
+            
+#         # if file_not_found:
+#         filename = fss.save(urllib.parse.unquote(file.name.split('.')[
+#             0] + '.' + file.name.split('.')[1]), file)
+#         url = fss.url(filename)
+#         Product.objects.create(img=url,)
+#         return Response({"link": url})

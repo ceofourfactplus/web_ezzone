@@ -2,13 +2,7 @@ from django.db import models
 from backend.settings import AUTH_USER_MODEL
 
 class ProductCategory(models.Model):
-    ABLE = '1'
-    DISABLE = '0'
-    STATUS = (
-        (ABLE,'true'),
-        (DISABLE,'false')
-    )
-    status = models.IntegerField(choices=STATUS,default=ABLE)
+    status = models.BooleanField(default=True)
     category = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now_add=True)
@@ -81,7 +75,8 @@ class Product(models.Model):
         (ABLE,'able'),
         (DISABLE,'disable')
     )
-    img = models.FileField(upload_to='images/',null=True,blank=True)
+    # img_name = models.CharField(max_length=1000)
+    img_add = models.ImageField(upload_to='images/',null=True,blank=True)
     status = models.IntegerField(choices=STATUS,default=ABLE)
     number = models.IntegerField(),
     name = models.CharField(max_length=100)

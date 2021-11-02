@@ -1,9 +1,9 @@
 <template>
-  <div class="body" style="width: 17vw; margin:8px;">
-    <img src="" alt="" />
+  <div class="card m-1" style="width: 16vw">
+    <img src="https://thaipbs-world.s3.ap-southeast-1.amazonaws.com/thaipbsworld/wp-content/uploads/2019/07/12125756/bubble-milk-tea-1.jpg" class="card-img-top" alt="" />
     <div class="card-body">
-      <div class="card-title">ชานมไข่มุก</div>
-      <p class="price">
+      <h5 class="card-title">ชานมไข่มุก</h5>
+      <p id="price" class="card-text">
         <span>ราคา</span> <span>19.00บาท</span>
       </p>
       <div class="btn-group" style="width: 100%">
@@ -19,8 +19,4 @@ export default {};
 </script>
 
 <style scoped>
-.body {
-  background-color: white;
-  border-radius: 4px;
-}
 </style>

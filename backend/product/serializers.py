@@ -1,4 +1,3 @@
-from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.exceptions import server_error
 from product.models import ProductCategory, SaleChannel, Topping, TypeTopping, PriceTopping, TableTopping, Product, PriceProduct
@@ -6,7 +5,7 @@ from product.models import ProductCategory, SaleChannel, Topping, TypeTopping, P
 class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductCategory
-        fields = ['id','category']
+        fields = ['id','category','create_by','update_by','status']
 
 class SaleChannelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,4 +42,4 @@ class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ['id','status','number','category','type_topping']
+        fields = ['id','status','name','img_add','number','category','type_topping']

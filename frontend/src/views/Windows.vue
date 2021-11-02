@@ -78,7 +78,7 @@
             </div>
           </div>
           <div class="card-footer">
-            <router-link class="btn btn-danger" :to="{ name: 'MainCreate' }">
+            <router-link class="btn btn-danger" :to="{name:'SelectApp'}">
               GO to Product page
             </router-link>
           </div>
@@ -91,5 +91,10 @@
 <script>
 export default {
   name: "Windows",
+  methos:{
+    ToProduct(){
+      this.router.push("/products")
+    }
+  }
 };
 </script>

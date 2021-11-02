@@ -10,6 +10,11 @@ import Register from "../views/Register.vue";
 import AllStock from "../views/Stock/AllStock.vue";
 import ToBuy from "../views/Stock/ToBuy.vue"
 import store from "../store";
+import Product from "../views/Product/Product.vue"
+import Topping from "../views/Product/Topping.vue"
+import SetTopping from "../views/Product/SetTopping.vue"
+import SaleChannel from "../views/Product/SaleChannel.vue"
+import SelectApp from "../views/Product/SelectApp.vue"
 const routes = [
   {
     path: "/",
@@ -28,10 +33,36 @@ const routes = [
     },
     children: [
       {
-        name: "Categpry",
+        name: "Category",
         path: "/category",
         component: Category,
+        params: {text:'category'}
+      },{
+        name: "Topping",
+        path: "/topping",
+        component: Topping,
+        params: {text:'topping'}
+      },{
+        name: "Product",
+        path: "/product",
+        component: Product,
+        params: {text:'product'}
+      },{
+        name: "SaleChannel",
+        path: "/sale-channel",
+        component: SaleChannel,
+        params: {text:'sale-channel'}
+      },{
+        name: "SetTopping",
+        path: "/set-topping",
+        component: SetTopping,
+        params: {text:'set-topping'}
       },
+      { 
+        name:"SelectApp",
+        path:'/',
+        component: SelectApp,
+      }
     ],
   },
   {

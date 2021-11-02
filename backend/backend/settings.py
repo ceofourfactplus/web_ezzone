@@ -148,3 +148,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'testezzone@gmail.com' 
 EMAIL_HOST_PASSWORD = 'ezzone2021'
 DEFAULT_FROM_EMAIL = 'testezzone@gmail.com'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')

@@ -2,6 +2,9 @@ import { createStore } from "vuex";
 import axios from "axios";
 import auth from "./modules/auth"
 import stock from "./modules/stock"
+import product from "./modules/product"
+
+
 export default createStore({
   state: {
     stock_data: [],
@@ -73,6 +76,7 @@ getters: {
   },
   modules: {
     auth,
-    stock
+    stock,
+    product,
   },
 });

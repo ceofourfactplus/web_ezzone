@@ -1,6 +1,6 @@
 <template>
   <div id="list-category">
-    <table class="table table-dark">
+    <table class="table table-dark fw-bold fs-5">
       <thead>
         <tr>
           <th>#</th>
@@ -14,39 +14,58 @@
           <td>{{ index + 1 }}</td>
           <td>{{ category.category }}</td>
           <td>
-            <div class="form-check form-switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                :value="category.status"
-                id="flexSwitchCheckDefault"
-              />
-            </div>
+            <Switch :value="category.status" :index="index" @input="Switch" />
           </td>
           <td>
-            <button class="btn btn-warning"><i class="fas fa-arrow-alt-circle-up"></i>update</button>
-						<button class="btn btn-danger"><i class="fas fa-trash-alt"></i>delete</button>
+            <div class="btn-group">
+              <button class="btn btn-warning">
+                <i class="fas fa-arrow-alt-circle-up"></i>update
+              </button>
+              <button class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i>delete
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
-
+    <category-create />
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import CategoryCreate from "../../components/CategoryCreate.vue";
+import Switch from "../../components/switch.vue";
 export default {
-	name:"Category",  
-	data(){
-		return{
-			categories:[]
-		}
-	}
+  components: { CategoryCreate, Switch },
+  name: "Category",
+  data() {
+    return {
+      categories: [],
+    };
+  },
+  mounted() {
+    axios.get("http://127.0.0.1:8000/product/category/").then((response) => {
+      this.categories = response.data;
+    });
+  },
+  methods: {
+    Switch(value, index) {
+      this.categories[index].status = value;
+      console.log(value);
+    },
+  },
 };
 </script>
 
 <style>
-.scroll{
-	scroll-behavior: smooth;
+.scroll {
+  scroll-behavior: smooth;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 </style>

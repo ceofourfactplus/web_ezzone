@@ -8,9 +8,7 @@
     "
   >
     <div class="container">
-      <router-link class="navbar-brand" :to="{ name: 'Home' }"
-        >EZ zone</router-link
-      >
+      <logo/>
       <button
         class="navbar-toggler"
         type="button"
@@ -134,28 +132,7 @@
               </button>
             </form>
           </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {{ $store.state.auth.userInfo.first_name }}
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-dark"
-              aria-labelledby="navbarDropdown"
-            >
-              <li class="dropdown-item" v-if="$store.state.auth.accessToken != null">
-                <router-link class="nav-link fw-bold" :to="{ name: 'Logout' }"
-                  >Log out</router-link
-                >
-              </li>
-            </ul>
-          </li>
+          <nav-user/>
         </ul>
       </div>
     </div>
@@ -176,6 +153,8 @@ import ModalSupplier from "./SupplierModal.vue";
 import ModalPayer from "./PayerModal.vue";
 import UnitModal from "./UnitModal.vue";
 import {mapState} from 'vuex'
+import NavUser from './NavUser.vue';
+import logo from './Logo.vue';
 export default {
   name: "NavbarStock",
   computed: mapState(["auth"]),
@@ -185,6 +164,8 @@ export default {
     ModalSupplier,
     ModalPayer,
     UnitModal,
+    NavUser,
+    logo
   },
 };
 </script>
