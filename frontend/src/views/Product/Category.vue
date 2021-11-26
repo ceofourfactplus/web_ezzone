@@ -1,60 +1,43 @@
 <template>
   <div id="list-category">
-    <table class="table table-dark fw-bold fs-5">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Category</th>
-          <th>able</th>
-          <th>edit/delete</th>
-        </tr>
-      </thead>
-      <tbody class="scroll">
-        <tr v-for="(category, index) in categories" :key="category.id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ category.category }}</td>
-          <td>
-            <Switch :value="category.status" :index="index" @input="Switch" />
-          </td>
-          <td>
-            <div class="btn-group">
-              <button class="btn btn-warning">
-                <i class="fas fa-arrow-alt-circle-up"></i>update
-              </button>
-              <button class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i>delete
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <category-create />
+    <category-table :categories="categories" @reload="reloadCategories()"/> 
+    <category-create @reload="reloadCategories()" />
+    <cate-update :category="select_category" @save="reloadCategories()" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import CategoryCreate from "../../components/CategoryCreate.vue";
-import Switch from "../../components/switch.vue";
+import CategoryCreate from "../../components/products/category/Create.vue";
+import CateUpdate from "../../components/products/category/Update.vue";
+import CategoryTable from "../../components/products/category/Table.vue"
+
 export default {
-  components: { CategoryCreate, Switch },
+  components: { CategoryCreate, CateUpdate, CategoryTable },
   name: "Category",
   data() {
     return {
       categories: [],
+      load: false,
+      select_category: "",
     };
   },
   mounted() {
-    axios.get("http://127.0.0.1:8000/product/category/").then((response) => {
-      this.categories = response.data;
-    });
+    this.reloadCategories();
   },
   methods: {
-    Switch(value, index) {
-      this.categories[index].status = value;
-      console.log(value);
+    reloadCategories() {
+      axios.get("http://127.0.0.1:8000/product/category/").then((response) => {
+        this.categories = response.data;
+      });
     },
+    DeleteCategory(id) {
+      axios.delete("http://127.0.0.1:8000/product/category/"+id+ "/").then(()=>{this.reloadCategories()})
+    },
+    // showModal() {
+    //   var myModal = bootstrap.Modal(document.getElementById("createModal"));
+    //   myModal.show();
+    // },
   },
 };
 </script>

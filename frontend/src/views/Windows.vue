@@ -24,7 +24,7 @@
           <div class="card-footer">
             <router-link
               class="btn btn-danger"
-              :to="{ name: 'AllStock' }"
+              :to="{ path: '/all-stock' }"
             >
               GO to Stock Page
             </router-link>

@@ -12,14 +12,13 @@
       <span class="toggle-indicator" :style="indicatorStyles" />
     </span>
     <span class="ms-2"> {{ able() }}</span>
-    
   </div>
 </template>
 
 <script>
 export default {
   name: "switch",
-  props: ["value", "index"],
+  props: ["value", "id"],
   computed: {
     backgroundStyles() {
       return {
@@ -33,10 +32,10 @@ export default {
   },
   methods: {
     toggle() {
-      this.$emit("input", !this.value, this.index);
+      this.$emit("input", !this.value, this.id);
     },
     able() {
-      if (this.value == true)return 'ABLE'
+      if (this.value == true)return 'AVAILABLE'
       if (this.value == false)return 'DISABLE'
     }
   },

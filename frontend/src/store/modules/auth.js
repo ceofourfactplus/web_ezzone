@@ -7,9 +7,9 @@ export default {
     confirm_pass: false,
     refreshToken: null,
     userInfo: "",
-    error_login:{
+    error_login: {
       boolean: false,
-      text: ''
+      text: "",
     },
   },
   mutations: {
@@ -30,87 +30,86 @@ export default {
   },
   actions: {
     userLogin(context, usercredentials) {
-      axios
+      return axios
         .post("http://127.0.0.1:8000/auth/is-active/", {
           username: usercredentials.username,
-          password: usercredentials.password
+          password: usercredentials.password,
         })
         .then(() => {
-          return new Promise((resolve) => {
-            axios
-              .post("http://127.0.0.1:8000/api-token/", {
-                username: usercredentials.username,
-                password: usercredentials.password,
-              })
-              .then((response) => {
-                context.commit("newToken", {
-                  access: response.data.access,
-                  refresh: response.data.refresh,
-                });
-                const headers = {
-                  headers: {
-                    Authorization: `Bearer ${response.data.access}`,
-                  },
-                };
-
-                axios
-                  .get("http://127.0.0.1:8000/auth/user-info/", headers)
-                  .then((response) => {
-                    context.commit("updateUserInfo", {
-                      userInfo: response.data,
-                    });
-                  });
-                axios
-                  .get("http://127.0.0.1:8000/stock/stock/", headers)
-                  .then((response) => {
-                    context.commit(
-                      "updateStock",
-                      {
-                        stock: response.data,
-                      },
-                      { root: true }
-                    );
-                  });
-                axios
-                  .get("http://127.0.0.1:8000/stock/unit/", headers)
-                  .then((response) => {
-                    context.commit(
-                      "updateUnit",
-                      {
-                        unit: response.data,
-                      },
-                      { root: true }
-                    );
-                  });
-                axios
-                  .get("http://127.0.0.1:8000/stock/payer/", headers)
-                  .then((response) => {
-                    context.commit(
-                      "updatePayer",
-                      {
-                        payer: response.data,
-                      },
-                      { root: true }
-                    );
-                  });
-                axios
-                  .get("http://127.0.0.1:8000/stock/supplier/", headers)
-                  .then((response) => {
-                    context.commit(
-                      "updateSupplier",
-                      {
-                        supplier: response.data,
-                      },
-                      { root: true }
-                    );
-                  });
+          return axios
+            .post("http://127.0.0.1:8000/api-token/", {
+              username: usercredentials.username,
+              password: usercredentials.password,
+            })
+            .then((response) => {
+              console.log("2");
+              context.commit("newToken", {
+                access: response.data.access,
+                refresh: response.data.refresh,
               });
-            resolve();
-          });
-        }).catch((error) => {
-          context.state.error_login.text = error
-          context.state.error_login.boolean = true;
+              const headers = {
+                headers: {
+                  Authorization: `Bearer ${response.data.access}`,
+                },
+              };
+
+              axios
+                .get("http://127.0.0.1:8000/auth/user-info/", headers)
+                .then((response) => {
+                  context.commit("updateUserInfo", {
+                    userInfo: response.data,
+                  });
+                });
+              axios
+                .get("http://127.0.0.1:8000/stock/stock/", headers)
+                .then((response) => {
+                  context.commit(
+                    "updateStock",
+                    {
+                      stock: response.data,
+                    },
+                    { root: true }
+                  );
+                });
+              axios
+                .get("http://127.0.0.1:8000/stock/unit/", headers)
+                .then((response) => {
+                  context.commit(
+                    "updateUnit",
+                    {
+                      unit: response.data,
+                    },
+                    { root: true }
+                  );
+                });
+              axios
+                .get("http://127.0.0.1:8000/stock/payer/", headers)
+                .then((response) => {
+                  context.commit(
+                    "updatePayer",
+                    {
+                      payer: response.data,
+                    },
+                    { root: true }
+                  );
+                });
+              axios
+                .get("http://127.0.0.1:8000/stock/supplier/", headers)
+                .then((response) => {
+                  context.commit(
+                    "updateSupplier",
+                    {
+                      supplier: response.data,
+                    },
+                    { root: true }
+                  );
+                });
+            });
         })
+        .catch((error) => {
+          context.state.error_login.text = error;
+          context.state.error_login.boolean = true;
+        });
     },
     userLogout(context) {
       if (context.getters.loggedIn) {
@@ -141,7 +140,7 @@ export default {
       return state.accessToken != null;
     },
     error_login(state) {
-      return state.error_login
-    }
+      return state.error_login;
+    },
   },
 };

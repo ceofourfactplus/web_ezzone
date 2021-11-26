@@ -1,5 +1,13 @@
 from django.db import models
+from django.db.models.query_utils import Q
 from backend.settings import AUTH_USER_MODEL
+from django.utils.translation import gettext_lazy as _ 
+
+def upload_to_product(instance,filename):
+    return 'product/{filename}'.format(filename=filename)
+
+def upload_to_topping(instance,filename):
+    return 'topping/{filename}'.format(filename=filename)
 
 class ProductCategory(models.Model):
     status = models.BooleanField(default=True)
@@ -12,13 +20,7 @@ class ProductCategory(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_update_by")
     
 class SaleChannel(models.Model):
-    ABLE = '1'
-    DISABLE = '0'
-    STATUS = (
-        (ABLE,'able'),
-        (DISABLE,'disable')
-    )
-    status = models.IntegerField(choices=STATUS,default=ABLE)
+    status = models.BooleanField(default=True)
     sale_channel = models.CharField(max_length=100)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sale_channel_create_by")
@@ -27,13 +29,10 @@ class SaleChannel(models.Model):
 
 
 class Topping(models.Model):
-    ABLE = '1'
-    DISABLE = '0'
-    STATUS = (
-        (ABLE,'able'),
-        (DISABLE,'disable')
-    )
-    status = models.IntegerField(choices=STATUS,default=ABLE)
+
+    code = models.CharField(max_length=30)
+    status = models.BooleanField(default=True)
+    img = models.ImageField(_("Image"), upload_to=upload_to_topping ,default='topping/default.png')
     name = models.CharField(max_length=50)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="topping_create_by")
@@ -50,6 +49,7 @@ class TypeTopping(models.Model):
 
 
 class PriceTopping(models.Model):
+    status = models.BooleanField(default=True)
     topping = models.ForeignKey(Topping,on_delete=models.CASCADE)
     sale_channel = models.ForeignKey(SaleChannel,on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10,decimal_places=2)
@@ -61,7 +61,7 @@ class PriceTopping(models.Model):
 
 class TableTopping(models.Model):
     topping = models.ForeignKey(Topping,on_delete=models.CASCADE)
-    sale_channel = models.ForeignKey(SaleChannel,on_delete=models.CASCADE)
+    type_topping = models.ForeignKey(TypeTopping,on_delete=models.CASCADE)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="table_topping_create_by")
     update_by = models.ForeignKey(
@@ -75,10 +75,9 @@ class Product(models.Model):
         (ABLE,'able'),
         (DISABLE,'disable')
     )
-    # img_name = models.CharField(max_length=1000)
-    img_add = models.ImageField(upload_to='images/',null=True,blank=True)
-    status = models.IntegerField(choices=STATUS,default=ABLE)
-    number = models.IntegerField(),
+    img = models.ImageField(_("Image"), upload_to=upload_to_product ,default='product/default.jpg')
+    status = models.BooleanField(default=True)
+    code = models.CharField(max_length=6)
     name = models.CharField(max_length=100)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     type_topping = models.ForeignKey(TypeTopping,on_delete=models.PROTECT)
@@ -86,12 +85,16 @@ class Product(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_create_by")
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_update_by")
+    # is_edit = models.BooleanField
+    # edit_for =  models.PrimeryKeyField
 
 
 class PriceProduct(models.Model):
+    status = models.BooleanField(default=True)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     sale_channel = models.ForeignKey(SaleChannel,on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10,decimal_places=2)
+    # old_price
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_product_create_by")
     update_by = models.ForeignKey(

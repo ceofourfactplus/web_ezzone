@@ -12,7 +12,7 @@ import ToBuy from "../views/Stock/ToBuy.vue"
 import store from "../store";
 import Product from "../views/Product/Product.vue"
 import Topping from "../views/Product/Topping.vue"
-import SetTopping from "../views/Product/SetTopping.vue"
+import TypeTopping from "../views/Product/TypeTopping.vue"
 import SaleChannel from "../views/Product/SaleChannel.vue"
 import SelectApp from "../views/Product/SelectApp.vue"
 const routes = [
@@ -53,10 +53,10 @@ const routes = [
         component: SaleChannel,
         params: {text:'sale-channel'}
       },{
-        name: "SetTopping",
-        path: "/set-topping",
-        component: SetTopping,
-        params: {text:'set-topping'}
+        name: "TypeTopping",
+        path: "/type-topping",
+        component: TypeTopping,
+        params: {text:'type-topping'}
       },
       { 
         name:"SelectApp",

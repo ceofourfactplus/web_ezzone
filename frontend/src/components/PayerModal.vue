@@ -105,10 +105,7 @@
                       class="btn btn-danger btn-sm"
                       @click="deletePayer(item.id)"
                     >
-                      delete
-                      <h2 style="color: #dc3545;">how are you </h2> 
-                        
-                     
+                      delete   
                     </button>
                   </td>
                 </tr>

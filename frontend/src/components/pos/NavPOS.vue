@@ -15,12 +15,16 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
-          <li class="nav-item me-2" style="width:100px">
-            <div class="row">
-              <a class="nav-link fw-bold active" href="#">see order</a>
+          <li class="nav-item ms-3 me-3" style="width: 110px">
+            <div class="row mb-1 mt-1">
+              <a class="fw-bold active btn btn-sm btn-primary" href="#"
+                >see order</a
+              >
             </div>
             <div class="row">
-              <a class="nav-link fw-bold active" href="#">clear category</a>
+              <a class="fw-bold active btn btn-sm btn-primary" href="#"
+                >clear category</a
+              >
             </div>
           </li>
           <li class="nav-item" id="categories_nav" style="width: 800px">
@@ -61,7 +65,7 @@
 
 <script>
 import axios from "axios";
-import Logo from "./Logo";
+import Logo from "../Logo";
 
 export default {
   components: { Logo },

@@ -1,39 +1,42 @@
-from product.models import ProductCategory,SaleChannel,Topping,TypeTopping,PriceTopping,TableTopping,PriceProduct,Product
-from product.serializers import ProductCategorySerializer,SaleChannelSerializer,ToppingSerializer,TypeToppingSerializer,PriceToppingSerializer,TableToppingSerializer,PriceProductSerializer,ProductSerializer
+from product.models import ProductCategory, SaleChannel, Topping, TypeTopping, PriceTopping, TableTopping, PriceProduct, Product
+from product.serializers import ProductCategorySerializer, SaleChannelSerializer, ToppingSerializer, TypeToppingSerializer, PriceToppingSerializer, TableToppingSerializer, PriceProductSerializer, ProductSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-# from rest_framework import status
-from django.core.files.storage import FileSystemStorage
-import os
-# from django.conf import settings
-import urllib
-
+from rest_framework.parsers import MultiPartParser, FormParser
 from .forms import *
+from django.contrib import messages
+import os
+
 
 class ProductCategoryList(APIView):
     def get(self, request):
         category = ProductCategory.objects.all()
-        serializer = ProductCategorySerializer(category, many=True)
+        serializer = ProductCategorySerializer(
+            category, context={"request": request}, many=True)
         print(serializer.data)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = ProductCategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+        if not ProductCategory.objects.filter(category=request.data['category']).exists():
+            serializer = ProductCategorySerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=201)
+            return Response(serializer.errors, status=400)
+        return Response('this caetgory name is already in use', status=400)
+
 
 class ProductCategoryDetail(APIView):
     def get_object(self, pk):
         try:
             return ProductCategory.objects.get(pk=pk)
         except ProductCategory.DoesNotExist:
-            raise 404
+            return Response('not found data', status=400)
 
     def get(self, request, pk):
         category = self.get_object(pk)
-        serializer = ProductCategorySerializer(category)
+        serializer = ProductCategorySerializer(
+            category, context={"request": request})
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -49,6 +52,7 @@ class ProductCategoryDetail(APIView):
         category.delete()
         return Response(status=204)
 
+
 class SalechannelList(APIView):
     def get(self, request):
         sale_channel = SaleChannel.objects.all()
@@ -61,6 +65,21 @@ class SalechannelList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+class SaleChannelStatus(APIView):
+    def get_object(self, pk):
+        try:
+            return SaleChannel.objects.get(pk=pk)
+        except SaleChannel.DoesNotExist:
+            raise 404
+
+    def put(self, request, pk):
+        sale_channel = self.get_object(pk)
+        sale_channel.status = request.data['status']
+        sale_channel.update_by_id = request.data['update_by']
+        sale_channel.save()
+        serializer = SaleChannelSerializer(sale_channel)
+        return Response(serializer.data)
 
 class SaleChannelDetail(APIView):
     def get_object(self, pk):
@@ -87,18 +106,25 @@ class SaleChannelDetail(APIView):
         sale_channel.delete()
         return Response(status=204)
 
+
 class ToppingList(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
     def get(self, request):
         object = Topping.objects.all()
-        serializer = ToppingSerializer(object, many=True)
+        serializer = ToppingSerializer(
+            object, context={"request": request}, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = ToppingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+        if not Topping.objects.filter(code=request.data['code']).exists():
+            serializer = ToppingSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=201)
+            return Response(serializer.errors, status=400)
+        return Response('this code is already taked', status=400)
+
 
 class ToppingDetail(APIView):
     def get_object(self, pk):
@@ -114,6 +140,9 @@ class ToppingDetail(APIView):
 
     def put(self, request, pk):
         object = self.get_object(pk)
+        if len(request.FILES) != 0:
+            os.remove(object.img.path)
+            object.img = request.FILES['img']
         serializer = ToppingSerializer(object, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -122,8 +151,10 @@ class ToppingDetail(APIView):
 
     def delete(self, request, pk):
         object = self.get_object(pk)
+        os.remove(object.img.path)
         object.delete()
         return Response(status=204)
+
 
 class TypeToppingList(APIView):
     def get(self, request):
@@ -137,6 +168,7 @@ class TypeToppingList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
 
 class TypeToppingDetail(APIView):
     def get_object(self, pk):
@@ -163,6 +195,7 @@ class TypeToppingDetail(APIView):
         object.delete()
         return Response(status=204)
 
+
 class PriceToppingList(APIView):
     def get(self, request):
         object = PriceTopping.objects.all()
@@ -175,6 +208,7 @@ class PriceToppingList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
 
 class PriceToppingDetail(APIView):
     def get_object(self, pk):
@@ -201,6 +235,7 @@ class PriceToppingDetail(APIView):
         object.delete()
         return Response(status=204)
 
+
 class TableToppingList(APIView):
     def get(self, request):
         object = TableTopping.objects.all()
@@ -213,6 +248,7 @@ class TableToppingList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
 
 class TableToppingDetail(APIView):
     def get_object(self, pk):
@@ -239,6 +275,7 @@ class TableToppingDetail(APIView):
         object.delete()
         return Response(status=204)
 
+
 class PriceProductList(APIView):
     def get(self, request):
         object = PriceProduct.objects.all()
@@ -251,6 +288,7 @@ class PriceProductList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
 
 class PriceProductDetail(APIView):
     def get_object(self, pk):
@@ -277,21 +315,30 @@ class PriceProductDetail(APIView):
         object.delete()
         return Response(status=204)
 
+
 class ProductList(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
     def get(self, request):
         object = Product.objects.all()
+        serializers = ProductSerializer(
+            object, context={"request": request}, many=True)
+        return Response(serializers.data)
 
-        serializer = ProductSerializer(object, many=True)
-        return Response(serializer.data)
+    def post(self, request, format=None):
+        print(request.data['code'])
+        if not Product.objects.filter(code=request.data['code']).exists():
+            serializer = ProductSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=201)
+            return Response(serializer.errors, status=400)
+        return Response('this code is already taked', status=400)
 
-    def post(self, request): 
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
 
 class ProductDetail(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
     def get_object(self, pk):
         try:
             return Product.objects.get(pk=pk)
@@ -300,12 +347,16 @@ class ProductDetail(APIView):
 
     def get(self, request, pk):
         object = self.get_object(pk)
-        serializer = ProductSerializer(object)
+        serializer = ProductSerializer(object, context={"request": request})
         return Response(serializer.data)
 
     def put(self, request, pk):
         object = self.get_object(pk)
-        serializer = ProductSerializer(object, data=request.data)
+        if len(request.FILES) != 0:
+            os.remove(object.img.path)
+            object.img = request.FILES['img']
+        serializer = ProductSerializer(
+            object, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -313,40 +364,39 @@ class ProductDetail(APIView):
 
     def delete(self, request, pk):
         object = self.get_object(pk)
+        os.remove(object.img.path)
         object.delete()
-        return Response(status=204)
+        return Response('delete success!', status=204)
 
 
-# class SaveImg(APIView):
-#     def post(self, request):
-#         print(request.data['name'])
-#         deliname = request.data['name']
-#         file = request.FILES.get('file')
-#         print(file.name)
-#         # file.name = file.name.replace(file.name.split('.')[0], deliname)
-#         fss = FileSystemStorage()
-#         # file_not_found = True
-#         names = []
-#         lastname = []
-#         for img_file in os.listdir('media'):
-#             if os.path.isfile(os.path.join('media', img_file)):
-#                 names.append(img_file.split('.')[0])
-#                 lastname.append(img_file.split('.')[1])
-#             if deliname in names:
-#                 # os.remove(os.path.join(settings.MEDIA_ROOT,
-#                 #                     urllib.parse.unquote(deliname) + '.' + lastname[names.index(deliname)]))
-#                 # filename = fss.save(urllib.parse.unquote(file.name.split('.')[
-#                 #     0] + '.' + file.name.split('.')[1]), file)
-#                 # url = fss.url(filename)
-#                 # maping = Product.objects.get(delivery_locate=deliname)
-#                 # maping.image = url
-#                 # maping.save()
-#                 # file_not_found = False
-#                 return Response('this img name is already')
-            
-#         # if file_not_found:
-#         filename = fss.save(urllib.parse.unquote(file.name.split('.')[
-#             0] + '.' + file.name.split('.')[1]), file)
-#         url = fss.url(filename)
-#         Product.objects.create(img=url,)
-#         return Response({"link": url})
+class ProductStatus(APIView):
+    def get_object(self, pk):
+        try:
+            return Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            raise 404
+
+    def put(self, request, pk):
+        product = self.get_object(pk)
+        product.status = request.data['status']
+        product.update_by_id = request.data['update_by']
+        product.save()
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+
+class ProductPos(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request):
+        product = Product.objects.filter(status=True)
+        serializer = ProductSerializer(
+            product, many=True, context={"request": request})
+        return Response(serializer.data)
+
+
+class ToppingPos(APIView):
+    def get(self, request):
+        topping = Topping.objects.filter(status=True)
+        serializer = ToppingSerializer(topping, many=True)
+        return Response(serializer.data)

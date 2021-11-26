@@ -2,17 +2,20 @@
   <div class="container">
     <div class="row mt-3">
       <button @click="link('Product')" style="color: black" class="circle bg-warning center">
-       Product
+       All Product
       </button>
       <button @click="link('Topping')" style="color: black" class="circle bg-light center">
         Topping
+      </button>
+      <button @click="link('SaleChannel')"  class="circle-s bg-primary center">
+        Sale Channel
       </button>
     </div>
     <div class="row mt-5">
       <button class="circle bg-success center" @click="link('Category')">
         Category
       </button>
-      <button class="circle bg-danger center " @click="link('SetTopping')">
+      <button class="circle bg-danger center " @click="link('TypeTopping')">
        Set Topping
       </button>
     </div>
@@ -37,7 +40,7 @@ export default {
   height: 300px;
   line-height: 70%;
   border-radius: 50%;
-  font-size: 60px;
+  font-size: 50px;
   color: #fff;
   text-align: center;
   background: #fa7e7edd;
@@ -47,10 +50,28 @@ export default {
 .circle:hover{
   width: 250px;
   height: 250px;
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold
 }
 
+.circle-s {
+  width: 300px;
+  height: 300px;
+  line-height: 70%;
+  border-radius: 50%;
+  font-size: 45px;
+  color: #fff;
+  text-align: center;
+  background: #fa7e7edd;
+  transition: width 1s, height 1s, font-size 1s , font-weight 1s;
+}
+
+.circle-s:hover{
+  width: 250px;
+  height: 250px;
+  font-size: 35px;
+  font-weight: bold
+}
 .center {
   margin: auto;
   padding: 10px;

@@ -15,8 +15,8 @@ class Order(models.Model):
     ON_DELIVERY = '2'
     FINISH = '3'
     STATUS_ORDER = (
-        (ON_COOKING,'cooking'),
-        (ON_DELIVERY,'delivery'),
+        (ON_COOKING,'on cooking'),
+        (ON_DELIVERY,'on delivery'),
         (FINISH,'finish'),
     )
 
@@ -42,7 +42,7 @@ class OrderItem(models.Model):
         (FLAVOUR_0,'non'),
         (FLAVOUR_50,'low'),
         (FLAVOUR_100,'midium'),
-        (FLAVOUR_150,'much')
+        (FLAVOUR_150,'very')
     )
 
     SPICY = "1"
