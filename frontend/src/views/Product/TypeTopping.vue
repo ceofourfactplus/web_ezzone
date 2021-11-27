@@ -1,7 +1,7 @@
 <template>
   <div id="type-topping">
       <type-topping-table :type_toppings="type_toppings" @reload="reloadTypeTopping" @select_type="SelectType" />
-      <type-topping-update @reload="reloadTypeTopping" :select_type="select_type" />
+      <type-topping-update @reload="reloadTypeTopping" :select_type_topping="select_type" />
       <type-topping-create @reload="reloadTypeTopping"/>
   </div>
 </template>

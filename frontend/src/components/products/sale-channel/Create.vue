@@ -121,13 +121,13 @@ export default {
       form: {
         sale_channel: "",
         products: [],
-        toppings:[]
+        toppings: [],
       },
       err: false,
     };
   },
   methods: {
-    create_sale_channel() {
+    async create_sale_channel() {
       const f = this.form;
       const fb = new FormData();
       fb.append("sale_channel", f.sale_channel);
@@ -137,26 +137,32 @@ export default {
         .post("http://127.0.0.1:8000/product/sale-channel/", fb)
         .then((response) => {
           this.categories = response.data;
-          console.log('1')
+          console.log("1");
           for (const item of f.product) {
-            const form = new FormData();
-            form.append("price", item.price);
-            form.append("product", item.id);
-            form.append("sale_channel_id", response.data.id);
-            form.append("status", item.status);
-            form.append("create_by", this.$store.state.auth.userInfo.id);
-            form.append("update_by", this.$store.state.auth.userInfo.id);
-            axios.post("http://127.0.0.1:8000/product/price-product/", form);
+            setTimeout(() => {
+              const form = new FormData();
+              form.append("price", item.price);
+              form.append("product", item.id);
+              form.append("sale_channel_id", response.data.id);
+              form.append("status", item.status);
+              form.append("create_by", this.$store.state.auth.userInfo.id);
+              form.append("update_by", this.$store.state.auth.userInfo.id);
+
+              axios.post("http://127.0.0.1:8000/product/price-product/", form);
+            }, 1000);
           }
           for (const item of f.topping) {
-            const form = new FormData();
-            form.append("price", item.price);
-            form.append("topping_id", item.id);
-            form.append("sale_channel_id", response.data.id);
-            form.append("status", item.status);
-            form.append("create_by", this.$store.state.auth.userInfo.id);
-            form.append("update_by", this.$store.state.auth.userInfo.id);
-            axios.post("http://127.0.0.1:8000/product/price-topping/", form);
+            setTimeout(() => {
+              const form = new FormData();
+              form.append("price", item.price);
+              form.append("topping_id", item.id);
+              form.append("sale_channel_id", response.data.id);
+              form.append("status", item.status);
+              form.append("create_by", this.$store.state.auth.userInfo.id);
+              form.append("update_by", this.$store.state.auth.userInfo.id);
+
+              axios.post("http://127.0.0.1:8000/product/price-topping/", form);
+            }, 1000);
           }
           this.$emit("reload");
         })

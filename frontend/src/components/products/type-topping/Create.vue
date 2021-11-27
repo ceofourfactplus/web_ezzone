@@ -26,7 +26,7 @@
                 >
                 <div class="col-9">
                   <input
-                    v-model="form.product_name"
+                    v-model="form.type_topping"
                     type="text"
                     class="form-control"
                     id="product_name"
@@ -38,12 +38,12 @@
             <h5>Select Topping</h5>
             <div class="col-12">
               <div class="row">
-                <div class="col" v-for="topping in toppings" :key="topping.id">
+                <div class="col-3" v-for="topping in toppings" :key="topping.id">
                   <div class="form-check">
                     <input
                       class="form-check-input"
                       type="checkbox"
-                      v-model="form.select_topping"
+                      v-model="form.topping"
                       :value="topping.id"
                       :id="topping.id"
                     />
@@ -70,7 +70,7 @@ import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
-  name: "CategoryCreate",
+  name: "CreateTypeToppings",
   computed: mapState(["auth", "product"]),
   data() {
     return {
@@ -86,7 +86,7 @@ export default {
     };
   },
   methods: {
-    create_product() {
+    create_type_topping()  {
       const f = this.form;
       const fb = new FormData();
       fb.append("type_topping", f.type_topping);
@@ -104,24 +104,17 @@ export default {
             })
           }
           this.$emit("reload");
+          this.clearForm()
         })
-        .catch(() => {
-          this.err = true;
+        .catch((error) => {
+          this.err.status = true;
+          this.err.data = error.response.data
         });
-    },
-    onFileChange(e) {
-      this.form.img = e.target.files[0];
-      console.log(this.form.img.name);
     },
     clearForm() {
       this.form = {
-        status: true,
-        img: null,
-        able: true,
-        category: "",
-        type_topping: "",
-        product_name: "",
-        code: "",
+        type_topping:'',
+        topping:[],
       };
     },
   },
@@ -134,7 +127,7 @@ export default {
     axios
       .get("http://127.0.0.1:8000/product/topping/")
       .then((response) => {
-        this.type_topping = response.data;
+        this.toppings = response.data;
       });
   },
 };

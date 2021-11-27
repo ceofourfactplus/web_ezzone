@@ -31,7 +31,7 @@ class PriceToppingSerializer(serializers.ModelSerializer):
 
 class ToppingSerializer(serializers.ModelSerializer):
     price_topping = PriceToppingSerializer(
-        many=True, read_only=True, source="pricetopping_set")
+        many=True, read_only=True, source="pricetopping")
 
     class Meta:
         model = Topping
@@ -41,17 +41,18 @@ class ToppingSerializer(serializers.ModelSerializer):
 class TableToppingSerializer(serializers.ModelSerializer):
     topping_id = serializers.IntegerField()
     type_topping_id = serializers.IntegerField()
+    topping = ToppingSerializer(read_only=True)
 
     class Meta:
         model = TableTopping
-        fields = ['id', 'topping_id', 'type_topping_id', 'create_by', 'update_by']
+        fields = ['id', 'topping_id', 'type_topping_id', 'create_by', 'update_by','topping']
 
 
 class TypeToppingSerializer(serializers.ModelSerializer):
     tabletopping_set = TableToppingSerializer(many=True,read_only=True)
     class Meta:
         model = TypeTopping
-        fields = ['id', 'type_topping','tabletopping_set']
+        fields = ['id', 'type_topping','create_by','update_by','tabletopping_set']
 
 class PriceProductSerializer(serializers.ModelSerializer):
     sale_channel = SaleChannelSerializer(read_only=True)
