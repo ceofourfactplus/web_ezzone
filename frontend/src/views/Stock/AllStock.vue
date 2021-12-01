@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <!-- if have stock-data -->
-    <div v-if="stock_data.length != 0" class="row mt-2">
-      <div class="col-3" v-for="data in stock_data" :key="data.id">
+    <div v-if="stock.stock_data.length != 0" class="row mt-2">
+      <div class="col-3" v-for="data in stock.stock_data" :key="data.id">
         <card-stock :item="data" />
       </div>
     </div>
@@ -21,7 +21,7 @@ export default {
   components: {
     CardStock,
   },
-  computed: mapState(["stock_data"])
+  computed: mapState(["stock"])
 };
 </script>
 

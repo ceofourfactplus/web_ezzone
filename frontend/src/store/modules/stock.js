@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 export default {
   namespace: true,
@@ -64,6 +64,57 @@ export default {
       commit("refreshModels", {
         models: model.models,
       });
+    },
+    opening({ context,state }) {
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${state.auth.accessToken}`,
+        },
+      };
+      axios
+        .get("http://127.0.0.1:8000/stock/stock/", headers)
+        .then((response) => {
+          context.commit(
+            "updateStock",
+            {
+              stock: response.data,
+            },
+            { root: true }
+          );
+        });
+      axios
+        .get("http://127.0.0.1:8000/stock/unit/", headers)
+        .then((response) => {
+          context.commit(
+            "updateUnit",
+            {
+              unit: response.data,
+            },
+            { root: true }
+          );
+        });
+      axios
+        .get("http://127.0.0.1:8000/stock/payer/", headers)
+        .then((response) => {
+          context.commit(
+            "updatePayer",
+            {
+              payer: response.data,
+            },
+            { root: true }
+          );
+        });
+      axios
+        .get("http://127.0.0.1:8000/stock/supplier/", headers)
+        .then((response) => {
+          context.commit(
+            "updateSupplier",
+            {
+              supplier: response.data,
+            },
+            { root: true }
+          );
+        });
     },
   },
 };

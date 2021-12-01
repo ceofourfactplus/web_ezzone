@@ -14,6 +14,8 @@ export default {
   },
   mutations: {
     destroyToken(state) {
+      localStorage.removeItem('username')
+      localStorage.removeItem('password')
       state.accessToken = null;
       state.refreshToken = null;
     },
@@ -42,6 +44,8 @@ export default {
               password: usercredentials.password,
             })
             .then((response) => {
+              localStorage.setItem('username',usercredentials.username)
+              localStorage.setItem('password',usercredentials.password)
               console.log("2");
               context.commit("newToken", {
                 access: response.data.access,
@@ -59,50 +63,6 @@ export default {
                   context.commit("updateUserInfo", {
                     userInfo: response.data,
                   });
-                });
-              axios
-                .get("http://127.0.0.1:8000/stock/stock/", headers)
-                .then((response) => {
-                  context.commit(
-                    "updateStock",
-                    {
-                      stock: response.data,
-                    },
-                    { root: true }
-                  );
-                });
-              axios
-                .get("http://127.0.0.1:8000/stock/unit/", headers)
-                .then((response) => {
-                  context.commit(
-                    "updateUnit",
-                    {
-                      unit: response.data,
-                    },
-                    { root: true }
-                  );
-                });
-              axios
-                .get("http://127.0.0.1:8000/stock/payer/", headers)
-                .then((response) => {
-                  context.commit(
-                    "updatePayer",
-                    {
-                      payer: response.data,
-                    },
-                    { root: true }
-                  );
-                });
-              axios
-                .get("http://127.0.0.1:8000/stock/supplier/", headers)
-                .then((response) => {
-                  context.commit(
-                    "updateSupplier",
-                    {
-                      supplier: response.data,
-                    },
-                    { root: true }
-                  );
                 });
             });
         })

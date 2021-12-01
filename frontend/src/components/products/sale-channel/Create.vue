@@ -18,13 +18,16 @@
           ></button>
         </div>
         <div class="modal-body">
+          <div class="alert alert-danger" role="alert" v-if="err">
+            some thing went wrong
+          </div>
           <form class="row g-3" @submit="create_sale_channel()">
-            <div class="col-md">
-              <div class="row m-1">
-                <label for="sale_channel" class="form-label col-sm-3"
+            <div class="col-8">
+              <div class="row">
+                <label for="sale_channel" class="form-label col-4"
                   >Sale Channel Name</label
                 >
-                <div class="col-sm-5">
+                <div class="col-8">
                   <input
                     v-model="form.sale_channel"
                     type="text"
@@ -38,13 +41,48 @@
                 </div> -->
               </div>
             </div>
+            <div class="col-4">
+              <div class="row">
+                <label for="exampleColorInput" class="col-7 form-label"
+                  >Color picker</label
+                >
+                <div class="col-5">
+                  <input
+                    type="color"
+                    v-model="form.color"
+                    class="form-control form-control-color"
+                    id="exampleColorInput"
+                    title="Choose your color"
+                    opacity
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <label
+                  for="formFileLg"
+                  class="col-form-label col-sm-2 text-uppercase"
+                  >Images</label
+                >
+
+                <div class="col-sm-10">
+                  <input
+                    class="form-control"
+                    id="formFileLg"
+                    type="file"
+                    @change="onFileChange"
+                  />
+                </div>
+              </div>
+            </div>
             <div class="row mt-1">
               <hr class="m-3 mt-1" />
               <h5 class="text-center">Product Price</h5>
             </div>
             <div class="row">
               <div
-                class="col"
+                class="col-3"
                 v-for="product in form.products"
                 :key="product.id"
               >
@@ -56,7 +94,7 @@
                   <div class="col-sm-8">
                     <input
                       type="number"
-                      v-model="product.price"
+                      v-model="product.new_price"
                       placeholder="Price"
                       class="form-control"
                       :id="product.id"
@@ -73,7 +111,7 @@
 
             <div class="row">
               <div
-                class="col"
+                class="col-3"
                 v-for="topping in form.toppings"
                 :key="topping.id"
               >
@@ -85,7 +123,7 @@
                   <div class="col-sm-8">
                     <input
                       type="number"
-                      v-model="topping.price"
+                      v-model="topping.new_price"
                       placeholder="Price"
                       class="form-control"
                       :id="topping.id"
@@ -122,57 +160,71 @@ export default {
         sale_channel: "",
         products: [],
         toppings: [],
+        img: null,
+        color: null,
       },
       err: false,
     };
   },
   methods: {
-    async create_sale_channel() {
-      const f = this.form;
-      const fb = new FormData();
-      fb.append("sale_channel", f.sale_channel);
-      fb.append("create_by", this.$store.state.auth.userInfo.id);
-      fb.append("update_by", this.$store.state.auth.userInfo.id);
-      axios
-        .post("http://127.0.0.1:8000/product/sale-channel/", fb)
-        .then((response) => {
-          this.categories = response.data;
-          console.log("1");
-          for (const item of f.product) {
-            setTimeout(() => {
-              const form = new FormData();
-              form.append("price", item.price);
-              form.append("product", item.id);
-              form.append("sale_channel_id", response.data.id);
-              form.append("status", item.status);
-              form.append("create_by", this.$store.state.auth.userInfo.id);
-              form.append("update_by", this.$store.state.auth.userInfo.id);
-
-              axios.post("http://127.0.0.1:8000/product/price-product/", form);
-            }, 1000);
-          }
-          for (const item of f.topping) {
-            setTimeout(() => {
-              const form = new FormData();
-              form.append("price", item.price);
-              form.append("topping_id", item.id);
-              form.append("sale_channel_id", response.data.id);
-              form.append("status", item.status);
-              form.append("create_by", this.$store.state.auth.userInfo.id);
-              form.append("update_by", this.$store.state.auth.userInfo.id);
-
-              axios.post("http://127.0.0.1:8000/product/price-topping/", form);
-            }, 1000);
-          }
-          this.$emit("reload");
-        })
-        .catch(() => {
-          this.err = true;
-        });
-    },
     onFileChange(e) {
-      this.form.img = e.target.files[0];
-      console.log(this.form.img.name);
+      if (this.form.img == null) {
+        this.form.img = e.target.files[0];
+      }
+    },
+    create_sale_channel() {
+      var can_save = true;
+      this.form.products.forEach((element) => {
+        if (element.new_price == undefined) {
+          can_save = false;
+          this.err = true;
+        }
+      });
+      this.form.toppings.forEach((element) => {
+        if (element.new_price == undefined) {
+          this.err = true;
+          can_save = false;
+        }
+      });
+      console.log("1");
+      if (this.form.sale_channel != "" && can_save && this.form.img != null) {
+        console.log("2");
+        const f = this.form;
+        const fb = new FormData();
+        fb.append("sale_channel", f.sale_channel);
+        fb.append("img", f.img, f.img.name);
+        fb.append("color", f.color+'ff');
+        fb.append("create_by", this.$store.state.auth.userInfo.id);
+        fb.append("update_by", this.$store.state.auth.userInfo.id);
+        axios
+          .post("http://127.0.0.1:8000/product/sale-channel/", fb)
+          .then((response) => {
+            this.form.products.forEach((element) => {
+              element.sale_channel_id = response.data.id;
+              element.create_by = this.$store.state.auth.userInfo.id;
+              element.update_by = this.$store.state.auth.userInfo.id;
+            });
+            this.form.toppings.forEach((element) => {
+              element.sale_channel_id = response.data.id;
+              element.update_by = this.$store.state.auth.userInfo.id;
+              element.create_by = this.$store.state.auth.userInfo.id;
+            });
+            axios.post(
+              "http://127.0.0.1:8000/product/many-price-product/",
+              f.products
+            );
+            axios.post(
+              "http://127.0.0.1:8000/product/many-price-topping/",
+              f.toppings
+            );
+            this.$emit("reload");
+          })
+          .catch(() => {
+            this.err = true;
+          });
+      } else {
+        this.err = true;
+      }
     },
     clearForm() {
       this.form = {
@@ -184,6 +236,11 @@ export default {
     Switch(value, obj) {
       this.form.status = value;
       console.log(obj);
+    },
+  },
+  watch: {
+    form() {
+      this.err = false;
     },
   },
   mounted() {

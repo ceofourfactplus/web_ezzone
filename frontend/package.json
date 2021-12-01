@@ -16,6 +16,7 @@
     "chart.js": "^3.5.1",
     "core-js": "^3.6.5",
     "idle-vue": "^2.0.5",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "npm": "^8.0.0",
     "sweetalert2": "^11.1.5",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.1.6",
+    "@types/lodash": "^4.14.177",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",

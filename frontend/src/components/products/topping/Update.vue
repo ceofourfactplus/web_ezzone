@@ -156,7 +156,7 @@ export default {
         fb.append("create_by", this.$store.state.auth.userInfo.id);
         fb.append("update_by", this.$store.state.auth.userInfo.id);
         axios
-          .post("http://127.0.0.1:8000/product/topping/", fb)
+          .put("http://127.0.0.1:8000/product/topping/", fb)
           .then((response) => {
             for (const sale_channel of this.price_topping) {
               if (sale_channel.price != null) {
@@ -164,7 +164,6 @@ export default {
                 sc.append("topping_id", response.data["id"]);
                 sc.append("price", sale_channel.price);
                 sc.append("sale_channel_id", sale_channel.id);
-                sc.append("create_by", this.$store.state.auth.userInfo.id);
                 sc.append("update_by", this.$store.state.auth.userInfo.id);
                 axios.post("http://127.0.0.1:8000/product/price-topping/", sc);
               } else {

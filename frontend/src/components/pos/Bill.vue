@@ -5,21 +5,32 @@
         <th>#</th>
         <th>name</th>
         <th>topping</th>
-        <th>sweet</th>
+        <th>flavour_level</th>
+        <th>size</th>
         <th>amount</th>
         <th>price</th>
         <th>edit</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(order, index) in bill" :key="order">
-        <th>{{ index }}</th>
-        <th>name</th>
-        <th>topping</th>
-        <th>sweet</th>
-        <th>amount</th>
-        <th>price</th>
-        <th>edit</th>
+      <tr v-for="(product, index) in order.cart" :key="index">
+        <th>{{ product.product.code }}</th>
+        <th>{{ product.product.name }}</th>
+        <th>
+          <div v-if="product.topping.length != 0">
+            <div v-for="topping in product.topping" :key="topping.id">
+              {{ topping.name }}
+            </div>
+          </div>
+          <div v-else>
+            -
+          </div>
+        </th>
+        <th>{{ sweet(product.flavour_level) }}</th>
+        <th>{{ product.size}}</th>
+        <th>{{ product.amount }}</th>
+        <th>{{ product.total_price }}</th>
+        <th><button class="btn btn-danger">edit</button></th>
       </tr>
     </tbody>
   </table>
@@ -27,7 +38,20 @@
 
 <script>
 export default {
-  props:['bill']
+  props: ["order"],
+  methods:{
+    sweet(s){
+      if(s=='none'){
+        return "no"
+      }if(s=='low'){
+        return "+"
+      }if(s=='medium'){
+        return "++"
+      }if(s=='very'){
+        return "+++"
+      }
+    }
+  }
 };
 </script>
 

@@ -25,6 +25,7 @@
             <router-link
               class="btn btn-danger"
               :to="{ path: '/all-stock' }"
+              @click="stock"
             >
               GO to Stock Page
             </router-link>
@@ -94,6 +95,9 @@ export default {
   methos:{
     ToProduct(){
       this.router.push("/products")
+    },
+    stock(){
+      this.$store.dispatch("stock/opening")
     }
   }
 };

@@ -17,12 +17,16 @@
         <ul class="navbar-nav">
           <li class="nav-item ms-3 me-3" style="width: 110px">
             <div class="row mb-1 mt-1">
-              <a class="fw-bold active btn btn-sm btn-primary" href="#"
+              <a
+                class="fw-bold active btn btn-sm btn-primary"
+                @click="$emit('see_order')"
                 >see order</a
               >
             </div>
             <div class="row">
-              <a class="fw-bold active btn btn-sm btn-primary" href="#"
+              <a
+                class="fw-bold active btn btn-sm btn-primary"
+                @click="$emit('clear_category')"
                 >clear category</a
               >
             </div>
@@ -32,7 +36,12 @@
               <button
                 v-for="category in categories"
                 :key="category.id"
-                class="m-2 fs-5 fw-bold btn btn-warning"
+                class="m-2 fs-5 fw-bold btn"
+                @click="select_category(category.id)"
+                :class="{
+                  'btn-danger': select_category_id == category.id,
+                  'btn-warning': select_category_id != category.id,
+                }"
               >
                 {{ category.category }}
               </button>
@@ -64,47 +73,22 @@
 </template>
 
 <script>
-import axios from "axios";
 import Logo from "../Logo";
 
 export default {
   components: { Logo },
+  props: ["categories",'select_category_id'],
   name: "NavbarPOS",
-  data() {
-    return {
-      categories: [],
-    };
-  },
-  methods: {
-    getCategory() {
-      axios.get("http://127.0.0.1:8000/product/category/").then((response) => {
-        this.categories = response.data;
-      });
-    },
-  },
-  mounted() {
-    this.getCategory();
-  },
+  methods:{
+    select_category(id){
+      this.$emit('select_category', id)
+    }
+  }
 };
 </script>
 
 <style>
-/* div#category_nav button {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
-}
-
-#category_nav {
-  background-color: #333;
-  overflow: auto;
-  white-space: nowrap;
- } */
-
 div.scrollmenu {
-  /* background-color: #333; */
   overflow: auto;
   white-space: nowrap;
 }

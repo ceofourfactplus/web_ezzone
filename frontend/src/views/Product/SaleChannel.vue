@@ -1,7 +1,7 @@
 <template>
   <div id="sale-channel">
       <sale-channel-table :sales_channels="sales_channels" @reload="reloadSaleChannel" @select_channel="SelectChannel" />
-      <sale-channel-update @reload="reloadSaleChannel" :select_channel="select_channel"></sale-channel-update>
+      <sale-channel-update @reload="reloadSaleChannel" :select_sale_channel="select_channel"></sale-channel-update>
       <sale-channel-create @reload="reloadSaleChannel"/>
   </div>
 </template>

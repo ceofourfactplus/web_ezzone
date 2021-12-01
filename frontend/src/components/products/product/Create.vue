@@ -56,14 +56,14 @@
               </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-6">
               <div class="row">
                 <label
                   for="category"
-                  class="col-form-label col-sm-2 text-uppercase"
+                  class="col-form-label col-sm-4 text-uppercase"
                   >Category</label
                 >
-                <div class="col-sm-10">
+                <div class="col-sm-8">
                   <select
                     id="category"
                     v-model="form.category"
@@ -76,6 +76,26 @@
                     >
                       {{ category.category }}
                     </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row">
+                <label
+                  for="product_name"
+                  class="col-form-label col-sm-3 text-uppercase"
+                  >Flavour</label
+                >
+
+                <div class="col-sm-9">
+                  <select
+                    id="topping_set"
+                    v-model="form.flavour"
+                    class="form-select"
+                  >
+                    <option value="sweet">sweet</option>
+                    <option value="spicy">spicy</option>
                   </select>
                 </div>
               </div>
@@ -190,6 +210,7 @@ export default {
         type_topping: "",
         product_name: "",
         code: "",
+        flavour:""
       },
       err: {
         status: false,
@@ -207,6 +228,7 @@ export default {
         fb.append("name", f.product_name);
         fb.append("img", f.img, f.img.name);
         fb.append("code", f.code);
+        fb.append("flavour", f.flavour);
         fb.append("create_by", this.$store.state.auth.userInfo.id);
         fb.append("update_by", this.$store.state.auth.userInfo.id);
         axios

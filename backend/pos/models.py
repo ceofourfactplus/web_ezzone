@@ -39,29 +39,23 @@ class OrderItem(models.Model):
     FLAVOUR_100 = '2'
     FLAVOUR_150 = '3'
     FLAVOUR_LEVEL = (
-        (FLAVOUR_0,'non'),
+        (FLAVOUR_0,'none'),
         (FLAVOUR_50,'low'),
-        (FLAVOUR_100,'midium'),
+        (FLAVOUR_100,'medium'),
         (FLAVOUR_150,'very')
     )
 
-    SPICY = "1"
-    SWEET = "2"
-    FLAVOUR_TYPE = (
-        (SPICY,'spicy'),
-        (SWEET,'sweet')
-    )
-
     flavour_level = models.IntegerField(choices=FLAVOUR_LEVEL)
-    flavour_type = models.IntegerField(choices=FLAVOUR_TYPE)
     product = models.ForeignKey(Product,on_delete=models.PROTECT)
     order = models.ForeignKey(Order,on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10,decimal_places=2)
-    desscriptions = models.TextField()
+    descriptions = models.TextField(null=True)
     amount = models.IntegerField()
 
 class OrderItemTopping(models.Model):
     item = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
     topping = models.ForeignKey(Topping,on_delete=models.PROTECT)
     total_price = models.DecimalField(max_digits=10 ,decimal_places=2)
+    descriptions = models.TextField(null=True)
     amount = models.IntegerField()
+

@@ -1,7 +1,9 @@
 from django.db import models
 from django.db.models.query_utils import Q
+from rest_framework.fields import ImageField
 from backend.settings import AUTH_USER_MODEL
 from django.utils.translation import gettext_lazy as _ 
+from colorfield.fields import ColorField
 
 def upload_to_product(instance,filename):
     return 'product/{filename}'.format(filename=filename)
@@ -9,7 +11,11 @@ def upload_to_product(instance,filename):
 def upload_to_topping(instance,filename):
     return 'topping/{filename}'.format(filename=filename)
 
+def upload_to_sale_channel(instance,filename):
+    return 'sale_channel/{filename}'.format(filename=filename)
+
 class ProductCategory(models.Model):
+    color = ColorField(default='#ffffff')
     status = models.BooleanField(default=True)
     category = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
@@ -20,7 +26,9 @@ class ProductCategory(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_update_by")
     
 class SaleChannel(models.Model):
+    color = ColorField(format='hexa')
     status = models.BooleanField(default=True)
+    img = models.ImageField(_("Image"), upload_to=upload_to_sale_channel)
     sale_channel = models.CharField(max_length=100)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sale_channel_create_by")
@@ -69,12 +77,7 @@ class TableTopping(models.Model):
 
 
 class Product(models.Model):
-    ABLE = '1'
-    DISABLE = '0'
-    STATUS = (
-        (ABLE,'able'),
-        (DISABLE,'disable')
-    )
+    flavour = models.CharField(max_length=50)
     img = models.ImageField(_("Image"), upload_to=upload_to_product ,default='product/default.jpg')
     status = models.BooleanField(default=True)
     code = models.CharField(max_length=6)
@@ -86,7 +89,7 @@ class Product(models.Model):
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_update_by")
     # is_edit = models.BooleanField
-    # edit_for =  models.PrimeryKeyField
+    # edit_for =  models.PrimeryKeyField()
 
 
 class PriceProduct(models.Model):

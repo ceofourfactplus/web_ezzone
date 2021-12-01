@@ -66,7 +66,7 @@ export default {
           password: this.password,
         })
         .then(() => {
-          console.log('1')
+          console.log("1");
           this.$router.push({ name: "Home" });
         })
         .catch((err) => {
@@ -74,6 +74,22 @@ export default {
           this.incorrectAuth = true;
         });
     },
+  },
+  beforeCreate() {
+    const username = localStorage.getItem('username');
+    const password = localStorage.getItem('password');
+    this.$store.dispatch("auth/userLogin", {
+      username: username,
+      password: password,
+    }).then(() => {
+          console.log("1");
+          this.$router.push({ name: "Home" });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.incorrectAuth = true;
+        });
+    console.log('dispatch')
   },
 };
 </script>
