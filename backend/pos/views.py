@@ -1,5 +1,5 @@
-from pos.models import Order,OrderItem,OrderItemTopping
-from pos.serializers import OrderSerializer, OrderItemSerializer, OrderItemToppingSerializer
+from pos.models import Order,OrderItem,OrderItemTopping,Customer
+from pos.serializers import OrderSerializer, OrderItemSerializer, OrderItemToppingSerializer,CustomerSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -116,3 +116,42 @@ class OrderItemToppingDetail(APIView):
         Order = self.get_object(pk)
         Order.delete()
         return Response(status=204)
+
+class AllOrder(APIView):
+    def post(self,request):
+        print(request.data)
+        # order_before = request.data
+        # order_before['']
+        # order = OrderSerializer(data=request.data)
+        # if order.is_valid():
+        #     order.save()
+        #     for product in request.data['cart']:
+        #         product['order'] = order.data['id']
+        #         product['product_id'] = product['product']['id']
+        #         product_serializer = OrderItemSerializer(data=product)
+        #         if product_serializer.is_valid():
+        #             product_serializer.save()
+        #             for topping in product['topping']:
+        #                 topping['item'] = product_serializer.data['id']
+        #                 topping['topping_id']  = topping['topping']['id']
+        #                 topping_serializer = OrderItemToppingSerializer(data=topping)
+        #                 if topping_serializer.is_valid:
+        #                     topping_serializer.save()
+        #                     return Response(order.data, status=201)
+        #                 return Response(topping_serializer.errors,status=400)
+        #         return Response(product_serializer.errors,status=400)
+        # return Response(order.errors,status=400)
+        return Response('ok')
+
+class CustomerList(APIView):
+    def get(self, request):
+        customer = Customer.objects.all()
+        serializer = CustomerSerializer(customer, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)

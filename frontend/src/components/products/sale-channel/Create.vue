@@ -152,7 +152,7 @@ import { mapState } from "vuex";
 
 export default {
   // components: { Switch },
-  name: "SaleChannelCreate",
+  name: "CreateSaleChannel",
   computed: mapState(["auth", "product"]),
   data() {
     return {

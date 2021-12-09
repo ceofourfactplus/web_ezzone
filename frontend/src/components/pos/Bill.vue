@@ -5,7 +5,7 @@
         <th>#</th>
         <th>name</th>
         <th>topping</th>
-        <th>flavour_level</th>
+        <th>flavour level</th>
         <th>size</th>
         <th>amount</th>
         <th>price</th>
@@ -13,7 +13,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(product, index) in order.cart" :key="index">
+      <tr v-for="(product, index) in order.cart" :key="index" style="height:20px;">
         <th>{{ product.product.code }}</th>
         <th>{{ product.product.name }}</th>
         <th>

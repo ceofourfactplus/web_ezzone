@@ -20,6 +20,21 @@ from .forms import *
 
 # product category
 
+class ProductCategoryStatus(APIView):
+    def get_object(self, pk):
+        try:
+            return ProductCategory.objects.get(pk=pk)
+        except ProductCategory.DoesNotExist:
+            raise 404
+
+    def put(self, request, pk):
+        sale_channel = self.get_object(pk)
+        sale_channel.status = request.data['status']
+        sale_channel.update_by_id = request.data['update_by']
+        sale_channel.save()
+        serializer = ProductCategorySerializer(sale_channel)
+        return Response(serializer.data)
+
 
 class ProductCategoryList(APIView):
     def get(self, request):
@@ -301,7 +316,7 @@ class PriceToppingMany(APIView):
                 sale_channel_id=data['sale_channel_id'],
                 price=data['new_price'],
                 create_by_id=data['create_by'],
-                update_by=data['update_by']
+                update_by_id=data['update_by']
             )
         return Response('ok')
 
@@ -409,7 +424,7 @@ class PriceProductMany(APIView):
                 sale_channel_id=data['sale_channel_id'],
                 price=data['new_price'],
                 create_by_id=data['create_by'],
-                update_by=data['update_by']
+                update_by_id=data['update_by']
             )
         return Response('ok')
 
@@ -499,8 +514,8 @@ class ProductStatus(APIView):
 class ProductPos(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
-    def get(self, request):
-        product = Product.objects.filter(status=True)
+    def get(self, request,pk):
+        product = Product.objects.filter(status=True,category_id=pk)
         serializer = ProductSerializer(
             product, many=True, context={"request": request})
         return Response(serializer.data)

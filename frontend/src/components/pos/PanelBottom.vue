@@ -27,15 +27,24 @@
     </button>
 
     <button
+      v-if="delivery != ''"
       type="button"
-      class="btn btn-warning"
+      class="btn btn-success"
       @click="select = 2"
       data-bs-toggle="modal"
       data-bs-target="#selectSaleChannel"
-      :class="{
-        'btn-success': delivery != {} && select == 2,
-        'btn-danger': select == 2,
-      }"
+    >
+      <img src="../../assets/delivery.png" alt="" />
+      <h5 class="mt-1">Delivery</h5>
+    </button>
+    <button
+      v-else
+      type="button"
+      class="btn"
+      @click="select = 2"
+      data-bs-toggle="modal"
+      data-bs-target="#selectSaleChannel"
+      :class="{ 'btn-warning': select != 2, 'btn-danger': select == 2 }"
     >
       <img src="../../assets/delivery.png" alt="" />
       <h5 class="mt-1">Delivery</h5>
@@ -43,6 +52,19 @@
     <button
       type="button"
       class="btn btn-warning"
+      data-bs-toggle="modal"
+      data-bs-target="#CustomerForm"
+      :class="{ 'btn-danger': select == 3, 'btn-success': customer != {} }"
+      @click="select = 3"
+    >
+      <img src="../../assets/payment.png" alt="" />
+      <h5 class="mt-1">Payment</h5>
+    </button>
+    <button
+      type="button"
+      class="btn btn-warning"
+      data-bs-toggle="modal"
+      data-bs-target="#CustomerForm"
       :class="{ 'btn-danger': select == 3, 'btn-success': customer != {} }"
       @click="select = 3"
       style="border-radius: 0px 50px 50px 0px"

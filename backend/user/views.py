@@ -1,3 +1,4 @@
+from django.core import exceptions
 from django.core.mail import send_mail
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -69,18 +70,21 @@ class activate(APIView):
 
 
 class ConfirmPass(APIView):
-    def post(self, request):
+    def post(self, pk,request):
         user = User.objects.get(id=request.data['id'])
         if user.check_password(request.data['password']):
             return Response('password correct', status=200)
         return Response('password Incerrect', status=400)
 
-class IsActive(APIView):
+class IsActive(APIView): 
+    # def get_object(self, request ):
+        # try:
+        # return User.objects.get(username=request.data['username'])
+        # except Exception as  E:
+            # raise 404
+
     def post(self, request):
-        print(request.data)
-        username = request.data['username']
-        user = User.objects.get(username=username)
-        
+        user = User.objects.get(username=request.data['username'])
         if user.check_password(request.data['password']):
             if user.is_active:
                 return Response('is_active')

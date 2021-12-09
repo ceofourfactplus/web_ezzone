@@ -3,15 +3,20 @@
     <thead>
       <tr>
         <th>#</th>
+        <th>Color</th>
         <th>Category</th>
         <th>Able</th>
         <th>edit/delete</th>
       </tr>
     </thead>
     <tbody class="scroll">
-      <tr v-for="(category,index) in categories" :key="category.id">
+      <tr v-for="(category, index) in categories" :key="category.id">
         <td>
-          {{ index+1 }}
+          {{ index + 1 }}
+        </td><td>
+          <div class="color">
+            <div style="width:100%;height:100%;" :style="{'background-color':category.color}"></div>
+          </div>
         </td>
         <td>{{ category.category }}</td>
         <td>
@@ -21,7 +26,7 @@
           <div class="btn-group">
             <button
               class="btn btn-warning"
-              @click="select_category = category"
+              @click="$emit('select_category',category)"
               data-bs-toggle="modal"
               data-bs-target="#UpdateCategory"
             >
@@ -41,16 +46,21 @@
 import Switch from "../../switch.vue";
 import axios from "axios";
 export default {
-  name:'TabelCategory',
+  name: "TabelCategory",
   components: { Switch },
   props: ["categories"],
   methods: {
     Switch(value, id) {
       axios
-        .put("http://127.0.0.1:8000/product/category/status/" + id + "/", {
-          status: value,
-          update_by: this.$store.state.auth.userInfo.id,
-        })
+        .put(
+          "http://127.0.0.1:8000/product/category/status/" +
+            id +
+            '/',{
+              update_by: this.$store.state.auth.userInfo.id,
+              status:value
+            }
+           
+        )
         .then((data) => {
           this.$emit("reload");
           console.log(data.data);
@@ -71,6 +81,13 @@ export default {
 #image {
   width: 40px;
   height: 40px;
+  border-radius: 20%;
+}
+.color {
+  width: 50px;
+  height: 50px;
+  border: 5px solid white;
+  margin:auto;
   border-radius: 20%;
 }
 </style>

@@ -4,6 +4,8 @@ from pos import views
   
 urlpatterns = [
     path('order/', views.OrderList.as_view()),
+    path('all-order/', views.AllOrder.as_view()),
+    path('customer/', views.CustomerList.as_view()),
     path('order/<int:id>/', views.OrderDetail.as_view()),
     path('order-item/', views.OrderItemList.as_view()),
     path('order-item/<int:id>/', views.OrderItemDetail.as_view()),

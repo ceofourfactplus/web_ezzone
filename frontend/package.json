@@ -19,7 +19,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "npm": "^8.0.0",
-    "sweetalert2": "^11.1.5",
+    "sweetalert2": "^11.2.1",
     "vue": "^3.2.20",
     "vue-chart-3": "^0.5.8",
     "vue-chartjs": "^3.5.1",

@@ -206,12 +206,15 @@ export default {
       });
 
       console.log("1");
-      if (this.form.sale_channel != "" && can_save && this.form.img != null) {
+      if (this.form.sale_channel != "" && can_save ) {
         console.log("2");
         const f = this.form;
         const fb = new FormData();
         fb.append("sale_channel", f.sale_channel);
-        fb.append("img", f.img, f.img.name);
+        if (f.img !=null){
+          fb.append("img", f.img, f.img.name);
+        }
+        
         fb.append("color", f.color + "ff");
         fb.append("create_by", this.$store.state.auth.userInfo.id);
         fb.append("update_by", this.$store.state.auth.userInfo.id);

@@ -20,7 +20,7 @@
         </div>
         <div class="modal-body">
           <form @submit="save_category()">
-            <div class="mb-3">
+            <div class="col-12 mb-3">
               <label for="Category" class="form-label">Category</label>
               <input
                 type="text"
@@ -29,6 +29,23 @@
                 id="Category"
                 placeholder="Drink"
               />
+            </div> 
+            <div class="col-12">
+              <div class="row">
+                <label for="exampleColorInput" class="col-5 form-label"
+                  >Color picker</label
+                >
+                <div class="col-6 me-2">
+                  <input
+                    type="color"
+                    v-model="color"
+                    class="form-control"
+                    id="exampleColorInput"
+                    title="Choose your color"
+                    opacity
+                  />
+                </div>
+              </div>
             </div>
             <button
               type="submit"
@@ -56,6 +73,7 @@ export default {
   data() {
     return {
       category_name: "",
+      color:''
     };
   },
   methods: {
@@ -65,6 +83,7 @@ export default {
           "http://127.0.0.1:8000/product/category/" + this.category.id + "/",
           {
             category: this.category_name,
+            color:this.color,
             create_by: this.category.create_by,
             update_by: this.$store.state.auth.userInfo.id,
           }
@@ -77,6 +96,7 @@ export default {
   watch:{
     category(newCategory) {
      this.category_name = newCategory.category   
+     this.color = newCategory.color
     }
   }
 };

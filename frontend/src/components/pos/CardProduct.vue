@@ -1,23 +1,26 @@
 <template>
-  <div class="card m-1" style="width: 245px;" v-if="product.status">
+  <div class="card m-1" style="width: 200px;" v-if="product.status">
     <img
       :src="product.img"
       class="card-img-top"
       alt=""
-      width="245"
+      width="200"
       height="150"
     />
     <div class="card-body">
-      <h5 class="card-title">{{ product.name }}</h5>
-      <p id="price" class="card-text"><span>ราคา</span> <span>19 บาท</span></p>
+      <h5 class="card-title"># {{product.code}} {{ product.name }}</h5>
+      <div v-for="price in product.price" :key="price">
+        <p v-if="price.sale_channel_id == sale_channel_id" id="price" class="card-text"><span>ราคา</span> <span>{{price.price}} บาท</span></p>
+      </div>
+      
       <div class="btn-group" style="width: 100%">
-        <button
+        <button :class="{'disabled':sale_channel_id == undefined||table == ''}"
           class="btn btn-warning"
           @click="$emit('add_to_cart', product)"
         >
           add
         </button>
-        <button
+        <button :class="{'disabled':sale_channel_id == undefined}"
           class="btn btn-success"
           type="button"
           data-bs-toggle="modal"

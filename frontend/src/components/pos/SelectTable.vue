@@ -35,6 +35,7 @@
               <option value='โซฟา'>โซฟา</option>
               <option value='โต๊ะหน้ากระดาน1'>โต๊ะหน้ากระดาน1</option>
               <option value='โต๊ะหน้ากระดาน2'>โต๊ะหน้ากระดาน2</option>
+              <option value="">none</option>
             </select>
           </div>
           <!-- <div class="row">
@@ -45,13 +46,6 @@
           </div> -->
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
           <button type="button" data-bs-dismiss="modal" @click="SelectTable" class="btn btn-primary">Save changes</button>
         </div>
       </div>
@@ -62,6 +56,7 @@
 <script>
 export default {
   name: "SelectTable",
+  props:['table'],
   data(){
     return{
       select_table:0
@@ -70,6 +65,11 @@ export default {
   methods:{
     SelectTable(){
       this.$emit('select_table',this.select_table)
+    }
+  },
+  watch:{
+    table(newData){
+      this.select_table = newData
     }
   }
 };

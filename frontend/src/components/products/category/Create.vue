@@ -10,7 +10,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Create SaleChannel</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Create Category</h5>
           <button
             type="button"
             class="btn-close"
@@ -33,6 +33,23 @@
                 placeholder="Drink"
               />
             </div>
+            <div class="col-12">
+              <div class="row">
+                <label for="exampleColorInput" class="col-5 form-label"
+                  >Color picker</label
+                >
+                <div class="col-6 me-2">
+                  <input
+                    type="color"
+                    v-model="color"
+                    class="form-control"
+                    id="exampleColorInput"
+                    title="Choose your color"
+                    opacity
+                  />
+                </div>
+              </div>
+            </div>
             <button
               type="submit"
               class="btn btn-primary"
@@ -53,22 +70,30 @@ import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
-  name: "CategoryCreate",
+  name: "CreateCategory",
   computed: mapState(["auth", "product"]),
   data() {
     return {
       category: "",
+      color: '',
       err: false,
     };
   },
   methods: {
+    onFileChange(e) {
+      if (this.img == null) {
+        this.img = e.target.files[0];
+      }
+    },
     save_category() {
+      const fb = new FormData();
+      fb.append("category", this.category);
+      fb.append("color", this.color);
+      fb.append("create_by", this.$store.state.auth.userInfo.id);
+      fb.append("update_by", this.$store.state.auth.userInfo.id);
+
       axios
-        .post("http://127.0.0.1:8000/product/category/", {
-          category: this.category,
-          create_by: this.$store.state.auth.userInfo.id,
-          update_by: this.$store.state.auth.userInfo.id,
-        })
+        .post("http://127.0.0.1:8000/product/category/", fb)
         .then((response) => {
           this.$store.state.product.category = response.data;
           this.$emit("reload");

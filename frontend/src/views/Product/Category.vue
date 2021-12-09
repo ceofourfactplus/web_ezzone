@@ -1,8 +1,8 @@
 <template>
   <div id="list-category">
-    <category-table :categories="categories" @reload="reloadCategories()"/> 
-    <category-create @reload="reloadCategories()" />
+    <category-table :categories="categories" @reload="reloadCategories()" @select_category="SelectCategory"/>
     <cate-update :category="select_category" @save="reloadCategories()" />
+    <category-create @reload="reloadCategories()"/>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
     return {
       categories: [],
       load: false,
-      select_category: "",
+      select_category: {},
     };
   },
   mounted() {
@@ -38,6 +38,9 @@ export default {
     //   var myModal = bootstrap.Modal(document.getElementById("createModal"));
     //   myModal.show();
     // },
+    SelectCategory(category){
+      this.select_category = category
+    }
   },
 };
 </script>

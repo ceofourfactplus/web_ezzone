@@ -1,6 +1,4 @@
 from django.db import models
-from django.db.models.query_utils import Q
-from rest_framework.fields import ImageField
 from backend.settings import AUTH_USER_MODEL
 from django.utils.translation import gettext_lazy as _ 
 from colorfield.fields import ColorField
