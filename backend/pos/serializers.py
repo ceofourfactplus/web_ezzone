@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import fields
 from pos.models import Order, OrderItem, OrderItemTopping, Customer
 from rest_framework import serializers
-from product.serializers import ProductSerializer, ToppingSerializer, SaleChannelSerializer
+from product.serializers import ProductSerializer, SaleChannelSerializer
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class OrderItemToppingSerializer(serializers.ModelSerializer):
-    topping_set = ToppingSerializer(read_only=True)
+    topping_set = ProductSerializer(read_only=True)
 
     class Meta:
         model = OrderItemTopping

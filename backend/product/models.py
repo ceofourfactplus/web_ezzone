@@ -13,18 +13,26 @@ def upload_to_sale_channel(instance,filename):
     return 'sale_channel/{filename}'.format(filename=filename)
 
 class ProductCategory(models.Model):
-    color = ColorField(default='#ffffff')
+    DESSERT = 1
+    DRINK = 2
+    FOOD = 3 
+    TYPE_CATEGORY=(
+        (DESSERT,'ของหวาน'),
+        (DRINK,'เครื่องดื่ม'),
+        (FOOD,'อาหาร')
+    )
     status = models.BooleanField(default=True)
     category = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now_add=True)
+    type_category = models.IntegerField(choices=TYPE_CATEGORY)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_create_by")
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_update_by")
     
 class SaleChannel(models.Model):
-    color = ColorField(format='hexa')
+    color = ColorField(default='#ffffff')
     status = models.BooleanField(default=True)
     img = models.ImageField(_("Image"), upload_to=upload_to_sale_channel)
     sale_channel = models.CharField(max_length=100)
@@ -33,69 +41,60 @@ class SaleChannel(models.Model):
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sale_channel_update_by")
 
-
-class Topping(models.Model):
-
-    code = models.CharField(max_length=30)
-    status = models.BooleanField(default=True)
-    img = models.ImageField(_("Image"), upload_to=upload_to_topping ,default='topping/default.png')
-    name = models.CharField(max_length=50)
-    create_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="topping_create_by")
-    update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="topping_update_by")
-
-
-class TypeTopping(models.Model):
-    type_topping = models.CharField(max_length=100)
-    create_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="type_topping_create_by")
-    update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="type_topping_update_by")
-
-
-class PriceTopping(models.Model):
-    status = models.BooleanField(default=True)
-    topping = models.ForeignKey(Topping,on_delete=models.CASCADE)
-    sale_channel = models.ForeignKey(SaleChannel,on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10,decimal_places=2)
-    create_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_topping_create_by")
-    update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_topping_update_by")
-
-
-class TableTopping(models.Model):
-    topping = models.ForeignKey(Topping,on_delete=models.CASCADE)
-    type_topping = models.ForeignKey(TypeTopping,on_delete=models.CASCADE)
-    create_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="table_topping_create_by")
-    update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="table_topping_update_by")
-
-
 class Product(models.Model):
-    flavour = models.CharField(max_length=50)
-    img = models.ImageField(_("Image"), upload_to=upload_to_product ,default='product/default.jpg')
-    status = models.BooleanField(default=True)
+    NONE_PICK_UP = 0
+    PRODUCT = 1
+    MATERIAL = 2
+    WAREHOUSE = (
+        (NONE_PICK_UP,'ไม่ต้องตัดสต็อก'),
+        (PRODUCT,'สินค้าพร้อมขาย'),
+        (MATERIAL,'วัตถุดิบ') 
+    )
+
+    ROTI = 1
+    DRINK = 2
+    FOOD = 3 
+    TYPE_TOPPING=(
+        (ROTI,'โรตี'),
+        (DRINK,'เครื่องดื่ม'),
+        (FOOD,'อาหาร')
+    )
+
+    SPICY = 1
+    SWEET = 2
+    FLAVOUR = (
+        (SPICY,'เผ็ด'),
+        (SWEET,'หวาน')
+    )
+
+    old_product =  models.ForeignKey("self",on_delete=models.PROTECT,null=True)
+    img = models.ImageField(_("Image"), upload_to=upload_to_product)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=100)
+    is_topping = models.BooleanField()
+    is_edit = models.BooleanField()
+    is_active = models.BooleanField()
+    flavour_level = models.BooleanField()
+    status = models.BooleanField(default=True)
+    remain = models.IntegerField()
+    flavour = models.IntegerField(choices=FLAVOUR)
+    minimum = models.IntegerField()
+    type_topping = models.IntegerField(choices=TYPE_TOPPING)
+    warehouse = models.IntegerField(choices=WAREHOUSE)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    type_topping = models.ForeignKey(TypeTopping,on_delete=models.PROTECT)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_create_by")
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_update_by")
-    # is_edit = models.BooleanField
-    # edit_for =  models.PrimeryKeyField()
 
 
 class PriceProduct(models.Model):
     status = models.BooleanField(default=True)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     sale_channel = models.ForeignKey(SaleChannel,on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10,decimal_places=2)
-    # old_price
+    price = models.DecimalField(max_digits=4,decimal_places=2)
+    old_price = models.AutoField(primary_key=True)
+    is_edit = models.BooleanField
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_product_create_by")
     update_by = models.ForeignKey(

@@ -43,8 +43,11 @@ INSTALLED_APPS = [
     'pos',
     'product',
     'rest_framework',
-    'stock',
-    'user',
+    'raw_material',
+    'material',
+    'customer',
+    'promotion',  
+    'user',  
     'rest_framework_simplejwt.token_blacklist',
     "verify_email.apps.VerifyEmailConfig",
     'colorfield',
@@ -86,14 +89,21 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+import pymysql
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'ezzone_database',
+        'USER': 'root',
+        'PASSWORD': 'ceo210750',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
+pymysql.version_info = (1, 4, 2, "final", 0)
+pymysql.install_as_MySQLdb()
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

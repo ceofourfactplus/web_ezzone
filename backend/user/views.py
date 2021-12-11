@@ -2,7 +2,7 @@ from django.core import exceptions
 from django.core.mail import send_mail
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializers
+from .serializers import UserSerializer
 from .models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
@@ -44,7 +44,7 @@ class RegisterUserAPIView(APIView):
                 fail_silently=False,
                 html_message=html_content,
             )
-            data = UserSerializers(user)
+            data = UserSerializer(user)
             return Response(data.data, status=201)
 
         return Response(status=400)
@@ -52,7 +52,7 @@ class RegisterUserAPIView(APIView):
 
 class UserInfo(APIView):
     def get(self, request):
-        serializer = UserSerializers(request.user)
+        serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
 

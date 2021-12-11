@@ -1,20 +1,16 @@
 import os
 
-from django.contrib import messages
-from django.db.models.query_utils import RegisterLookupMixin
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
-from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
 
-from product.models import (PriceProduct, PriceTopping, Product,
-                            ProductCategory, SaleChannel, TableTopping,
-                            Topping, TypeTopping)
+from product.models import (PriceProduct, Product,
+                            ProductCategory, SaleChannel)
 from product.serializers import (PriceProductSerializer,
-                                 PriceToppingSerializer,
+                                 PriceProductSerializer,
                                  ProductCategorySerializer, ProductSerializer,
-                                 SaleChannelSerializer, TableToppingSerializer,
-                                 ToppingSerializer, TypeToppingSerializer)
+                                 SaleChannelSerializer, 
+                                 ProductSerializer)
 
 from .forms import *
 
@@ -151,18 +147,18 @@ class SaleChannelDetail(APIView):
 # topping
 
 
-class ToppingList(APIView):
+class ProductList(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def get(self, request):
-        object = Topping.objects.all()
-        serializer = ToppingSerializer(
+        object = Product.objects.all()
+        serializer = ProductSerializer(
             object, context={"request": request}, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        if not Topping.objects.filter(code=request.data['code']).exists():
-            serializer = ToppingSerializer(data=request.data)
+        if not Product.objects.filter(code=request.data['code']).exists():
+            serializer = ProductSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=201)
@@ -170,11 +166,11 @@ class ToppingList(APIView):
         return Response('this code is already taked', status=400)
 
 
-class ToppingStatus(APIView):
+class ProductStatus(APIView):
     def get_object(self, pk):
         try:
-            return Topping.objects.get(pk=pk)
-        except Topping.DoesNotExist:
+            return Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
             raise 404
 
     def put(self, request, pk):
@@ -182,20 +178,20 @@ class ToppingStatus(APIView):
         topping.status = request.data['status']
         topping.update_by_id = request.data['update_by']
         topping.save()
-        serializer = ToppingSerializer(topping)
+        serializer = ProductSerializer(topping)
         return Response(serializer.data)
 
 
-class ToppingDetail(APIView):
+class ProductDetail(APIView):
     def get_object(self, pk):
         try:
-            return Topping.objects.get(pk=pk)
-        except Topping.DoesNotExist:
+            return Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
             raise 404
 
     def get(self, request, pk):
         object = self.get_object(pk)
-        serializer = ToppingSerializer(object)
+        serializer = ProductSerializer(object)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -203,7 +199,7 @@ class ToppingDetail(APIView):
         if len(request.FILES) != 0:
             os.remove(object.img.path)
             object.img = request.FILES['img']
-        serializer = ToppingSerializer(object, data=request.data)
+        serializer = ProductSerializer(object, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -216,162 +212,13 @@ class ToppingDetail(APIView):
         return Response(status=204)
 
 
-class ToppingPos(APIView):
+class ProductPos(APIView):
     def get(self, request):
-        topping = Topping.objects.filter(status=True)
-        serializer = ToppingSerializer(topping, many=True)
+        topping = Product.objects.filter(status=True)
+        serializer = ProductSerializer(topping, many=True)
         return Response(serializer.data)
 
 
-
-
-# type topping
-
-class TypeToppingList(APIView):
-    def get(self, request):
-        object = TypeTopping.objects.all()
-        serializer = TypeToppingSerializer(object, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = TypeToppingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-class TypeToppingDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return TypeTopping.objects.get(pk=pk)
-        except TypeTopping.DoesNotExist:
-            raise 404
-
-    def get(self, request, pk):
-        object = self.get_object(pk)
-        serializer = TypeToppingSerializer(object)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        object = self.get_object(pk)
-        serializer = TypeToppingSerializer(object, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
-    def delete(self, request, pk):
-        object = self.get_object(pk)
-        object.delete()
-        return Response(status=204)
-
-# price topping
-
-
-class PriceToppingList(APIView):
-    def get(self, request):
-        object = PriceTopping.objects.all()
-        serializer = PriceToppingSerializer(object, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = PriceToppingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-class PriceToppingDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return PriceTopping.objects.get(pk=pk)
-        except PriceTopping.DoesNotExist:
-            raise 404
-
-    def get(self, request, pk):
-        object = self.get_object(pk)
-        serializer = PriceToppingSerializer(object)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        object = self.get_object(pk)
-        serializer = PriceToppingSerializer(object, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
-    def delete(self, request, pk):
-        object = self.get_object(pk)
-        object.delete()
-        return Response(status=204)
-
-class PriceToppingMany(APIView):
-    def post(self, request):
-        for data in request.data:
-            PriceTopping.objects.create(
-                topping_id=data['id'],
-                sale_channel_id=data['sale_channel_id'],
-                price=data['new_price'],
-                create_by_id=data['create_by'],
-                update_by_id=data['update_by']
-            )
-        return Response('ok')
-
-    def put(self, request):
-        for data in request.data:
-            for item in data['price_topping']:
-                if item['sale_channel_id']==data['sale_channel_edit']:
-                    price = PriceTopping.objects.get(id = item['id'])
-                    serializer = PriceToppingSerializer(price,data=item)
-                    if serializer.is_valid(): 
-                        price.save()
-                        return Response('ok')
-                    return Response(serializer.errors,status=400)
-                
-# table topping
-
-
-class TableToppingList(APIView):
-    def get(self, request):
-        object = TableTopping.objects.all()
-        serializer = TableToppingSerializer(object, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = TableToppingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-class TableToppingDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return TableTopping.objects.get(pk=pk)
-        except TableTopping.DoesNotExist:
-            raise 404
-
-    def get(self, request, pk):
-        object = self.get_object(pk)
-        serializer = TableToppingSerializer(object)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        object = self.get_object(pk)
-        serializer = TableToppingSerializer(object, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
-    def delete(self, request, pk):
-        object = self.get_object(pk)
-        object.delete()
-        return Response(status=204)
 
 # price product
 
