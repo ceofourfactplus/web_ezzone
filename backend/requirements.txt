@@ -18,7 +18,6 @@ Django-Verify-Email==1.0.7
 djangocms-admin-style==2.0.2
 djangocms-snippet==3.0.0
 djangorestframework==3.11.0
-djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.7.2
 filelock==3.0.12
 gunicorn==20.1.0
