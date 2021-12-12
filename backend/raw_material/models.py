@@ -42,7 +42,7 @@ class RawMaterial(models.Model):
     name = models.CharField(max_length=255)
     remain = models.IntegerField()
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
-    minstock = models.IntegerField()
+    minimum = models.IntegerField(default=1)
     avg_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     min_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     max_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
@@ -52,11 +52,11 @@ class RawMaterial(models.Model):
         Supplier, on_delete=models.PROTECT, null=True, related_name="raw_material_min_price_supplier")
     in_refrigerator = models.BooleanField(default=False)
     create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(null=True)
+    update_at = models.DateTimeField(null=True,blank=True)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_update_by", null=True)
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_update_by", null=True,blank=True)
     img = models.ImageField(
         _("Image"), upload_to=upload_to_raw_material, default='raw_material/default.jpg',)
 
@@ -81,11 +81,11 @@ class ReceiptRawMaterial(models.Model):
     total_amount = models.IntegerField()
     payment = models.CharField(max_length=8, choices=PAYMENT)
     create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now_add=True, null=True)
+    update_at = models.DateTimeField(auto_now_add=True, null=True,blank=True)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_update_by", blank=True)
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_update_by",null=True, blank=True)
 
 
 class ReceiptRawMaterialDetail(models.Model):
@@ -98,8 +98,8 @@ class ReceiptRawMaterialDetail(models.Model):
     remark = models.TextField(blank=True)
     discount = models.DecimalField(max_digits=10, decimal_places=2)
     create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(null=True,blank=True)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_update_by", blank=True)
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_update_by", null=True,blank=True)

@@ -22,30 +22,31 @@ class PointPromotion(models.Model):
   end_promotion_date = models.DateField()
   end_reward_redemption = models.DateField()
   point_price = models.IntegerField()
-  point = models.IntegerField()
+  point = models.IntegerField(default=1)
   img = models.ImageField(_("Image"), upload_to=upload_to_promotion)
-  status = models.BooleanField()
-  description = models.TextField(null=True)
+  status = models.BooleanField(default=True)
+  description = models.TextField(null=True,blank=True)
   create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="promotion_point_create_by")
   update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="promotion_point_update_by",null=True)
   create_at = models.DateTimeField(auto_now_add=True)
-  update_at = models.DateTimeField(auto_now_add=True,null=True)
+  update_at = models.DateTimeField(null=True,blank=True)
     
 
 class Rewards (models.Model):
   reward = models.CharField(max_length=255)
   img = models.ImageField(_("Image"), upload_to=upload_to_rewards)
   value = models.DecimalField(max_digits=4,decimal_places=2)
-  description = models.TextField(null=True)
+  description = models.TextField(null=True,blank=True)
   amount = models.IntegerField()
+  cost = models.DecimalField(max_digits=4,decimal_places=2)
   create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="rewards_create_by")
   update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="rewards_update_by",null=True)
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="rewards_update_by",null=True,blank=True)
   create_at = models.DateTimeField(auto_now_add=True)
-  update_at = models.DateTimeField(auto_now_add=True,null=True)
+  update_at = models.DateTimeField(null=True,blank=True)
     
 
 class ConditionRewards(models.Model):
@@ -56,12 +57,12 @@ class ConditionRewards(models.Model):
 
 class Voucher (models.Model):
   voucher = models.CharField
-  img = models.ImageField(_("Image"), upload_to=upload_to_voucher,)
-  discount = models.DecimalField
+  img = models.ImageField(_("Image"), upload_to=upload_to_voucher)
+  discount = models.DecimalField(max_digits=4,decimal_places=2)
   start_date = models.DateField
   end_date = models.DateField
-  is_percent = models.BooleanField
-  description = models.TextField(null=True)
+  is_percent = models.BooleanField(default=False)
+  description = models.TextField(null=True,blank=True)
   amount = models.IntegerField
   create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="voucher_create_by")
@@ -80,23 +81,25 @@ class Redemption(models.Model):
   create_at = models.DateTimeField(auto_now_add=True)
   point =  models.IntegerField()
   status_given = models.BooleanField(default=False)
-  due_date = models.DateTimeField(null=True)
-  description = models.TextField(null=True)
-  img = models.ImageField(_("Image"), upload_to=upload_to_redemption ,null=True)
+  due_date = models.DateTimeField(null=True,blank=True)
+  description = models.TextField(null=True,blank=True)
+  img = models.ImageField(_("Image"), upload_to=upload_to_redemption ,null=True,blank=True)
 
 class PromotionPackage(models.Model):
   promotion = models.CharField(max_length=100)
+  date_start = models.DateField()
+  amount_day = models.IntegerField()
   discount_price = models.DecimalField(max_digits=4,decimal_places=2)
   normal_price = models.DecimalField(max_digits=4,decimal_places=2)
   status_use = models.BooleanField(default=True)
   total_amount = models.IntegerField()
-  description = models.TextField(null=True)
+  description = models.TextField(null=True,blank=True)
 
 class PackageItem(models.Model):
   product = models.ForeignKey(Product,on_delete=models.PROTECT)
   amount = models.IntegerField()
   total_price = models.DecimalField(max_digits=4,decimal_places=2)
-  description = models.TextField(null=True)
+  description = models.TextField(null=True,blank=True)
   package = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
 
 class ItemTopping(models.Model):
@@ -104,11 +107,11 @@ class ItemTopping(models.Model):
   item = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
   amount = models.IntegerField()
   total_price = models.DecimalField(max_digits=3,decimal_places=2)
-  description = models.TextField(null=True)
+  description = models.TextField(null=True,blank=True)
 
 
 class CustomerPoint(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
     point_promotion = models.ForeignKey(PointPromotion,on_delete=models.PROTECT)
     point = models.IntegerField()
-    description = models.TextField()
+    description = models.TextField(null=True,blank=True)

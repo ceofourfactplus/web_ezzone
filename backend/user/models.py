@@ -1,3 +1,4 @@
+from django.contrib.auth import default_app_config
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from backend.settings import AUTH_USER_MODEL
@@ -12,6 +13,7 @@ class User(AbstractUser):
   is_purchaser = models.BooleanField(default=False)
   is_service = models.BooleanField(default=False)
   born_at = models.BooleanField(blank=True,null=True)
+  is_working = models.BooleanField(default=True)
   img = models.ImageField(_("Image"), upload_to=upload_to_user,default='topping/default.png')
 
 class Login(models.Model):

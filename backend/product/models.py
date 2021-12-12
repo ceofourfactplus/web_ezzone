@@ -3,6 +3,8 @@ from backend.settings import AUTH_USER_MODEL
 from django.utils.translation import gettext_lazy as _ 
 from colorfield.fields import ColorField
 
+from user.models import User
+
 def upload_to_product(instance,filename):
     return 'product/{filename}'.format(filename=filename)
 
@@ -11,6 +13,10 @@ def upload_to_topping(instance,filename):
 
 def upload_to_sale_channel(instance,filename):
     return 'sale_channel/{filename}'.format(filename=filename)
+
+class Owner(User):
+    phone_number = models.IntegerField()
+
 
 class ProductCategory(models.Model):
     DESSERT = 1
@@ -24,12 +30,12 @@ class ProductCategory(models.Model):
     status = models.BooleanField(default=True)
     category = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(null=True,blank=True)
     type_category = models.IntegerField(choices=TYPE_CATEGORY)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_update_by")
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_update_by",null=True,blank=True)
     
 class SaleChannel(models.Model):
     color = ColorField(default='#ffffff')
@@ -39,7 +45,7 @@ class SaleChannel(models.Model):
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sale_channel_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sale_channel_update_by")
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sale_channel_update_by",null=True,blank=True)
 
 class Product(models.Model):
     NONE_PICK_UP = 0
@@ -67,35 +73,48 @@ class Product(models.Model):
         (SWEET,'หวาน')
     )
 
-    old_product =  models.ForeignKey("self",on_delete=models.PROTECT,null=True)
+    old_product =  models.ForeignKey("self",on_delete=models.PROTECT,null=True,blank=True)
     img = models.ImageField(_("Image"), upload_to=upload_to_product)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=100)
     is_topping = models.BooleanField()
-    is_edit = models.BooleanField()
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=True)
     flavour_level = models.BooleanField()
     status = models.BooleanField(default=True)
     remain = models.IntegerField()
     flavour = models.IntegerField(choices=FLAVOUR)
-    minimum = models.IntegerField()
+    minimum = models.IntegerField(default=1)
+    percent = models.IntegerField(null=True,blank=True)
+    is_consignment = models.BooleanField(default=False)
     type_topping = models.IntegerField(choices=TYPE_TOPPING)
     warehouse = models.IntegerField(choices=WAREHOUSE)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_update_by")
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_update_by",null=True,blank=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(null=True,blank=True)
 
+class AddProduct(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.PROTECT)
+    amount = models.IntegerField()
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(null=True,blank=True)
+    create_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="add_product_create_by")
+    update_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="add_product_update_by",null=True,blank=True)
 
 class PriceProduct(models.Model):
     status = models.BooleanField(default=True)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     sale_channel = models.ForeignKey(SaleChannel,on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=4,decimal_places=2)
-    old_price = models.AutoField(primary_key=True)
-    is_edit = models.BooleanField
+    old_price = models.ForeignKey('self',on_delete=models.PROTECT,null=True,blank=True)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_product_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_product_update_by")
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_product_update_by",null=True,blank=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(null=True,blank=True)

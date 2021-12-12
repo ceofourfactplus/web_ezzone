@@ -23,20 +23,47 @@ class UnitSerializer(serializers.ModelSerializer):
 
 class RawMaterialSerializer(serializers.ModelSerializer):
     unit_id = serializers.IntegerField()
-    unit_set = UnitSerializer(read_only=True, source="unit")
     category_id = serializers.IntegerField()
-    category_set = RawMaterialCategorySerializer(
-        read_only=True, source="raw_material_category")
     create_by_id = serializers.IntegerField()
     update_by_id = serializers.IntegerField()
-    create_by = UserSerializer(read_only=True, source="user")
-    update_by = UserSerializer(read_only=True, source="user")
+    max_price_supplier_id = serializers.IntegerField()
+    min_price_supplier_id = serializers.IntegerField()
+    create_by_set = UserSerializer(read_only=True, source="user")
+    update_by_set = UserSerializer(read_only=True, source="user")
+    category_set = RawMaterialCategorySerializer(
+        read_only=True, source="raw_material_category")
+    min_price_supplier_set = SupplierSerializer(read_only=True, source="supplier")
+    max_price_supplier_set = SupplierSerializer(read_only=True, source="supplier")
+    unit_set = UnitSerializer(read_only=True, source="unit")
 
     class Meta:
         model = RawMaterial
-        fields = ['id', 'code', 'status', 'name', 'balance', 'unit_id', 'minraw_material',
-                  'avg_price', 'max_price', 'min_price', 'create_by', 'update_by', 'create_by_id', 
-                  'update_by_id','create_at', 'update_at', 'unit_set', 'category_id', 'category_set']
+        fields = [
+            'id',
+            'img',
+            'status',
+            'name',
+            'balance',
+            'minimum',
+            'avg_price',
+            'max_price',
+            'min_price',
+            'max_price_supplier_id',
+            'min_price_supplier_id',
+            'in_refrigerator',
+            'create_by_id',
+            'update_by_id',
+            'category_id',
+            'unit_id',
+            'create_at',
+            'update_at',
+            'category_set',
+            'max_price_supplier_set',
+            'min_price_supplier_set',
+            'update_by_set',
+            'create_by_set',
+            'unit_set',
+        ]
 
 
 class PickUpRawMaterialSerializer(serializers.ModelSerializer):
@@ -87,7 +114,7 @@ class ReceiptRawMaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReceiptRawMaterial
         fields = ['id', 'supplier_id', 'total_price',
-                  'total_amount', 'payment','receipt_raw_material_detail_list'
+                  'total_amount', 'payment', 'receipt_raw_material_detail_list'
                   'create_at', 'create_by_id', 'update_by_id',
                   'update_at', 'supplier_set',
                   'create_by', 'update_by']

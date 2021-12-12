@@ -8,11 +8,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-
-
-# Create your views here.
-
-
 class RegisterUserAPIView(APIView):
     def post(self, request):
         username = request.data['username']
@@ -56,17 +51,16 @@ class UserInfo(APIView):
         return Response(serializer.data)
 
 
-# def activate():
-#     pass
-
 class activate(APIView):
-    def get(self, request,id ,token):
-        user = User.objects.get(id=id)
-        if default_token_generator.check_token(user, token):
-            user.is_active = True
-            user.save()
-            return Response('Thank you for your email confirmation. Now you can login your account.')
-        return Response('Activation link is invalid!')
+    def put(self, request,):
+        user = User.objects.get(id=request.data['id'])
+        if default_token_generator.check_token(user, request.data['token']):
+            serializer = UserSerializer(user,data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response('Thank you for your email confirmation.',status=200)
+            return Response('bad request',status=400)
+        return Response('Activation link is invalid!',status=400)
 
 
 class ConfirmPass(APIView):
@@ -77,17 +71,11 @@ class ConfirmPass(APIView):
         return Response('password Incerrect', status=400)
 
 class IsActive(APIView): 
-    # def get_object(self, request ):
-        # try:
-        # return User.objects.get(username=request.data['username'])
-        # except Exception as  E:
-            # raise 404
-
     def post(self, request):
         user = User.objects.get(username=request.data['username'])
         if user.check_password(request.data['password']):
             if user.is_active:
                 return Response('is_active')
-            return Response('is_not_active',status=400)
-        return Response('your password is incorrect',status=400)
+            return Response('is_not_active', status=400)
+        return Response('your password is incorrect', status=400)
         
