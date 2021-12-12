@@ -14,10 +14,6 @@ def upload_to_topping(instance,filename):
 def upload_to_sale_channel(instance,filename):
     return 'sale_channel/{filename}'.format(filename=filename)
 
-class Owner(User):
-    phone_number = models.IntegerField()
-
-
 class ProductCategory(models.Model):
     DESSERT = 1
     DRINK = 2
@@ -84,8 +80,8 @@ class Product(models.Model):
     remain = models.IntegerField()
     flavour = models.IntegerField(choices=FLAVOUR)
     minimum = models.IntegerField(default=1)
+    consignment = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT,null=True,default=None)
     percent = models.IntegerField(null=True,blank=True)
-    is_consignment = models.BooleanField(default=False)
     type_topping = models.IntegerField(choices=TYPE_TOPPING)
     warehouse = models.IntegerField(choices=WAREHOUSE)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
