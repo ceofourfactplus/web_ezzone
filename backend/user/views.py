@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from .models import User
+from django.http import Http404
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -52,9 +53,9 @@ class UserInfo(APIView):
 
 
 class activate(APIView):
-    def get_object(self,request):
+    def get_object(self,username):
         try:
-            return User.objects.get(id=request.data['id'])
+            return User.objects.get(username=username)
         except User.DoesNotExist:
             raise Response('This user does not exist in the system.',status=400)
 
@@ -77,8 +78,15 @@ class ConfirmPass(APIView):
         return Response('password Incerrect', status=400)
 
 class IsActive(APIView): 
-    def post(self, request):
-        user = User.objects.get(username=request.data['username'])
+    def get_object(self,username):
+        try:
+            return User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404
+            
+            
+    def post(self, request, format=None):
+        user = self.get_object(request.data['username']) 
         if user.check_password(request.data['password']):
             if user.is_active:
                 return Response('is_active')

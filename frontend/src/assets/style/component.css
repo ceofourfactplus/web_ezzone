@@ -107,7 +107,31 @@ input::placeholder {
   border-color: #FF7CA3;
 }
 .text-error{
-  color:#FF7CA3;
-  font-size: 24px;
+  font-size: 18px;
+  line-height: 23px;
+  color: #FF7CA3;
 }
 
+.c {
+  position: relative;
+  margin: auto;
+  top: 100px;
+}
+h1 {
+  font-style: normal;
+  font-weight: 800;
+  font-size: 72px;
+  line-height: 94px;
+  color: #fafafa;
+  margin-bottom: 40px;
+}
+.back{
+  top:45px;
+  left:55px;
+  position: fixed;
+}
+
+.register-user{
+  top:100px;
+  left:100px;
+}

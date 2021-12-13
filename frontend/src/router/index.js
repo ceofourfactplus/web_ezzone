@@ -6,7 +6,7 @@ import MainStock from "../views/Stock/MainStock.vue";
 import Login from "../views/User/Login.vue";
 import Logout from "../views/User/Logout.vue";
 import Windows from "../views/Windows.vue";
-import Register from "../views/Register.vue";
+import Register from "../views/User/Register.vue";
 import AllStock from "../views/Stock/AllStock.vue";
 import ToBuy from "../views/Stock/ToBuy.vue"
 import store from "../store";

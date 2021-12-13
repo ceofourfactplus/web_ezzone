@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export default {
   namespaced: true,
   state: {
@@ -7,8 +6,8 @@ export default {
     confirm_pass: false,
     refreshToken: null,
     userInfo: "",
-    error_login: {
-      boolean: false,
+    error: {
+      status: false,
       text: "",
     },
   },
@@ -31,46 +30,6 @@ export default {
     },
   },
   actions: {
-    userLogin(context, usercredentials) {
-      return axios
-        .post("http://127.0.0.1:8000/user/is-active/", {
-          username: usercredentials.username,
-          password: usercredentials.password,
-        })
-        .then(() => {
-          return axios
-            .post("http://127.0.0.1:8000/api-token/", {
-              username: usercredentials.username,
-              password: usercredentials.password,
-            })
-            .then((response) => {
-              localStorage.setItem('username',usercredentials.username)
-              localStorage.setItem('password',usercredentials.password)
-              console.log("2");
-              context.commit("newToken", {
-                access: response.data.access,
-                refresh: response.data.refresh,
-              });
-              const headers = {
-                headers: {
-                  Authorization: `Bearer ${response.data.access}`,
-                },
-              };
-
-              axios
-                .get("http://127.0.0.1:8000/auth/user-info/", headers)
-                .then((response) => {
-                  context.commit("updateUserInfo", {
-                    userInfo: response.data,
-                  });
-                });
-            });
-        })
-        .catch((error) => {
-          context.state.error_login.text = error;
-          context.state.error_login.boolean = true;
-        });
-    },
     userLogout(context) {
       if (context.getters.loggedIn) {
         context.commit("destroyToken");
