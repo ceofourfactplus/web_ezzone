@@ -68,7 +68,7 @@ input {
   font-weight: bold;
 }
 input::placeholder {
-  color: #e0eeee;
+  color: #e0eeee88;
 }
 
 .btn {
