@@ -17,7 +17,7 @@
             
           </div>
           <div class="col-3 m-1"><button class="btn btn-warning" @click="$emit('select_channel','');$emit('select_table','')">
-              <img src="../../assets/tablePOS/free-table.png" width="100" height="100" style="border-radius:5px;" alt="">
+              <img src="../../assets/img/tablePOS/free-table.png" width="100" height="100" style="border-radius:5px;" alt="">
               <h5 class="mt-1">cancel
               </h5>
             </button></div>

@@ -33,7 +33,7 @@ export default {
   actions: {
     userLogin(context, usercredentials) {
       return axios
-        .post("http://127.0.0.1:8000/auth/is-active/", {
+        .post("http://127.0.0.1:8000/user/is-active/", {
           username: usercredentials.username,
           password: usercredentials.password,
         })

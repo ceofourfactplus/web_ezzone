@@ -17,7 +17,7 @@ def upload_to_redemption(instance,filename):
     return 'redemption/{filename}'.format(filename=filename)
 
 class PointPromotion(models.Model):
-  promotion = models.CharField(max_length=255)
+  promotion = models.CharField(max_length=100)
   start_promotion_date = models.DateField()
   end_promotion_date = models.DateField()
   end_reward_redemption = models.DateField()
@@ -35,7 +35,7 @@ class PointPromotion(models.Model):
     
 
 class Rewards (models.Model):
-  reward = models.CharField(max_length=255)
+  reward = models.CharField(max_length=100)
   img = models.ImageField(_("Image"), upload_to=upload_to_rewards)
   value = models.DecimalField(max_digits=4,decimal_places=2)
   description = models.TextField(null=True,blank=True)

@@ -9,7 +9,7 @@
       data-bs-target="#selectTable"
       @click="select = 1"
     >
-      <img src="../../assets/eat-here.png" />
+      <img src="../../assets/img/eat-here.png" />
       <h5 class="mt-1">Eat Here</h5>
     </button>
     <button
@@ -22,7 +22,7 @@
       data-bs-target="#selectTable"
       @click="select = 1"
     >
-      <img src="../../assets/eat-here.png" />
+      <img src="../../assets/img/eat-here.png" />
       <h5 class="mt-1">Eat Here</h5>
     </button>
 
@@ -34,7 +34,7 @@
       data-bs-toggle="modal"
       data-bs-target="#selectSaleChannel"
     >
-      <img src="../../assets/delivery.png" alt="" />
+      <img src="../../assets/img/delivery.png" alt="" />
       <h5 class="mt-1">Delivery</h5>
     </button>
     <button
@@ -46,7 +46,7 @@
       data-bs-target="#selectSaleChannel"
       :class="{ 'btn-warning': select != 2, 'btn-danger': select == 2 }"
     >
-      <img src="../../assets/delivery.png" alt="" />
+      <img src="../../assets/img/delivery.png" alt="" />
       <h5 class="mt-1">Delivery</h5>
     </button>
     <button
@@ -57,7 +57,7 @@
       :class="{ 'btn-danger': select == 3, 'btn-success': customer != {} }"
       @click="select = 3"
     >
-      <img src="../../assets/payment.png" alt="" />
+      <img src="../../assets/img/payment.png" alt="" />
       <h5 class="mt-1">Payment</h5>
     </button>
     <button
@@ -69,7 +69,7 @@
       @click="select = 3"
       style="border-radius: 0px 50px 50px 0px"
     >
-      <img src="../../assets/customer.png" alt="" />
+      <img src="../../assets/img/customer.png" alt="" />
       <h5 class="mt-1">Customer</h5>
     </button>
   </div>

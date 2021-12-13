@@ -1,0 +1,113 @@
+/* all component style of ezzone web is here */
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  counter-reset: div;
+  text-align: center;
+}
+
+/* spanning cols */
+.col-1 {
+  grid-column: auto/span 2;
+}
+
+.col-2 {
+  grid-column: auto/span 2;
+}
+
+.col-3 {
+  grid-column: auto/span 3;
+}
+
+.col-4 {
+  grid-column: auto/span 4;
+}
+
+.col-5 {
+  grid-column: auto/span 5;
+}
+
+.col-6 {
+  grid-column: auto/span 6;
+}
+
+.col-7 {
+  grid-column: auto/span 7;
+}
+
+.col-8 {
+  grid-column: auto/span 8;
+}
+
+.col-9 {
+  grid-column: auto/span 9;
+}
+
+.col-10 {
+  grid-column: auto/span 10;
+}
+
+.col-11 {
+  grid-column: auto/span 11;
+}
+
+.col-12 {
+  grid-column: auto/span 12;
+}
+
+input {
+  border-radius: 10px;
+  width: 520px;
+  height: 80px;
+  text-indent: 30px;
+  background-color: #484a54;
+  border: 0px;
+  color: #e0eeee;
+  font-size: 24px;
+  font-weight: bold;
+}
+input::placeholder {
+  color: #e0eeee;
+}
+
+.btn {
+  background-color: #ea7c69;
+  font-size: 24px;
+  font-weight: bolder;
+  border-radius: 10px;
+  color: #252836;
+}
+
+.btn-ghost {
+  background-color: #252836;
+  font-size: 24px;
+  font-weight: bolder;
+  color: #ea7c69;
+  border-color: #ea7c69;
+  border-radius: 10px;
+  border-width: 4px;
+}
+
+.m {
+  margin: auto;
+  margin-bottom: 40px;
+}
+
+.alert{
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background-color: #252836;
+  border-width: 4px;
+  border-color: #ea7c69;
+}
+
+.alert-error{
+  border-color: #FF7CA3;
+}
+.text-error{
+  color:#FF7CA3;
+  font-size: 24px;
+}
+

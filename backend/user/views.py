@@ -52,8 +52,14 @@ class UserInfo(APIView):
 
 
 class activate(APIView):
+    def get_object(self,request):
+        try:
+            return User.objects.get(id=request.data['id'])
+        except User.DoesNotExist:
+            raise Response('This user does not exist in the system.',status=400)
+
     def put(self, request,):
-        user = User.objects.get(id=request.data['id'])
+        user = self.get_object
         if default_token_generator.check_token(user, request.data['token']):
             serializer = UserSerializer(user,data=request.data)
             if serializer.is_valid():

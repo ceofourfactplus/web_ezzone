@@ -3,7 +3,7 @@
     <div class="position-absolute top-50 start-50 translate-middle row">
       <div class="col">
         <div class="card">
-          <img src="../assets/warehouse.jpeg" class="card-img-top" />
+          <img src="../assets/img/warehouse.jpeg" class="card-img-top" />
           <div class="card-body" style="height: 350px; overflow:auto;">
             <h5 class="card-title">Stock</h5>
             <div class="container card-text">
@@ -35,7 +35,7 @@
 
       <div class="col">
         <div class="card" >
-          <img src="../assets/counter.jpeg" class="card-img-top" />
+          <img src="../assets/img/counter.jpeg" class="card-img-top" />
           <div class="card-body" style="height: 350px">
             <h5 class="card-title">POS</h5>
             <div class="card-text container">
@@ -63,7 +63,7 @@
 
       <div class="col">
         <div class="card">
-          <img src="../assets/production.jpeg" class="card-img-top" />
+          <img src="../assets/img/production.jpeg" class="card-img-top" />
           <div class="card-body" style="height: 350px">
             <h5 class="card-title">PRODUCT</h5>
             <div class="card-text container">

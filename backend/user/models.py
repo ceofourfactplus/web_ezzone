@@ -8,14 +8,25 @@ def upload_to_user(instance,filename):
     return 'user/{filename}'.format(filename=instance.username)
 
 class User(AbstractUser):
-  is_chef = models.BooleanField(default=False)
-  is_bartender = models.BooleanField(default=False)
-  is_purchaser = models.BooleanField(default=False)
-  is_service = models.BooleanField(default=False)
   is_owner = models.BooleanField(default=False)
-  born_at = models.BooleanField(blank=True,null=True)
+  birth_day = models.BooleanField(blank=True,null=True)
   is_working = models.BooleanField(default=True)
+  gender = models.CharField(max_length=30)
   img = models.ImageField(_("Image"), upload_to=upload_to_user,default='topping/default.png')
+
+class Permission(models.Model):
+  permission = models.CharField(max_length=50)
+  customer = models.BooleanField(default=False)
+  material = models.BooleanField(default=False)
+  pos = models.BooleanField(default=False)
+  product =  models.BooleanField(default=False)
+  promotion = models.BooleanField(default=False)
+  raw_material = models.BooleanField(default=False)
+  user = models.BooleanField(default=False)
+
+class UserPermission(models.Model):
+  permission = models.ForeignKey(Permission,on_delete=models.CASCADE)
+  user = models.ForeignKey(User,on_delete=models.CASCADE)
 
 class Login(models.Model):
   token = models.CharField

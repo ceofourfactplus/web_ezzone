@@ -39,10 +39,10 @@
             </select>
           </div>
           <!-- <div class="row">
-            <img scr="../../assets/tablePOS/free-out-door.png" v-if="select_table == 'โต๊ะนอกบ้าน'" alt="">
-            <img scr="../../assets/tablePOS/free-mirror.png" v-else-if="select_table === '2'||select_table === '9'||select_table === '10'" alt="">
-            <img scr="../../assets/tablePOS/free-table.png" v-else-if="select_table >= '3' && select_table <= '7'" alt="">
-            <img scr="../../assets/tablePOS/free-sofa.png" v-else-if="select_table === '8'" alt="">
+            <img scr="../../assets/img/tablePOS/free-out-door.png" v-if="select_table == 'โต๊ะนอกบ้าน'" alt="">
+            <img scr="../../assets/img/tablePOS/free-mirror.png" v-else-if="select_table === '2'||select_table === '9'||select_table === '10'" alt="">
+            <img scr="../../assets/img/tablePOS/free-table.png" v-else-if="select_table >= '3' && select_table <= '7'" alt="">
+            <img scr="../../assets/img/tablePOS/free-sofa.png" v-else-if="select_table === '8'" alt="">
           </div> -->
         </div>
         <div class="modal-footer">
