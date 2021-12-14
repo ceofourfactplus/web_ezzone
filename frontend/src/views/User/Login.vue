@@ -33,6 +33,7 @@
             aria-label=".form-control-lg example"
           />
         </div>
+        <div class="col-12"></div>
         <div class="m-3" v-if="error.status">
           <div class="text-error">
             <img src="../../assets/icon/btn-warning.png" alt="" /> username or
@@ -41,7 +42,7 @@
         </div>
         <div class="m" v-else></div>
 
-        <button type="submit" class="btn m" id="btn-login">Login</button>
+        <button type="submit" class="btn m mt-2" id="btn-login">Login</button>
         <button
           type="button"
           class="btn-ghost m"
@@ -52,13 +53,21 @@
         </button>
       </form>
     </div>
+    <div class="card" :class="{'card-active':alert}">
+      <div class="icon">
+        <img src="../../assets/icon/btn-pass.png" alt="">
+      </div>
+      <div class="main-text">
+        Login already
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { api_user } from "../../api/api_user";
-import axios from 'axios'
+import axios from "axios";
 export default {
   name: "Login",
   computed: mapState(["auth"]),
@@ -69,6 +78,7 @@ export default {
       error: {
         status: true,
       },
+      alert:false
     };
   },
   methods: {
@@ -104,6 +114,13 @@ export default {
           this.error.status = true;
         });
     },
+    wait(ms) {
+      var start = new Date().getTime();
+      var end = start;
+      while (end < start + ms) {
+        end = new Date().getTime();
+      }
+    },
   },
   watch: {
     username() {
@@ -130,4 +147,5 @@ export default {
   width: 300px;
   height: 70px;
 }
+
 </style>

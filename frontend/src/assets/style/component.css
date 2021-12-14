@@ -58,15 +58,23 @@
 
 input {
   border-radius: 10px;
-  width: 520px;
-  height: 80px;
-  text-indent: 30px;
-  background-color: #484a54;
+  width: 400px;
+  height: 60px;
+  text-indent: 10px;
+  background-color: #303344;
   border: 0px;
   color: #e0eeee;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 400;
 }
+
+input[type="date"] {
+  padding-right: 20px;
+  padding-left: 0px;
+  text-indent: 5px;
+  color: #e0eeee88;
+}
+
 input::placeholder {
   color: #e0eeee88;
 }
@@ -94,7 +102,7 @@ input::placeholder {
   margin-bottom: 40px;
 }
 
-.alert{
+.alert {
   width: 100%;
   height: auto;
   border-radius: 10px;
@@ -103,13 +111,13 @@ input::placeholder {
   border-color: #ea7c69;
 }
 
-.alert-error{
-  border-color: #FF7CA3;
+.alert-error {
+  border-color: #ff7ca3;
 }
-.text-error{
+.text-error {
   font-size: 18px;
   line-height: 23px;
-  color: #FF7CA3;
+  color: #ff7ca3;
 }
 
 .c {
@@ -125,13 +133,70 @@ h1 {
   color: #fafafa;
   margin-bottom: 40px;
 }
-.back{
-  top:45px;
-  left:55px;
+.back {
+  top: 45px;
+  left: 55px;
   position: fixed;
 }
 
-.register-user{
-  top:100px;
-  left:100px;
+.register-user {
+  top: 150px;
+  left: 45px;
+  position: fixed;
+  border-radius: 50%;
+}
+
+.card {
+  left: 25%;
+  top: 25%;
+  width: 390px;
+  height: 500px;
+  position: fixed;
+  background: #303344;
+  border: 2px solid #ea7c69;
+  box-sizing: border-box;
+  border-radius: 10px;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.card-active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.card .icon {
+  margin: 0;
+  position: relative;
+  top: 26%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.card .main-text {
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  top: 55%;
+  font-weight: bold;
+  color: #fff;
+  font-size: 50px;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.card .second {
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  top: 75%;
+  font-weight: bold;
+  color: #ffb572;
+  font-size: 28px;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }

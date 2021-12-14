@@ -12,7 +12,6 @@ from django.utils.html import strip_tags
 class RegisterUserAPIView(APIView):
     def post(self, request):
         username = request.data['username']
-        email = request.data['email']
         password = request.data['password']
         can_save = True
 
@@ -20,31 +19,31 @@ class RegisterUserAPIView(APIView):
             can_save = False
             return Response('Username or password is taken, choose another one', status=400)
 
-        if User.objects.filter(email=email).exists():
-            can_save = False
-            return Response('Username or password is taken, choose another one', status=400)
-
-        if can_save:
-            user = User.objects.create_user(username, email, password)
-            user.first_name = request.data['first_name']
-            user.last_name = request.data['last_name']
-            user.is_active = False
-            user.save()
+        if not User.objects.filter(username=username).exists():
+            user = User.objects.create_user(
+                username = request.data['username'],
+                email = request.data['email'],
+                password = request.data['password'],
+                first_name = request.data['first_name'],
+                last_name = request.data['last_name'],
+                phone_number = request.data['phone_number'],
+                id_card = request.data['id_card'],
+                is_active = False
+            )
             html_content = render_to_string('user/send_verify_mail.html',{'token':default_token_generator.make_token(user),'user_id':user.id,'name':user.first_name,})
             plain_content = strip_tags(html_content)
             send_mail(
                 'testezzone',
                 plain_content,
                 'testezzone@gmail.com',
-                [user.email],
+                'ceofourfactplus@gmail.com',
                 fail_silently=False,
                 html_message=html_content,
             )
             data = UserSerializer(user)
             return Response(data.data, status=201)
 
-        return Response(status=400)
-
+        return Response('Username or password is taken, choose another one', status=400)
 
 class UserInfo(APIView):
     def get(self, request):

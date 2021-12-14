@@ -8,13 +8,13 @@ import Logout from "../views/User/Logout.vue";
 import Windows from "../views/Windows.vue";
 import Register from "../views/User/Register.vue";
 import AllStock from "../views/Stock/AllStock.vue";
-import ToBuy from "../views/Stock/ToBuy.vue"
+import ToBuy from "../views/Stock/ToBuy.vue";
 import store from "../store";
-import Product from "../views/Product/Product.vue"
-import Topping from "../views/Product/Topping.vue"
-import TypeTopping from "../views/Product/TypeTopping.vue"
-import SaleChannel from "../views/Product/SaleChannel.vue"
-import SelectApp from "../views/Product/SelectApp.vue"
+import Product from "../views/Product/Product.vue";
+import Topping from "../views/Product/Topping.vue";
+import TypeTopping from "../views/Product/TypeTopping.vue";
+import SaleChannel from "../views/Product/SaleChannel.vue";
+import SelectApp from "../views/Product/SelectApp.vue";
 const routes = [
   {
     path: "/",
@@ -36,33 +36,37 @@ const routes = [
         name: "Category",
         path: "/category",
         component: Category,
-        params: {text:'category'}
-      },{
+        params: { text: "category" },
+      },
+      {
         name: "Topping",
         path: "/topping",
         component: Topping,
-        params: {text:'topping'}
-      },{
+        params: { text: "topping" },
+      },
+      {
         name: "Product",
         path: "/product",
         component: Product,
-        params: {text:'product'}
-      },{
+        params: { text: "product" },
+      },
+      {
         name: "SaleChannel",
         path: "/sale-channel",
         component: SaleChannel,
-        params: {text:'sale-channel'}
-      },{
+        params: { text: "sale-channel" },
+      },
+      {
         name: "TypeTopping",
         path: "/type-topping",
         component: TypeTopping,
-        params: {text:'type-topping'}
+        params: { text: "type-topping" },
       },
-      { 
-        name:"SelectApp",
-        path:'/',
+      {
+        name: "SelectApp",
+        path: "/",
         component: SelectApp,
-      }
+      },
     ],
   },
   {
