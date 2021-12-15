@@ -34,7 +34,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   .search-bar {
     background-size: contain;
     background-repeat: no-repeat;
@@ -51,7 +51,7 @@ export default {
   .img-float{
       /* width: 50px; */
       left: 38px;
-      top: 14%;
+      top: 9.3%;
       position: fixed;
   }
 </style>

@@ -7,7 +7,7 @@
         @click="select_cate(cate)"
         class="tab-item"
       >
-        {{ cate }}
+        <p class="txt">{{ cate }}</p>
       </button>
     <button class="tab-item" v-if="categories.length < 5">></button>
   </div>
@@ -28,6 +28,7 @@ export default {
         "Garnish",
         "Package",
         "ETC.",
+        '>'
       ],
     };
   },
@@ -40,13 +41,14 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
+
 .tab {
   overflow: hidden;
-  width: 95%;
+  width: 90%;
   margin-right: 1%;
-  margin-left: 3%;
-  margin-top: 3%;
+  margin-left: 5%;
+  margin-top: 10px;
 }
 
 .tab-item {
@@ -57,15 +59,19 @@ export default {
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
+  padding-top: 6px;
   transition: 0.3s;
-  font-size: 19px;
-  font-weight: 400;
+  font-size: 18px;
+  font-size: height 10px;
+  font-weight: 700;
+  font-style: normal;
   border-radius: 15px 15px 0px 0px;
   margin-top: 0px;
   margin: 3px;
   height: 46px;
   width: fit-content;
   text-decoration: none;
+  line-height: 31px;
 }
 
 /* Change background color of buttons on hover */

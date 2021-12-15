@@ -9,7 +9,6 @@
         v-model="ham_val" 
         @click="tick"
         />
-    <label for="checkbox"></label>
     <div class="float-menu" v-if="ham_val">
         <p
             v-for="(item, idx) in ham_menus" 
@@ -56,7 +55,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.back {
+  top: 3.5%;
+}
 input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
@@ -66,7 +68,7 @@ input[type="checkbox"] {
   content: url("../../assets/icon/btn-navbar.png");
   position: fixed;
   right: 7%;
-  top: 5%;
+  top: 3%;
 }
 
 label{
