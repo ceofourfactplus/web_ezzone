@@ -1,12 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "../views/User/Login.vue";
 import Register from "../views/User/Register.vue";
-<<<<<<< HEAD
 import Test from '../views/Test.vue'
 import UserStatus from '../views/User/UserStatus.vue'
-=======
-// import Test from '../views/Test.vue'
->>>>>>> 80b99c295871cdb70bc5cfa42e66f4a73521245d
 import store from "../store";
 // import Product from "../views/Product/Product.vue"
 // import Topping from "../views/Product/Topping.vue"
@@ -158,7 +154,6 @@ const routes = [
     name: "Register",
     component: Register,
   },
-<<<<<<< HEAD
   {
     path: "/test",
     name: "Test",
@@ -170,13 +165,6 @@ const routes = [
     component: UserStatus,
   }
   
-=======
-  // {
-  //   path: "/test",
-  //   name: "Test",
-  //   component: Test,
-  // },
->>>>>>> 80b99c295871cdb70bc5cfa42e66f4a73521245d
 ];
 
 const router = createRouter({
