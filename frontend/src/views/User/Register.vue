@@ -1,7 +1,7 @@
 <template>
   <div class="c" style="top: 0px">
     <!-- input img -->
-    <div class="">
+    <div style="height:0px">
       <label for="file">
         <img
           v-if="show_img == null"
@@ -23,12 +23,13 @@
         @change="onFileChange"
         style="display: none"
         id="file"
-        required
+        class="register-user"
       />
       <!-- <check-box-white/> -->
     </div>
-    <div class="gender" style="width:200px">
-      <div class="row ms-3" style="color:#fff"><h4>Gender</h4></div>
+
+    <div class="gender" style="width: 200px">
+      <div class="row ms-3" style="color: #fff"><h4>Gender</h4></div>
       <div class="row">
         <div class="checkbox">
           <div class="row">
@@ -67,11 +68,9 @@
       </div>
     </div>
     <!-- back to login path -->
-    <img src="../../assets/icon/btn-back.png" class="back" @click="back" />
-
+    <nav-app @back="back">Registration</nav-app>
     <!-- form -->
     <div class="container">
-      <h1 id="login">Registration</h1>
       <div class="row">
         <div class="col-3"></div>
         <div class="col-9">
@@ -239,8 +238,10 @@
 
 <script>
 import axios from "axios";
+import NavApp from '../../components/main_component/NavApp.vue';
 // import CheckBoxWhite from '../../components/main_component/CheckBoxWhite.vue';
 export default {
+  components: { NavApp },
   // components: { CheckBoxWhite },
   name: "Register",
   data() {
@@ -273,7 +274,7 @@ export default {
       console.log(this.username.length > 6);
       console.log(this.password.length > 6);
       console.log(this.img != null);
-      console.log(this.gender != '')
+      console.log(this.gender != "");
       if (
         this.id_card.toString().length == 13 &&
         this.first_name != "" &&
@@ -282,8 +283,8 @@ export default {
         this.username.length > 6 &&
         this.password.length > 6 &&
         this.password == this.confirm_password &&
-        this.img != null && 
-        this.gender != ''
+        this.img != null &&
+        this.gender != ""
       ) {
         const user = new FormData();
         user.append("username", this.username);
@@ -375,7 +376,7 @@ input {
 }
 .gender {
   position: fixed;
-  top: 325px;
+  top: 295px;
   left: 50px;
   color: #ffffff80;
 }

@@ -1,7 +1,6 @@
 <template>
   <div>
     <!-- Head -->
-    <NavRM :header="'Add Raw Material'" />
     <div class="row">
       <div style="width: 1px"></div>
       <div class="col-9" style="width: 415px; padding: 0px">
@@ -33,16 +32,11 @@
 </template>
 
 <script>
-// import RawMaterial from '../../components/materials/RawMaterial.vue'
-// import api_raw_material from "../../api/api_raw_material";
 import Tabs from "../../components/materials/Tabs.vue"
-import NavRM from "../../components/materials/NavRM.vue";
 
 export default {
   components: {
-    // RawMaterial,
       Tabs,
-    NavRM,
   },
   // mounted: {
 

@@ -133,14 +133,9 @@ h1 {
   color: #fafafa;
   margin-bottom: 40px;
 }
-.back {
-  top: 45px;
-  left: 55px;
-  position: fixed;
-}
 
 .register-user {
-  top: 150px;
+  top: 120px;
   left: 45px;
   position: fixed;
   border-radius: 50%;
@@ -242,5 +237,8 @@ h1 {
   font-size: 13px;
   top: 0px;
   left: 0px;  display: flex;
-
 }
+
+
+
+
