@@ -6,7 +6,7 @@
       placeholder="Search"
       v-model="texts"
     />
-    <img class="img-float" src="../../assets/icon/Search-19x18-1.png">
+    <img class="img-float" src="../../assets/icon/search-orange.png">
   </div>
 </template>
 
@@ -38,20 +38,20 @@ export default {
   .search-bar {
     background-size: contain;
     background-repeat: no-repeat;
-    background-color: #3E4444;
+    background-color: #3a3d49;
     text-indent: 60px;
     padding-left: 10px;
     margin-left: 3px;
-    border-radius: 60px;
+    border-radius: 20px;
     width: 90%;
-    height: 50px;
+    height: 45px;
     /* Extra Styling */
   }
 
   .img-float{
       /* width: 50px; */
-      left: 38px;
-      top: 9.3%;
+      left: 50px;
+      top: 105px;
       position: fixed;
   }
 </style>

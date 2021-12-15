@@ -5,20 +5,28 @@
         <input
           type="radio"
           class="me-3 mt-2"
-          v-model="gender"
-          value="Male"
-          id="Male"
+          :value="label" 
+          @input="change"
+          :id="label"
         />
       </div>
       <div class="col-8">
-        <label class="ms-3" for="Male"><slot></slot></label>
+        <label class="ms-3" :for="label"><slot></slot></label>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {  
+  props: ['label'],
+  methods:{
+    change(e){
+      console.log(e.target.value)
+      this.$emit('update:change', e.target.value)
+    }
+  }
+};
 </script>
 
 <style scoped>

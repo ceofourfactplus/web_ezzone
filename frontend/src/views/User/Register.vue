@@ -31,7 +31,7 @@
     <div class="gender" style="width: 200px">
       <div class="row ms-3" style="color: #fff"><h4>Gender</h4></div>
       <div class="row">
-        <div class="checkbox">
+        <div class="checkbox-white">
           <div class="row">
             <div class="col-4">
               <input
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="checkbox">
+        <div class="checkbox-white">
           <div class="row">
             <div class="col-4">
               <input
