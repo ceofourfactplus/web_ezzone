@@ -1,13 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "../views/User/Login.vue";
 import Register from "../views/User/Register.vue";
-import Test from '../views/Test.vue'
+// import Test from '../views/Test.vue'
 import store from "../store";
-import Product from "../views/Product/Product.vue"
-import Topping from "../views/Product/Topping.vue"
-import TypeTopping from "../views/Product/TypeTopping.vue"
-import SaleChannel from "../views/Product/SaleChannel.vue"
-import SelectApp from "../views/Product/SelectApp.vue"
+// import Product from "../views/Product/Product.vue"
+// import Topping from "../views/Product/Topping.vue"
+// import TypeTopping from "../views/Product/TypeTopping.vue"
+// import SaleChannel from "../views/Product/SaleChannel.vue"
+// import SelectApp from "../views/Product/SelectApp.vue"
 import RawMaterials from "../views/RawMaterials/RawMaterials.vue"
 import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
 import Suppliers from "../views/RawMaterials/Suppliers.vue"
@@ -18,14 +18,14 @@ import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
 
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Windows,
-    meta: {
-      requiresLogin: true,
-    },
-  },
+  // {
+  //   path: "/",
+  //   name: "Home",
+  //   component: Windows,
+  //   meta: {
+  //     requiresLogin: true,
+  //   },
+  // },
   {
     path: "/suppliers",
     name: "Suppliers",
@@ -82,67 +82,67 @@ const routes = [
       requiresLogin: false,
     },
   },
-  {
-    path: "/product",
-    name: "MainCreate",
-    component: MainCreate,
-    meta: {
-      requiresLogin: true,
-    },
-    children: [
-      {
-        name: "Category",
-        path: "/category",
-        component: Category,
-        params: {text:'category'}
-      },{
-        name: "Topping",
-        path: "/topping",
-        component: Topping,
-        params: {text:'topping'}
-      },{
-        name: "Product",
-        path: "/product",
-        component: Product,
-        params: {text:'product'}
-      },{
-        name: "SaleChannel",
-        path: "/sale-channel",
-        component: SaleChannel,
-        params: {text:'sale-channel'}
-      },{
-        name: "TypeTopping",
-        path: "/type-topping",
-        component: TypeTopping,
-        params: {text:'type-topping'}
-      },
-      { 
-        name:"SelectApp",
-        path:'/',
-        component: SelectApp,
-      }
-    ],
-  },
-  {
-    path: "/stock",
-    name: "MainStock",
-    component: MainStock,
-    meta: {
-      requiresLogin: true,
-    },
-    children: [
-      {
-        name: "ToBuy",
-        path: "/to-buy",
-        component: ToBuy,
-      },
-      {
-        name: "AllStock",
-        path: "/all-stock",
-        component: AllStock,
-      },
-    ],
-  },
+  // {
+  //   path: "/product",
+  //   name: "MainCreate",
+  //   component: MainCreate,
+  //   meta: {
+  //     requiresLogin: true,
+  //   },
+    // children: [
+    //   {
+    //     name: "Category",
+    //     path: "/category",
+    //     component: Category,
+    //     params: {text:'category'}
+    //   },{
+    //     name: "Topping",
+    //     path: "/topping",
+    //     component: Topping,
+    //     params: {text:'topping'}
+    //   },{
+    //     name: "Product",
+    //     path: "/product",
+    //     component: Product,
+    //     params: {text:'product'}
+    //   },{
+    //     name: "SaleChannel",
+    //     path: "/sale-channel",
+    //     component: SaleChannel,
+    //     params: {text:'sale-channel'}
+    //   },{
+    //     name: "TypeTopping",
+    //     path: "/type-topping",
+    //     component: TypeTopping,
+    //     params: {text:'type-topping'}
+    //   },
+    //   { 
+    //     name:"SelectApp",
+    //     path:'/',
+    //     component: SelectApp,
+    //   }
+    // ],
+  // },
+  // {
+  //   path: "/stock",
+  //   name: "MainStock",
+  //   component: MainStock,
+  //   meta: {
+  //     requiresLogin: true,
+  //   },
+  //   children: [
+  //     {
+  //       name: "ToBuy",
+  //       path: "/to-buy",
+  //       component: ToBuy,
+  //     },
+  //     {
+  //       name: "AllStock",
+  //       path: "/all-stock",
+  //       component: AllStock,
+  //     },
+  //   ],
+  // },
   {
     path: "/login",
     name: "Login",
@@ -153,11 +153,11 @@ const routes = [
     name: "Register",
     component: Register,
   },
-  {
-    path: "/test",
-    name: "Test",
-    component: Test,
-  },
+  // {
+  //   path: "/test",
+  //   name: "Test",
+  //   component: Test,
+  // },
 ];
 
 const router = createRouter({
