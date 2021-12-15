@@ -87,8 +87,11 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          this.$store.state.auth.accessToken = response.data.token;
-          this.$store.state.auth.userInfo = response.data.user_set;
+          this.alert
+          console.log(response.data.user_set)
+          this.auth.accessToken = response.data.token;
+          this.auth.userInfo = response.data.user_set;
+
         })
         .catch((err) => {
           console.log(err);
