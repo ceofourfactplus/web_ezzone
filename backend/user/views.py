@@ -1,47 +1,35 @@
+from os import stat
 from django.core import exceptions
 from django.core.mail import send_mail
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer
-from .models import User
+from .serializers import UserSerializer,LoginSerializer
+from .models import Login, User
 from django.http import Http404
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import random
 
+from rest_framework.parsers import FormParser, MultiPartParser
 class RegisterUserAPIView(APIView):
+    def clean_username(self):
+      username = self.cleaned_data['username']
+      if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+        raise 404
+      return username
+
+
     def post(self, request):
         username = request.data['username']
-        password = request.data['password']
-        can_save = True
-
-        if User.objects.filter(username=username).exists():
-            can_save = False
-            return Response('Username or password is taken, choose another one', status=400)
-
+        
         if not User.objects.filter(username=username).exists():
-            user = User.objects.create_user(
-                username = request.data['username'],
-                email = request.data['email'],
-                password = request.data['password'],
-                first_name = request.data['first_name'],
-                last_name = request.data['last_name'],
-                phone_number = request.data['phone_number'],
-                id_card = request.data['id_card'],
-                is_active = False
-            )
-            html_content = render_to_string('user/send_verify_mail.html',{'token':default_token_generator.make_token(user),'user_id':user.id,'name':user.first_name,})
-            plain_content = strip_tags(html_content)
-            send_mail(
-                'testezzone',
-                plain_content,
-                'testezzone@gmail.com',
-                'ceofourfactplus@gmail.com',
-                fail_silently=False,
-                html_message=html_content,
-            )
-            data = UserSerializer(user)
-            return Response(data.data, status=201)
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+            
+
+            return Response(serializer.data, status=201)
 
         return Response('Username or password is taken, choose another one', status=400)
 
@@ -88,7 +76,21 @@ class IsActive(APIView):
         user = self.get_object(request.data['username']) 
         if user.check_password(request.data['password']):
             if user.is_active:
-                return Response('is_active')
-            return Response('is_not_active', status=400)
+                token = random.uniform(9999999999999999,0.0000001)
+                login = Login.objects.create(
+                    token=token,
+                    user_id=user.id,
+                )
+                serializer = LoginSerializer(login)
+                return Response(serializer.data,status=201)
+            return Response('your account is wait for activate', status=400)
         return Response('your password is incorrect', status=400)
         
+
+class UserList(APIView):    
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get (self,request):
+        user = User.objects.all()
+        serializer = UserSerializer(user, context={"request": request},many=True)
+        return Response(serializer.data,status=200)

@@ -4,7 +4,6 @@ export default {
   state: {
     accessToken: null,
     confirm_pass: false,
-    refreshToken: null,
     userInfo: "",
     error: {
       status: false,
@@ -16,11 +15,9 @@ export default {
       localStorage.removeItem('username')
       localStorage.removeItem('password')
       state.accessToken = null;
-      state.refreshToken = null;
     },
-    newToken(state, { access, refresh }) {
+    newToken(state, { access}) {
       state.accessToken = access;
-      state.refreshToken = refresh;
     },
     check_pass(state, bo) {
       state.check_pass = bo;

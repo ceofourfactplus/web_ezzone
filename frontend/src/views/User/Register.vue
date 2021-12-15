@@ -1,6 +1,7 @@
 <template>
   <div class="c" style="top: 0px">
-    <div class="img-up">
+    <!-- input img -->
+    <div class="">
       <label for="file">
         <img
           v-if="show_img == null"
@@ -24,13 +25,51 @@
         id="file"
         required
       />
+      <!-- <check-box-white/> -->
     </div>
-    <img
-      src="../../assets/icon/btn-back.png"
-      class="back"
-      @click="back"
-      alt=""
-    />
+    <div class="gender" style="width:200px">
+      <div class="row ms-3" style="color:#fff"><h4>Gender</h4></div>
+      <div class="row">
+        <div class="checkbox">
+          <div class="row">
+            <div class="col-4">
+              <input
+                type="radio"
+                class="me-3 mt-2"
+                v-model="gender"
+                value="Male"
+                id="Male"
+              />
+            </div>
+            <div class="col-8">
+              <label class="ms-3" for="Male">Male</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="checkbox">
+          <div class="row">
+            <div class="col-4">
+              <input
+                type="radio"
+                class="me-3 mt-2"
+                v-model="gender"
+                value="Female"
+                id="Female"
+              />
+            </div>
+            <div class="col-8">
+              <label class="ms-3" for="Female">Female</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- back to login path -->
+    <img src="../../assets/icon/btn-back.png" class="back" @click="back" />
+
+    <!-- form -->
     <div class="container">
       <h1 id="login">Registration</h1>
       <div class="row">
@@ -186,6 +225,8 @@
         </div>
       </div>
     </div>
+
+    <!-- card pop up -->
     <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">
         <img src="../../assets/icon/btn-pass.png" alt="" />
@@ -198,7 +239,9 @@
 
 <script>
 import axios from "axios";
+// import CheckBoxWhite from '../../components/main_component/CheckBoxWhite.vue';
 export default {
+  // components: { CheckBoxWhite },
   name: "Register",
   data() {
     return {
@@ -213,6 +256,7 @@ export default {
       confirm_password: "",
       img: null,
       show_img: null,
+      gender: "",
       error: {
         data: "",
         status: false,
@@ -229,6 +273,7 @@ export default {
       console.log(this.username.length > 6);
       console.log(this.password.length > 6);
       console.log(this.img != null);
+      console.log(this.gender != '')
       if (
         this.id_card.toString().length == 13 &&
         this.first_name != "" &&
@@ -237,7 +282,8 @@ export default {
         this.username.length > 6 &&
         this.password.length > 6 &&
         this.password == this.confirm_password &&
-        this.img != null
+        this.img != null && 
+        this.gender != ''
       ) {
         const user = new FormData();
         user.append("username", this.username);
@@ -248,6 +294,7 @@ export default {
         user.append("id_card", this.id_card);
         user.append("phone_number", this.phone_number);
         user.append("img", this.img, this.img.name);
+        user.append("gender", this.gender);
         axios
           .post("http://127.0.0.1:8000/user/register/", user)
           .then(() => {
@@ -325,5 +372,14 @@ export default {
 <style scoped>
 input {
   margin-bottom: 15px;
+}
+.gender {
+  position: fixed;
+  top: 325px;
+  left: 50px;
+  color: #ffffff80;
+}
+.checkbox {
+  left: 50px;
 }
 </style>

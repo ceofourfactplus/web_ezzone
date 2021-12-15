@@ -84,7 +84,7 @@ input::placeholder {
   font-size: 24px;
   font-weight: bolder;
   border-radius: 10px;
-  color: #252836;
+  color: #fff;
 }
 
 .btn-ghost {
@@ -127,7 +127,7 @@ input::placeholder {
 }
 h1 {
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 72px;
   line-height: 94px;
   color: #fafafa;
@@ -199,4 +199,48 @@ h1 {
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+
+.checkbox label {
+  font-size: 24px;
+  display: inline;
+}
+.checkbox input {
+  position: relative;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  justify-content: center;
+  align-content: center;
+  display: flex;
+  text-indent: 3px;
+}
+.checkbox input::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  background-color: #252836;
+  border: 2px solid #ffffff80;
+  border-radius: 3px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: 0.3s all ease;
+}
+.checkbox input:checked::before {
+  background-color: #ffffff80;
+  border: 0px solid #ffffff80;
+}
+.checkbox input:checked::after {
+  position: absolute;
+  content: "\f00c";
+  font-family: "FontAwesome";
+  color: #252836;
+  font-size: 13px;
+  top: 0px;
+  left: 0px;  display: flex;
+
 }

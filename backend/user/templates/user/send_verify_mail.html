@@ -65,7 +65,7 @@
 
       </div>
       <div class="col-6">
-        <img src="{{ img }}" alt="">
+        <img src="{{ user.img }}" alt="">
       </div>
       <div class="col-12">
         <button class="submit" onclick="btn_submit()">Submit</button>
@@ -95,8 +95,7 @@
         is_purcheser:perchaser,
         is_admin:admin,
         is_activate:true,
-        id:'{{index}}',
-        token:'{{token}}',
+        id:'{{user.id}}',
       })
     }
   </script>

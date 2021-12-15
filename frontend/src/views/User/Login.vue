@@ -36,8 +36,8 @@
         <div class="col-12"></div>
         <div class="m-3" v-if="error.status">
           <div class="text-error">
-            <img src="../../assets/icon/btn-warning.png" alt="" /> username or
-            password is wrong
+            <img src="../../assets/icon/btn-warning.png" alt="" />
+            {{ error.data }}
           </div>
         </div>
         <div class="m" v-else></div>
@@ -53,13 +53,11 @@
         </button>
       </form>
     </div>
-    <div class="card" :class="{'card-active':alert}">
+    <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="">
+        <img src="../../assets/icon/btn-pass.png" alt="" />
       </div>
-      <div class="main-text">
-        Login already
-      </div>
+      <div class="main-text">Login already</div>
     </div>
   </div>
 </template>
@@ -67,7 +65,6 @@
 <script>
 import { mapState } from "vuex";
 import { api_user } from "../../api/api_user";
-import axios from "axios";
 export default {
   name: "Login",
   computed: mapState(["auth"]),
@@ -76,50 +73,27 @@ export default {
       username: "",
       password: "",
       error: {
-        status: true,
+        status: false,
+        data: "",
       },
-      alert:false
+      alert: false,
     };
   },
   methods: {
     login() {
-      const up = {
-        username: this.username,
-        password: this.password,
-      };
       api_user
-        .post("is-active/", up)
-        .then(() => {
-          axios
-            .post("http://127.0.0.1:8000/api-token/", up)
-            .then((response) => {
-              localStorage.setItem("access", response.data.access);
-              localStorage.setItem("refresh", response.data.refresh);
-              this.$state.commit("newToken", {
-                access: response.data.access,
-                refresh: response.data.refresh,
-              });
-              this.api_user
-                .get("user-info/", {
-                  Authorization: `Bearer ${response.data.access}`,
-                })
-                .then((response) => {
-                  this.$state.commit("updateUserInfo", {
-                    userInfo: response.data,
-                  });
-                });
-            });
+        .post("login/", {
+          username: this.username,
+          password: this.password,
         })
-        .catch(() => {
+        .then((response) => {
+          this.$store.state.auth.accessToken = response.data.token;
+          this.$store.state.auth.userInfo = response.data.user_set;
+        })
+        .catch((err) => {
+          console.log(err);
           this.error.status = true;
         });
-    },
-    wait(ms) {
-      var start = new Date().getTime();
-      var end = start;
-      while (end < start + ms) {
-        end = new Date().getTime();
-      }
     },
   },
   watch: {
@@ -129,11 +103,6 @@ export default {
     password() {
       this.error.status = false;
     },
-  },
-  beforeCreate() {
-    this.username = localStorage.getItem("username");
-    this.password = localStorage.getItem("password");
-    this.login;
   },
 };
 </script>
@@ -147,5 +116,4 @@ export default {
   width: 300px;
   height: 70px;
 }
-
 </style>

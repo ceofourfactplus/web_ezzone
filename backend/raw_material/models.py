@@ -103,3 +103,9 @@ class ReceiptRawMaterialDetail(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_create_by")
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_update_by", null=True,blank=True)
+
+class MultiUnit(models.Model):
+    raw_material = models.ForeignKey(RawMaterial,on_delete=models.PROTECT,default=None,null=True)
+    unit = models.ForeignKey(Unit,on_delete=models.PROTECT,default=None,null=True,related_name='multi_unit_unit')
+    to_unit = models.ForeignKey(Unit,on_delete=models.PROTECT,default=None,null=True,related_name='multi_unit_to_unit')
+    to_amount = models.IntegerField(default=1)

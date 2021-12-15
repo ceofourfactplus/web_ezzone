@@ -1,9 +1,9 @@
 import smtplib
 import ssl
 
-sender_email = "testezzone@gmail.com"
+sender_email = "testezzone1@gmail.com"
 receiver_email = "ceofourfactplus@gmail.com"
-password = 'ezzone2021'
+password = 'test14/12/2021'
 # Subject: Hi there
 message = 'test'
 

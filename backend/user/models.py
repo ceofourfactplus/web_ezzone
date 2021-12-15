@@ -24,11 +24,12 @@ class User(AbstractUser):
   birth_day = models.BooleanField(blank=True,null=True)
   is_working = models.BooleanField(default=WORKING,choices=STATUS_WORK)
   gender = models.CharField(max_length=30)
+  is_banned = models.BooleanField(default=False)
   img = models.ImageField(_("Image"), upload_to=upload_to_user,default='',null=True,blank=True)
 
 class Login(models.Model):
-  token = models.CharField
-  user = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT)
+  token = models.CharField(max_length=30,default=None)
+  user = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT,default=None,)
   login_at = models.DateTimeField(auto_now_add=True)
-  logout_at = models.DateTimeField(auto_now_add=True)
-  time_login = models.TimeField()
+  logout_at = models.DateTimeField(default=None,null=True)
+  time_login = models.TimeField(default=None,null=True)
