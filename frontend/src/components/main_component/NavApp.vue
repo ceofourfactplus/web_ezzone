@@ -27,7 +27,7 @@ export default {
   position: fixed;
 }
 .nav{
-height: 120px;
+height: 90px;
 }
 .header-text{
   width:100%;

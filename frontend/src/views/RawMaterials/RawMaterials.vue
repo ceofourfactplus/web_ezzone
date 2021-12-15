@@ -2,33 +2,33 @@
   <div>
     <!-- Head -->
     <nav-app @back="back">Raw Material</nav-app>
-    <SearchBar @search="serch_by_typing" />
+      <SearchBar @search="serch_by_typing" />
 
-    <Tabs @select_cate="query_category" />
+      <Tabs @select_cate="query_category" />
 
-    <!-- Table -->
-    <div class="table-head">
-      <div class="row" style="padding-right: 10px">
-        <div class="col-6 items-in-row">Items</div>
-        <div class="col-2 items-in-row">Qty</div>
-        <div class="col-2 items-in-row">Unit</div>
-        <div class="col-2 items-in-row">Status</div>
-      </div>
-    </div>
-    <div class="my-table">
-      <div
-        class="my-row my-table"
-        v-for="(item, idx) in raw_materials"
-        :key="idx"
-      >
-        <div class="col-6 items-in-row item-field">{{ item.item }}</div>
-        <div class="col-2 items-in-row">{{ item.qty }}</div>
-        <div class="col-2 items-in-row">{{ item.unit }}</div>
-        <div class="col-2 items-in-row">
-          <img src="../../assets/icon/Group95.png" alt="img" />
+      <!-- Table -->
+      <div class="table-head">
+        <div class="row" style="padding-right: 10px">
+          <div class="col-6 items-in-row">Items</div>
+          <div class="col-2 items-in-row">Qty</div>
+          <div class="col-2 items-in-row">Unit</div>
+          <div class="col-2 items-in-row">Status</div>
         </div>
       </div>
-    </div>
+      <div class="my-table">
+        <div
+          class="my-row my-table"
+          v-for="(item, idx) in raw_materials"
+          :key="idx"
+        >
+          <div class="col-6 items-in-row item-field">{{ item.item }}</div>
+          <div class="col-2 items-in-row">{{ item.qty }}</div>
+          <div class="col-2 items-in-row">{{ item.unit }}</div>
+          <div class="col-2 items-in-row">
+            <img src="../../assets/icon/Group95.png" alt="img" />
+          </div>
+        </div>
+      </div>
 
     <!-- <RawMaterial :materials=materials /> -->
   </div>

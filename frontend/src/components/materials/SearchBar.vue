@@ -6,7 +6,7 @@
       placeholder="Search"
       v-model="texts"
     />
-    <img class="img-float" src="../../assets/icon/Search-19x18-1.png">
+    <img class="img-float" src="../../assets/icon/868282.png">
   </div>
 </template>
 
@@ -44,14 +44,14 @@ export default {
     margin-left: 3px;
     border-radius: 60px;
     width: 90%;
-    height: 50px;
+    height: 45px;
     /* Extra Styling */
   }
 
   .img-float{
-      /* width: 50px; */
-      left: 38px;
-      top: 9.3%;
+      width: 43px;
+      left: 48px;
+      top: 9.5%;
       position: fixed;
   }
 </style>
