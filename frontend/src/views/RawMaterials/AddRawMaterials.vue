@@ -24,13 +24,13 @@
           </div>
           <div
             class="item-in-head-table"
-            style="width: 100px; font-size: 24px; padding-top: 3px"
+            style="width: 100px; font-size: 24px; padding-top: 3px; margin-top: 5px;"
           >
             + Qty
           </div>
           <div
             class="item-in-head-table"
-            style="font-size: 24px; width: 87px; height: 41px; padding-top: 3px"
+            style="font-size: 24px; width: 87px; height: 41px; padding-top: 3px; margin-top: 5px;"
           >
             Unit
           </div>
@@ -43,6 +43,7 @@
               padding-left: 0px;
               margin-left: 5px;
               margin-right: 15px;
+              margin-top: 5px;
             "
           >
             Total Price
@@ -50,7 +51,7 @@
         </div>
       </div>
       <div style="height: 720px; overflow-y: scroll; overflow-x: hidden;">
-        <div class="table-item" v-for="(item, idx) in list_in_row" :key="idx">
+        <div class="table-item" v-for="(item, idx) in raw_material_data" :key="idx">
         <div class="checkbox-orange">
           <div class="row">
             <input
@@ -65,7 +66,12 @@
               <div class="item-in-table-row">{{ item.item }}</div>
             </div>
             <div class="col-1">
-              <div class="qty" style="margin-left: 30px">{{ item.qty }}</div>
+              <div 
+                class="qty" 
+                style="margin-left: 30px"
+              >
+              <input type="text" class="inp-qty" v-model="item.qty" @input="calc(item)">
+            </div>
             </div>
             <div class="col-1">
               <div class="unit">
@@ -80,8 +86,8 @@
                 </select>
               </div>
             </div>
-            <div class="price-unit">{{ item.price_unit }}</div>
-            <div class="col-1 total-price">{{ item.total_price }}</div>
+            <div class="price-unit"><input type="text" class="inp-qty" v-model="item.price_unit" @input="calc(item)"></div>
+            <div class="col-1 total-price"><input type="text" class="inp-qty" v-model="item.total_price" @input="calc_discount(item)"></div>
           </div>
         </div>
       </div>
@@ -104,6 +110,7 @@ export default {
     return {
       category_name: "",
       cb_in_table: "",
+      discount: 0,
       list_vals: [],
       units: [
         { unit: "ชิ้น", value: "a" },
@@ -112,46 +119,33 @@ export default {
         { unit: "ถุง", value: "d" },
         { unit: "ลัง", value: "e" },
       ],
-      list_in_row: [
-        { item: "item1", qty: 9999, unit: 'ชิ้น', price_unit: 999, total_price: 9999 },
-        { item: "item2", qty: 9999, unit: 'กล่อง', price_unit: 999, total_price: 9999 },
-        { item: "item3", qty: 9999, unit: 'แพ็ค', price_unit: 999, total_price: 9999 },
-        { item: "item4", qty: 9999, unit: 'ถุง', price_unit: 999, total_price: 9999 },
-        { item: "item5", qty: 9999, unit: 'ลัง', price_unit: 999, total_price: 9999 },
-      ],
-      categories: [
-        "All",
-        "Fresh Food",
-        "Dried Food",
-        "Garnish",
-        "Package",
-        "ETC.",
-        "+",
+      raw_material_data: [
+        { item: "item1", qty: 9999, unit: 'ชิ้น', price_unit: 999, total_price: 0, discount: 0,},
+        { item: "item2", qty: 9999, unit: 'กล่อง', price_unit: 999, total_price: 0, discount: 0,},
+        { item: "item3", qty: 9999, unit: 'แพ็ค', price_unit: 999, total_price: 0, discount: 0,},
+        { item: "item4", qty: 9999, unit: 'ถุง', price_unit: 999, total_price: 0, discount: 0,},
+        { item: "item5", qty: 9999, unit: 'ลัง', price_unit: 999, total_price: 0, discount: 0,},
       ],
       test_count: 5,
-      // id: Null,
-      // img: NullNull,
-      // status: Null,
-      // name: Null,
-      // balance: Null,
-      // minimum: Null,
-      // avg_price: Null,
-      // max_price: Null,
-      // min_price: Null,
-      // max_price_supplier_id: Null,
-      // min_price_supplier_id: Null,
-      // in_refrigerator: Null,
-      // create_by_id: Null,
-      // update_by_id: Null,
-      // category_id: Null,
-      // unit_id: Null,
     };
   },
   methods: {
     add() {
       console.log('add')
       this.test_count += 1
-      this.list_in_row.push({ item: `item${this.test_count}`, qty: 9999, unit: 'ลัง', price_unit: 999, total_price: 9999 },)
+      this.raw_material_data.push({ item: `item${this.test_count}`, qty: 9999, unit: 'ลัง', price_unit: 999, total_price: 9999 },)
+    },
+    calc(item) {
+      var idx = this.raw_material_data.indexOf(item)
+      var sum = parseInt(item.qty) * parseInt(item.price_unit)
+      this.raw_material_data[idx].total_price = sum
+      this.raw_material_data[idx].discount = sum - this.raw_material_data[idx].total_price
+    },
+    calc_discount(item) {
+      var idx = this.raw_material_data.indexOf(item)
+      var sum = parseInt(item.qty) * parseInt(item.price_unit)
+      this.raw_material_data[idx].discount = sum - this.raw_material_data[idx].total_price
+      console.log(this.raw_material_data[idx].discount)
     }
     // createCategory() {
     //   const data = {'name': this.category_name}
@@ -164,6 +158,11 @@ export default {
 </script>
 
 <style scoped>
+input.inp-qty {
+  width: 100%;
+  height: 45px;
+  background-color: #bd523f;
+}
 .total-price,
 .price-unit,
 .qty {
@@ -202,7 +201,9 @@ export default {
 .pu {
   padding-right: 0px;
   margin-top: 0px;
+  margin: 0px;
   padding-top: 0px;
+  position: relative;
   width: 70px;
   height: 41px;
 }
@@ -217,7 +218,7 @@ export default {
 }
 .item-in-head-table {
   font-size: 18px;
-  margin-top: 5px;
+  margin-top: 0px;
 }
 .head-item {
   display: inline;

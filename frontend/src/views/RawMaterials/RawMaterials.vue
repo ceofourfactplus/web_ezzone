@@ -4,8 +4,9 @@
     <nav-app @back="back">Raw Material</nav-app>
       <SearchBar @search="serch_by_typing" />
 
-      <Tabs @select_cate="query_category" />
-
+      <div>
+        <Tabs @select_cate="query_category" />
+      </div>
       <!-- Table -->
       <div class="table-head">
         <div class="row" style="padding-right: 10px">
