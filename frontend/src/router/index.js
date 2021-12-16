@@ -39,25 +39,16 @@ const routes = [
     path: "/po-for-suppliers",
     name: "POForSuppliers",
     component: POForSuppliers,
-    meta: {
-      requiresLogin: false,
-    },
   },
   {
     path: "/pickup-raw-material",
     name: "PickupRawMaterial",
-    component: PickupRawMaterial,
-    meta: {
-      requiresLogin: false,
-    },
+    component: PickupRawMaterial, 
   },
   {
     path: "/minimum",
     name: "Minimum",
     component: Minimum,
-    meta: {
-      requiresLogin: false,
-    },
   },
   {
     path: "/manage-raw-material",
