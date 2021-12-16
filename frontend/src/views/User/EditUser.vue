@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>User Data</nav-app>
+    <nav-app @back="back()">User Data</nav-app>
     <!-- alert -->
     <div class="row">
       <div class="col-12">
@@ -307,7 +307,7 @@
         </div>
         <div class="row mb-3">
           <div class="col-3 w-100">
-            <label for="email" style="margin-left:0px">Email</label>
+            <label for="email" style="margin-left:-25px">Email</label>
           </div>
           <div class="col-9 w-100">
             <input type="email" v-model="user.email" id="email" />
@@ -435,6 +435,9 @@ export default {
         return "Inavtive";
       }
     },
+    back(){
+      this.$route.push({name:'UserStatus'})
+    },
     change_status(status) {
       this.user.is_working = status;
     },
@@ -512,10 +515,10 @@ input[type="number"] {
 }
 
 .btn-ghost {
-  width: 282px;
-  height: 60px;
+  width: 300px;
+  height: 70px;
   font-weight: 600;
   font-size: 36px;
-  line-height:1px
+  line-height:10px;
 }
 </style>

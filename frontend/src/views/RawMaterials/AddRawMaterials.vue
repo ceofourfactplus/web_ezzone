@@ -10,7 +10,7 @@
           placeholder="Search for Raw Material"
           v-model="texts"
         />
-        <img class="img-float" src="../../assets/icon/868282.png" />
+        <img class="img-float" src="../../assets/icon/Search-19x18-1.png" />
       </div>
       <div style="padding-left: 0px">
         <button class="btn-ghost" @click="add">Confirm Add</button>
