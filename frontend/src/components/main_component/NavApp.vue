@@ -27,11 +27,7 @@ export default {
   position: fixed;
 }
 .nav{
-<<<<<<< HEAD
 height: 90px;
-=======
-height:100px;
->>>>>>> 547f0d42ea438cec64d2bac35e35f52a83200ba6
 }
 .header-text{
   width:100%;

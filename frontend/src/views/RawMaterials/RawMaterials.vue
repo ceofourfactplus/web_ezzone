@@ -15,7 +15,8 @@
           <div class="col-2 items-in-row">Status</div>
         </div>
       </div>
-      <div class="my-table">
+      <div style="height: 660px; overflow-y: scroll; overflow-x: hidden;">
+        <div class="my-table">
         <div
           class="my-row my-table"
           v-for="(item, idx) in raw_materials"
@@ -28,6 +29,7 @@
             <img src="../../assets/icon/Group95.png" alt="img" />
           </div>
         </div>
+      </div>
       </div>
 
     <!-- <RawMaterial :materials=materials /> -->
