@@ -1,6 +1,7 @@
 <template>
   <!-- Tabs -->
-  <div class="tab">
+  <div>
+    <div class="tab">
       <button
         v-for="(cate, idx) in categories"
         :key="idx"
@@ -10,6 +11,7 @@
         {{ cate }}
       </button>
     <button class="tab-item" v-if="categories.length < 5">></button>
+  </div>
   </div>
 </template>
 
