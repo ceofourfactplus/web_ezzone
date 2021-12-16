@@ -1,37 +1,23 @@
-from os import stat
-from django.core import exceptions
-from django.core.mail import send_mail
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer,LoginSerializer
+from .serializers import UserSerializer, LoginSerializer
 from .models import Login, User
 from django.http import Http404
-from django.contrib.auth.tokens import default_token_generator
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 import random
 
 from rest_framework.parsers import FormParser, MultiPartParser
+
+
 class RegisterUserAPIView(APIView):
-    def clean_username(self):
-      username = self.cleaned_data['username']
-      if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
-        raise 404
-      return username
-
-
     def post(self, request):
         username = request.data['username']
-        
         if not User.objects.filter(username=username).exists():
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-            
-
             return Response(serializer.data, status=201)
-
         return Response('Username or password is taken, choose another one', status=400)
+
 
 class UserInfo(APIView):
     def get(self, request):
@@ -39,58 +25,63 @@ class UserInfo(APIView):
         return Response(serializer.data)
 
 
-class activate(APIView):
-    def get_object(self,username):
-        try:
-            return User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise Response('This user does not exist in the system.',status=400)
-
-    def put(self, request,):
-        user = self.get_object
-        if default_token_generator.check_token(user, request.data['token']):
-            serializer = UserSerializer(user,data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response('Thank you for your email confirmation.',status=200)
-            return Response('bad request',status=400)
-        return Response('Activation link is invalid!',status=400)
-
-
 class ConfirmPass(APIView):
-    def post(self, pk,request):
+    def post(self, pk, request):
         user = User.objects.get(id=request.data['id'])
         if user.check_password(request.data['password']):
             return Response('password correct', status=200)
         return Response('password Incerrect', status=400)
 
-class IsActive(APIView): 
-    def get_object(self,username):
+
+class IsActive(APIView):
+    def get_object(self, username):
         try:
             return User.objects.get(username=username)
         except User.DoesNotExist:
             raise Http404
-            
-            
+
     def post(self, request, format=None):
-        user = self.get_object(request.data['username']) 
+        user = self.get_object(request.data['username'])
         if user.check_password(request.data['password']):
             if user.is_active:
-                token = random.uniform(9999999999999999,0.0000001)
+                token = random.uniform(9999999999999999, 0.0000001)
                 login = Login.objects.create(
                     token=token,
                     user_id=user.id,
                 )
                 serializer = LoginSerializer(login)
-                return Response(serializer.data,status=201)
+                return Response(serializer.data, status=201)
             return Response('your account is wait for activate', status=400)
         return Response('your password is incorrect', status=400)
-        
 
-class UserList(APIView):    
+
+class UserList(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
-    def get (self,request):
+    def get(self, request):
         user = User.objects.all()
-        serializer = UserSerializer(user, context={"request": request},many=True)
-        return Response(serializer.data,status=200)
+        serializer = UserSerializer(
+            user, context={"request": request}, many=True)
+        return Response(serializer.data, status=200)
+
+
+class SearchName(APIView):
+    def get(self, request, qury):
+        user = User.objects.filter(first_name__contains=qury)
+        serializer = UserSerializer(
+            user, context={"request": request}, many=True)
+        return Response(serializer.data, status=200)
+
+class EditUser(APIView):
+    def get (self,request,pk):
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    def put(self,request,pk):
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=400)

@@ -16,7 +16,7 @@ import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
 import Minimum from "../views/RawMaterials/Minimum.vue"
 import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
-
+import EditUser from '../views/User/EditUser.vue'
 
 const routes = [
   // {
@@ -163,6 +163,12 @@ const routes = [
     path:'/user-status',
     name:'UserStatus',
     component: UserStatus,
+  },
+  {
+    path:'/edit-user/:id',
+    props: true,
+    component: EditUser,
+    name:'EditUser'
   }
   
 ];

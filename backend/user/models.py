@@ -16,15 +16,15 @@ class User(AbstractUser):
     (WORKING,'working'),
     (BANNED,'banned'),
   )
+  nick_name = models.CharField(max_length=30)
   is_chef = models.BooleanField(default=False)
-  is_bartender = models.BooleanField(default=False)
-  is_purchaser = models.BooleanField(default=False)
-  is_service = models.BooleanField(default=False)
+  is_barista = models.BooleanField(default=False)
+  is_purchesing = models.BooleanField(default=False)
+  is_receptionist = models.BooleanField(default=False)
   is_owner = models.BooleanField(default=False)
   birth_day = models.BooleanField(blank=True,null=True)
-  is_working = models.BooleanField(default=WORKING,choices=STATUS_WORK)
+  is_working = models.IntegerField(default=WORKING,choices=STATUS_WORK)
   gender = models.CharField(max_length=30)
-  is_banned = models.BooleanField(default=False)
   img = models.ImageField(_("Image"), upload_to=upload_to_user,default='',null=True,blank=True)
 
 class Login(models.Model):

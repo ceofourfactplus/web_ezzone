@@ -18,15 +18,15 @@ class UserSerializer (serializers.ModelSerializer):
             'is_active',
             'date_joined', 
             'is_chef', 
-            'is_bartender', 
-            'is_purchaser', 
-            'is_service', 
+            'is_barista', 
+            'is_purchesing', 
+            'is_receptionist', 
             'is_owner', 
             'birth_day', 
+            'nick_name', 
             'is_working', 
             'gender', 
             'img',
-            'is_banned'
         ]
 
 
