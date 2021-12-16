@@ -1,7 +1,9 @@
-# from django.urls import path
-# from . import views
+from django.urls import path
+from . import views
 
-# urlpatterns = [
+urlpatterns = [
+    path('create-raw-material/', views.RawMaterialListAPIView().as_view()),
+    
 #     path('supplier/', views.SupplierListAPIView.as_view()),
 #     path('unit/', views.UnitListAPIView.as_view()),
 #     path('stock/', views.StockListAPIView.as_view()),
@@ -23,4 +25,4 @@
 #     path('unit-fil/<str:q>', views.UnitFil.as_view()),
 #     path('frequency/stock/<int:stock_id>', views.StockFrequency.as_view()),
 #     path('to-buy/',views.ToBuyStock.as_view()),
-# ]
+]

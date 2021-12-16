@@ -3,6 +3,12 @@ from .models import RawMaterialCategory, RawMaterial, ReceiptRawMaterial, Receip
 from user.serializers import UserSerializer
 
 
+class RawMaterialListSeriallizer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = RawMaterial
+        fields = '__all__'
+
 class RawMaterialCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = RawMaterialCategory

@@ -98,6 +98,7 @@
 
 <script>
 import NavApp from "../../components/main_component/NavApp.vue";
+import api_raw_material from "../../api/api_raw_material"
 
 export default {
   components: {
@@ -146,10 +147,23 @@ export default {
       var sum = parseInt(item.qty) * parseInt(item.price_unit)
       this.raw_material_data[idx].discount = sum - this.raw_material_data[idx].total_price
       console.log(this.raw_material_data[idx].discount)
+    },
+    create_raw_material() {
+      data = {
+            'id',
+            'name',
+            'balance',
+            'category_id',
+            'unit_id',
+            'create_by_id',
+      }
+      api_raw_material.post('create-raw-material/', data).then(response => {
+        console.log('created')
+      })
     }
     // createCategory() {
     //   const data = {'name': this.category_name}
-    //   axios.post('create_category/', data).then(response => {
+    //   api_raw_material.post('create_category/', data).then(response => {
     //     console.log(response.data)
     //   })
     // },
