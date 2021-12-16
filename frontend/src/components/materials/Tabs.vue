@@ -7,7 +7,7 @@
         @click="select_cate(cate)"
         class="tab-item"
       >
-        <p class="txt">{{ cate }}</p>
+        {{ cate }}
       </button>
     <button class="tab-item" v-if="categories.length < 5">></button>
   </div>
@@ -41,11 +41,12 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
 
 .tab {
   overflow: hidden;
   width: 90%;
+  height: 46px;
   margin-right: 1%;
   margin-left: 5%;
   margin-top: 10px;
@@ -58,18 +59,19 @@ export default {
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding: 5px;
   padding-top: 6px;
   transition: 0.3s;
-  font-size: 18px;
-  font-size: height 10px;
-  font-weight: 700;
+  font-size: 26.5px;
+  /* font-weight: 700; */
   font-style: normal;
   border-radius: 15px 15px 0px 0px;
   margin-top: 0px;
   margin: 3px;
+  margin-bottom: 1em;
   height: 46px;
   width: fit-content;
+  block-size: fit-content;
   text-decoration: none;
   line-height: 31px;
 }

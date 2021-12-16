@@ -36,7 +36,7 @@ const routes = [
     },
   },
   {
-    path: "/po_for_suppliers",
+    path: "/po-for-suppliers",
     name: "POForSuppliers",
     component: POForSuppliers,
     meta: {
@@ -44,7 +44,7 @@ const routes = [
     },
   },
   {
-    path: "/pickup_raw_material",
+    path: "/pickup-raw-material",
     name: "PickupRawMaterial",
     component: PickupRawMaterial,
     meta: {
@@ -60,7 +60,7 @@ const routes = [
     },
   },
   {
-    path: "/manage_raw_material",
+    path: "/manage-raw-material",
     name: "ManageRawMaterial",
     component: ManageRawMaterial,
     meta: {
@@ -68,7 +68,7 @@ const routes = [
     },
   },
   {
-    path: "/raw_materials",
+    path: "/raw-materials",
     name: "RawMaterials",
     component: RawMaterials,
     meta: {
@@ -76,7 +76,7 @@ const routes = [
     },
   },
   {
-    path: "/add_raw_materials",
+    path: "/add-raw-materials",
     name: "AddRawMaterials",
     component: AddRawMaterials,
     meta: {
