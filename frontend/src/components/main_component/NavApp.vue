@@ -1,11 +1,17 @@
 <template>
   <nav class="nav">
-    <img
-      src="../../assets/icon/btn-back.png"
-      class="back inline ms-4"
-    />
-
-    <p id="login" class="header-text" @click="$router.go(-1)"><slot></slot></p>
+    <div class="row">
+      <div class="col-3">
+        <img
+          src="../../assets/icon/btn-back.png"
+          class="back inline ms-4"
+          @click="$router.go(-1)"
+        />
+      </div>
+      <div class="col-9">
+        <p id="login" class="header-text"><slot></slot></p>
+      </div>
+    </div>
   </nav>
 </template>
 
@@ -24,17 +30,16 @@ export default {};
   height: 90px;
 }
 .header-text {
-  width: 100%;
   font-style: normal;
   font-weight: 800;
   font-size: 48px;
   top: 0px;
-  margin: auto;
   margin-bottom: 100px;
   color: #fafafa;
   display: inline;
   position: fixed;
   line-height: 80px;
+  margin-left:25%;
 }
 .inline {
   display: inline;

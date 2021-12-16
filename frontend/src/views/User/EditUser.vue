@@ -10,7 +10,6 @@
             <span id="text">Waiting for admin activate</span></span
           >
         </div>
-        a
       </div>
     </div>
 
@@ -262,6 +261,7 @@
         </div>
       </div>
     </div>
+
     <!-- form -->
     <div class="row" style="margin-top: 30px">
       <div class="col-12">
@@ -283,10 +283,10 @@
         </div>
         <div class="row mb-3">
           <div class="col-3 w-100">
-            <label for="first_name">Nick Name</label>
+            <label for="nick_name">Nick Name</label>
           </div>
           <div class="col-9 w-100">
-            <input type="text" v-model="user.frist_name" id="first_name" />
+            <input type="text" v-model="user.nick_name" id="nick_name" />
           </div>
         </div>
         <div class="row mb-3">
@@ -294,7 +294,13 @@
             <label for="birth_date">Birth Date</label>
           </div>
           <div class="col-9 w-100">
-            <input type="text"  class="textbox-n" onfocus="(this.type='date')" v-model="user.birth_date" id="birth_date" />
+            <input
+              type="text"
+              class="textbox-n"
+              onfocus="(this.type='date')"
+              v-model="user.birth_date"
+              id="birth_date"
+            />
           </div>
         </div>
         <div class="row mb-3">
@@ -302,12 +308,16 @@
             <label for="phone_number">Phone No.</label>
           </div>
           <div class="col-9 w-100">
-            <input type="number" v-model="user.phone_number" id="phone_number" />
+            <input
+              type="number"
+              v-model="user.phone_number"
+              id="phone_number"
+            />
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-3 w-100">
-            <label for="email" style="margin-left:-25px">Email</label>
+            <label for="email" style="margin-left: -25px">Email</label>
           </div>
           <div class="col-9 w-100">
             <input type="email" v-model="user.email" id="email" />
@@ -315,18 +325,16 @@
         </div>
         <div class="row mb-3">
           <div class="col-3 w-100">
-            <label for="first_name">ID Number</label>
+            <label for="id_card">ID Number</label>
           </div>
           <div class="col-9 w-100">
-            <input type="number" v-model="user.frist_name" id="first_name" />
+            <input type="number" v-model="user.id_card" id="id_card" />
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <button
-              class="btn-ghost mt-3"
-            >
-              <img src="../../assets/icon/save.png" alt=""  class="me-4" />
+            <button class="btn-ghost mt-3" @click="save()">
+              <img src="../../assets/icon/save.png" alt="" class="me-4" />
               Save
             </button>
           </div>
@@ -435,12 +443,17 @@ export default {
         return "Inavtive";
       }
     },
-    back(){
-      this.$router.push({name:'UserStatus'})
+    back() {
+      this.$router.push({ name: "UserStatus" });
     },
     change_status(status) {
       this.user.is_working = status;
     },
+  },
+  user() {
+    api_user.get("edit-user/" + this.$route.params.id).then(() => {
+      this.$router.go(-1);
+    });
   },
   mounted() {
     api_user.get("edit-user/" + this.$route.params.id).then((reponse) => {
@@ -474,18 +487,18 @@ export default {
 }
 
 label img {
-  top: 230px;
+  top: 180px;
 }
 
 .gender {
   position: fixed;
-  top: 325px;
+  top: 290px;
   right: 20px;
   color: #ffffff;
 }
 
 .status {
-  top: 190px;
+  top: 155px;
   right: 80px;
   position: fixed;
 }
@@ -519,6 +532,6 @@ input[type="number"] {
   height: 70px;
   font-weight: 600;
   font-size: 36px;
-  line-height:10px;
+  line-height: 10px;
 }
 </style>

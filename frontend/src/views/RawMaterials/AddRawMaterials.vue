@@ -98,7 +98,7 @@
 
 <script>
 import NavApp from "../../components/main_component/NavApp.vue";
-import api_raw_material from "../../api/api_raw_material"
+// import api_raw_material from "../../api/api_raw_material"
 
 export default {
   components: {
@@ -149,17 +149,17 @@ export default {
       console.log(this.raw_material_data[idx].discount)
     },
     create_raw_material() {
-      data = {
-            'id',
-            'name',
-            'balance',
-            'category_id',
-            'unit_id',
-            'create_by_id',
-      }
-      api_raw_material.post('create-raw-material/', data).then(response => {
-        console.log('created')
-      })
+      // data = [
+      //       'id',
+      //       'name',
+      //       'balance',
+      //       'category_id',
+      //       'unit_id',
+      //       'create_by_id',
+      // ]
+      // api_raw_material.post('create-raw-material/', data).then(response => {
+      //   console.log('created')
+      // })
     }
     // createCategory() {
     //   const data = {'name': this.category_name}
