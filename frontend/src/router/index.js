@@ -17,6 +17,8 @@ import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
 import Minimum from "../views/RawMaterials/Minimum.vue"
 import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
 import EditUser from '../views/User/EditUser.vue'
+import DashBoard from '../views/DashBoard.vue'
+
 
 const routes = [
   // {
@@ -27,6 +29,14 @@ const routes = [
   //     requiresLogin: true,
   //   },
   // },
+  {
+    path: "/dash-board",
+    name: "DashBoard",
+    component: DashBoard,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/suppliers",
     name: "Suppliers",
