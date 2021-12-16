@@ -68,7 +68,7 @@
       </div>
     </div>
     <!-- back to login path -->
-    <nav-app @back="back">Registration</nav-app>
+    <nav-app>Registration</nav-app>
     <!-- form -->
     <div class="container">
       <div class="row">
