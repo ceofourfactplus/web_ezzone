@@ -148,6 +148,7 @@ export default {
       this.raw_material_data[idx].discount = sum - this.raw_material_data[idx].total_price
       console.log(this.raw_material_data[idx].discount)
     },
+<<<<<<< HEAD
     create_raw_material() {
       // data = [
       //       'id',
@@ -161,6 +162,21 @@ export default {
       //   console.log('created')
       // })
     }
+=======
+    // create_raw_material() {
+    //   data = [
+    //         'id',
+    //         'name',
+    //         'balance',
+    //         'category_id',
+    //         'unit_id',
+    //         'create_by_id',
+    //   ]
+    //   api_raw_material.post('create-raw-material/', data).then(response => {
+    //     console.log('created')
+    //   })
+    // },
+>>>>>>> 0d45cc076cd38aaef05830e54fcab531634d56c5
     // createCategory() {
     //   const data = {'name': this.category_name}
     //   api_raw_material.post('create_category/', data).then(response => {
