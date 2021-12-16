@@ -4,11 +4,6 @@ import Register from "../views/User/Register.vue";
 import Test from '../views/Test.vue'
 import UserStatus from '../views/User/UserStatus.vue'
 import store from "../store";
-// import Product from "../views/Product/Product.vue"
-// import Topping from "../views/Product/Topping.vue"
-// import TypeTopping from "../views/Product/TypeTopping.vue"
-// import SaleChannel from "../views/Product/SaleChannel.vue"
-// import SelectApp from "../views/Product/SelectApp.vue"
 import RawMaterials from "../views/RawMaterials/RawMaterials.vue"
 import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
 import Suppliers from "../views/RawMaterials/Suppliers.vue"
@@ -21,14 +16,6 @@ import DashBoard from '../views/DashBoard.vue'
 
 
 const routes = [
-  // {
-  //   path: "/",
-  //   name: "Home",
-  //   component: Windows,
-  //   meta: {
-  //     requiresLogin: true,
-  //   },
-  // },
   {
     path: "/dash-board",
     name: "DashBoard",
@@ -41,9 +28,6 @@ const routes = [
     path: "/suppliers",
     name: "Suppliers",
     component: Suppliers,
-    meta: {
-      requiresLogin: false,
-    },
   },
   {
     path: "/po-for-suppliers",
@@ -64,87 +48,17 @@ const routes = [
     path: "/manage-raw-material",
     name: "ManageRawMaterial",
     component: ManageRawMaterial,
-    meta: {
-      requiresLogin: false,
-    },
   },
   {
     path: "/raw-materials",
     name: "RawMaterials",
     component: RawMaterials,
-    meta: {
-      requiresLogin: false,
-    },
   },
   {
     path: "/add-raw-materials",
     name: "AddRawMaterials",
     component: AddRawMaterials,
-    meta: {
-      requiresLogin: false,
-    },
   },
-  // {
-  //   path: "/product",
-  //   name: "MainCreate",
-  //   component: MainCreate,
-  //   meta: {
-  //     requiresLogin: true,
-  //   },
-    // children: [
-    //   {
-    //     name: "Category",
-    //     path: "/category",
-    //     component: Category,
-    //     params: {text:'category'}
-    //   },{
-    //     name: "Topping",
-    //     path: "/topping",
-    //     component: Topping,
-    //     params: {text:'topping'}
-    //   },{
-    //     name: "Product",
-    //     path: "/product",
-    //     component: Product,
-    //     params: {text:'product'}
-    //   },{
-    //     name: "SaleChannel",
-    //     path: "/sale-channel",
-    //     component: SaleChannel,
-    //     params: {text:'sale-channel'}
-    //   },{
-    //     name: "TypeTopping",
-    //     path: "/type-topping",
-    //     component: TypeTopping,
-    //     params: {text:'type-topping'}
-    //   },
-    //   { 
-    //     name:"SelectApp",
-    //     path:'/',
-    //     component: SelectApp,
-    //   }
-    // ],
-  // },
-  // {
-  //   path: "/stock",
-  //   name: "MainStock",
-  //   component: MainStock,
-  //   meta: {
-  //     requiresLogin: true,
-  //   },
-  //   children: [
-  //     {
-  //       name: "ToBuy",
-  //       path: "/to-buy",
-  //       component: ToBuy,
-  //     },
-  //     {
-  //       name: "AllStock",
-  //       path: "/all-stock",
-  //       component: AllStock,
-  //     },
-  //   ],
-  // },
   {
     path: "/login",
     name: "Login",

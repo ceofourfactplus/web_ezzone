@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="back()">User Data</nav-app>
+    <nav-app>User Data</nav-app>
     <!-- alert -->
     <div class="row">
       <div class="col-12">
@@ -436,7 +436,7 @@ export default {
       }
     },
     back(){
-      this.$route.push({name:'UserStatus'})
+      this.$router.push({name:'UserStatus'})
     },
     change_status(status) {
       this.user.is_working = status;
