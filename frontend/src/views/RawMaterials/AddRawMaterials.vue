@@ -24,73 +24,120 @@
           </div>
           <div
             class="item-in-head-table"
-            style="width: 100px; font-size: 24px; padding-top: 3px; margin-top: 5px;"
+            style="
+              width: 100px;
+              font-size: 24px;
+              padding-top: 3px;
+              margin-top: 5px;
+            "
           >
             + Qty
           </div>
           <div
             class="item-in-head-table"
-            style="font-size: 24px; width: 87px; height: 41px; padding-top: 3px; margin-top: 5px;"
+            style="
+              font-size: 24px;
+              width: 87px;
+              height: 41px;
+              padding-top: 3px;
+              padding-left: 0px;
+              margin-top: 5px;
+            "
           >
             Unit
           </div>
-          <div class="item-in-head-table pu">Price <br />/Unit</div>
+          <div
+            class="item-in-head-table"
+            style="font-size: 24px; padding-top: 3px; margin-top: 5px; padding-right: 0px;"
+          >
+            Price
+          </div>
           <div
             class="item-in-head-table"
             style="
               width: 103px;
               height: 41px;
+              font-size: 24px;
               padding-left: 0px;
               margin-left: 5px;
               margin-right: 15px;
-              margin-top: 5px;
+              margin-top: 0px;
             "
           >
-            Total Price
+            Total
           </div>
         </div>
       </div>
-      <div style="height: 720px; overflow-y: scroll; overflow-x: hidden;">
-        <div class="table-item" v-for="(item, idx) in raw_material_data" :key="idx">
-        <div class="checkbox-orange">
-          <div class="row">
-            <input
-              type="checkbox"
-              class="me-3 mt-2"
-              v-model="list_vals"
-              :value="item"
-              id="Female"
-              style="left: 25px; bottom: 3px"
-            />
-            <div class="col-4">
-              <div class="item-in-table-row">{{ item.item }}</div>
-            </div>
-            <div class="col-1">
-              <div 
-                class="qty" 
-                style="margin-left: 30px"
-              >
-              <input type="text" class="inp-qty" v-model="item.qty" @input="calc(item)">
-            </div>
-            </div>
-            <div class="col-1">
-              <div class="unit">
-                <select style="background-color: #2f3446; color: white; border-radius: 10px;" v-model="item.unit">
-                  <option
-                    v-for="unit in units"
-                    :value="unit.unit"
-                    :key="unit.value"
+      <div style="height: 720px; overflow-y: scroll; overflow-x: hidden">
+        <div
+          class="table-item"
+          v-for="(item, idx) in raw_material_data"
+          :key="idx"
+        >
+          <div class="checkbox-orange">
+            <div class="row">
+              <input
+                type="checkbox"
+                class="me-3 mt-2"
+                v-model="list_vals"
+                :value="item"
+                id="Female"
+                style="left: 25px; bottom: 3px"
+              />
+              <div class="col-4">
+                <div class="item-in-table-row">{{ item.item }}</div>
+              </div>
+              <div class="col-1">
+                <div class="qty" style="margin-left: 30px">
+                  <input
+                    type="text"
+                    class="inp-qty"
+                    v-model="item.qty"
+                    @input="calc(item)"
+                    @click="item.qty = ''"
+                  />
+                </div>
+              </div>
+              <div class="col-1">
+                <div class="unit">
+                  <select
+                    style="
+                      background-color: #2f3446;
+                      color: white;
+                      border-radius: 10px;
+                    "
+                    v-model="item.unit"
                   >
-                    {{ unit.unit }}
-                  </option>
-                </select>
+                    <option
+                      v-for="unit in units"
+                      :value="unit.unit"
+                      :key="unit.value"
+                    >
+                      {{ unit.unit }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="price-unit">
+                <input
+                  type="text"
+                  class="inp-qty"
+                  v-model="item.price_unit"
+                  @input="calc(item)"
+                  @click="item.price_unit = ''"
+                />
+              </div>
+              <div class="col-1 total-price">
+                <input
+                  type="text"
+                  class="inp-qty"
+                  v-model="item.total_price"
+                  @input="calc_discount(item)"
+                />
               </div>
             </div>
-            <div class="price-unit"><input type="text" class="inp-qty" v-model="item.price_unit" @input="calc(item)"></div>
-            <div class="col-1 total-price"><input type="text" class="inp-qty" v-model="item.total_price" @input="calc_discount(item)"></div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -121,32 +168,75 @@ export default {
         { unit: "ลัง", value: "e" },
       ],
       raw_material_data: [
-        { item: "item1", qty: 9999, unit: 'ชิ้น', price_unit: 999, total_price: 0, discount: 0,},
-        { item: "item2", qty: 9999, unit: 'กล่อง', price_unit: 999, total_price: 0, discount: 0,},
-        { item: "item3", qty: 9999, unit: 'แพ็ค', price_unit: 999, total_price: 0, discount: 0,},
-        { item: "item4", qty: 9999, unit: 'ถุง', price_unit: 999, total_price: 0, discount: 0,},
-        { item: "item5", qty: 9999, unit: 'ลัง', price_unit: 999, total_price: 0, discount: 0,},
+        {
+          item: "item1",
+          qty: 9999,
+          unit: "ชิ้น",
+          price_unit: 999,
+          total_price: 0,
+          discount: 0,
+        },
+        {
+          item: "item2",
+          qty: 9999,
+          unit: "กล่อง",
+          price_unit: 999,
+          total_price: 0,
+          discount: 0,
+        },
+        {
+          item: "item3",
+          qty: 9999,
+          unit: "แพ็ค",
+          price_unit: 999,
+          total_price: 0,
+          discount: 0,
+        },
+        {
+          item: "item4",
+          qty: 9999,
+          unit: "ถุง",
+          price_unit: 999,
+          total_price: 0,
+          discount: 0,
+        },
+        {
+          item: "item5",
+          qty: 9999,
+          unit: "ลัง",
+          price_unit: 999,
+          total_price: 0,
+          discount: 0,
+        },
       ],
       test_count: 5,
     };
   },
   methods: {
     add() {
-      console.log('add')
-      this.test_count += 1
-      this.raw_material_data.push({ item: `item${this.test_count}`, qty: 9999, unit: 'ลัง', price_unit: 999, total_price: 9999 },)
+      console.log("add");
+      this.test_count += 1;
+      this.raw_material_data.push({
+        item: `item${this.test_count}`,
+        qty: 9999,
+        unit: "ลัง",
+        price_unit: 999,
+        total_price: 9999,
+      });
     },
     calc(item) {
-      var idx = this.raw_material_data.indexOf(item)
-      var sum = parseInt(item.qty) * parseInt(item.price_unit)
-      this.raw_material_data[idx].total_price = sum
-      this.raw_material_data[idx].discount = sum - this.raw_material_data[idx].total_price
+      var idx = this.raw_material_data.indexOf(item);
+      var sum = parseInt(item.qty) * parseInt(item.price_unit);
+      this.raw_material_data[idx].total_price = sum;
+      this.raw_material_data[idx].discount =
+        sum - this.raw_material_data[idx].total_price;
     },
     calc_discount(item) {
-      var idx = this.raw_material_data.indexOf(item)
-      var sum = parseInt(item.qty) * parseInt(item.price_unit)
-      this.raw_material_data[idx].discount = sum - this.raw_material_data[idx].total_price
-      console.log(this.raw_material_data[idx].discount)
+      var idx = this.raw_material_data.indexOf(item);
+      var sum = parseInt(item.qty) * parseInt(item.price_unit);
+      this.raw_material_data[idx].discount =
+        sum - this.raw_material_data[idx].total_price;
+      console.log(this.raw_material_data[idx].discount);
     },
     // create_raw_material() {
     //   data = [
@@ -289,6 +379,6 @@ th {
   text-indent: 65px;
   border-radius: 20px;
   height: 45px;
-  background-color: #3E4444;
+  background-color: #3e4444;
 }
 </style>

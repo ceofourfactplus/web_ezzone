@@ -4,7 +4,7 @@ export default {
   state: {
     accessToken: null,
     confirm_pass: false,
-    userInfo: "",
+    userInfo: {is_barista: true, is_staff: true, is_chef: false, is_purchesing: false, is_receptionist: false},
     error: {
       status: false,
       text: "",
