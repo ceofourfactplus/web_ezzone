@@ -34,12 +34,15 @@ export default {};
   font-weight: 800;
   font-size: 48px;
   top: 0px;
+  right: 80px;
   margin-bottom: 100px;
   color: #fafafa;
   display: inline;
   position: fixed;
+  width:80%;
+  
   line-height: 80px;
-  margin-left:25%;
+  margin-left:20%;
 }
 .inline {
   display: inline;

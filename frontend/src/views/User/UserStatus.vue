@@ -224,18 +224,23 @@ export default {
   methods: {
     role(user) {
       var output = "";
-      if (user.is_bartender) {
+
+      if (user.is_barista) {
         output = output + "B";
+      }
+      if (user.is_staff) {
+        if (output.length != 0) output = output + "/";
+        output = output + "M";
       }
       if (user.is_chef) {
         if (output.length != 0) output = output + "/";
         output = output + "C";
       }
-      if (user.is_service) {
+      if (user.is_receptionish) {
         if (output.length != 0) output = output + "/";
         output = output + "R";
       }
-      if (user.is_percheser) {
+      if (user.is_purchesing) {
         if (output.length != 0) output = output + "/";
         output = output + "P";
       }

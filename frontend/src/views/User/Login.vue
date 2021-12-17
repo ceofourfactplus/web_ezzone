@@ -45,12 +45,18 @@
         <button type="submit" class="btn m mt-2" id="btn-login">Login</button>
         <button
           type="button"
-          class="btn-ghost m"
+          class="btn-ghost"
           @click="$router.push({ name: 'Register' })"
           id="btn-login"
         >
           Register
         </button>
+        <div class="col-12 mt-3">
+          <router-link to="/forgot-password"
+          style="color:#fff;font-size:18px;text-decoration: underline;"
+            >Forget password</router-link
+          >
+        </div>
       </form>
     </div>
     <div class="card" :class="{ 'card-active': alert }">
@@ -87,11 +93,9 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          this.alert
-          console.log(response.data.user_set)
+          this.$router.push({name:'DashBoard'})
           this.auth.accessToken = response.data.token;
           this.auth.userInfo = response.data.user_set;
-
         })
         .catch((err) => {
           console.log(err);
@@ -110,13 +114,17 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .m {
   margin: auto;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+}
+input {
+  height: 80px!important;
 }
 #btn-login {
   width: 300px;
   height: 70px;
 }
+ 
 </style>

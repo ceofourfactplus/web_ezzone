@@ -2,7 +2,7 @@
   <div>
     <nav-app>User Data</nav-app>
     <!-- alert -->
-    <div class="row">
+    <div class="row" v-if="!user.is_active">
       <div class="col-12">
         <div class="btn-ghost-y m-auto" id="alert">
           <span
@@ -83,15 +83,15 @@
                 <input
                   type="checkbox"
                   class="me-3 mt-2"
-                  v-model="user.is_perchesing"
-                  id="Purchesing"
+                  v-model="user.is_purchesing"
+                  id="Perchesing"
                 />
               </div>
               <div class="col-8">
                 <label
                   class="ms-2"
                   style="color: #fff; font-weight: 700"
-                  for="Purchesing"
+                  for="Perchesing"
                   >Purchesing</label
                 >
               </div>
@@ -426,6 +426,7 @@ export default {
     return {
       user: {},
       blur: false,
+      show_img: null,
     };
   },
   methods: {
@@ -443,14 +444,50 @@ export default {
         return "Inavtive";
       }
     },
+    onFileChange(e) {
+      this.img = e.target.files[0];
+      if (this.img) {
+        const reader = new FileReader();
+        reader.onload = (e) => (this.show_img = e.target.result);
+        reader.readAsDataURL(this.img);
+      }
+    },
     back() {
       this.$router.push({ name: "UserStatus" });
     },
     change_status(status) {
       this.user.is_working = status;
     },
+    check_status() {
+      if (
+        !this.user.is_chef &&
+        !this.user.is_barista &&
+        !this.user.is_receptionish &&
+        !this.user.is_staff &&
+        !this.user.is_purchesing
+      ) {
+        console.log('woo')
+        this.user.is_working = 0;
+      }
+      console.log('new')
+    },
   },
-  user() {
+  edir_user() {
+    const user =  new FormData();
+    user.append("is_chef", this.user.is_chef);
+    user.append("is_barista", this.user.is_barista);
+    user.append("is_purchesing", this.user.is_purchesing);
+    user.append("is_receptionist", this.user.is_receptionish);
+    user.append("is_staff", this.user.is_staff);
+    user.append("username", this.username);
+    user.append("password", this.password);
+    user.append("email", this.email);
+    user.append("first_name", this.first_name);
+    user.append("last_name", this.last_name);
+    user.append("id_card", this.id_card);
+    user.append("phone_number", this.phone_number);
+    user.append("img", this.img, this.img.name);
+    user.append("gender", this.gender);
     api_user.get("edit-user/" + this.$route.params.id).then(() => {
       this.$router.go(-1);
     });
@@ -458,7 +495,13 @@ export default {
   mounted() {
     api_user.get("edit-user/" + this.$route.params.id).then((reponse) => {
       this.user = reponse.data;
+      if (this.user.img != null){
+        this.show_img = this.user.img
+      }
     });
+  },
+  watch: {
+    user() {this.check_status()},
   },
 };
 </script>
