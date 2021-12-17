@@ -1,196 +1,183 @@
 <template>
-  <div class="c" style="top: 0px">
-    <!-- input img -->
-    <div style="height:0px">
-      <label for="file">
-        <img
-          v-if="show_img == null"
-          width="150"
-          height="150"
-          src="../../assets/icon/User.png"
-          class="register-user"
-        />
-        <img
-          v-else
-          :src="show_img"
-          width="150"
-          height="150"
-          class="register-user"
-        />
-      </label>
-      <input
-        type="file"
-        @change="onFileChange"
-        style="display: none"
-        id="file"
-        class="register-user"
-      />
-      <!-- <check-box-white/> -->
-    </div>
-
-    <div class="gender" style="width: 200px">
-      <div class="row ms-3" style="color: #fff"><h4>Gender</h4></div>
-      <div class="row">
-        <div class="checkbox-white">
-          <div class="row">
-            <div class="col-4">
-              <input
-                type="radio"
-                class="me-3 mt-2"
-                v-model="gender"
-                value="Male"
-                id="Male"
-              />
-            </div>
-            <div class="col-8">
-              <label class="ms-3" for="Male">Male</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="checkbox-white">
-          <div class="row">
-            <div class="col-4">
-              <input
-                type="radio"
-                class="me-3 mt-2"
-                v-model="gender"
-                value="Female"
-                id="Female"
-              />
-            </div>
-            <div class="col-8">
-              <label class="ms-3" for="Female">Female</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="" style="top: 0px">
     <!-- back to login path -->
     <nav-app>Registration</nav-app>
+    <!-- input img -->
+
     <!-- form -->
     <div class="container">
       <div class="row">
-        <div class="col-3"></div>
-        <div class="col-9">
+        <div class="col-3">
+          <!-- select img -->
+          <div style="height: 0px">
+            <label for="file">
+              <img
+                v-if="show_img == null"
+                width="170"
+                height="170"
+                src="../../assets/icon/User.png"
+                class="register-user"
+              />
+              <img
+                v-else
+                :src="show_img"
+                width="170"
+                height="170"
+                class="register-user"
+              />
+            </label>
+            <input
+              type="file"
+              @change="onFileChange"
+              style="display: none"
+              id="file"
+              class="register-user"
+            />
+            <!-- <check-box-white/> -->
+          </div>
+
+          <!-- gender -->
+          <div class="gender" style="width: 200px">
+            <div class="row ms-4 mb-2" style="color: #fff; font-size:24px; font-weight:bold;">Gender</div>
+            <div class="row">
+              <div class="checkbox-white">
+                <div class="row">
+                  <div class="col-4">
+                    <input
+                      type="radio"
+                      class="me-3 mt-2"
+                      v-model="gender"
+                      value="Male"
+                      id="Male"
+                    />
+                  </div>
+                  <div class="col-8">
+                    <label class="ms-3" for="Male">Male</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="checkbox-white">
+                <div class="row">
+                  <div class="col-4">
+                    <input
+                      type="radio"
+                      class="me-3 mt-2"
+                      v-model="gender"
+                      value="Female"
+                      id="Female"
+                    />
+                  </div>
+                  <div class="col-8">
+                    <label class="ms-3" for="Female">Female</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-9 mt-4 ms-4">
+          <!-- nick name -->
+          <div class="row">
+            <input
+              type="text"
+              v-model="nick_name"
+              placeholder="Nick Name"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
+          </div>
           <!-- first name -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="text"
-                v-model="first_name"
-                placeholder="First Name"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="text"
+              v-model="first_name"
+              placeholder="First Name"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- last name -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="text"
-                v-model="last_name"
-                placeholder="Last Name"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="text"
+              v-model="last_name"
+              placeholder="Last Name"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- id card -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="number"
-                v-model="id_card"
-                placeholder="ID Card"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="number"
+              v-model="id_card"
+              placeholder="ID Card"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- birth date -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="text"
-                v-model="birth_date"
-                placeholder="Birth Date"
-                onfocus="(this.type='date')"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="text"
+              v-model="birth_date"
+              placeholder="Birth Date"
+              onfocus="(this.type='date')"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- phone number -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="number"
-                v-model="phone_number"
-                placeholder="Phone Number"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="number"
+              v-model="phone_number"
+              placeholder="Phone Number"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- email -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="email"
-                v-model="email"
-                placeholder="Email"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="email"
+              v-model="email"
+              placeholder="Email"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- Username -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="text"
-                v-model="username"
-                placeholder="Username"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="text"
+              v-model="username"
+              placeholder="Username"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- password -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="password"
-                v-model="password"
-                placeholder="Password"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="password"
+              v-model="password"
+              placeholder="Password"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <!-- conf password -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
-              <input
-                type="password"
-                v-model="confirm_password"
-                placeholder="Confirm Password"
-                aria-label=".form-control-lg example"
-                style="width: 400px"
-              />
-            </div>
+            <input
+              type="password"
+              v-model="confirm_password"
+              placeholder="Confirm Password"
+              aria-label=".form-control-lg example"
+              style="width: 400px"
+            />
           </div>
           <div class="row">
             <div class="col-1"></div>
@@ -210,8 +197,6 @@
 
           <!-- btn restgister -->
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-11 ms-3">
               <button
                 class="btn-ghost"
                 @click="register"
@@ -219,7 +204,6 @@
               >
                 Register
               </button>
-            </div>
           </div>
         </div>
       </div>
@@ -238,7 +222,7 @@
 
 <script>
 import axios from "axios";
-import NavApp from '../../components/main_component/NavApp.vue';
+import NavApp from "../../components/main_component/NavApp.vue";
 // import CheckBoxWhite from '../../components/main_component/CheckBoxWhite.vue';
 export default {
   components: { NavApp },
@@ -246,6 +230,7 @@ export default {
   name: "Register",
   data() {
     return {
+      nick_name:"",
       first_name: "",
       last_name: "",
       id_card: "",
@@ -255,7 +240,7 @@ export default {
       username: "",
       password: "",
       confirm_password: "",
-      img: null,
+      img: "",
       show_img: null,
       gender: "",
       error: {
@@ -268,12 +253,13 @@ export default {
   methods: {
     register() {
       console.log(this.id_card.toString().length);
+      console.log(this.nick_name != "");
       console.log(this.first_name != "");
       console.log(this.last_name != "");
       console.log(this.birth_date != "");
       console.log(this.username.length > 6);
       console.log(this.password.length > 6);
-      console.log(this.img != null);
+      console.log(this.img != "");
       console.log(this.gender != "");
       if (
         this.id_card.toString().length == 13 &&
@@ -283,7 +269,7 @@ export default {
         this.username.length > 6 &&
         this.password.length > 6 &&
         this.password == this.confirm_password &&
-        this.img != null &&
+        this.img != "" &&
         this.gender != ""
       ) {
         const user = new FormData();
@@ -294,7 +280,7 @@ export default {
         user.append("last_name", this.last_name);
         user.append("id_card", this.id_card);
         user.append("phone_number", this.phone_number);
-        user.append("img", this.img, this.img.name);
+        user.append("img", this.img);
         user.append("gender", this.gender);
         axios
           .post("http://127.0.0.1:8000/user/register/", user)
@@ -373,10 +359,11 @@ export default {
 <style scoped>
 input {
   margin-bottom: 15px;
+  height: 60px;
 }
 .gender {
   position: fixed;
-  top: 295px;
+  top: 315px;
   left: 50px;
   color: #ffffff80;
 }

@@ -2,7 +2,7 @@
   <div>
     <nav-app>User Data</nav-app>
     <!-- alert -->
-    <div class="row">
+    <div class="row" v-if="!user.is_active">
       <div class="col-12">
         <div class="btn-ghost-y m-auto" id="alert">
           <span
@@ -10,7 +10,6 @@
             <span id="text">Waiting for admin activate</span></span
           >
         </div>
-        a
       </div>
     </div>
 
@@ -84,15 +83,15 @@
                 <input
                   type="checkbox"
                   class="me-3 mt-2"
-                  v-model="user.is_perchesing"
-                  id="Purchesing"
+                  v-model="user.is_purchesing"
+                  id="Perchesing"
                 />
               </div>
               <div class="col-8">
                 <label
                   class="ms-2"
                   style="color: #fff; font-weight: 700"
-                  for="Purchesing"
+                  for="Perchesing"
                   >Purchesing</label
                 >
               </div>
@@ -262,6 +261,7 @@
         </div>
       </div>
     </div>
+
     <!-- form -->
     <div class="row" style="margin-top: 30px">
       <div class="col-12">
@@ -283,10 +283,10 @@
         </div>
         <div class="row mb-3">
           <div class="col-3 w-100">
-            <label for="first_name">Nick Name</label>
+            <label for="nick_name">Nick Name</label>
           </div>
           <div class="col-9 w-100">
-            <input type="text" v-model="user.frist_name" id="first_name" />
+            <input type="text" v-model="user.nick_name" id="nick_name" />
           </div>
         </div>
         <div class="row mb-3">
@@ -294,7 +294,13 @@
             <label for="birth_date">Birth Date</label>
           </div>
           <div class="col-9 w-100">
-            <input type="text"  class="textbox-n" onfocus="(this.type='date')" v-model="user.birth_date" id="birth_date" />
+            <input
+              type="text"
+              class="textbox-n"
+              onfocus="(this.type='date')"
+              v-model="user.birth_date"
+              id="birth_date"
+            />
           </div>
         </div>
         <div class="row mb-3">
@@ -302,12 +308,16 @@
             <label for="phone_number">Phone No.</label>
           </div>
           <div class="col-9 w-100">
-            <input type="number" v-model="user.phone_number" id="phone_number" />
+            <input
+              type="number"
+              v-model="user.phone_number"
+              id="phone_number"
+            />
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-3 w-100">
-            <label for="email" style="margin-left:-25px">Email</label>
+            <label for="email" style="margin-left: -25px">Email</label>
           </div>
           <div class="col-9 w-100">
             <input type="email" v-model="user.email" id="email" />
@@ -315,18 +325,16 @@
         </div>
         <div class="row mb-3">
           <div class="col-3 w-100">
-            <label for="first_name">ID Number</label>
+            <label for="id_card">ID Number</label>
           </div>
           <div class="col-9 w-100">
-            <input type="number" v-model="user.frist_name" id="first_name" />
+            <input type="number" v-model="user.id_card" id="id_card" />
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <button
-              class="btn-ghost mt-3"
-            >
-              <img src="../../assets/icon/save.png" alt=""  class="me-4" />
+            <button class="btn-ghost mt-3" @click="save()">
+              <img src="../../assets/icon/save.png" alt="" class="me-4" />
               Save
             </button>
           </div>
@@ -418,6 +426,7 @@ export default {
     return {
       user: {},
       blur: false,
+      show_img: null,
     };
   },
   methods: {
@@ -435,17 +444,64 @@ export default {
         return "Inavtive";
       }
     },
-    back(){
-      this.$router.push({name:'UserStatus'})
+    onFileChange(e) {
+      this.img = e.target.files[0];
+      if (this.img) {
+        const reader = new FileReader();
+        reader.onload = (e) => (this.show_img = e.target.result);
+        reader.readAsDataURL(this.img);
+      }
+    },
+    back() {
+      this.$router.push({ name: "UserStatus" });
     },
     change_status(status) {
       this.user.is_working = status;
     },
+    check_status() {
+      if (
+        !this.user.is_chef &&
+        !this.user.is_barista &&
+        !this.user.is_receptionish &&
+        !this.user.is_staff &&
+        !this.user.is_purchesing
+      ) {
+        console.log('woo')
+        this.user.is_working = 0;
+      }
+      console.log('new')
+    },
+  },
+  edir_user() {
+    const user =  new FormData();
+    user.append("is_chef", this.user.is_chef);
+    user.append("is_barista", this.user.is_barista);
+    user.append("is_purchesing", this.user.is_purchesing);
+    user.append("is_receptionist", this.user.is_receptionish);
+    user.append("is_staff", this.user.is_staff);
+    user.append("username", this.username);
+    user.append("password", this.password);
+    user.append("email", this.email);
+    user.append("first_name", this.first_name);
+    user.append("last_name", this.last_name);
+    user.append("id_card", this.id_card);
+    user.append("phone_number", this.phone_number);
+    user.append("img", this.img, this.img.name);
+    user.append("gender", this.gender);
+    api_user.get("edit-user/" + this.$route.params.id).then(() => {
+      this.$router.go(-1);
+    });
   },
   mounted() {
     api_user.get("edit-user/" + this.$route.params.id).then((reponse) => {
       this.user = reponse.data;
+      if (this.user.img != null){
+        this.show_img = this.user.img
+      }
     });
+  },
+  watch: {
+    user() {this.check_status()},
   },
 };
 </script>
@@ -474,18 +530,18 @@ export default {
 }
 
 label img {
-  top: 230px;
+  top: 180px;
 }
 
 .gender {
   position: fixed;
-  top: 325px;
+  top: 290px;
   right: 20px;
   color: #ffffff;
 }
 
 .status {
-  top: 190px;
+  top: 155px;
   right: 80px;
   position: fixed;
 }
@@ -519,6 +575,6 @@ input[type="number"] {
   height: 70px;
   font-weight: 600;
   font-size: 36px;
-  line-height:10px;
+  line-height: 10px;
 }
 </style>

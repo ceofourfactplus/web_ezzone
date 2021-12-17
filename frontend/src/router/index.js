@@ -13,6 +13,7 @@ import Minimum from "../views/RawMaterials/Minimum.vue"
 import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
 import EditUser from '../views/User/EditUser.vue'
 import DashBoard from '../views/DashBoard.vue'
+import ForgotPassword from '../views/User/ForgotPassword.vue'
 
 
 const routes = [
@@ -63,6 +64,11 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
+  },
+  {
+    path: "/forgot-password",
+    name: "ForgotPassword",
+    component: ForgotPassword,
   },
   {
     path: "/register",
