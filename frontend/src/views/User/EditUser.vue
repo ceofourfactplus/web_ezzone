@@ -2,7 +2,7 @@
   <div>
     <nav-app>User Data</nav-app>
     <!-- alert -->
-    <div class="row" v-if="!user.is_active">
+    <div class="row" v-if="false">
       <div class="col-12">
         <div class="btn-ghost-y m-auto" id="alert">
           <span
@@ -29,8 +29,8 @@
             <img
               v-else
               :src="show_img"
-              width="150"
-              height="150"
+              width="200"
+              height="200"
               class="register-user"
             />
           </label>
@@ -270,7 +270,7 @@
             <label for="first_name">First Name</label>
           </div>
           <div class="col-9 w-100">
-            <input type="text" v-model="user.frist_name" id="first_name" />
+            <input type="text" v-model="user.first_name" id="first_name" />
           </div>
         </div>
         <div class="row mb-3">
@@ -333,7 +333,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <button class="btn-ghost mt-3" @click="save()">
+            <button class="btn-ghost mt-3" @click="edit_user()">
               <img src="../../assets/icon/save.png" alt="" class="me-4" />
               Save
             </button>
@@ -427,6 +427,7 @@ export default {
       user: {},
       blur: false,
       show_img: null,
+      new_img: false,
     };
   },
   methods: {
@@ -445,11 +446,12 @@ export default {
       }
     },
     onFileChange(e) {
-      this.img = e.target.files[0];
-      if (this.img) {
+      this.user.img = e.target.files[0];
+      this.new_img = true;
+      if (this.user.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.img);
+        reader.readAsDataURL(this.user.img);
       }
     },
     back() {
@@ -466,42 +468,51 @@ export default {
         !this.user.is_staff &&
         !this.user.is_purchesing
       ) {
-        console.log('woo')
+        console.log("woo");
         this.user.is_working = 0;
       }
-      console.log('new')
+      console.log("new");
+    },
+    edit_user() {
+      const user_data = new FormData();
+      user_data.append("is_chef", this.user.is_chef);
+      user_data.append("is_barista", this.user.is_barista);
+      user_data.append("is_purchesing", this.user.is_purchesing);
+      user_data.append("is_receptionist", this.user.is_receptionist);
+      user_data.append("is_staff", this.user.is_staff);
+      user_data.append("username", this.user.username);
+      user_data.append("password", this.user.password);
+      user_data.append("email", this.user.email);
+      user_data.append("first_name", this.user.first_name);
+      user_data.append("last_name", this.user.last_name);
+      user_data.append("nick_name", this.user.nick_name);
+      user_data.append("id_card", this.user.id_card);
+      user_data.append("phone_number", this.user.phone_number);
+      user_data.append("is_active", true);
+      if (this.new_img) {
+        user_data.append("img", this.user.img, this.user.img.name);
+      } else {
+        user_data.append("img", '');
+      }
+      user_data.append("gender", this.user.gender);
+      api_user.put("edit-user/" + this.user.id, user_data).then(() => {
+        this.$router.go(-1);
+      });
     },
   },
-  edir_user() {
-    const user =  new FormData();
-    user.append("is_chef", this.user.is_chef);
-    user.append("is_barista", this.user.is_barista);
-    user.append("is_purchesing", this.user.is_purchesing);
-    user.append("is_receptionist", this.user.is_receptionish);
-    user.append("is_staff", this.user.is_staff);
-    user.append("username", this.username);
-    user.append("password", this.password);
-    user.append("email", this.email);
-    user.append("first_name", this.first_name);
-    user.append("last_name", this.last_name);
-    user.append("id_card", this.id_card);
-    user.append("phone_number", this.phone_number);
-    user.append("img", this.img, this.img.name);
-    user.append("gender", this.gender);
-    api_user.get("edit-user/" + this.$route.params.id).then(() => {
-      this.$router.go(-1);
-    });
-  },
+
   mounted() {
     api_user.get("edit-user/" + this.$route.params.id).then((reponse) => {
       this.user = reponse.data;
-      if (this.user.img != null){
-        this.show_img = this.user.img
+      if (this.user.img != null) {
+        this.show_img = this.user.img;
       }
     });
   },
   watch: {
-    user() {this.check_status()},
+    user() {
+      this.check_status();
+    },
   },
 };
 </script>
@@ -521,7 +532,7 @@ export default {
 }
 #img {
   margin-right: 10px !important;
-  margin-bottom: 5px !important;
+  margin-bottom: 0px !important;
 }
 #header {
   margin-left: 25px;
@@ -530,18 +541,18 @@ export default {
 }
 
 label img {
-  top: 180px;
+  top: 150px;
 }
 
 .gender {
   position: fixed;
-  top: 290px;
+  top: 250px;
   right: 20px;
   color: #ffffff;
 }
 
 .status {
-  top: 155px;
+  top: 110px;
   right: 80px;
   position: fixed;
 }

@@ -8,5 +8,5 @@ urlpatterns = [
   path('read-all/', views.UserList.as_view()),
   path('search-name/<str:qury>', views.SearchName.as_view()), 
   path('edit-user/<int:pk>',views.EditUser.as_view()),
-  
+  path('change-status/<int:pk>/<int:status>', views.ChangeStatus.as_view())
 ]

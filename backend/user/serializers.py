@@ -23,11 +23,16 @@ class UserSerializer (serializers.ModelSerializer):
             'is_purchesing', 
             'is_receptionist', 
             'is_owner', 
-            'birth_day', 
+            'id_card',
+            'birth_date', 
             'is_working', 
             'gender', 
             'img',
         ]
+    
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
 
 
 class LoginSerializer(serializers.ModelSerializer):

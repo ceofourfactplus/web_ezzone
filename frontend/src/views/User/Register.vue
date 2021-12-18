@@ -276,10 +276,12 @@ export default {
         user.append("username", this.username);
         user.append("password", this.password);
         user.append("email", this.email);
+        user.append("nick_name", this.nick_name);
         user.append("first_name", this.first_name);
         user.append("last_name", this.last_name);
         user.append("id_card", this.id_card);
         user.append("phone_number", this.phone_number);
+        user.append("birth_date", this.birth_date);
         user.append("img", this.img);
         user.append("gender", this.gender);
         axios

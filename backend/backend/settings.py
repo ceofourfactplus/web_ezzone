@@ -46,10 +46,7 @@ INSTALLED_APPS = [
     'material',
     'customer',
     'promotion',  
-    'user',  
-    'rest_framework_simplejwt.token_blacklist',
-    "verify_email.apps.VerifyEmailConfig",
-    'colorfield',
+    'user',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -95,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'ezzone_database',
         'USER': 'root',
-        'PASSWORD': 'siri160349',
+        'PASSWORD': 'ceo210750',
         'HOST': 'localhost',
         'PORT': '3306',
     }

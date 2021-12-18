@@ -100,6 +100,7 @@ export default {
         .catch((err) => {
           console.log(err);
           this.error.status = true;
+          this.error.data = err.response.data
         });
     },
   },

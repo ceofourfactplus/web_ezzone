@@ -124,7 +124,7 @@ export default {
   width: 100%;
 }
 #btn-submit {
-  width: 220px;
+  width: 270px;
   height: 60px;
 }
 .img {

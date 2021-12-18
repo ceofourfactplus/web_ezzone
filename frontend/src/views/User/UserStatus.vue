@@ -56,7 +56,7 @@
                   class="img-user-status me-2"
                   alt=""
                 />
-                <span>{{ user.first_name }}</span>
+                <span>{{ user.nick_name }}</span>
               </div>
             </div>
             <div class="col-4" style="margin-left: 10px; width: 100%">
@@ -76,7 +76,11 @@
               class="col-2"
               style="margin: auto; margin-left: 30px; width: 100%"
             >
-              <img src="../../assets/icon/edit-user.png" alt="" @click="ToEditUser(user)" />
+              <img
+                src="../../assets/icon/edit-user.png"
+                alt=""
+                @click="ToEditUser(user)"
+              />
             </div>
           </div>
         </div>
@@ -153,7 +157,7 @@
         </div>
         <div class="col-12 mt-3 w-100 m-auto">
           <button
-            v-if="(select_user.is_working == 1)"
+            v-if="select_user.is_working == 1"
             class="mt-4 btn-g"
             style="width: 80%; height: 70px"
           >
@@ -282,16 +286,17 @@ export default {
       this.select_user = user;
     },
     change_status(status) {
-      this.select_user.is_working = status;
-      api_user.put("edit-user/",this.select.id, this.select_user).then(() => {
-        api_user.get('read-all/').then(response=>{
-        this.all_user = response.data
-      })
-      });
+      api_user
+        .put("change-status/" + this.select_user.id+'/'+status)
+        .then(() => {
+          api_user.get("read-all/").then((response) => {
+            this.all_user = response.data;
+          });
+        });
     },
-    ToEditUser(user){
-      this.$router.push({name:'EditUser',params:{id:user.id}})
-    }
+    ToEditUser(user) {
+      this.$router.push({ name: "EditUser", params: { id: user.id } });
+    },    
   },
 };
 </script>
