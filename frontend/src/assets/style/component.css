@@ -56,7 +56,7 @@
   grid-column: auto/span 12;
 }
 
-input {
+textarea,input {
   border-radius: 10px;
   width: 400px;
   height: 60px;
@@ -75,8 +75,9 @@ input[type="date"] {
   color: #e0eeee88;
 }
 
-input::placeholder {
+input::placeholder ,textarea::placeholder{
   color: #e0eeee88;
+  text-indent: 10px;
 }
 
 .btn {

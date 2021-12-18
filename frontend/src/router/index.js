@@ -14,6 +14,8 @@ import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
 import EditUser from '../views/User/EditUser.vue'
 import DashBoard from '../views/DashBoard.vue'
 import ForgotPassword from '../views/User/ForgotPassword.vue'
+import Customer from '../views/Customer/Customer.vue'
+import CreateCustomer from '../views/Customer/CreateCustomer.vue'
 
 
 const routes = [
@@ -90,6 +92,18 @@ const routes = [
     props: true,
     component: EditUser,
     name:'EditUser'
+  },
+  {
+    path:'/customer',
+    props: true,
+    component: Customer,
+    name:'Customer'
+  },
+  {
+    path:'/create-customer',
+    props: true,
+    component: CreateCustomer,
+    name:'CreateCustomer'
   }
   
 ];
