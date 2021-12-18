@@ -50,7 +50,7 @@ class IsActive(APIView):
                     token=token,
                     user_id=user.id,
                 )
-                serializer = LoginSerializer(login)
+                serializer = LoginSerializer(login, context={"request": request})
                 return Response(serializer.data, status=201)
             return Response('your account is wait for activate', status=400)
         return Response('your password is incorrect', status=400)
@@ -61,6 +61,7 @@ class UserList(APIView):
 
     def get(self, request):
         user = User.objects.all()
+
         serializer = UserSerializer(
             user, context={"request": request}, many=True)
         return Response(serializer.data, status=200)
@@ -68,15 +69,21 @@ class UserList(APIView):
 
 class SearchName(APIView):
     def get(self, request, qury):
-        user = User.objects.filter(first_name__contains=qury)
+        user = User.objects.filter(nick_name__contains=qury)
         serializer = UserSerializer(
             user, context={"request": request}, many=True)
         return Response(serializer.data, status=200)
 
 class EditUser(APIView):
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise 404
+
     def get (self,request,pk):
         user = User.objects.get(pk=pk)
-        serializer = UserSerializer(user)
+        serializer = UserSerializer(user, context={"request": request})
         return Response(serializer.data)
 
     def put(self,request,pk):
@@ -86,3 +93,13 @@ class EditUser(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors,status=400)
+
+class ChangeStatus(APIView):
+  
+    def put(self,request,pk,status):
+        user = User.objects.get(pk=pk)
+        user.is_active = True
+        user.is_working = status
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)

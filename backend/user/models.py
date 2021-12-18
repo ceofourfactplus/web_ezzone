@@ -22,9 +22,10 @@ class User(AbstractUser):
   is_purchesing = models.BooleanField(default=False)
   is_receptionist = models.BooleanField(default=False)
   is_owner = models.BooleanField(default=False)
-  birth_day = models.BooleanField(blank=True,null=True)
+  birth_date = models.DateField(blank=True,null=True)
   is_working = models.IntegerField(default=WORKING,choices=STATUS_WORK)
   gender = models.CharField(max_length=30)
+  id_card = models.CharField(blank=True,null=True,max_length=13)
   img = models.ImageField(_("Image"), upload_to=upload_to_user,default='',null=True,blank=True)
 
 class Login(models.Model):
