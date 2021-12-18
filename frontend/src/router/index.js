@@ -5,6 +5,7 @@ import Test from '../views/Test.vue'
 import UserStatus from '../views/User/UserStatus.vue'
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RawMaterials.vue"
+import AddNewRM from "../views/RawMaterials/AddNewRM.vue"
 import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
 import Suppliers from "../views/RawMaterials/Suppliers.vue"
 import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
@@ -16,11 +17,20 @@ import DashBoard from '../views/DashBoard.vue'
 import ForgotPassword from '../views/User/ForgotPassword.vue'
 
 
+
 const routes = [
   {
     path: "/dash-board",
     name: "DashBoard",
     component: DashBoard,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/add-new-rm",
+    name: "AddNewRM",
+    component: AddNewRM,
     meta: {
       requiresLogin: false,
     },

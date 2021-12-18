@@ -48,7 +48,6 @@ export default {
   width: 90%;
   height: 45px;
   background-image: url("../../assets/icon/Search-19x18-1.png");
-  background-repeat: no-repeat;
   background-position: 2% 50%;
   /* Extra Styling */
 }

@@ -12,8 +12,23 @@
         <div class="col-6">
           <p id="login" class="header-text"><slot></slot></p>
         </div>
+        <div class="col-3">
+          <img @click="ham_status = !ham_status" class="hamburger" src="../../assets/icon/Menu-icon.png" />
+        </div>
       </div>
     </nav>
+
+    <div class="side-bar" v-if="ham_status">
+        <p 
+          class="txt" 
+          v-for="page in pages" 
+          @click="select_page(page)"
+          :key="page.name"
+          :class="{'selected': ham_val == page.name}"
+          >
+          {{ page.name }}
+        </p>
+      </div>
   </div>
 </template>
 

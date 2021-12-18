@@ -5,10 +5,10 @@
     <div class="row" v-if="is_staff">
       <div style="width: 1%"></div>
       <div class="col-9 wrap-search">
-          <SearchBar @search="serch_by_typing" />
+        <SearchBar @search="serch_by_typing" />
       </div>
       <div style="padding-left: 0px">
-        <button class="btn-ghost">+ Raw Material</button>
+        <button class="btn-ghost">+ New</button>
       </div>
     </div>
     <SearchBar v-else @search="serch_by_typing" />
@@ -16,63 +16,113 @@
       <Tabs @select_cate="query_category" />
     </div>
     <!-- Table -->
-    <div class="table" style="margin-top: 10px;">
+    <div class="table" style="margin-top: 10px">
       <div class="table-header">
         <!-- Is Staff -->
         <div v-if="is_staff" class="row" style="padding-right: 80px">
-          <div class="col-6" style="margin-left: 90px;">Items</div>
-          <div class="col-2" style="padding-left: 10px;">Qty</div>
-          <div class="col-2" style="padding-left: 20px;">Unit</div>
+          <div class="col-6" style="margin-left: 90px">Items</div>
+          <div class="col-2" style="padding-left: 10px">Qty</div>
+          <div class="col-2" style="padding-left: 20px">Unit</div>
           <div class="col-2">Status</div>
         </div>
         <!-- Is User -->
         <div v-else class="row" style="padding-right: 10px">
-          <div class="col-6" style="margin-left: 90px;">Items</div>
+          <div class="col-6" style="margin-left: 90px">Items</div>
           <div class="col-2">Qty</div>
           <div class="col-2">Unit</div>
           <div class="col-2">Status</div>
         </div>
       </div>
-      <div style="height: 660px; overflow-y: scroll; overflow-x: hidden; border-radius: 10px;">
-          <div v-if="is_staff">
-            <div
-              class="row table-item"
-              v-for="(item, idx) in raw_materials"
-              :key="idx"
-              style="padding-right: 0px; background-color: #303344; border-radius: 10px;"
-            >
-              <div class="col-6" style="text-align: left;">{{ item.item }}</div>
-              <div class="col-2">{{ item.qty }}</div>
-              <div class="col-2">{{ item.unit }}</div>
-              <div class="col-1">
-                <img src="../../assets/icon/Group95.png" alt="img" />
-              </div>
-              <div class="col-1">
-                <img @click="edit(item)" src="../../assets/icon/edit.png" alt="img" />
+      <div
+        style="
+          height: 660px;
+          overflow-y: scroll;
+          overflow-x: hidden;
+          border-radius: 10px;
+        "
+      >
+        <div v-if="is_staff">
+          <div
+            class="row table-item"
+            v-for="(item, idx) in raw_materials"
+            :key="idx"
+            style="
+              padding-right: 0px;
+              background-color: #303344;
+              border-radius: 10px;
+            "
+          >
+            <div class="col-6" style="text-align: left">{{ item.item }}</div>
+            <div class="col-2">{{ item.qty }}</div>
+            <div class="col-2">{{ item.unit }}</div>
+            <div class="col-1">
+              <img src="../../assets/icon/Group95.png" alt="img" />
+            </div>
+            <div class="col-1">
+              <img
+                @click="edit(item)"
+                src="../../assets/icon/edit.png"
+                alt="img"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <div
+            class="row table-item"
+            v-for="(item, idx) in raw_materials"
+            :key="idx"
+            style="
+              padding-right: 0px;
+              background-color: #303344;
+              border-radius: 10px;
+            "
+          >
+            <div class="col-6" style="text-align: left">{{ item.item }}</div>
+            <div class="col-2">{{ item.qty }}</div>
+            <div class="col-2">{{ item.unit }}</div>
+            <div class="col-2" style="margin-left: 30px">
+              <img src="../../assets/icon/Group95.png" alt="img" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="popup-add-rm" v-if="add_rm">
+      <div class="row">
+        <div class="col-4">
+          <div class="image-for-add"></div>
+        </div>
+        <div class="col-8">
+          <div class="row" style="margin: 20px 0px 20px 22px; width: 296px; height: 57px; padding: 0px;">
+            <div class="col-11 txt-for-add">
+              Raw Material Detail
+            </div>
+            <div class="col-1"></div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="first-form-wrap">
+                <input type="text" placeholder="Name" class="input-for-add">
+                <div class="row">
+                  <div class="col-6 category-select-for-add">Category: </div>
+                  <div class="col-6">
+                    <input list="categories" style="width: 133px; height: 35px; background-color: #889898; color: white; margin-top: 17px;">
+                    <data-list id="categories">
+                      <option v-for="cate in categories" :key="cate" :value="cate"></option>
+                    </data-list>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div v-else>
-            <div
-              class="row table-item"
-              v-for="(item, idx) in raw_materials"
-              :key="idx"
-              style="padding-right: 0px; background-color: #303344; border-radius: 10px;"
-            >
-              <div class="col-6" style="text-align: left;">{{ item.item }}</div>
-              <div class="col-2">{{ item.qty }}</div>
-              <div class="col-2">{{ item.unit }}</div>
-              <div class="col-2" style="margin-left: 30px">
-                <img src="../../assets/icon/Group95.png" alt="img" />
-              </div>
-            </div>
-          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script> 
 // import RawMaterial from '../../components/materials/RawMaterial.vue'
 // import api_raw_material from "../../api/api_raw_material";
 import Tabs from "../../components/materials/Tabs.vue";
@@ -93,8 +143,18 @@ export default {
     return {
       category: "",
       is_staff: false,
-      texts: '',
+      add_rm: true,
+      texts: "",
       materials: [],
+       categories: [
+        "All",
+        "Fresh Food",
+        "Dried Food",
+        "Garnish",
+        "Package",
+        "ETC.",
+      ],
+      img: require('../../assets/icon/frame.png'),
       raw_materials: [
         {
           item: "นมข้นหวาน",
@@ -125,7 +185,7 @@ export default {
   },
   methods: {
     edit(item) {
-      console.log(item, 'item')
+      console.log(item, "item");
     },
     query_category(cate) {
       console.log(cate);
@@ -150,6 +210,58 @@ export default {
 </script>
 
 <style scoped>
+.category-select-for-add {
+  font-size: 30px; 
+  line-height: 56px; 
+  color: white; 
+  margin: 4px 0px 0px 30px; 
+  /* width: 317px;  */
+  height: 57px; 
+  text-align: left;
+}
+.input-for-add {
+  background-color: #C4C4C4; 
+  color: black; 
+  width: 317px; 
+  height: 46px; 
+  margin: 24px 0px 0px 0px;
+}
+.first-form-wrap {
+  position: absolute;
+  width: 60%;
+  height: 220px;
+  border-radius: 20px;
+  margin: 0px 0px 0px 25px;
+  background-color: #252836;
+}
+.txt-for-add {
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 56px;
+  width: 100%;
+  color: white;
+}
+.image-for-add {
+  position: absolute;
+  width: 167px;
+  height: 196px;
+  margin: 42px 0px 0px 34px;
+  border-radius: 20px;
+  background-image: url('../../assets/icon/frame.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+::placeholder {
+  color: #889898;
+}
+.popup-add-rm {
+  width: 625px;
+  height: 756px;
+  top: 7%;
+  left: 7%;
+  position: absolute;
+  background-color: aqua;
+}
 .row {
   padding-right: 50px;
 }
