@@ -10,7 +10,6 @@
           placeholder="Search for Raw Material"
           v-model="texts"
         />
-        <img class="img-float" src="../../assets/icon/Search-19x18-1.png" />
       </div>
       <div style="padding-left: 0px">
         <button class="btn-ghost" @click="add">Confirm Add</button>
@@ -265,7 +264,9 @@ export default {
 input.inp-qty {
   width: 100%;
   height: 45px;
-  background-color: #bd523f;
+  background-color: #252629;
+  text-align: right;
+  position: relative;
 }
 .total-price,
 .price-unit,

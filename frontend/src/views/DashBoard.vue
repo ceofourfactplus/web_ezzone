@@ -1,22 +1,10 @@
 <template>
   <div>
     <div class="title">Manager</div>
-    <!-- <div class="row" style="margin: auto; margin-left: 47px; margin-top: 20px">
-      <div v-for="(dsh, idx) in dash_board_list" :key="idx">
-        <div class="col-3" v-if="check_permission(dsh.permissions)" style="background-color: white">
-          <div>
-            <img class="image" :src="dsh.img" />
-            <p class="content">{{ dsh.txt }}</p>
-          </div>
-        </div>
-        <div v-else style="background-color: orange; padding-left: 0px; padding-right: 0px"></div>
-      </div>
-    </div> -->
-
-    <div class="row" style="margin: auto; margin-left: 47px; margin-top: 20px">
+    <div class="row" style="margin: auto; margin-left: 30px; margin-right: 30px; margin-top: 0px;">
       <div class="col-3" v-for="(dsh, idx) in main_dash_board_list" :key="idx">
         <img class="image" :src="dsh.img" />
-        <p class="content">{{ dsh.txt }}</p>
+        <p :style="dsh.margin" class="content">{{ dsh.txt }}</p>
       </div>
     </div>
   </div>
@@ -32,7 +20,7 @@ export default {
     this.dash_board_list.forEach((el) => {
       temp.push(el.permissions);
     });
-    this.fist_check_permission(temp);
+    this.first_check_permission(temp);
   },
   data() {
     return {
@@ -40,62 +28,73 @@ export default {
         {
           permissions: ["is_staff", "is_receptionist"],
           img: require("../../src/assets/icon/order-box.png"),
+          margin: 'margin-left: 33px',
           txt: "Orders",
         },
         {
           permissions: ["is_staff", "is_barista"],
           img: require("../../src/assets/icon/drink.png"),
+          margin: 'margin-left: 0px',
           txt: "Drink Order",
         },
         {
           permissions: ["is_staff", "is_chef"],
           img: require("../../src/assets/icon/food.png"),
+          margin: 'margin-left: 0px',
           txt: "Food Order",
         },
-        // {permissions: ['is_staff', ], img: require('../../src/assets/icon/order-detail.png'), txt: 'Order Detail'},
         {
           permissions: ["is_staff", "is_purchesing"],
           img: require("../../src/assets/icon/add-rm.png"),
+          margin: 'margin-left: 30px',
           txt: "Add RM",
         },
         {
           permissions: ["is_staff"],
           img: require("../../src/assets/icon/raw-material.png"),
+          margin: 'margin-left: 0px',
           txt: "Raw Material",
         },
         {
           permissions: ["is_staff", "is_cheff"],
           img: require("../../src/assets/icon/frame.png"),
+          margin: 'margin-left: 8px',
           txt: "Pickup RM",
         },
         {
           permissions: ["is_staff", "is_cheff", "is_barista"],
           img: require("../../src/assets/icon/add-product.png"),
+          margin: 'margin-left: 0px',
           txt: "Add Product",
         },
         {
           permissions: ["is_staff"],
           img: require("../../src/assets/icon/product.png"),
+          margin: 'margin-left: 30px',
           txt: "Product",
         },
         {
           permissions: ["is_staff"],
           img: require("../../src/assets/icon/customer.png"),
+          margin: 'margin-left: 14px',
           txt: "Customer",
         },
         {
           permissions: ["is_staff"],
           img: require("../../src/assets/icon/promotion.png"),
+          margin: 'margin-left: 5px',
           txt: "Promotion",
         },
         {
           permissions: ["is_staff"],
           img: require("../../src/assets/icon/user-status.png"),
+          margin: 'margin-left: 4px',
           txt: "User Status",
         },
         {
           permissions: ["is_staff"],
           img: require("../../src/assets/icon/report.png"),
+          margin: 'margin-left: 33px',
           txt: "Report",
         },
       ],
@@ -103,16 +102,7 @@ export default {
     };
   },
   methods: {
-    check_permission(permissions) {
-      console.log(permissions, "permissions");
-      for (let index = 0; index < permissions.length; index++) {
-        if (this.$store.state.auth.userInfo[permissions[index]]) {
-          return true;
-        }
-      }
-      return false;
-    },
-    fist_check_permission(permissions) {
+    first_check_permission(permissions) {
       permissions.forEach((permission, idx) => {
         permission.forEach((el) => {
           if (this.$store.state.auth.userInfo[el]) {
@@ -120,17 +110,8 @@ export default {
           }
         });
       });
+      this.main_dash_board_list = [...new Set(this.main_dash_board_list)]
       console.log(this.main_dash_board_list)
-      // for (let index = 0; index < dsh.length + 1; index++) {
-      //   for (let idx = 1; idx < dsh.length; idx++) {
-      //     console.log(dsh[index].txt, dsh[idx].txt, 'coordinates')
-      //     if (dsh[index].txt == dsh[idx].txt) {
-      //       console.log(dsh[index], index, idx)
-
-      //       dsh.splice(index, 1)
-      //     }
-      //   }
-      // }
     },
   },
 };
@@ -148,10 +129,10 @@ body {
 .title {
   width: 100%;
   height: 59px;
-  background-color: #2f414e;
   text-align: center;
-  font-size: 36px;
-  font-weight: 700;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 80px;
   color: white;
 }
 .col-3 {
@@ -159,22 +140,11 @@ body {
   margin-top: 60px;
   cursor: pointer;
 }
-
 .content {
   /* height: 36px; */
   color: white;
   font-size: 28px;
   position: absolute;
-}
-.row1 {
-  width: 100%;
-  height: 168px;
-  margin-top: 29px;
-}
-.row2 {
-  width: 100%;
-  height: 168px;
-  margin-top: 45px;
 }
 .block {
   width: 180px;

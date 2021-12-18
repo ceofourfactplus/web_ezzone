@@ -9,7 +9,7 @@
 
 /* spanning cols */
 .col-1 {
-  grid-column: auto/span 2;
+  grid-column: auto/span 1;
 }
 
 .col-2 {
