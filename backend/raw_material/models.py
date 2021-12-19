@@ -64,6 +64,7 @@ class RawMaterial(models.Model):
 
 class PickUpRawMaterial(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)
+    
     amount = models.IntegerField()
     create_at = models.DateTimeField(auto_now_add=True)
     create_by = models.ForeignKey(

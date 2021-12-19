@@ -4,7 +4,13 @@ export default {
   state: {
     accessToken: null,
     confirm_pass: false,
-    userInfo: {is_barista: true, is_staff: true, is_chef: false, is_purchesing: true, is_receptionist: false},
+    userInfo: {
+      is_barista: false,
+      is_staff: false,
+      is_chef: true,
+      is_purchesing: true,
+      is_receptionist: false,
+    },
     error: {
       status: false,
       text: "",
@@ -12,11 +18,11 @@ export default {
   },
   mutations: {
     destroyToken(state) {
-      localStorage.removeItem('username')
-      localStorage.removeItem('password')
+      localStorage.removeItem("username");
+      localStorage.removeItem("password");
       state.accessToken = null;
     },
-    newToken(state, { access}) {
+    newToken(state, { access }) {
       state.accessToken = access;
     },
     check_pass(state, bo) {

@@ -1,7 +1,14 @@
 <template>
   <div class="" style="top: 0px">
     <!-- back to login path -->
-    <nav-app>Customer Registration <img src="../../assets/icon/save.png" @click="create_customer()" class="save" alt=""></nav-app>
+    <nav-app
+      >Customer Registration
+      <img
+        src="../../assets/icon/save.png"
+        @click="create_customer()"
+        class="save"
+        alt=""
+    /></nav-app>
     <!-- input img -->
 
     <!-- form -->
@@ -218,8 +225,8 @@ export default {
       phone_number: "",
       email: "",
       img: "",
-      invite_by:'',
-      address:'',
+      invite_by: "",
+      address: "",
       show_img: null,
       gender: "",
       error: {
@@ -232,15 +239,10 @@ export default {
   methods: {
     create_customer() {
       if (
-        this.id_card.toString().length == 13 &&
-        this.first_name != "" &&
-        this.last_name != "" &&
-        this.birth_date != "" &&
-        this.username.length > 6 &&
-        this.password.length > 6 &&
-        this.password == this.confirm_password &&
-        this.img != "" &&
-        this.gender != ""
+        this.nick_name != "" &&
+        this.gender != "" &&
+        String(this.phone_number).length == 10 &&
+        this.birth_date != ""
       ) {
         const user = new FormData();
         user.append("nick_name", this.nick_name);
@@ -252,10 +254,14 @@ export default {
         user.append("line_id", this.line_id);
         user.append("invite_by", this.invite_by);
         user.append("address", this.address);
-        user.append("img", this.img);
+        if (this.img == "") {
+          user.append("img", "");
+        } else {
+          user.append("img", this.img, this.img.name);
+        }
         user.append("gender", this.gender);
         axios
-          .post("http://127.0.0.1:8000/user/register/", user)
+          .post("http://127.0.0.1:8000/customer/customer", user)
           .then(() => {
             this.alert = true;
             setTimeout(() => {
@@ -343,9 +349,9 @@ input {
   left: 50px;
 }
 
-.save{
+.save {
   position: fixed;
-  top:20px;
-  right:30px
+  top: 20px;
+  right: 30px;
 }
 </style>
