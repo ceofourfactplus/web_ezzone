@@ -3,8 +3,7 @@
     <!-- Head -->
     <nav-app @back="back">Raw Material</nav-app>
     <div class="row" v-if="is_staff">
-      <div style="width: 1%"></div>
-      <div class="col-10 wrap-search">
+      <div class="col-11 wrap-search">
         <SearchBar @search="serch_by_typing" />
       </div>
       <div style="padding-left: 0px">
@@ -48,6 +47,7 @@
             :key="idx"
             style="
               padding-right: 0px;
+              margin: 5px 0px 0px 0px;
               background-color: #303344;
               border-radius: 10px;
             "
@@ -67,6 +67,7 @@
             </div>
           </div>
         </div>
+
         <div v-else>
           <div
             class="row table-item"
@@ -168,7 +169,7 @@
           <div class="row" style="padding-right: 0px">
             <div class="col-12" style="padding-right: 0px">
               <div class="first-form-wrap">
-                <input type="text" placeholder="Name" class="input-for-add" />
+                <input type="text" placeholder="Name" class="input-for-add" v-model="raw_material_item.name" />
                 <!-- Category Line -->
                 <div class="row" style="padding-right: 5px;">
                   <div class="col-12">
@@ -176,7 +177,7 @@
                     <input
                       list="categories"
                       type="text"
-                      v-model="category"
+                      v-model="raw_material_item.category"
                       class="select-input"
                     />
                     <datalist id="categories">
@@ -217,7 +218,7 @@
                     >
                       Fridge :
                     </p>
-                    <input type="checkbox" name="switch" id="switch" />
+                    <input type="checkbox" name="switch" id="switch" v-model="raw_material_item.in_refrigerator" />
                     <label
                       class="switch-label"
                       for="switch"
@@ -249,7 +250,7 @@
                 <label for="qty" style="font-size: 30px; margin-top: -5px"
                   >Qty&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;
                 </label>
-                <input type="text" name="qty" id="qty" class="input-in-add" />
+                <input v-model="raw_material_item.qty" type="text" name="qty" id="qty" class="input-in-add" />
               </div>
               <div
                 class="col-8"
@@ -275,6 +276,7 @@
                   type="text"
                   name="qty"
                   id="qty"
+                  v-model="min_qty"
                   class="input-in-add-sp"
                 />
               </div>
@@ -360,6 +362,7 @@
                   type="text"
                   name="price"
                   id="price"
+                  v-model="raw_material_item.price"
                   style="width: 123px; height: 37px; background-color: #717171"
                 />
               </div>
@@ -382,6 +385,7 @@
                   type="text"
                   name="min_price"
                   id="min_price"
+                  v-model="raw_material_item.min_price"
                   class="input-in-third-section"
                 />
               </div>
@@ -412,6 +416,7 @@
                   type="text"
                   name="max_price"
                   id="max_price"
+                  v-model="raw_material_item.max_price"
                   class="input-in-third-section"
                 />
               </div>
@@ -440,6 +445,7 @@
                   type="text"
                   name="avg_price"
                   id="avg_price"
+                  v-model="raw_material_item.avg_price"
                   class="input-in-third-section"
                 />
               </div>
@@ -488,13 +494,16 @@ export default {
       units: ["a", "b", "c"],
       materials: [],
       alert: false,
-      raw_materials_item: {
+      total_cost: 0,
+      raw_material_item: {
         'img': '',
         'status': 1,
         'name': '',
         'category': '',
+        'qty': null,
         'minimum': 1,
         'maximum': 10,
+        'price': 0,
         'avg_price': null,
         'max_price': null,
         'min_price': null,
@@ -539,12 +548,25 @@ export default {
   },
   methods: {
     saveChange() {
+      console.log(this.raw_material_item)
       this.alert = true
       setTimeout(() => {
         this.alert = false;
         this.add_rm = false;
         // this.$router.push({ name: "RawMaterials" });
       }, 2000);
+      this.raw_material_item.img = ''
+      this.raw_material_item.status = 1
+      this.raw_material_item.name = ''
+      this.raw_material_item.category = ''
+      this.raw_material_item.qty = ''
+      this.raw_material_item.minimum = 1
+      this.raw_material_item.maximum = 10
+      this.raw_material_item.price = 0
+      this.raw_material_item.avg_price = null
+      this.raw_material_item.max_price = null
+      this.raw_material_item.min_price = null
+      this.raw_material_item.in_refrigerator = false
     },
     onFileChange(e) {
       this.img = e.target.files[0];
@@ -580,6 +602,12 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  width: 625px;
+  height: 756px;
+  top: 7%;
+  left: 7%;
+}
 .unit-select-input {
   width: 150px;
   height: 40px;
@@ -590,7 +618,7 @@ export default {
   background-repeat: no-repeat;
 }
 .select-input {
-  width: 210px;
+  width: 200px;
   height: 35px;
   background-color: #2f414e;
   color: white;
@@ -758,6 +786,8 @@ input[type="checkbox"] {
   left: 7%;
   position: absolute;
   background-color: #303344;
+  border: 2px solid #ea7c69;
+  border-radius: 20px;
 }
 .row {
   padding-right: 50px;
@@ -765,16 +795,16 @@ input[type="checkbox"] {
 .btn-ghost {
   border-color: #65b0f6;
   color: #65b0f6;
-  width: 242px;
+  width: 119px;
   height: 45px;
-  margin-left: 0px;
+  margin-left: 15px;
 }
 
 .wrap-search {
-  min-width: 424px;
+  min-width: 520px;
   width: fit-content;
   padding: 0px;
-  margin-left: 0px;
+  margin-left: 45px;
 }
 
 .search-bar {
