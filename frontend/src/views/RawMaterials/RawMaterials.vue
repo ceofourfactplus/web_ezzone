@@ -4,11 +4,11 @@
     <nav-app @back="back">Raw Material</nav-app>
     <div class="row" v-if="is_staff">
       <div style="width: 1%"></div>
-      <div class="col-9 wrap-search">
+      <div class="col-10 wrap-search">
         <SearchBar @search="serch_by_typing" />
       </div>
       <div style="padding-left: 0px">
-        <button class="btn-ghost">+ New</button>
+        <button class="btn-ghost" @click="add_rm = true">+ New</button>
       </div>
     </div>
     <SearchBar v-else @search="serch_by_typing" />
@@ -88,29 +88,141 @@
         </div>
       </div>
     </div>
+    <!-- Popup -->
     <div class="popup-add-rm" v-if="add_rm">
-      <div class="row">
+      <!-- Nav in Popup -->
+      <div class="row" style="margin-left: 35px">
+        <div class="col-3" @click="saveChange">
+          <img
+            src="../../assets/icon/save.png"
+            style="
+              top: 10px;
+              left: 10px;
+              position: absolute;
+              width: 50px;
+              height: 50px;
+            "
+          />
+        </div>
+        <div class="col-6 txt-for-add" style="width: 100%">+ Raw Material</div>
+        <div class="col-3">
+          <img
+            @click="add_rm = false"
+            src="../../assets/icon/Union.png"
+            style="
+              top: 10px;
+              right: 10px;
+              position: absolute;
+              width: 50px;
+              height: 50px;
+            "
+          />
+        </div>
+      </div>
+      <!-- Section 1 -->
+      <div class="row" style="margin-top: 10px">
         <div class="col-4">
-          <div class="image-for-add"></div>
+          <!-- Select Image -->
+          <div style="height: 0px">
+            <img
+              v-if="show_img == null"
+              width="208"
+              height="219"
+              src="../../assets/img/BG.png"
+              style="margin: 10px 0px 0px -6px"
+              class="raw-image"
+            />
+            <img
+              v-else
+              :src="show_img"
+              width="208"
+              height="219"
+              style="margin: 10px 0px 0px -10px"
+              class="raw-image"
+            />
+            <label for="file">
+              <div class="edit-block">
+                <div class="row">
+                  <div class="col-2">
+                    <img
+                      style="align-item: left; margin-left: 3px"
+                      src="../../assets/icon/el_camera.png"
+                    />
+                  </div>
+                  <div class="col-10">
+                    <p style="font-size: 16px; margin-left: 10px">Edit</p>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <input
+              type="file"
+              @change="onFileChange"
+              style="display: none"
+              id="file"
+              class="raw-image"
+            />
+          </div>
         </div>
         <div class="col-8">
-          <div class="row" style="margin: 20px 0px 20px 22px; width: 296px; height: 57px; padding: 0px;">
-            <div class="col-11 txt-for-add">
-              Raw Material Detail
-            </div>
-            <div class="col-1"></div>
-          </div>
-          <div class="row">
-            <div class="col-12">
+          <div class="row" style="padding-right: 0px">
+            <div class="col-12" style="padding-right: 0px">
               <div class="first-form-wrap">
-                <input type="text" placeholder="Name" class="input-for-add">
+                <input type="text" placeholder="Name" class="input-for-add" />
+                <!-- Category Line -->
+                <div class="row" style="padding-right: 5px;">
+                  <div class="col-12">
+                    <label class="category-select-for-add">Category : </label>
+                    <input
+                      list="categories"
+                      type="text"
+                      v-model="category"
+                      class="select-input"
+                    />
+                    <datalist id="categories">
+                      <option v-for="(cate, idx) in categories" :key="idx">
+                        {{ cate }}
+                      </option>
+                    </datalist>
+                  </div>
+                </div>
+                <!-- Status Line -->
                 <div class="row">
-                  <div class="col-6 category-select-for-add">Category: </div>
-                  <div class="col-6">
-                    <input list="categories" style="width: 133px; height: 35px; background-color: #889898; color: white; margin-top: 17px;">
-                    <data-list id="categories">
-                      <option v-for="cate in categories" :key="cate" :value="cate"></option>
-                    </data-list>
+                  <div class="col-12" style="margin-left: 22px">
+                    <p
+                      class="category-select-for-add"
+                      style="display: inline; margin-left: -90px"
+                    >
+                      Status :
+                    </p>
+                    <div class="status-show" style="display: inline">
+                      Minimum
+                    </div>
+                    <img
+                      src="../../assets/icon/Group95.png"
+                      style="
+                        position: relative;
+                        left: 75px;
+                        margin-bottom: 10px;
+                      "
+                    />
+                  </div>
+                </div>
+                <!-- Fridge Line -->
+                <div class="row">
+                  <div class="col-12">
+                    <p
+                      class="category-select-for-add"
+                      style="display: inline; margin-left: -175px"
+                    >
+                      Fridge :
+                    </p>
+                    <input type="checkbox" name="switch" id="switch" />
+                    <label
+                      class="switch-label"
+                      for="switch"
+                      style="position: absolute; margin: -38px 0px 0px 200px"
+                    ></label>
                   </div>
                 </div>
               </div>
@@ -118,11 +230,236 @@
           </div>
         </div>
       </div>
+      <!-- Section 2 -->
+      <div class="row">
+        <div class="col-12">
+          <div class="second-form-wrap">
+            <!-- Qty & Min Qty Line -->
+            <div class="row" style="padding-right: 0px">
+              <div
+                class="col-4"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 30px;
+                "
+              >
+                <label for="qty" style="font-size: 30px; margin-top: -5px"
+                  >Qty&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;
+                </label>
+                <input type="text" name="qty" id="qty" class="input-in-add" />
+              </div>
+              <div
+                class="col-8"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 50px;
+                "
+              >
+                <label
+                  for="qty"
+                  style="
+                    font-size: 30px;
+                    margin-top: -5px;
+                    margin-right: -16px;
+                    width: 100%;
+                  "
+                  >Min Qty&nbsp;&nbsp;:</label
+                >
+                <input
+                  type="text"
+                  name="qty"
+                  id="qty"
+                  class="input-in-add-sp"
+                />
+              </div>
+            </div>
+            <!-- Unit & Max Qty Line-->
+            <div class="row" style="padding-right: 0px">
+              <div
+                class="col-4"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 30px;
+                "
+              >
+                <label for="myBrowser" style="font-size: 30px; margin-top: -5px"
+                  >Unit&nbsp;&nbsp;:&nbsp;&nbsp;</label
+                >
+                <input
+                  class="unit-select-input"
+                  v-model="unit"
+                  type="text"
+                  list="browsers"
+                  id="myBrowser"
+                  name="myBrowser"
+                />
+                <datalist id="browsers">
+                  <option v-for="unit in units" :key="unit">{{ unit }}</option>
+                </datalist>
+              </div>
+              <div
+                class="col-8"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 50px;
+                "
+              >
+                <label
+                  for="qty"
+                  style="
+                    font-size: 30px;
+                    margin-top: -5px;
+                    margin-right: -16px;
+                    width: 100%;
+                  "
+                  >Max Qty&nbsp;&nbsp;:</label
+                >
+                <input
+                  type="text"
+                  name="qty"
+                  id="qty"
+                  class="input-in-add-sp"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Section 3 -->
+      <div class="row">
+        <div class="col-12">
+          <div class="third-form-wrap">
+            <!-- Price & Min Price Line -->
+            <div class="row" style="padding-right: 0px">
+              <div
+                class="col-4"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 30px;
+                "
+              >
+                <label for="price" style="font-size: 30px; margin-top: -10px"
+                  >Price&nbsp;:&nbsp;&nbsp;
+                </label>
+                <input
+                  type="text"
+                  name="price"
+                  id="price"
+                  style="width: 123px; height: 37px; background-color: #717171"
+                />
+              </div>
+              <div
+                class="col-8"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 50px;
+                "
+              >
+                <label
+                  for="min_price"
+                  style="font-size: 30px; margin-top: -10px; width: 100%"
+                  >Min Price&nbsp;&nbsp;:</label
+                >
+                <input
+                  type="text"
+                  name="min_price"
+                  id="min_price"
+                  class="input-in-third-section"
+                />
+              </div>
+            </div>
+            <!-- Total Cost & Max Price Line -->
+            <div class="row" style="padding-right: 0px">
+              <div class="col-4 w-100">
+                <p style="font-size: 30px; margin: 12px 0px 0px 25px">
+                  Total Cost :
+                </p>
+              </div>
+              <div
+                class="col-8"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 50px;
+                "
+              >
+                <label
+                  for="max_price"
+                  style="font-size: 30px; margin-top: -10px; width: 100%"
+                  >Max Price&nbsp;&nbsp;:</label
+                >
+                <input
+                  type="text"
+                  name="max_price"
+                  id="max_price"
+                  class="input-in-third-section"
+                />
+              </div>
+            </div>
+            <!-- Input & Average Price Line -->
+            <div class="row" style="padding-right: 0px">
+              <div class="col-4">
+                <input type="text" class="last-input-in-add" />
+              </div>
+              <div
+                class="col-8"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 0.5rem;
+                  margin-top: 22px;
+                  margin-left: 50px;
+                "
+              >
+                <label
+                  for="avg_price"
+                  style="font-size: 30px; margin-top: -10px; width: 100%"
+                  >Avg Price&nbsp;&nbsp;:</label
+                >
+                <input
+                  type="text"
+                  name="avg_price"
+                  id="avg_price"
+                  class="input-in-third-section"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Card Popup -->
+    <div class="card" :class="{ 'card-active': alert }">
+      <div class="icon">
+        <img src="../../assets/icon/btn-pass.png" alt="" />
+      </div>
+      <div class="main-text">Saved successfully</div>
+      <!-- <div class="second">wait for admin tp activate</div> -->
     </div>
   </div>
 </template>
 
-<script> 
+<script>
 // import RawMaterial from '../../components/materials/RawMaterial.vue'
 // import api_raw_material from "../../api/api_raw_material";
 import Tabs from "../../components/materials/Tabs.vue";
@@ -142,11 +479,28 @@ export default {
   data() {
     return {
       category: "",
+      image: "",
+      show_img: null,
       is_staff: false,
-      add_rm: true,
+      add_rm: false,
       texts: "",
+      unit: "",
+      units: ["a", "b", "c"],
       materials: [],
-       categories: [
+      alert: false,
+      raw_materials_item: {
+        'img': '',
+        'status': 1,
+        'name': '',
+        'category': '',
+        'minimum': 1,
+        'maximum': 10,
+        'avg_price': null,
+        'max_price': null,
+        'min_price': null,
+        'in_refrigerator': false,
+      },
+      categories: [
         "All",
         "Fresh Food",
         "Dried Food",
@@ -154,7 +508,7 @@ export default {
         "Package",
         "ETC.",
       ],
-      img: require('../../assets/icon/frame.png'),
+      img: require("../../assets/icon/frame.png"),
       raw_materials: [
         {
           item: "นมข้นหวาน",
@@ -184,6 +538,22 @@ export default {
     };
   },
   methods: {
+    saveChange() {
+      this.alert = true
+      setTimeout(() => {
+        this.alert = false;
+        this.add_rm = false;
+        // this.$router.push({ name: "RawMaterials" });
+      }, 2000);
+    },
+    onFileChange(e) {
+      this.img = e.target.files[0];
+      if (this.img) {
+        const reader = new FileReader();
+        reader.onload = (e) => (this.show_img = e.target.result);
+        reader.readAsDataURL(this.img);
+      }
+    },
     edit(item) {
       console.log(item, "item");
     },
@@ -210,34 +580,161 @@ export default {
 </script>
 
 <style scoped>
+.unit-select-input {
+  width: 150px;
+  height: 40px;
+  background-color: #2f414e;
+  background-image: url("../../assets/icon/down-arrow.png");
+  background-position: center right;
+  background-size: 24px;
+  background-repeat: no-repeat;
+}
+.select-input {
+  width: 210px;
+  height: 35px;
+  background-color: #2f414e;
+  color: white;
+  margin: 17px -10px 0px 5px;
+  background-image: url("../../assets/icon/down-arrow.png");
+  background-position: center right;
+  background-size: 24px;
+  background-repeat: no-repeat;
+}
+input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+.edit-block {
+  position: absolute;
+  top: 250px;
+  left: 30px;
+  width: 74px;
+  height: 28.23px;
+  background-color: #c4c4c4;
+  border-radius: 5px;
+}
+.raw-image {
+  position: fixed;
+  border-radius: 30px;
+}
+.last-input-in-add {
+  background-color: #717171;
+  width: 217px;
+  height: 37px;
+  margin: 20px 0px 0px 20px;
+}
+.input-in-third-section {
+  width: 150px;
+  height: 37px;
+  background-color: #717171;
+  margin-right: -70px;
+  margin-top: 0px;
+}
+.input-in-add {
+  width: 150px;
+  height: 40px;
+  background-color: #717171;
+}
+#qty[data-v-8556b7f6] {
+  width: 150px;
+  height: 40px;
+}
+.input-in-add-sp {
+  width: 300px;
+  height: 40px;
+  background-color: #717171;
+  margin-right: -70px;
+}
+#qty {
+  width: 130px;
+  height: 40px;
+}
+.third-form-wrap {
+  width: 597px;
+  height: 215px;
+  margin: 12px 0px 0px 15px;
+  color: white;
+  border-radius: 20px;
+  background-color: #252836;
+}
+.second-form-wrap {
+  width: 597px;
+  height: 157px;
+  margin: 265px 0px 0px 15px;
+  color: white;
+  border-radius: 20px;
+  background-color: #252836;
+}
+input:checked + label {
+  background-color: green;
+}
+input:checked + .switch-label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+.switch-label {
+  display: block;
+  width: 64px;
+  height: 30px;
+  background-color: #477a85;
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 0 20px #477a8550;
+}
+.switch-label::after {
+  content: "";
+  width: 30px;
+  height: 30px;
+  background-color: #e8f5f7;
+  position: absolute;
+  border-radius: 70px;
+  top: 0px;
+  left: 5px;
+  transition: 0.5s;
+}
+input[type="checkbox"] {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+.status-show {
+  width: 110px;
+  height: 33px;
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0px -60px 0px 70px;
+  background-color: #ffb572;
+  border-radius: 3px;
+}
 .category-select-for-add {
-  font-size: 30px; 
-  line-height: 56px; 
-  color: white; 
-  margin: 4px 0px 0px 30px; 
-  /* width: 317px;  */
-  height: 57px; 
+  font-size: 30px;
+  line-height: 56px;
+  color: white;
+  margin: 4px 0px 0px 6px;
+  height: 57px;
   text-align: left;
 }
 .input-for-add {
-  background-color: #C4C4C4; 
-  color: black; 
-  width: 317px; 
-  height: 46px; 
+  background-color: #c4c4c4;
+  color: black;
+  width: 340px;
+  height: 46px;
   margin: 24px 0px 0px 0px;
 }
 .first-form-wrap {
   position: absolute;
   width: 60%;
-  height: 220px;
+  height: 255px;
   border-radius: 20px;
-  margin: 0px 0px 0px 25px;
+  margin: 0px 0px 0px 37px;
   background-color: #252836;
 }
 .txt-for-add {
   font-weight: bold;
-  font-size: 28px;
+  font-size: 36px;
   line-height: 56px;
+  text-align: center;
   width: 100%;
   color: white;
 }
@@ -247,7 +744,7 @@ export default {
   height: 196px;
   margin: 42px 0px 0px 34px;
   border-radius: 20px;
-  background-image: url('../../assets/icon/frame.png');
+  background-image: url("../../assets/img/warehouse.jpeg");
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -260,7 +757,7 @@ export default {
   top: 7%;
   left: 7%;
   position: absolute;
-  background-color: aqua;
+  background-color: #303344;
 }
 .row {
   padding-right: 50px;
