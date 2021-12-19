@@ -38,11 +38,12 @@ class Supplier(models.Model):
 
 class RawMaterial(models.Model):
     category = models.ForeignKey(RawMaterialCategory, on_delete=models.PROTECT)
-    status = models.BooleanField(default=True)
+    status = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     remain = models.IntegerField()
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     minimum = models.IntegerField(default=1)
+    maximum = models.IntegerField(default=10)
     avg_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     min_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     max_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)

@@ -28,9 +28,9 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class RawMaterialSerializer(serializers.ModelSerializer):
-    unit_id = serializers.IntegerField()
-    category_id = serializers.IntegerField()
-    create_by_id = serializers.IntegerField()
+    unit_id = serializers.IntegerField(null=True)
+    category_id = serializers.IntegerField(null=True)
+    create_by_id = serializers.IntegerField(null=True)
     update_by_id = serializers.IntegerField()
     max_price_supplier_id = serializers.IntegerField()
     min_price_supplier_id = serializers.IntegerField()
@@ -49,8 +49,8 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'img',
             'status',
             'name',
-            'balance',
             'minimum',
+            'maximum',
             'avg_price',
             'max_price',
             'min_price',
