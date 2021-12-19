@@ -51,4 +51,7 @@ export default {
   background-position: 2% 50%;
   /* Extra Styling */
 }
+::placeholder{
+  text-indent: 60px;
+}
 </style>

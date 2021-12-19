@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from customer.models import Customer 
+from customer.models import Customer
 from backend.settings import AUTH_USER_MODEL
 from product.models import Product
 

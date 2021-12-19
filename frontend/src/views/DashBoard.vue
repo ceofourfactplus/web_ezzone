@@ -1,10 +1,37 @@
 <template>
   <div>
-    <div class="title">Manager</div>
-    <div class="row" style="margin: auto; margin-left: 30px; margin-right: 30px; margin-top: 0px;">
-      <div class="col-3" v-for="(dsh, idx) in main_dash_board_list" :key="idx">
-        <img class="image" :src="dsh.img" />
-        <p :style="dsh.margin" class="content">{{ dsh.txt }}</p>
+    <div class="title">
+      Manager
+      <router-link :to="{ name: 'Login' }">
+        <img src="../assets/icon/exit.png" class="hamburger" alt=""
+      /></router-link>
+    </div>
+
+    <div v-for="category in dash_board_list" :key="category">
+      <div v-if="has_permission(category.permissions)">
+        <h1>{{ category.title }}</h1>
+        <div style="margin-left: 50px; margin-right: 50px">
+          <div class="row">
+            <div
+              v-for="(dsh, idx) in category.btn"
+              :key="idx"
+              class="col-3"
+              style="padding-left: 0px; padding-right: 0px"
+            >
+              <div
+                v-if="has_permission(dsh.permissions)"
+                style="padding: 0px; height: 180px"
+              >
+                <router-link :to="{ name: dsh.link }">
+                  <img class="image" :src="dsh.img" />
+                  <p class="content">
+                    {{ dsh.txt }}
+                  </p>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -12,116 +39,210 @@
 
 <script>
 export default {
-  //   components: {
-
-  //   },
-  mounted() {
-    var temp = [];
-    this.dash_board_list.forEach((el) => {
-      temp.push(el.permissions);
-    });
-    this.first_check_permission(temp);
-  },
   data() {
     return {
       dash_board_list: [
         {
+          permissions: ["is_staff", "is_barista", "is_chef"],
+          title: "Display",
+          btn: [
+            {
+              permissions: ["is_staff", "is_barista", "is_chef"],
+              img: require("../../src/assets/icon/drink.png"),
+              txt: "Drink Order",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff", "is_barista", "is_chef"],
+              img: require("../../src/assets/icon/order-box.png"),
+              txt: "Food Order",
+              link: "DashBoard",
+            },
+          ],
+        },
+        {
           permissions: ["is_staff", "is_receptionist"],
-          img: require("../../src/assets/icon/order-box.png"),
-          margin: 'margin-left: 33px',
-          txt: "Orders",
-        },
-        {
-          permissions: ["is_staff", "is_barista"],
-          img: require("../../src/assets/icon/drink.png"),
-          margin: 'margin-left: 0px',
-          txt: "Drink Order",
-        },
-        {
-          permissions: ["is_staff", "is_chef"],
-          img: require("../../src/assets/icon/food.png"),
-          margin: 'margin-left: 0px',
-          txt: "Food Order",
-        },
-        {
-          permissions: ["is_staff", "is_purchesing"],
-          img: require("../../src/assets/icon/add-rm.png"),
-          margin: 'margin-left: 30px',
-          txt: "Add RM",
+          title: "Order",
+          btn: [
+            {
+              permissions: ["is_staff", "is_receptionist"],
+              img: require("../../src/assets/icon/order-box.png"),
+              txt: "Orders",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff", "is_receptionist"],
+              img: require("../../src/assets/icon/order-detail.png"),
+              txt: "Order Status",
+              link: "DashBoard",
+            },
+          ],
         },
         {
           permissions: ["is_staff"],
-          img: require("../../src/assets/icon/raw-material.png"),
-          margin: 'margin-left: 0px',
-          txt: "Raw Material",
+          title: "Promotion",
+          btn: [
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/promotion.png"),
+              txt: "Point",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/package.png"),
+              txt: "Package",
+              link: "DashBoard",
+            },
+          ],
         },
         {
-          permissions: ["is_staff", "is_cheff"],
-          img: require("../../src/assets/icon/frame.png"),
-          margin: 'margin-left: 8px',
-          txt: "Pickup RM",
+          permissions: ["is_staff", "is_purchesing", "is_barista", "is_chef"],
+          title: "Raw Material",
+          btn: [
+            {
+              permissions: [
+                "is_staff",
+                "is_purchesing",
+                "is_receptionist",
+                "is_barista",
+                "is_chef",
+              ],
+              img: require("../../src/assets/icon/RM.png"),
+              txt: "Raw Material",
+              link: "RawMaterials",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/NewRM.png"),
+              txt: "New RM",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff", "is_purchesing"],
+              img: require("../../src/assets/icon/PO.png"),
+              txt: "PO",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff", "is_purchesing"],
+              img: require("../../src/assets/icon/add_RM.png"),
+              txt: "Add RM",
+              link: "DashBoard",
+            },
+            {
+              permissions: [
+                "is_staff",
+                "is_purchesing",
+                "is_barista",
+                "is_chef",
+                "is_receptionist",
+              ],
+              img: require("../../src/assets/icon/pick_up.png"),
+              txt: "Pick RM",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/category_rm.png"),
+              txt: "Categories",
+              link: "DashBoard",
+            },
+          ],
         },
         {
-          permissions: ["is_staff", "is_cheff", "is_barista"],
-          img: require("../../src/assets/icon/add-product.png"),
-          margin: 'margin-left: 0px',
-          txt: "Add Product",
+          permissions: ["is_staff", "is_barista", "is_chef", "is_receptionist"],
+          title: "Products",
+          btn: [
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/product.png"),
+              txt: "Products",
+              link: "DashBoard",
+            },
+            {
+              permissions: [
+                "is_staff",
+                "is_barista",
+                "is_chef",
+                "is_receptionist",
+              ],
+              img: require("../../src/assets/icon/add_product.png"),
+              txt: "Add Qty",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/category_product.png"),
+              txt: "Categories",
+              link: "DashBoard",
+            },
+          ],
         },
         {
           permissions: ["is_staff"],
-          img: require("../../src/assets/icon/product.png"),
-          margin: 'margin-left: 30px',
-          txt: "Product",
+          title: "Contacts",
+          btn: [
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/customer.png"),
+              txt: "Customers",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/supplier.png"),
+              txt: "Supplier",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/user-status.png"),
+              txt: "User Status",
+              link: "UserStatus",
+            },
+          ],
         },
         {
           permissions: ["is_staff"],
-          img: require("../../src/assets/icon/customer.png"),
-          margin: 'margin-left: 14px',
-          txt: "Customer",
-        },
-        {
-          permissions: ["is_staff"],
-          img: require("../../src/assets/icon/promotion.png"),
-          margin: 'margin-left: 5px',
-          txt: "Promotion",
-        },
-        {
-          permissions: ["is_staff"],
-          img: require("../../src/assets/icon/user-status.png"),
-          margin: 'margin-left: 4px',
-          txt: "User Status",
-        },
-        {
-          permissions: ["is_staff"],
-          img: require("../../src/assets/icon/report.png"),
-          margin: 'margin-left: 33px',
-          txt: "Report",
+          title: "Report",
+          btn: [
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/report.png"),
+              txt: "Report",
+              link: "DashBoard",
+            },
+          ],
         },
       ],
-      main_dash_board_list: [],
     };
   },
   methods: {
-    first_check_permission(permissions) {
-      permissions.forEach((permission, idx) => {
-        permission.forEach((el) => {
-          if (this.$store.state.auth.userInfo[el]) {
-            this.main_dash_board_list.push(this.dash_board_list[idx]);
-          }
-        });
-      });
-      this.main_dash_board_list = [...new Set(this.main_dash_board_list)]
-      console.log(this.main_dash_board_list)
+    has_permission(array) {
+      for (const item of array) {
+        if (this.$store.state.auth.userInfo[item]) {
+          return true;
+        }
+      }
+      return false;
     },
   },
 };
 </script>
 
 <style scoped>
+h1 {
+  font-size: 40px;
+  text-align: left;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
 body {
   background-color: white;
 }
-.not_allowed {
+.container-box {
   display: none;
   width: 0px;
   height: 0px;
@@ -135,15 +256,11 @@ body {
   line-height: 80px;
   color: white;
 }
-.col-3 {
-  width: 100%;
-  margin-top: 60px;
-  cursor: pointer;
-}
 .content {
   /* height: 36px; */
   color: white;
   font-size: 28px;
+  width: 160px;
   position: absolute;
 }
 .block {
@@ -154,5 +271,12 @@ body {
 .image {
   width: 130px;
   height: 130px;
+}
+.row {
+}
+.hamburger {
+  top: 30px;
+  right: 20px;
+  position: absolute;
 }
 </style>

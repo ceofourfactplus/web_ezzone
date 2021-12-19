@@ -37,11 +37,12 @@ class Order(models.Model):
     )
 
     status_delivery = models.IntegerField(choices=STATUS_DELIVERY)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=6, decimal_places=2)
     total_amount = models.IntegerField()
     payment = models.ForeignKey(Payment, on_delete=models.PROTECT)
     sale_channel = models.ForeignKey(SaleChannel, on_delete=models.PROTECT)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    delivery_price = models.DecimalField(max_digits=3, decimal_places=2)
     description = models.TextField(null=True, blank=True)
     status_order = models.IntegerField(
         choices=STATUS_ORDER, default=ON_COOKING)
@@ -77,7 +78,7 @@ class OrderItem(models.Model):
         PromotionPackage, on_delete=models.PROTECT, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     size = models.CharField(max_length=50, null=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=4, decimal_places=2)
     description = models.TextField(null=True)
     amount = models.IntegerField()
     create_at = models.DateTimeField(auto_now_add=True)
@@ -90,7 +91,7 @@ class OrderItem(models.Model):
 class OrderItemTopping(models.Model):
     item = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
     topping = models.ForeignKey(Product, on_delete=models.PROTECT)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=4, decimal_places=2)
     amount = models.IntegerField()
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True, blank=True)

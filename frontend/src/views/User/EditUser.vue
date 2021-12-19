@@ -491,8 +491,6 @@ export default {
       user_data.append("is_active", true);
       if (this.new_img) {
         user_data.append("img", this.user.img, this.user.img.name);
-      } else {
-        user_data.append("img", '');
       }
       user_data.append("gender", this.user.gender);
       api_user.put("edit-user/" + this.user.id, user_data).then(() => {
