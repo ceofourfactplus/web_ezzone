@@ -17,6 +17,7 @@ import DashBoard from '../views/DashBoard.vue'
 import ForgotPassword from '../views/User/ForgotPassword.vue'
 import Customer from '../views/Customer/Customer.vue'
 import CreateCustomer from '../views/Customer/CreateCustomer.vue'
+import EditCustomer from '../views/Customer/EditCustomer.vue'
 
 
 
@@ -114,8 +115,13 @@ const routes = [
     props: true,
     component: CreateCustomer,
     name:'CreateCustomer'
-  }
-  
+  },
+  {
+    path:'/edit-customer/:id',
+    props: true,
+    component: EditCustomer,
+    name:'EditCustomer'
+  },
 ];
 
 const router = createRouter({
