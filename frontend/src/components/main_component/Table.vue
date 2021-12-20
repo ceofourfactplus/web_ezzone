@@ -44,7 +44,7 @@
             </div>
             <div class="col-2">{{ item.qty }}</div>
             <div class="col-2">{{ item.unit }}</div>
-            <div class="col-1">
+            <div class="col-1" v-if="status != 'category'">
               <img :src="$store.state.raw_material.status_image[item.status]" alt="img" />
             </div>
             <div class="col-1">
@@ -90,7 +90,7 @@
 
 export default {
   components: {},
-  props: ["head1", "head2", "head3", "head4", "head5", "elements", "is_staff"],
+  props: ["head1", "head2", "head3", "head4", "head5", "elements", "is_staff", "status"],
   mounted() {
   },
   data() {

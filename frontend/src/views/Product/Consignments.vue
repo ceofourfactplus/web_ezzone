@@ -128,17 +128,5 @@ export default {
 </script>
 
 <style scoped>
-.btn-ghost {
-  border-color: #65b0f6;
-  color: #65b0f6;
-  width: 119px;
-  height: 45px;
-  margin: 0px 30px 0px 0px;
-}
-.wrap-search {
-  min-width: 520px;
-  width: fit-content;
-  padding: 0px;
-  margin-left: 45px;
-}
+
 </style>

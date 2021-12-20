@@ -1,7 +1,18 @@
 <template>
   <!-- Tabs -->
   <div>
-    <div class="tab">
+    <div class="tab" v-if="status == 'category'">
+      <button
+        v-for="(item, idx) in elements"
+        :key="idx"
+        @click="select_item(item)"
+        class="tab-item"
+      >
+        {{ item.category }}
+      </button>
+    <button class="tab-item" v-if="elements.length > 5">></button>
+  </div>
+  <div class="tab" v-else>
       <button
         v-for="(item, idx) in elements"
         :key="idx"
@@ -19,7 +30,7 @@
 <script>
 export default {
   name: "Tabs",
-  props: ['elements'],
+  props: ['elements', 'status'],
   data() {
     return {
       //   materials: [],
