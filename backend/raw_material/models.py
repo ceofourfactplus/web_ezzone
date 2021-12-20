@@ -117,4 +117,6 @@ class OP(models.Model):
     supplier = models.ForeignKey(Supplier ,on_delete=models.PROTECT)
     amount = models.IntegerField()
     unit =  models.ForeignKey(Unit,on_delete=models.PROTECT)
+    create_at = models.DateTimeField(auto_now_add=True)
     
+

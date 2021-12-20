@@ -19,7 +19,7 @@ import Customer from '../views/Customer/Customer.vue'
 import CreateCustomer from '../views/Customer/CreateCustomer.vue'
 import EditCustomer from '../views/Customer/EditCustomer.vue'
 import Products from '../views/Product/Products.vue'
-import ProductDetail from '../views/Product/ProductDetail.vue'
+import CreateProduct from '../views/Product/CreateProduct.vue'
 import ProductCategory from '../views/Product/ProductCategory.vue'
 
 
@@ -34,9 +34,9 @@ const routes = [
     },
   },
   {
-    path: "/product-detail/:id",
-    name: "ProductDetail",
-    component: ProductDetail,
+    path: "/create-product/",
+    name: "CreateProduct",
+    component: CreateProduct,
     meta: {
       requiresLogin: false,
     },
@@ -148,7 +148,7 @@ const routes = [
     props: true,
     component: EditCustomer,
     name:'EditCustomer'
-  },
+  }, 
 ];
 
 const router = createRouter({

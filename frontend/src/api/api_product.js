@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-const apiProduct = axios.create({
+const api_product = axios.create({
     baseURL: 'http://127.0.0.1:8000/product',
     timeout: 1000,
 })
 
-export{ apiProduct }
+export{ api_product }
