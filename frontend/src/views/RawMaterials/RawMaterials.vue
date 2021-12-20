@@ -12,83 +12,12 @@
     </div>
     <SearchBar v-else @search="serch_by_typing" />
     <div>
-      <Tabs @select_cate="query_category" />
+      <Tabs :elements="categories" @select_item="query_category" />
     </div>
     <!-- Table -->
-    <div class="table" style="margin-top: 10px">
-      <div class="table-header">
-        <!-- Is Staff -->
-        <div v-if="is_staff" class="row" style="padding-right: 80px">
-          <div class="col-6" style="margin-left: 90px">Items</div>
-          <div class="col-2" style="padding-left: 10px">Qty</div>
-          <div class="col-2" style="padding-left: 20px">Unit</div>
-          <div class="col-2">Status</div>
-        </div>
-        <!-- Is User -->
-        <div v-else class="row" style="padding-right: 10px">
-          <div class="col-6" style="margin-left: 90px">Items</div>
-          <div class="col-2">Qty</div>
-          <div class="col-2">Unit</div>
-          <div class="col-2">Status</div>
-        </div>
-      </div>
-      <div
-        style="
-          height: 660px;
-          overflow-y: scroll;
-          overflow-x: hidden;
-          border-radius: 10px;
-        "
-      >
-        <div v-if="is_staff">
-          <div
-            class="row table-item"
-            v-for="(item, idx) in raw_materials"
-            :key="idx"
-            style="
-              padding-right: 0px;
-              margin: 5px 0px 0px 0px;
-              background-color: #303344;
-              border-radius: 10px;
-            "
-          >
-            <div class="col-6" style="text-align: left">{{ item.item }}</div>
-            <div class="col-2">{{ item.qty }}</div>
-            <div class="col-2">{{ item.unit }}</div>
-            <div class="col-1">
-              <img src="../../assets/icon/Group95.png" alt="img" />
-            </div>
-            <div class="col-1">
-              <img
-                @click="edit(item)"
-                src="../../assets/icon/edit.png"
-                alt="img"
-              />
-            </div>
-          </div>
-        </div>
+    <Table :head1="'Item'" :head2="'Qty'" :head3="'Unit'" :head4="'Status'" :elements="raw_materials" />
 
-        <div v-else>
-          <div
-            class="row table-item"
-            v-for="(item, idx) in raw_materials"
-            :key="idx"
-            style="
-              padding-right: 0px;
-              background-color: #303344;
-              border-radius: 10px;
-            "
-          >
-            <div class="col-6" style="text-align: left">{{ item.item }}</div>
-            <div class="col-2">{{ item.qty }}</div>
-            <div class="col-2">{{ item.unit }}</div>
-            <div class="col-2" style="margin-left: 30px">
-              <img src="../../assets/icon/Group95.png" alt="img" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Popup -->
     <div class="popup-add-rm" v-if="add_rm">
       <!-- Nav in Popup -->
@@ -200,7 +129,7 @@
                       Minimum
                     </div>
                     <img
-                      src="../../assets/icon/Group95.png"
+                      src="../../assets/icon/warning.png"
                       style="
                         position: relative;
                         left: 75px;
@@ -471,13 +400,14 @@
 import Tabs from "../../components/materials/Tabs.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
+import Table from "../../components/main_component/Table.vue"
 
 export default {
   components: {
-    // RawMaterial,
     Tabs,
     SearchBar,
     NavApp,
+    Table,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
@@ -510,38 +440,38 @@ export default {
         'in_refrigerator': false,
       },
       categories: [
-        "All",
-        "Fresh Food",
-        "Dried Food",
-        "Garnish",
-        "Package",
-        "ETC.",
+        {name: "All"},
+        {name: "Fresh Food"},
+        {name: "Dried Food"},
+        {name: "Garnish"},
+        {name: "Package"},
+        {name: "ETC."},
       ],
       img: require("../../assets/icon/frame.png"),
       raw_materials: [
         {
-          item: "นมข้นหวาน",
+          name: "นมข้นหวานหวานสุดๆๆๆๆๆ",
           qty: 2,
           unit: "pack",
-          status: "../../assets/icon/Group95.png",
+          status: "1",
         },
         {
-          item: "นมข้นจืด",
+          name: "นมข้นจืด",
           qty: 2,
           unit: "pack",
-          status: "../../assets/icon/Group95.png",
+          status: "3",
         },
         {
-          item: "โซดา",
+          name: "โซดา",
           qty: 20,
           unit: "bag",
-          status: "../../assets/icon/Group95.png",
+          status: "2",
         },
         {
-          item: "สไปรท์",
+          name: "สไปรท์",
           qty: 10,
           unit: "bag",
-          status: "../../assets/icon/Group95.png",
+          status: "1",
         },
       ],
     };

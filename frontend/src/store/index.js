@@ -3,6 +3,8 @@ import { createStore } from "vuex";
 import auth from "./modules/auth";
 import stock from "./modules/stock";
 import product from "./modules/product";
+import raw_material from "./modules/raw_material";
+
 
 export default createStore({
   state: {
@@ -18,5 +20,6 @@ export default createStore({
     auth,
     stock,
     product,
+    raw_material,
   },
 });

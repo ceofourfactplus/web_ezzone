@@ -3,14 +3,14 @@
   <div>
     <div class="tab">
       <button
-        v-for="(cate, idx) in categories"
+        v-for="(item, idx) in elements"
         :key="idx"
-        @click="select_cate(cate)"
+        @click="select_item(item)"
         class="tab-item"
       >
-        {{ cate }}
+        {{ item.name }}
       </button>
-    <button class="tab-item" v-if="categories.length < 5">></button>
+    <button class="tab-item" v-if="elements.length < 5">></button>
   </div>
   </div>
 </template>
@@ -19,24 +19,15 @@
 <script>
 export default {
   name: "Tabs",
-  props: [],
+  props: ['elements'],
   data() {
     return {
       //   materials: [],
-      categories: [
-        "All",
-        "Fresh Food",
-        "Dried Food",
-        "Garnish",
-        "Package",
-        "ETC.",
-        '>'
-      ],
     };
   },
   methods: {
-    select_cate(cate) {
-      this.$emit("select_cate", cate);
+    select_item(item) {
+      this.$emit("select_item", item);
     },
   },
 };
