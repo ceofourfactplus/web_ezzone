@@ -45,7 +45,7 @@ export default {
   padding-left: 10px;
   margin-left: 3px;
   border-radius: 20px;
-  width: 90%;
+  width: 100%;
   height: 45px;
   background-image: url("../../assets/icon/Search-19x18-1.png");
   background-position: 2% 50%;
