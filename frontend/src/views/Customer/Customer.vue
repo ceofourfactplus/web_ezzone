@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>Customer Management</nav-app>
+    <nav-app>Customer&#160;Management</nav-app>
     <div class="row">
       <div class="col-8 ms-4 pe-2">
         <search-bar @search="search" style="width: 500px" />
@@ -192,7 +192,7 @@ export default {
           this.all_customer = response.data;
         });
       } else {
-        api_customer.get("read-all/").then((response) => {
+        api_customer.get("customer").then((response) => {
           this.all_customer = response.data;
         });
       }

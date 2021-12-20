@@ -59,7 +59,7 @@ class RawMaterial(models.Model):
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_update_by", null=True,blank=True)
     img = models.ImageField(
-        _("Image"), upload_to=upload_to_raw_material, default='raw_material/default.jpg',)
+        _("Image"), upload_to=upload_to_raw_material, default=None,)
 
 
 class PickUpRawMaterial(models.Model):
@@ -111,3 +111,10 @@ class MultiUnit(models.Model):
     unit = models.ForeignKey(Unit,on_delete=models.PROTECT,default=None,null=True,related_name='multi_unit_unit')
     to_unit = models.ForeignKey(Unit,on_delete=models.PROTECT,default=None,null=True,related_name='multi_unit_to_unit')
     to_amount = models.IntegerField(default=1)
+
+class OP(models.Model):
+    raw_material = models.ForeignKey(RawMaterial,on_delete=models.PROTECT)
+    supplier = models.ForeignKey(Supplier ,on_delete=models.PROTECT)
+    amount = models.IntegerField()
+    unit =  models.ForeignKey(Unit,on_delete=models.PROTECT)
+    

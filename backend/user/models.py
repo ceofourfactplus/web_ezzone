@@ -8,9 +8,9 @@ def upload_to_user(instance,filename):
     return 'user/{filename}'.format(filename=instance.username)
 
 class User(AbstractUser):
-  NOT_WORKING = '0'
-  WORKING = '1'
-  BANNED = '2'
+  NOT_WORKING = 0
+  WORKING = 1
+  BANNED = 2
   STATUS_WORK = (
     (NOT_WORKING,'not working'),
     (WORKING,'working'),

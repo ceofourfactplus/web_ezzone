@@ -176,7 +176,7 @@
             </datalist>
           </div>
 
-          <!-- conf password -->
+          <!-- address -->
           <div class="row">
             <textarea
               v-model="address"
@@ -251,13 +251,13 @@ export default {
         user.append("birth_date", this.birth_date);
         user.append("phone_number", this.phone_number);
         user.append("email", this.email);
-        user.append("line_id", this.line_id);
+        user.append("line_customer_id", this.line_id);
         user.append("invite_by", this.invite_by);
         user.append("address", this.address);
-        if (this.img == "") {
-          user.append("img", "");
-        } else {
+        if (this.img != null) {
           user.append("img", this.img, this.img.name);
+        }else{
+          user.append("img", '');
         }
         user.append("gender", this.gender);
         axios

@@ -1,16 +1,25 @@
 <template>
   <div>
     <nav class="nav">
-      <div class="row">
-        <div class="col-3">
+      <div class="row w-100">
+        <div class="col-2">
           <img
             src="../../assets/icon/btn-back.png"
             class="back inline ms-4"
             @click="$router.go(-1)"
           />
         </div>
-        <div class="col-6">
-          <p id="login" class="header-text"><slot></slot></p>
+        <div class="col-9 w-100">
+          <h1 id="login" class="header-text"><slot></slot></h1>
+        </div>
+        <div class="col-2" v-if="save">
+          <img
+          @click="$emit('save')"
+            src="../../assets/icon/save.png"
+            style="align-item: right"
+            class="save"
+            alt=""
+          />
         </div>
       </div>
     </nav>
@@ -19,6 +28,7 @@
 
 <script>
 export default {
+  props: ["save"],
   data() {
     return {
       pages: [
@@ -29,21 +39,21 @@ export default {
         { name: "Pickup Raw Materials" },
       ],
       ham_status: false,
-      ham_val: '',
+      ham_val: "",
     };
   },
   methods: {
     select_page(page) {
-      this.ham_val = page.name
-      console.log(page.name)
-    }
-  }
+      this.ham_val = page.name;
+      console.log(page.name);
+    },
+  },
 };
 </script>
 
 <style scoped>
 .selected {
-  color: #EA7C69;
+  color: #ea7c69;
 }
 .txt {
   margin-top: 20px;
@@ -72,19 +82,17 @@ export default {
 .nav {
   height: 90px;
 }
+.save {
+  right: 40px;
+  top: 25px;
+  position: fixed;
+}
 .header-text {
   font-style: normal;
   font-weight: 800;
   font-size: 48px;
-  top: 0px;
-  right: 80px;
-  margin-bottom: 100px;
   color: #fafafa;
   display: inline;
-  position: fixed;
-  width: 80%;
-
   line-height: 80px;
-  margin-left: 20%;
 }
 </style>
