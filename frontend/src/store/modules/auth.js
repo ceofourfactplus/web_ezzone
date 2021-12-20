@@ -6,7 +6,7 @@ export default {
     confirm_pass: false,
     userInfo: {
       is_barista: false,
-      is_staff: false,
+      is_staff: true,
       is_chef: true,
       is_purchesing: true,
       is_receptionist: false,

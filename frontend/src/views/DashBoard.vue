@@ -187,7 +187,7 @@ export default {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/customer.png"),
               txt: "Customers",
-              link: "DashBoard",
+              link: "Customer",
             },
             {
               permissions: ["is_staff"],
@@ -237,7 +237,6 @@ h1 {
   text-align: left;
   margin-left: 20px;
   margin-bottom: 10px;
-  text-decoration: underline;
 }
 body {
   background-color: white;

@@ -475,6 +475,7 @@ export default {
     },
     edit_user() {
       const user_data = new FormData();
+      user_data.append("is_working", parseInt(this.user.is_working));
       user_data.append("is_chef", this.user.is_chef);
       user_data.append("is_barista", this.user.is_barista);
       user_data.append("is_purchesing", this.user.is_purchesing);
