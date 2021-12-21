@@ -21,7 +21,7 @@
       >
         {{ item.name }}
       </button>
-    <button class="tab-item" v-if="elements.length < 5">></button>
+    <button class="tab-item" v-if="elements.length > 5">></button>
   </div>
   </div>
 </template>

@@ -78,6 +78,7 @@
             class="row table-item"
             v-for="(item, idx) in elements"
             :key="idx"
+            @click="showRmDetial(item)"
             style="
               padding-right: 0px;
               background-color: #303344;
@@ -92,7 +93,7 @@
             <div class="col-1" style="margin-right: 40px;">{{ item.qty }}</div>
             <div class="col-1" style="margin-right: 37px;">{{ item.unit }}</div>
             <div class="col-1">
-              <img style="margin-right: -30px;" :src="$store.state.raw_material.status_image[item.status]" alt="img" />
+              <img style="margin-right: 0px;" :src="$store.state.raw_material.status_image[item.status]" alt="img" />
             </div>
             <div class="col-1">
               <img @click="show_pickup(item)" style="margin-right: -150px;" src="../../assets/icon/pickup.png" alt="img" />
@@ -169,6 +170,9 @@ export default {
   methods: {
     show_pickup(item) {
       this.$emit('show_pickup', item)
+    },
+    showRmDetial(item) {
+      this.$emit('show_rm_detail', item)
     },
   },
 };

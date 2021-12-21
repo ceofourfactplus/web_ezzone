@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true">Product&#160;Detail</nav-app>
+    <nav-app save="true">New&#160;RM</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -27,11 +27,12 @@
                 type="text"
                 style="width: 350px; margin: auto"
                 placeholder="Name"
+                v-model="name"
               />
             </div>
             <div class="col-12 h-25">
               <label for="">Category&nbsp;:</label
-              ><select name="category" id="category">
+              ><select name="category" id="category" v-model="category_id">
                 <option
                   v-for="category in categories"
                   :key="category.id"
@@ -42,8 +43,8 @@
               </select>
             </div>
             <div class="col-12 h-25">
-              <label for="">Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label
-              ><input type="text" />
+              <label for="">Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+              <div></div>
             </div>
             <div class="col-12 h-25">
               <label for="">Fridge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
@@ -56,44 +57,50 @@
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;:</label
-            ><input type="text" style="width: 74%" />
+            ><input type="text" style="width: 74%" v-model="remain" />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
-            ><input type="text" style="width: 55%" />
+            ><input type="text" style="width: 55%" v-model="minimum" />
           </div>
           <div class="col-6 label-input m-15">
-            <label for="">Unti&nbsp;&nbsp;:</label
-            ><input type="text" style="width: 70%" />
+            <label for="units">Unti&nbsp;&nbsp;:</label
+            ><input
+              type="text"
+              style="width: 70%"
+              v-model="unit"
+              id="units"
+              list="unit"
+            />
+            <datalist id="unit">
+              <option v-for="unit in units" :key="unit.id">
+                {{ unit.unit }}
+              </option>
+            </datalist>
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Max&nbsp;Qty&nbsp;:</label
-            ><input type="text" style="width: 53%" />
+            ><input type="text" style="width: 53%" v-model="maximum" />
           </div>
         </div>
       </div>
       <div class="frame f-3">
         <div class="row">
           <div class="col-6 label-input">
-            <label for="">Price&nbsp;&nbsp;:</label
-            ><input type="text" style="width: 69%" />
+            <label for="">Min&nbsp;Price&nbsp;&nbsp;:</label>
+            <input type="number" style="width: 47%" v-model="min_price" />
           </div>
           <div class="col-6 label-input">
-            <label for="">Min&nbsp;Price&nbsp;&nbsp;:</label
-            ><input type="text" style="width: 47%" />
+            <label for="">Max&nbsp;Price&nbsp;:</label
+            ><input type="number" style="width: 48%" v-model="maximum" />
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Total&nbsp;Cost&nbsp;:</label
-            ><input type="text" style="width: 50%" />
+            ><input type="number" style="width: 5p;0%" v-model="total_price" />
           </div>
-          <div class="col-6 label-input m-15">
-            <label for="">Max&nbsp;Price&nbsp;:</label
-            ><input type="text" style="width: 48%" />
-          </div>
-          <div class="col-6"></div>
           <div class="col-6 label-input m-15">
             <label for="">Avg&nbsp;Price&nbsp;&nbsp;:</label
-            ><input type="text" style="width:48%" />
+            ><input type="number" style="width: 48%" v-model="avg_price" />
           </div>
         </div>
       </div>
@@ -104,29 +111,59 @@
 <script>
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
-
+import { api_raw_material } from "../../api/api_raw_material.js";
 export default {
   components: { NavApp, Switch },
-  mounted() {
-    this.fetchRawMaterials();
-  },
   data() {
     return {
+      category_id: null,
+      status: true,
+      remain: null,
+      unit: null,
+      minimum: null,
+      maximum: null,
+      avg_price: null,
+      min_price: null,
+      max_price: null,
+      img: null,
+      is_refrigerator: false,
+      min_price_supplier: null,
+      max_price_supplier: null,
+      name: "",
+      total_price: 0,
       show_img: null,
+      categories: [],
+      units: [],
     };
   },
   methods: {
-    fetchRawMaterials() {
-      console.log("fetch raw materials");
-    },
     onFileChange(e) {
-      this.show_img = e.target.files[0];
-      if (this.show_img) {
+      this.img = e.target.files[0];
+      if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
         reader.readAsDataURL(this.show_img);
       }
     },
+    fridge(val) {
+      this.is_refrigerator = val;
+    },
+  },
+  watch: {
+    remain() {
+      this.total_price = this.remain * this.avg_price;
+    },
+    avg_price() {
+      this.total_price = this.remain * this.avg_price;
+    },
+  },
+  mounted() {
+    api_raw_material.get("category").then((response) => {
+      this.categories = response.data;
+    });
+    api_raw_material.get("unit").then((response) => {
+      this.units = response.data;
+    });
   },
 };
 </script>

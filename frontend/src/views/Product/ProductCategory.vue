@@ -89,7 +89,7 @@
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavAppHam.vue";
 // import Table from "../../components/main_component/Table.vue";
-import { apiProduct } from "../../api/apiProduct";
+import { api_product } from "../../api/api_product";
 
 export default {
   components: {
@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     fetchProductCategories() {
-        apiProduct.get('/category/').then((response) => {
+        api_product.get('/category/').then((response) => {
             console.log(response.data)
             this.products_categories = response.data
             this.temp_categories = response.data
@@ -126,7 +126,7 @@ export default {
         type_category: 2,
         create_by: 2,
       };
-      apiProduct.post("/category/", data).then((response) => {
+      api_product.post("/category/", data).then((response) => {
         console.log(response.data, "response category");
         setTimeout(() => {
           this.alert = false;
@@ -134,6 +134,7 @@ export default {
           this.products_categories.push(response.data);
         }, 2000);
       });
+      this.category = ''
     },
     search_by_typing(val) {
           console.log(val, 'val')
