@@ -185,6 +185,7 @@ export default {
       console.log(item, "item");
       this.raw_material_item = item
       this.show_pickup_status = true;
+      this.show_rm_detail_status = false;
     },
     showRmDetial(item) {
       console.log(item, "item");
