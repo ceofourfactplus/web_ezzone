@@ -15,7 +15,7 @@
       <Tabs :elements="categories" @select_item="query_category" />
     </div>
     <!-- Table -->
-    <Table :head1="'Item'" :head2="'Qty'" :head3="'Unit'" :head4="'Status'" :elements="raw_materials" />
+    <Table :head1="'Item'" :head2="'Qty'" :head3="'Unit'" :head4="'Status'" :head5="'Pickup'" :category="'raw_material'" :elements="raw_materials" @show_pickup="show_pickup" />
 
 
     <!-- Popup -->
@@ -383,6 +383,7 @@
         </div>
       </div>
     </div>
+
     <!-- Card Popup -->
     <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">
@@ -390,16 +391,21 @@
       </div>
       <div class="main-text">Saved successfully</div>
     </div>
+
+    <!-- Show Pickup Popup -->
+    <PickupPopup />
   </div>
 </template>
 
 <script>
 // import RawMaterial from '../../components/materials/RawMaterial.vue'
-// import api_raw_material from "../../api/api_raw_material";
+import {api_raw_material} from "../../api/api_raw_material";
 import Tabs from "../../components/materials/Tabs.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue"
+import PickupPopup from "../../components/materials/PickupPopup.vue"
+
 
 export default {
   components: {
@@ -407,15 +413,18 @@ export default {
     SearchBar,
     NavApp,
     Table,
+    PickupPopup,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
+    this.fetchRMCategories()
   },
   data() {
     return {
       category: "",
       image: "",
       show_img: null,
+      show_pickup_status: false,
       is_staff: false,
       add_rm: false,
       texts: "",
@@ -438,14 +447,7 @@ export default {
         'min_price': null,
         'in_refrigerator': false,
       },
-      categories: [
-        {name: "All"},
-        {name: "Fresh Food"},
-        {name: "Dried Food"},
-        {name: "Garnish"},
-        {name: "Package"},
-        {name: "ETC."},
-      ],
+      categories: [],
       img: require("../../assets/icon/frame.png"),
       raw_materials: [
         {
@@ -476,6 +478,12 @@ export default {
     };
   },
   methods: {
+    fetchRMCategories() {
+      api_raw_material.get("/category/").then((response) => {
+        console.log(response.data);
+        this.categories = response.data;
+      });
+    },
     saveChange() {
       console.log(this.raw_material_item)
       this.alert = true
@@ -507,6 +515,10 @@ export default {
     },
     edit(item) {
       console.log(item, "item");
+    },
+    show_pickup(item) {
+      console.log(item, 'item')
+      this.show_pickup_status = true
     },
     query_category(cate) {
       console.log(cate);
