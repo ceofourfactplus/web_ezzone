@@ -22,7 +22,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 import NavApp from "../../components/main_component/NavApp.vue";
 import Tabs from "../../components/materials/Tabs.vue"
 import Table from "../../components/main_component/Table.vue"
-import {apiProduct} from "../../api/apiProduct"
+import {api_product} from "../../api/api_product"
 
 export default {
   components: {
@@ -96,12 +96,12 @@ export default {
   },
   methods: {
       fetchProducts() {
-          apiProduct.get('/product').then(response => {
+          api_product.get('/product').then(response => {
               console.log(response.data, 'response')
           })
       },
       fetchProductCategories() {
-          apiProduct.get('/category/').then((response) => {
+          api_product.get('/category/').then((response) => {
             console.log(response.data)
             this.products_categories = response.data
         })

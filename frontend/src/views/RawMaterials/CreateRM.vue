@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true">New&#160;RM</nav-app>
+    <nav-app save="true" @save="save()">New&#160;RM</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -31,14 +31,19 @@
               />
             </div>
             <div class="col-12 h-25">
-              <label for="">Category&nbsp;:</label
-              ><select name="category" id="category" v-model="category_id">
+              <label for="">Category&nbsp;:</label>
+              <select
+                name="category"
+                id="category"
+                v-model="category_id"
+                style="height: 50px"
+              >
                 <option
                   v-for="category in categories"
                   :key="category.id"
                   :value="category.id"
                 >
-                  {{ category.category }}
+                  {{ category.name }}
                 </option>
               </select>
             </div>
@@ -64,7 +69,7 @@
             ><input type="text" style="width: 55%" v-model="minimum" />
           </div>
           <div class="col-6 label-input m-15">
-            <label for="units">Unti&nbsp;&nbsp;:</label
+            <label for="units">Unit&nbsp;&nbsp;:</label
             ><input
               type="text"
               style="width: 70%"
@@ -84,24 +89,40 @@
           </div>
         </div>
       </div>
-      <div class="frame f-3">
-        <div class="row">
-          <div class="col-6 label-input">
-            <label for="">Min&nbsp;Price&nbsp;&nbsp;:</label>
-            <input type="number" style="width: 47%" v-model="min_price" />
-          </div>
-          <div class="col-6 label-input">
-            <label for="">Max&nbsp;Price&nbsp;:</label
-            ><input type="number" style="width: 48%" v-model="maximum" />
-          </div>
-          <div class="col-6 label-input m-15">
-            <label for="">Total&nbsp;Cost&nbsp;:</label
-            ><input type="number" style="width: 5p;0%" v-model="total_price" />
-          </div>
-          <div class="col-6 label-input m-15">
-            <label for="">Avg&nbsp;Price&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 48%" v-model="avg_price" />
-          </div>
+      <div class="frame f-2">
+        <div class="row" style="width: 99%">
+          <input type="number" class="i-25" style="text-align: right" />
+          <select name="" id="" class="i-25">
+            <option value="" selected>unit</option>
+            <option v-for="unit in units" :key="unit.id" value="">
+              {{ unit.unit }}
+            </option>
+          </select>
+          <span style="color: #fff; font-size: 30px">&#160;&#160;=</span>
+          <input type="number" class="i-25" style="text-align: right" />
+          <select name="" id="" class="i-25">
+            <option value="" selected>unit</option>
+            <option v-for="unit in units" :key="unit.id" value="">
+              {{ unit.unit }}
+            </option>
+          </select>
+        </div>
+        <div class="row m-15" style="width: 99%">
+          <input type="number" class="i-25" style="text-align: right" />
+          <select name="" id="" class="i-25">
+            <option value="" selected>unit</option>
+            <option v-for="unit in units" :key="unit.id" value="">
+              {{ unit.unit }}
+            </option>
+          </select>
+          <span style="color: #fff; font-size: 30px">&#160;&#160;=</span>
+          <input type="number" class="i-25" style="text-align: right" />
+          <select name="" id="" class="i-25">
+            <option value="" selected>unit</option>
+            <option v-for="unit in units" :key="unit.id" value="">
+              {{ unit.unit }}
+            </option>
+          </select>
         </div>
       </div>
     </div>
@@ -122,13 +143,8 @@ export default {
       unit: null,
       minimum: null,
       maximum: null,
-      avg_price: null,
-      min_price: null,
-      max_price: null,
       img: null,
       is_refrigerator: false,
-      min_price_supplier: null,
-      max_price_supplier: null,
       name: "",
       total_price: 0,
       show_img: null,
@@ -142,11 +158,27 @@ export default {
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.show_img);
+        reader.readAsDataURL(this.img);
       }
     },
     fridge(val) {
       this.is_refrigerator = val;
+    },
+    save() {
+      const data = new FormData();
+      data.append("maximum", this.maximum);
+      data.append("minimum", this.minimum);
+      data.append("remain", this.remain);
+      data.append("category", this.category);
+      data.append("name", this.name);
+      data.append("is_refrigerator", this.is_refrigerator);
+      data.append("img", this.img, this.img.name);
+      data.append("unit", this.unit);
+      data.append("update_by_id", this.$store.state.auth.userInfo.id);
+      data.append("create_by_id", this.$store.state.auth.userInfo.id);
+      api_raw_material.post("raw-material/", data).then(() => {
+        this.$router.push({name:'CreateRM'});
+      });
     },
   },
   watch: {
@@ -169,6 +201,9 @@ export default {
 </script>
 
 <style scoped>
+.i-25 {
+  width: 140px;
+}
 .frame {
   margin-top: 15px;
   margin-bottom: 20px;
@@ -188,7 +223,7 @@ export default {
 }
 .f-3 {
   width: 680px;
-  height: 235px;
+  height: 230px;
 }
 .container-f {
   padding-left: 22px;
@@ -202,12 +237,19 @@ input {
   margin-left: 10px;
 }
 select {
-  background-color: #303344;
+  background-color: #717171;
   margin-left: 10px;
   width: 200px;
   font-size: 30px;
   color: #fff;
+  border-radius: 10px;
+  font-size: 24px;
   border: 0px;
+  text-indent: 10px;
+}
+
+option {
+  font-size: 20px;
 }
 raw-img {
   width: 236px;

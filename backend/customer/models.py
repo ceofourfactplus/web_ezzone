@@ -25,4 +25,3 @@ class Customer(models.Model):
 #     level = models.CharField
 #     price = models.DecimalField
 #     time = models.TextField
-
