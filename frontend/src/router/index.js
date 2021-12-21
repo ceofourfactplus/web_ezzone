@@ -21,10 +21,19 @@ import EditCustomer from '../views/Customer/EditCustomer.vue'
 import Products from '../views/Product/Products.vue'
 import ProductDetail from '../views/Product/ProductDetail.vue'
 import ProductCategory from '../views/Product/ProductCategory.vue'
+import RawMaterialCategory from '../views/RawMaterials/RawMaterialCategory.vue'
 
 
 
 const routes = [
+  {
+    path: "/raw-material-category",
+    name: "RawMaterialCategory",
+    component: RawMaterialCategory,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/product-category",
     name: "ProductCategory",

@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('product/', include('product.urls')),
     path('pos/', include('pos.urls')),
-    # path('raw_material/', include('raw_material.urls')),
+    path('raw_material/', include('raw_material.urls')),
     # path('material/', include('material.urls')),
     path('customer/', include('customer.urls')),
     # path('promotion/',include('promotion.urls')),

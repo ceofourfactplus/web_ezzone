@@ -13,7 +13,7 @@
     <div style="margin-left: 0px;">
         <Tabs :elements="products_categories" :status="'category'" @select_item="select_item" />
     </div>
-    <Table :head1="'Name'" :head2="'Qty'" :head3="'Unit'" :head4="'Status'" :elements="products" />
+    <Table :head1="'Name'" :head2="'Qty'" :head3="'Unit'" :head4="'Owner'" :head5="'Status'" :elements="products" :category="category" />
   </div>
 </template>
 
@@ -39,6 +39,7 @@ export default {
   data() {
     return {
         is_staff: false,
+        category: '',
         products_categories: [],
         temp_products: [
             {
@@ -108,6 +109,7 @@ export default {
       },
       select_item(item) {
           console.log(item)
+          this.category = item.category
       },
       search_by_typing(val) {
           console.log(val, 'val')
