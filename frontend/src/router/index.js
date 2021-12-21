@@ -10,7 +10,7 @@ import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
 // import Minimum from "../views/RawMaterials/Minimum.vue"
-import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
+// import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
 import EditUser from '../views/User/EditUser.vue'
 import DashBoard from '../views/DashBoard.vue'
 import ForgotPassword from '../views/User/ForgotPassword.vue'
@@ -93,11 +93,11 @@ const routes = [
   //   name: "Minimum",
   //   component: Minimum,
   // },
-  {
-    path: "/manage-raw-material",
-    name: "ManageRawMaterial",
-    component: ManageRawMaterial,
-  },
+  // {
+  //   path: "/manage-raw-material",
+  //   name: "ManageRawMaterial",
+  //   component: ManageRawMaterial,
+  // },
   {
     path: "/raw-materials",
     name: "RawMaterials",
