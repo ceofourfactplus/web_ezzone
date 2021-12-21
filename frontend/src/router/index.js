@@ -5,12 +5,11 @@ import Test from '../views/Test.vue'
 import UserStatus from '../views/User/UserStatus.vue'
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RawMaterials.vue"
-import AddNewRM from "../views/RawMaterials/AddNewRM.vue"
 import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
-import Suppliers from "../views/RawMaterials/Suppliers.vue"
-import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
+// import Suppliers from "../views/RawMaterials/Suppliers.vue"
+// import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
-import Minimum from "../views/RawMaterials/Minimum.vue"
+// import Minimum from "../views/RawMaterials/Minimum.vue"
 import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
 import EditUser from '../views/User/EditUser.vue'
 import DashBoard from '../views/DashBoard.vue'
@@ -66,34 +65,34 @@ const routes = [
       requiresLogin: false,
     },
   },
-  {
-    path: "/add-new-rm",
-    name: "AddNewRM",
-    component: AddNewRM,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
-    path: "/suppliers",
-    name: "Suppliers",
-    component: Suppliers,
-  },
-  {
-    path: "/po-for-suppliers",
-    name: "POForSuppliers",
-    component: POForSuppliers,
-  },
+  // {
+  //   path: "/add-new-rm",
+  //   name: "AddNewRM",
+  //   component: AddNewRM,
+  //   meta: {
+  //     requiresLogin: false,
+  //   },
+  // },
+  // {
+  //   path: "/suppliers",
+  //   name: "Suppliers",
+  //   component: Suppliers,
+  // },
+  // {
+  //   path: "/po-for-suppliers",
+  //   name: "POForSuppliers",
+  //   component: POForSuppliers,
+  // },
   {
     path: "/pickup-raw-material",
     name: "PickupRawMaterial",
     component: PickupRawMaterial, 
   },
-  {
-    path: "/minimum",
-    name: "Minimum",
-    component: Minimum,
-  },
+  // {
+  //   path: "/minimum",
+  //   name: "Minimum",
+  //   component: Minimum,
+  // },
   {
     path: "/manage-raw-material",
     name: "ManageRawMaterial",
