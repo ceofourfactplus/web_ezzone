@@ -5,7 +5,7 @@ urlpatterns = [
     path('create-raw-material/', views.RawMaterialListAPIView().as_view()),
     
 #     path('supplier/', views.SupplierListAPIView.as_view()),
-#     path('unit/', views.UnitListAPIView.as_view()),
+    path('unit', views.UnitListAPIView.as_view()),
 #     path('stock/', views.StockListAPIView.as_view()),
 #     path('stock-trance/', views.StockTranceListAPIView.as_view()),
 #     path('payer/', views.PayerListAPIView.as_view()),

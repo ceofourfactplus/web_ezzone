@@ -3,7 +3,7 @@
     <nav-app>Customer&#160;Management</nav-app>
     <div class="row">
       <div class="col-8 ms-4 pe-2">
-        <search-bar @search="search" style="width: 500px" />
+        <search-bar @search="search" style="width: 470px" />
       </div>
       <div class="col-4">
         <button

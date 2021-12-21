@@ -5,7 +5,7 @@ import Test from '../views/Test.vue'
 import UserStatus from '../views/User/UserStatus.vue'
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RawMaterials.vue"
-import AddNewRM from "../views/RawMaterials/AddNewRM.vue"
+import CreateRM from "../views/RawMaterials/CreateRM.vue"
 import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
 import Suppliers from "../views/RawMaterials/Suppliers.vue"
 import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
@@ -58,9 +58,9 @@ const routes = [
     },
   },
   {
-    path: "/add-new-rm",
-    name: "AddNewRM",
-    component: AddNewRM,
+    path: "/rm/create-rm",
+    name: "CreateRM",
+    component: CreateRM,
     meta: {
       requiresLogin: false,
     },
@@ -91,12 +91,12 @@ const routes = [
     component: ManageRawMaterial,
   },
   {
-    path: "/raw-materials",
+    path: "/rm/raw-materials",
     name: "RawMaterials",
     component: RawMaterials,
   },
   {
-    path: "/add-raw-materials",
+    path: "/rm/add-raw-materials",
     name: "AddRawMaterials",
     component: AddRawMaterials,
   },
