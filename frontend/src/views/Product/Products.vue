@@ -102,7 +102,7 @@ export default {
           })
       },
       fetchProductCategories() {
-          apiProduct.get('/category/').then((response) => {
+          api_product.get('/category/').then((response) => {
             console.log(response.data)
             this.products_categories = response.data
         })

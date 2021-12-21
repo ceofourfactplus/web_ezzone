@@ -6,7 +6,6 @@ import UserStatus from '../views/User/UserStatus.vue'
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RawMaterials.vue"
 import CreateRM from "../views/RawMaterials/CreateRM.vue"
-import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
 // import Suppliers from "../views/RawMaterials/Suppliers.vue"
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
@@ -22,7 +21,6 @@ import Products from '../views/Product/Products.vue'
 import CreateProduct from '../views/Product/CreateProduct.vue'
 import ProductCategory from '../views/Product/ProductCategory.vue'
 import RawMaterialCategory from '../views/RawMaterials/RawMaterialCategory.vue'
-
 
 
 const routes = [
@@ -74,16 +72,11 @@ const routes = [
       requiresLogin: false,
     },
   },
-  {
-    path: "/suppliers",
-    name: "Suppliers",
-    component: Suppliers,
-  },
-  {
-    path: "/po-for-suppliers",
-    name: "POForSuppliers",
-    component: POForSuppliers,
-  },
+  // {
+  //   path: "/suppliers",
+  //   name: "Suppliers",
+  //   component: Suppliers,
+  // },
   {
     path: "/pickup-raw-material",
     name: "PickupRawMaterial",
@@ -103,11 +96,6 @@ const routes = [
     path: "/rm/raw-materials",
     name: "RawMaterials",
     component: RawMaterials,
-  },
-  {
-    path: "/rm/add-raw-materials",
-    name: "AddRawMaterials",
-    component: AddRawMaterials,
   },
   {
     path: "/login",
