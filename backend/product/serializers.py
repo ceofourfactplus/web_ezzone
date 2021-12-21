@@ -12,7 +12,7 @@ class SaleChannelSerializer(serializers.ModelSerializer):
 class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductCategory
-        fields = ['id', 'category', 'color',
+        fields = ['id', 'category', 'type_category',
                   'create_by', 'update_by', 'status']
 
 

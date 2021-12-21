@@ -22,7 +22,6 @@
         <img src="../../assets/icon/btn-pass.png" alt="" />
       </div>
       <div class="main-text">Saved successfully</div>
-      <!-- <div class="second">wait for admin tp activate</div> -->
     </div>
   </div>
 </template>

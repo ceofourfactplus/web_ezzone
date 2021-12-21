@@ -7,11 +7,11 @@ import store from "../store";
 import RawMaterials from "../views/RawMaterials/RawMaterials.vue"
 import CreateRM from "../views/RawMaterials/CreateRM.vue"
 import AddRawMaterials from "../views/RawMaterials/AddRawMaterials.vue"
-import Suppliers from "../views/RawMaterials/Suppliers.vue"
-import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
+// import Suppliers from "../views/RawMaterials/Suppliers.vue"
+// import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
-import Minimum from "../views/RawMaterials/Minimum.vue"
-import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
+// import Minimum from "../views/RawMaterials/Minimum.vue"
+// import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
 import EditUser from '../views/User/EditUser.vue'
 import DashBoard from '../views/DashBoard.vue'
 import ForgotPassword from '../views/User/ForgotPassword.vue'
@@ -21,10 +21,19 @@ import EditCustomer from '../views/Customer/EditCustomer.vue'
 import Products from '../views/Product/Products.vue'
 import CreateProduct from '../views/Product/CreateProduct.vue'
 import ProductCategory from '../views/Product/ProductCategory.vue'
+import RawMaterialCategory from '../views/RawMaterials/RawMaterialCategory.vue'
 
 
 
 const routes = [
+  {
+    path: "/raw-material-category",
+    name: "RawMaterialCategory",
+    component: RawMaterialCategory,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/product-category",
     name: "ProductCategory",
@@ -80,16 +89,16 @@ const routes = [
     name: "PickupRawMaterial",
     component: PickupRawMaterial, 
   },
-  {
-    path: "/minimum",
-    name: "Minimum",
-    component: Minimum,
-  },
-  {
-    path: "/manage-raw-material",
-    name: "ManageRawMaterial",
-    component: ManageRawMaterial,
-  },
+  // {
+  //   path: "/minimum",
+  //   name: "Minimum",
+  //   component: Minimum,
+  // },
+  // {
+  //   path: "/manage-raw-material",
+  //   name: "ManageRawMaterial",
+  //   component: ManageRawMaterial,
+  // },
   {
     path: "/rm/raw-materials",
     name: "RawMaterials",

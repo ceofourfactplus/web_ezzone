@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="back">Product Category</nav-app>
+    <nav-app @back="back">RM Category</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
@@ -33,7 +33,7 @@
         <div v-if="is_staff">
           <div
             class="row table-item"
-            v-for="(item, idx) in products_categories"
+            v-for="(item, idx) in rm_categories"
             :key="idx"
             style="
               padding-right: 0px;
@@ -43,11 +43,11 @@
             "
           >
             <div class="col-6" style="text-align: left; width: 100%">
-              {{ item.category }}
+              {{ item.name }}
             </div>
             <div class="col-2" style="margin-left: -5px">100</div>
             <div class="col-2" style="margin-left: 40px">1000</div>
-            <div class="col-1" style="position: absolute; right: 50px;">
+            <div class="col-1" style="position: absolute; right: 50px">
               <img
                 @click="edit(item)"
                 src="../../assets/icon/edit.png"
@@ -61,8 +61,12 @@
 
     <!-- Popup -->
     <div class="category-popup" v-if="add_category_status">
-        <img @click="add_category_status = false" style="position: absolute; right: 10px; top: 10px;" src="../../assets/icon/delete.png">
-      <h2>Create Category</h2>
+      <img
+        @click="add_category_status = false"
+        style="position: absolute; right: 10px; top: 10px"
+        src="../../assets/icon/delete.png"
+      />
+      <h2>Create RM Category</h2>
       <label for="category" style="color: white">Name : &nbsp;</label>
       <input
         v-model="category"
@@ -82,6 +86,25 @@
       </div>
       <div class="main-text">Saved successfully</div>
     </div>
+
+    <!-- Input Datalist -->
+    <!-- <label class="category-select-for-add">Category : </label>
+    <input
+      list="categories"
+      type="text"
+      v-model="raw_material_item.category"
+      class="select-input"
+    />
+    <datalist id="categories">
+      <option v-for="(cate, idx) in categories" :key="idx">
+        {{ cate }}
+      </option>
+    </datalist>
+
+    .select-input { width: 200px; height: 35px; background-color: #2f414e;
+    color: white; margin: 17px -10px 0px 5px; background-image:
+    url("../../assets/icon/down-arrow.png"); background-position: center right;
+    background-size: 24px; background-repeat: no-repeat; } -->
   </div>
 </template>
 
@@ -89,7 +112,7 @@
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavAppHam.vue";
 // import Table from "../../components/main_component/Table.vue";
-import { apiProduct } from "../../api/apiProduct";
+import { api_raw_material } from "../../api/api_raw_material";
 
 export default {
   components: {
@@ -99,7 +122,7 @@ export default {
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
-    this.fetchProductCategories()
+    this.fetchRMCategories();
   },
   data() {
     return {
@@ -107,48 +130,46 @@ export default {
       alert: false,
       add_category_status: false,
       category: "",
-      products_categories: [],
+      rm_categories: [],
       temp_categories: [],
     };
   },
   methods: {
-    fetchProductCategories() {
-        apiProduct.get('/category/').then((response) => {
-            console.log(response.data)
-            this.products_categories = response.data
-            this.temp_categories = response.data
-        })
+    fetchRMCategories() {
+      api_raw_material.get("/category/").then((response) => {
+        console.log(response.data);
+        this.rm_categories = response.data;
+        this.temp_categories = response.data;
+      });
     },
     save() {
       this.alert = true;
       var data = {
-        category: this.category,
-        type_category: 2,
-        create_by: 2,
+        name: this.category,
       };
-      apiProduct.post("/category/", data).then((response) => {
+      api_raw_material.post("/category/", data).then((response) => {
         console.log(response.data, "response category");
         setTimeout(() => {
           this.alert = false;
           this.add_category_status = false;
-          this.products_categories.push(response.data);
+          this.rm_categories.push(response.data);
         }, 2000);
       });
     },
     search_by_typing(val) {
-          console.log(val, 'val')
-          var temp = []
-          if (val == '') {
-              this.products_categories = this.temp_categories
-          } else {
-              this.temp_categories.forEach(element => {
-                if(element.category.indexOf(val) + 1 != 0) {
-                    temp.push(element)
-                }
-            });
-            this.products_categories = temp
+      console.log(val, "val");
+      var temp = [];
+      if (val == "") {
+        this.rm_categories = this.temp_categories;
+      } else {
+        this.temp_categories.forEach((element) => {
+          if (element.category.indexOf(val) + 1 != 0) {
+            temp.push(element);
           }
-      },
+        });
+        this.rm_categories = temp;
+      }
+    },
   },
 };
 </script>

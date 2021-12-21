@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import Category, Invoice, Payer, Stock, StockTrance, Supplier, Unit, StockTrance, InvoiceDetail, RawMaterial
-from .serializers import CategorySerializer, InvoiceSerializer, PayerSerializer, StockSerializer, SupplierSerializer, StockTranceSerializer, UnitSerializer, InvoiceDetailSerializer, RawMaterialListSeriallizer
+from .models import RawMaterialCategory
+from .serializers import RawMaterialCategorySerializer
 # Create your views here.
 
 
@@ -359,9 +359,18 @@ class DeleteAllDataAPIView(APIView):
 
 class CategoryAPIView(APIView):
     def get(self, request):
-        category = Category.objects.all()
-        serializer = CategorySerializer(category, many=True)
+        category = RawMaterialCategory.objects.all()
+        serializer = RawMaterialCategorySerializer(category, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        if not RawMaterialCategory.objects.filter(name=request.data['name']).exists():
+            serializer = RawMaterialCategorySerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=201)
+            return Response(serializer.errors, status=400)
+        return Response('this caetgory name is already in use', status=400)
 
 
 class CategoryDetailAPIView(APIView):

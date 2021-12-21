@@ -27,10 +27,12 @@ class UnitSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+
 class RawMaterialSerializer(serializers.ModelSerializer):
-    unit_id = serializers.IntegerField(null=True)
-    category_id = serializers.IntegerField(null=True)
-    create_by_id = serializers.IntegerField(null=True)
+    unit_id = serializers.IntegerField(required=True)
+    category_id = serializers.IntegerField(required=True)
+    create_by_id = serializers.IntegerField(required=True)
     update_by_id = serializers.IntegerField()
     max_price_supplier_id = serializers.IntegerField()
     min_price_supplier_id = serializers.IntegerField()
