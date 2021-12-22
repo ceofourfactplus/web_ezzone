@@ -122,7 +122,7 @@ export default {
               permissions: ["is_staff", "is_purchesing"],
               img: require("../../src/assets/icon/PO.png"),
               txt: "PO",
-              link: "DashBoard",
+              link: "PO",
             },
             {
               permissions: ["is_staff", "is_purchesing"],

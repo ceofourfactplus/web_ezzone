@@ -5,26 +5,45 @@
       <div class="table-header">
         <!-- Is Staff -->
         <div v-if="is_staff" class="row" style="padding-right: 80px">
-          <div class="col-6" style="margin-left: 200px">{{ head1 }}</div>
+          <div class="col-4" style="margin-left: 200px">{{ head1 }}</div>
           <div class="col-2" style="padding-left: 10px">{{ head2 }}</div>
           <div class="col-2" style="padding-left: 20px">{{ head3 }}</div>
           <div class="col-2">{{ head4 }}</div>
         </div>
         <!-- Is Raw Material -->
-        <div v-else-if="category == 'raw_material'" class="row" style="padding-right: 0px">
-          <div class="col-6" style="margin-left: 90px; font-size: 28px;">{{ head1 }}</div>
-          <div class="col-1" style="margin-left: 180px; font-size: 28px;">{{ head2 }}</div>
-          <div class="col-1" style="margin-left: 15px; font-size: 28px;">{{ head3 }}</div>
-          <div class="col-1" style="margin-left: 10px; font-size: 28px;">{{ head4 }}</div>
-          <div class="col-1" style="margin-left: 10px; font-size: 28px;">{{ head5 }}</div>
+        <div
+          v-else-if="category == 'raw_material'"
+          class="row"
+          style="padding-right: 0px"
+        >
+          <div class="col-6" style="margin-left: 90px; font-size: 28px">
+            {{ head1 }}
+          </div>
+          <div class="col-1" style="margin-left: 180px; font-size: 28px">
+            {{ head2 }}
+          </div>
+          <div class="col-1" style="margin-left: 15px; font-size: 28px">
+            {{ head3 }}
+          </div>
+          <div class="col-1" style="margin-left: 10px; font-size: 28px">
+            {{ head4 }}
+          </div>
+          <div class="col-1" style="margin-left: 10px; font-size: 28px">
+            {{ head5 }}
+          </div>
         </div>
+        
         <!-- Is Consignment -->
-        <div v-else-if="category == 'Consignment'" class="row" style="padding-right: 0px">
+        <div
+          v-else-if="category == 'Consignment'"
+          class="row"
+          style="padding-right: 0px"
+        >
           <div class="col-6" style="margin-left: 90px">{{ head1 }}</div>
-          <div class="col-1" style="margin-left: 220px;">{{ head2 }}</div>
-          <div class="col-1" style="margin-left: -5px;">{{ head3 }}</div>
-          <div class="col-1" style="margin-left: -5px;">{{ head4 }}</div>
-          <div class="col-1" style="margin-left: 0px;">{{ head5 }}</div>
+          <div class="col-1" style="margin-left: 220px">{{ head2 }}</div>
+          <div class="col-1" style="margin-left: -5px">{{ head3 }}</div>
+          <div class="col-1" style="margin-left: -5px">{{ head4 }}</div>
+          <div class="col-1" style="margin-left: 0px">{{ head5 }}</div>
         </div>
         <!-- Is User -->
         <div v-else class="row" style="padding-right: 10px">
@@ -61,7 +80,10 @@
             <div class="col-2">{{ item.qty }}</div>
             <div class="col-2">{{ item.unit }}</div>
             <div class="col-1" v-if="status != 'category'">
-              <img :src="$store.state.raw_material.status_image[item.status]" alt="img" />
+              <img
+                :src="$store.state.raw_material.status_image[item.status]"
+                alt="img"
+              />
             </div>
             <div class="col-1">
               <img
@@ -86,16 +108,40 @@
               margin-top: 5px;
             "
           >
-            <div class="col-6" @click="showRmDetial(item)" style="text-align: left; width: 100%; font-size: 24px;">
+            <div
+              class="col-6"
+              @click="showRmDetial(item)"
+              style="text-align: left; width: 100%; font-size: 24px"
+            >
               {{ item.name }}
             </div>
-            <div class="col-1" @click="showRmDetial(item)" style="margin-right: 40px;">{{ item.remain }}</div>
-            <div class="col-1" @click="showRmDetial(item)" style="margin-right: 37px;">{{ item.unit_set.unit }}</div>
+            <div
+              class="col-1"
+              @click="showRmDetial(item)"
+              style="margin-right: 40px"
+            >
+              {{ item.remain }}
+            </div>
+            <div
+              class="col-1"
+              @click="showRmDetial(item)"
+              style="margin-right: 37px"
+            >
+              {{ item.unit_set.unit }}
+            </div>
             <div class="col-1" @click="showRmDetial(item)">
-              <img style="margin-right: 0px;" :src="$store.state.raw_material.status_image[item.status]" alt="img" />
+              <img
+                style="margin-right: 0px"
+                :src="$store.state.raw_material.status_image[item.status]"
+                alt="img"
+              />
             </div>
             <div class="col-1" @click="show_pickup(item)">
-              <img style="margin-right: -150px;" src="../../assets/icon/pickup.png" alt="img" />
+              <img
+                style="margin-right: -150px"
+                src="../../assets/icon/pickup.png"
+                alt="img"
+              />
             </div>
           </div>
         </div>
@@ -113,14 +159,21 @@
               margin-top: 5px;
             "
           >
-            <div class="col-6" style="text-align: left; width: 100%; font-size: 24px;">
+            <div
+              class="col-6"
+              style="text-align: left; width: 100%; font-size: 24px"
+            >
               {{ item.name }}
             </div>
-            <div class="col-1" style="margin-right: -140px;">{{ item.qty }}</div>
-            <div class="col-1" style="margin-right: -10px;">{{ item.unit }}</div>
-            <div class="col-1"><p style="margin-right: -100px;">Someone</p></div>
+            <div class="col-1" style="margin-right: -140px">{{ item.qty }}</div>
+            <div class="col-1" style="margin-right: -10px">{{ item.unit }}</div>
+            <div class="col-1"><p style="margin-right: -100px">Someone</p></div>
             <div class="col-1">
-              <img style="margin-right: -200px;" :src="$store.state.raw_material.status_image[item.status]" alt="img" />
+              <img
+                style="margin-right: -200px"
+                :src="$store.state.raw_material.status_image[item.status]"
+                alt="img"
+              />
             </div>
           </div>
         </div>
@@ -144,7 +197,10 @@
             <div class="col-2">{{ item.qty }}</div>
             <div class="col-2">{{ item.unit }}</div>
             <div class="col-2" style="margin-left: 30px">
-              <img :src="$store.state.raw_material.status_image[item.status]" alt="img" />
+              <img
+                :src="$store.state.raw_material.status_image[item.status]"
+                alt="img"
+              />
             </div>
           </div>
         </div>
@@ -158,24 +214,52 @@
 
 export default {
   components: {},
-  props: ["head1", "head2", "head3", "head4", "head5", "elements", "is_staff", "status", "category"],
-  mounted() {
-  },
+  props: [
+    "head1",
+    "head2",
+    "head3",
+    "head4",
+    "head5",
+    "elements",
+    "is_staff",
+    "status",
+    "category",
+  ],
+  mounted() {},
   data() {
-    return {
-        
-    };
+    return {};
   },
   methods: {
     show_pickup(item) {
-      this.$emit('show_pickup', item)
+      this.$emit("show_pickup", item);
     },
     showRmDetial(item) {
-      this.$emit('show_rm_detail', item)
+      this.$emit("show_rm_detail", item);
+    },
+    min_sup() {
+      return "true";
+    },
+    status_img(status) {
+      if (status == 2) {
+        return require("../../assets/icon/warning.png");
+      } else {
+      }
     },
   },
 };
 </script>
 
 <style scoped>
+.po {
+  padding-right: 0px;
+  font-size: 28px;
+  width: 90.5%;
+  left: 45px;
+  position: absolute;
+}
+.po-item {
+  padding-right: 0px;
+  font-size: 28px;
+  left: 45px;
+}
 </style>

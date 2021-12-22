@@ -41,7 +41,6 @@ class RawMaterial(models.Model):
     status = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     remain = models.IntegerField()
-    unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     minimum = models.IntegerField(default=1)
     maximum = models.IntegerField(default=10)
     in_refrigerator = models.BooleanField(default=False)
@@ -52,12 +51,18 @@ class RawMaterial(models.Model):
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_update_by", null=True, blank=True)
     img = models.ImageField(
-        _("Image"), upload_to=upload_to_raw_material, default=None,)
-
+        _("Image"), upload_to=upload_to_raw_material, default=None,) 
+    unit_l = models.ForeignKey(Unit,on_delete=models.PROTECT, related_name="raw_material_unit_l",)
+    unit_m = models.ForeignKey(Unit,on_delete=models.PROTECT, related_name="raw_material_unit_m",)
+    unit_s = models.ForeignKey(Unit,on_delete=models.PROTECT, related_name="raw_material_unit_s",)
+    l_to_m = models.IntegerField()
+    m_to_s = models.IntegerField()
+    avg_l = models.DecimalField(max_digits=5, decimal_places=2)
+    avg_m = models.DecimalField(max_digits=5, decimal_places=2)
+    avg_s = models.DecimalField(max_digits=5, decimal_places=2)
 
 class PickUpRawMaterial(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)
-
     amount = models.IntegerField()
     create_at = models.DateTimeField(auto_now_add=True)
     create_by = models.ForeignKey(
@@ -99,29 +104,6 @@ class ReceiptRawMaterialDetail(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_create_by")
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_update_by", null=True, blank=True)
-
-
-class MultiUnit(models.Model):
-    raw_material = models.ForeignKey(
-        RawMaterial, on_delete=models.PROTECT, default=None, null=True)
-    unit = models.ForeignKey(Unit, on_delete=models.PROTECT,
-                             default=None, null=True, related_name='multi_unit_unit')
-    to_unit = models.ForeignKey(Unit, on_delete=models.PROTECT,
-                                default=None, null=True, related_name='multi_unit_to_unit')
-    to_amount = models.IntegerField(default=1)
-
-
-class PriceUnit(models.Model):
-    avg_price = models.DecimalField(
-        max_digits=5, decimal_places=2, default=None, null=True)
-    max_price = models.DecimalField(
-        max_digits=5, decimal_places=2, default=None, null=True)
-    min_price = models.DecimalField(
-        max_digits=5, decimal_places=2, default=None, null=True)
-    raw_material = models.ForeignKey(
-        RawMaterial, on_delete=models.PROTECT, default=None, null=True)
-    unit = models.ForeignKey(
-        Unit, on_delete=models.PROTECT, default=None, null=True)
 
 
 class OP(models.Model):

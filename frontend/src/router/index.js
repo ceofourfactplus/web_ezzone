@@ -9,8 +9,7 @@ import CreateRM from "../views/RawMaterials/CreateRM.vue"
 // import Suppliers from "../views/RawMaterials/Suppliers.vue"
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
-// import Minimum from "../views/RawMaterials/Minimum.vue"
-// import ManageRawMaterial from "../views/RawMaterials/ManageRawMaterial.vue"
+import PO from "../views/RawMaterials/PO.vue"
 import EditUser from '../views/User/EditUser.vue'
 import DashBoard from '../views/DashBoard.vue'
 import ForgotPassword from '../views/User/ForgotPassword.vue'
@@ -146,6 +145,11 @@ const routes = [
     component: EditCustomer,
     name:'EditCustomer'
   }, 
+  {
+    path:'/rm/po-notice',
+    name:'PO',
+    component:PO
+  }
 ];
 
 const router = createRouter({

@@ -12,15 +12,20 @@
         </button>
       </div>
     </div>
+
+    <!-- search bar -->
     <SearchBar
       v-else
       style="width: 90%; margin-left: 30px"
       @search="serchByTyping"
     />
+
+    <!-- select category -->
     <div>
       <Tabs :elements="categories" @select_item="queryCategory" />
     </div>
-    <!-- Table -->
+
+    <!-- Table for admin -->
     <Table
       v-if="is_staff"
       :head1="'Item'"
@@ -33,6 +38,8 @@
       @show_pickup="showPickup"
       @show_rm_detail="showRmDetial"
     />
+
+    <!-- for user -->
     <Table
       v-else
       :head1="'Item'"
@@ -41,14 +48,14 @@
       :head4="'Status'"
       :elements="raw_materials"
     />
-    <!-- Card Popup -->
 
-      <div class="card" :class="{ 'card-active': alert }">
-        <div class="icon">
-          <img src="../../assets/icon/btn-pass.png" alt="" />
-        </div>
-        <div class="main-text">Saved successfully</div>
+    <!-- Card Popup -->
+    <div class="card" :class="{ 'card-active': alert }">
+      <div class="icon">
+        <img src="../../assets/icon/btn-pass.png" alt="" />
       </div>
+      <div class="main-text">Saved successfully</div>
+    </div>
 
     <!-- Show Pickup Popup -->
     <div class="blur" v-if="show_pickup_status" @click="sjot = false">
@@ -57,6 +64,7 @@
         @show_status="changeShowPckupStatus"
       />
     </div>
+
     <!-- RM Detail -->
     <div v-if="show_rm_detail_status">
       <RMDetailPopup
@@ -92,7 +100,7 @@ export default {
     this.fetchRMCategories();
     this.fetchRawMaterials();
   },
-  
+
   data() {
     return {
       category: "",
@@ -102,12 +110,8 @@ export default {
       show_rm_detail_status: false,
       is_staff: false,
       add_rm: false,
-      texts: "",
       unit: "",
-      units: ["a", "b", "c"],
-      materials: [],
       alert: false,
-      total_cost: 0,
       raw_material_item: {
         img: "",
         status: 1,
@@ -126,25 +130,21 @@ export default {
       img: require("../../assets/icon/frame.png"),
       raw_materials: [],
       temp_rm: [],
-      blur:false
     };
   },
   methods: {
     fetchRMCategories() {
       api_raw_material.get("/category/").then((response) => {
-        console.log(response.data, "categories");
         this.categories = response.data;
       });
     },
     fetchRawMaterials() {
       api_raw_material.get("raw-material/").then((response) => {
-        console.log(response.data, "data");
         this.raw_materials = response.data;
         this.temp_rm = response.data;
       });
     },
     saveChange() {
-      console.log(this.raw_material_item);
       this.alert = true;
       setTimeout(() => {
         this.alert = false;
@@ -176,13 +176,11 @@ export default {
       console.log(item, "item");
     },
     showPickup(item) {
-      console.log(item, "item");
       this.raw_material_item = item;
       this.show_pickup_status = true;
       this.show_rm_detail_status = false;
     },
     showRmDetial(item) {
-      console.log(item, "item");
       this.show_rm_detail_status = true;
       this.raw_material_item = item;
       api_raw_material.get(`/category/${item.category_id}`).then((response) => {
@@ -190,17 +188,14 @@ export default {
       });
     },
     queryCategory(cate) {
-      console.log(cate);
-      // api_raw_material.get(`query_category/${cate}`).then((response) => {
-      //   this.materials = response.data;
-      // });
+      api_raw_material.get(`query_category/${cate}`).then((response) => {
+        this.raw_materials = response.data;
+      });
     },
     selectCategory(cate) {
       this.category = cate;
-      console.log(this.category);
     },
     serchByTyping(val) {
-      console.log(val, "val");
       var temp = [];
       if (val == "") {
         this.raw_materials = this.temp_rm;
@@ -214,13 +209,10 @@ export default {
       }
     },
     changeShowPickupStatus(pickup_val, item) {
-      console.log(pickup_val, item,  'pickup_val')
-      api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`).then((response) => {
-        console.log(response.data, 'data')
-      })
+      api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`);
     },
     hideShowPickup() {
-      this.show_pickup_status = false
+      this.show_pickup_status = false;
     },
     changeRmDetailStatus() {
       this.show_rm_detail_status = false;
