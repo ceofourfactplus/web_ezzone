@@ -48,8 +48,16 @@
               </select>
             </div>
             <div class="col-12 h-25">
-              <label for="">Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-              <div></div>
+              <label for="" style="display: inline"
+                >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                <button
+                  class="btn-y"
+                  style="width: 100px; display: inilne"
+                  :class="{ 'btn-g': remain > minimum }"
+                >
+                  {{ status_am }}
+                </button></label
+              >
             </div>
             <div class="col-12 h-25">
               <label for="">Fridge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
@@ -62,63 +70,66 @@
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;:</label
-            ><input type="text" style="width: 74%" v-model="remain" />
+            ><input type="number" style="width: 74%" v-model="remain" />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
-            ><input type="text" style="width: 55%" v-model="minimum" />
+            ><input type="number" style="width: 55%" v-model="minimum" />
           </div>
           <div class="col-6 label-input m-15">
-            <label for="units">Unit&nbsp;&nbsp;:</label
-            ><input
-              type="text"
-              style="width: 70%"
-              v-model="unit"
-              id="units"
-              list="unit"
-            />
-            <datalist id="unit">
-              <option v-for="unit in units" :key="unit.id">
+            <label for="unit">Unit&nbsp;:</label>
+            <select
+              name="unit"
+              id="unit"
+              v-model="unit_id"
+              style="height: 50px"
+            >
+              <option value="" selected disabled>unit</option>
+              <option v-for="unit in units" :key="unit.id" :value="unit.id">
                 {{ unit.unit }}
               </option>
-            </datalist>
+            </select>
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Max&nbsp;Qty&nbsp;:</label
-            ><input type="text" style="width: 53%" v-model="maximum" />
+            ><input type="number" style="width: 53%" v-model="maximum" />
           </div>
         </div>
       </div>
       <div class="frame f-2">
         <div class="row" style="width: 99%">
-          <input type="number" class="i-25" style="text-align: right" />
-          <select name="" id="" class="i-25">
-            <option value="" selected>unit</option>
-            <option v-for="unit in units" :key="unit.id" value="">
+          <input type="number" class="i-25 g" value="1" disabled style="text-align: right" />
+          <select v-model="unit_id" class="i-25 ig">
+            <option value="" selected disabled>unit</option>
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
-          <span style="color: #fff; font-size: 30px">&#160;&#160;=</span>
-          <input type="number" class="i-25" style="text-align: right" />
-          <select name="" id="" class="i-25">
-            <option value="" selected>unit</option>
-            <option v-for="unit in units" :key="unit.id" value="">
+
+          <span style="color: #fff; font-size: 30px">=</span>
+
+          <input type="number" class="i-25 g" model="to_amount" style="text-align: right" />
+          <select name="" id="" v-model="to_unit_id" class="i-25 ig">
+            <option value="" selected disabled>unit</option>
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
         </div>
         <div class="row m-15" style="width: 99%">
-          <input type="number" class="i-25" style="text-align: right" />
-          <select name="" id="" class="i-25">
-            <option value="" selected>unit</option>
-            <option v-for="unit in units" :key="unit.id" value="">
+          <input type="number" class="i-25 g" value="1" disabled style="text-align: right" />
+          <select v-model="to_unit_id" class="i-25 ig">
+            <option value="" selected disabled>unit</option>
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
-          <span style="color: #fff; font-size: 30px">&#160;&#160;=</span>
-          <input type="number" class="i-25" style="text-align: right" />
-          <select name="" id="" class="i-25">
-            <option value="" selected>unit</option>
+
+          <span style="color: #fff; font-size: 30px">=</span>
+
+          <input type="number" v-model="next_amount" class="i-25 g" style="text-align: right" />
+          <select name="" id="" v-model="next_unit_id" class="i-25 ig">
+            <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" value="">
               {{ unit.unit }}
             </option>
@@ -140,7 +151,7 @@ export default {
       category_id: null,
       status: true,
       remain: null,
-      unit: null,
+      unit_id: null,
       minimum: null,
       maximum: null,
       img: null,
@@ -149,6 +160,10 @@ export default {
       total_price: 0,
       show_img: null,
       categories: [],
+      to_unit_id: null,
+      next_unit_id: null,
+      to_amount: 1,
+      next_amount: 0,
       units: [],
     };
   },
@@ -169,16 +184,20 @@ export default {
       data.append("maximum", this.maximum);
       data.append("minimum", this.minimum);
       data.append("remain", this.remain);
-      data.append("category", this.category);
+      data.append("category_id", this.category_id);
       data.append("name", this.name);
       data.append("is_refrigerator", this.is_refrigerator);
       data.append("img", this.img, this.img.name);
-      data.append("unit", this.unit);
+      data.append("unit_id", this.unit_id);
+      data.append("to_unit_id", this.to_unit_id);
+      data.append("next_unit_id", this.next_unit_id);
+      data.append("to_amount", this.to_amount);
+      data.append("next_amount", this.next_amount);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
-      api_raw_material.post("raw-material/", data).then((response) => {
-        this.$router.push({name:'CreateRM'});
-        console.log(response)
+
+      api_raw_material.post("raw-material/", data).then(() => {
+        this.$router.push({ name: "CreateRM" });
       });
     },
   },
@@ -188,6 +207,15 @@ export default {
     },
     avg_price() {
       this.total_price = this.remain * this.avg_price;
+    },
+  },
+  computed: {
+    status_am: function () {
+      if (this.remain > this.minimum) {
+        return "success";
+      } else {
+        return "ไม่พอ";
+      }
     },
   },
   mounted() {
@@ -237,18 +265,6 @@ input {
   height: 50px;
   margin-left: 10px;
 }
-select {
-  background-color: #717171;
-  margin-left: 10px;
-  width: 200px;
-  font-size: 30px;
-  color: #fff;
-  border-radius: 10px;
-  font-size: 24px;
-  border: 0px;
-  text-indent: 10px;
-}
-
 option {
   font-size: 20px;
 }
@@ -324,5 +340,32 @@ label {
 
 .m-15 {
   margin-top: 20px;
+}
+.g {
+  border-radius: 10px 0px 0px 10px;
+  width: 165px;
+}
+.ig {
+  border-radius: 0px 10px 10px 0px;
+  left: -3px;
+  margin-left: -5px;
+}
+SELECT {
+  background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")
+    no-repeat;
+  background-position: calc(100% - 0.75rem) center !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  padding-right: 2rem !important;
+  background-color: #717171;
+  margin-left: 10px;
+  width: 200px;
+  font-size: 30px;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 24px;
+  border: 0px;
+  text-indent: 10px;
 }
 </style>

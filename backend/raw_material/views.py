@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import RawMaterial, RawMaterialCategory,Unit
-from .serializers import RawMaterialCategorySerializer,UnitSerializer,RawMaterialSerializer
+from .models import PriceUnit, MultiUnit, RawMaterial, RawMaterialCategory, Unit
+from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer
 # Create your views here.
 
 
@@ -26,23 +26,34 @@ class RawMaterialListAPIView(APIView):
         return Response(serializer.data, status=200)
 
     def post(self, request):
-        if Unit.objects.filter(unit=request.data['unit']).exists():
-            request.data['unit_id'] = Unit.objects.get(unit=request.data['unit']).id
-        else:
-            unit = Unit.objects.create(unit=request.data['unit'])
-            request.data['unit_id'] = unit.id
-
-        if RawMaterialCategory.objects.filter(name=request.data['category']).exists():
-            request.data['category_id'] = RawMaterialCategory.objects.get(name=request.data['category']).id
-        else:
-            category = RawMaterialCategory.objects.create(name=request.data['category'])
-            request.data['category_id'] = category.id
-
         serializer = RawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print('serializer', serializer.data['id'])
+            print('request', request.data)
+            if request.data['to_unit_id'] != None:
+                MultiUnit.objects.create(
+                    raw_material_id=serializer.data['id'],
+                    unit_id=serializer.data['unit_id'],
+                    to_unit_id=request.data['to_unit_id'],
+                    to_amount=request.data['to_amount']
+                )
+                PriceUnit.objects.create(avg_price=0, max_price=0, min_price=0,
+                                         raw_material_id=serializer.data['id'], unit_id=serializer.data['unit_id'])
+                # if request.data['next_unit_id'] != None:
+                #     MultiUnit.objects.create(
+                #         raw_material_id=serializer.data['id'],
+                #         unit_id=request.data['to_unit_id'],
+                #         to_unit_id=request.data['next_unit_id'],
+                #         to_amount=request.data['next_amount']
+                #     )
+                #     PriceUnit.objects.create(avg_price=0, max_price=0, min_price=0,
+                #                              raw_material_id=serializer.data['id'], unit_id=serializer.data['unit_id'])
+                #     return Response(serializer.data, status=201)
+                return Response(serializer.data, status=201)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
 
 class SupplierListAPIView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -141,7 +152,7 @@ class CategoryAPIView(APIView):
                 return Response(serializer.data, status=201)
             return Response(serializer.errors, status=400)
         return Response('this caetgory name is already in use', status=400)
- 
+
 
 class RMCategoryDetailAPIView(APIView):
     def get(self,request, pk):
@@ -159,4 +170,3 @@ class CategoryFilter(APIView):
         serializer = CategorySerializer(category, many=True)
         print(serializer.data)
         return Response(serializer.data)
-

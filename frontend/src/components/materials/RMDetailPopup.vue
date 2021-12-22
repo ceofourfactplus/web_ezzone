@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="top:30%">
     <div class="show-pickup-popup">
       <!-- Nav -->
       <div class="row">
@@ -243,7 +243,7 @@ span.icon-edit {
 .show-pickup-popup {
   width: 616.86px;
   height: 600px;
-  top: 7%;
+  top: 30%;
   left: 7%;
   position: absolute;
   background-color: #252836;

@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <nav-app @back="back">RM Category</nav-app>

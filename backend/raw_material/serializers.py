@@ -12,7 +12,7 @@ class RawMaterialListSeriallizer(serializers.ModelSerializer):
 class RawMaterialCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = RawMaterialCategory
-        fields = ['id', 'name']
+        fields = '__all__'
 
 
 class SupplierSerializer(serializers.ModelSerializer):
