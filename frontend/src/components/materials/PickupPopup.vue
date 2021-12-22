@@ -114,7 +114,7 @@ export default {
     },
     confirm() {
         this.alert = true
-        this.$emit("show_status", this.pickup_amount, this.item)
+        this.$emit("confirm", this.pickup_amount, this.item)
         setTimeout(() => {
           this.alert = false;
         }, 2000);
@@ -174,8 +174,8 @@ span.icon-save {
 .show-pickup-popup {
   width: 616.86px;
   height: 406px;
-  top: 7%;
-  left: 7%;
+  top: 20%;
+  left: 12%;
   position: absolute;
   background-color: #252836;
   border: 2px solid #ea7c69;

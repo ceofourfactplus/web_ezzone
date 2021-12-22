@@ -47,7 +47,7 @@
 
     <!-- Show Pickup Popup -->
     <div v-if="show_pickup_status">
-      <PickupPopup :item="raw_material_item" @show_status="changeShowPickupStatus" />
+      <PickupPopup :item="raw_material_item" @show_status="hideShowPickup" @confirm="changeShowPickupStatus"  />
     </div>
     <!-- RM Detail -->
     <div v-if="show_rm_detail_status">
@@ -204,6 +204,8 @@ export default {
       api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`).then((response) => {
         console.log(response.data, 'data')
       })
+    },
+    hideShowPickup() {
       this.show_pickup_status = false
     },
     changeRmDetailStatus() {
