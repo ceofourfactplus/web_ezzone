@@ -176,8 +176,9 @@ export default {
       data.append("unit", this.unit);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
-      api_raw_material.post("raw-material/", data).then(() => {
+      api_raw_material.post("raw-material/", data).then((response) => {
         this.$router.push({name:'CreateRM'});
+        console.log(response)
       });
     },
   },

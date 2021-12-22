@@ -50,7 +50,7 @@
             <div class="row" style="margin-top: 20px; text-align: left">
               <div class="col-12">
                 <p>
-                  Qty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ item.qty }}
+                  Qty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ item.remain }}
                 </p>
               </div>
             </div>
@@ -96,7 +96,7 @@ export default {
     return {
       show_status: false,
       alert: false,
-      show_img: null,
+      show_img: require(`../../../../backend${this.item.img}`),
       name: "",
       qty: 0,
       pickup_amount: 0,

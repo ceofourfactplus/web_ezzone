@@ -130,10 +130,10 @@ class CategoryAPIView(APIView):
         return Response('this caetgory name is already in use', status=400)
  
 
-class CategoryDetailAPIView(APIView):
+class RMCategoryDetailAPIView(APIView):
     def get(self, pk):
-        category = Category.objects.get(id=pk)
-        serializer = CategorySerializer(category)
+        category = RawMaterialCategory.objects.get(id=pk)
+        serializer = RawMaterialCategorySerializer(category)
         return Response(serializer.data)
 
 

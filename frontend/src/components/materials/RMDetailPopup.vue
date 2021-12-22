@@ -27,7 +27,7 @@
             <div class="row">
               <div class="col-12" style="padding: 0px">
                 <label id="select_img" for="file">
-                  <img :src="show_img" class="image" v-if="show_img != null" />
+                  <img :src="show_img" class="image" v-if="show_img != null"/>
                   <div class="edit-block">Edit</div>
                 </label>
                 <input
@@ -45,7 +45,7 @@
             <div class="row" style="text-align: left">
               <div class="col-12">
                 <p style="margin-bottom: 0px">
-                  Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: sth
+                  Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{item.name}}
                 </p>
               </div>
             </div>
@@ -65,7 +65,7 @@
                 />
                 <datalist id="categories">
                   <option v-for="(cate, idx) in categories" :key="idx">
-                    {{ cate }}
+                    {{ cate.name }}
                   </option>
                 </datalist>
               </div>
@@ -94,20 +94,20 @@
           <div class="col-6" style="width: 100%; margin-top: 15px">
             <!-- Input Datalist -->
             <label style="margin-left: 20px"
-              >Qty&nbsp;&nbsp;&nbsp;&nbsp;: 100&nbsp;</label
+              >Qty&nbsp;&nbsp;&nbsp;&nbsp;: {{item.remain}}&nbsp;</label
             >
-            <input
+            <!-- <input
               list="categories"
               type="text"
-              v-model="category"
+              v-model="item.unit_set.unit"
               class="select-input"
               style="width: 96px; height: 40px"
             />
             <datalist id="categories">
               <option v-for="(cate, idx) in categories" :key="idx">
-                {{ cate }}
+                {{ cate.name }}
               </option>
-            </datalist>
+            </datalist> -->
           </div>
           <!-- Second Row -->
           <div class="col-6" style="width: 100%; margin-top: 15px">
@@ -145,17 +145,17 @@
 <script>
 export default {
   name: "RMDetailPopup",
-  props: [],
+  props: ["item", "categories"],
   data() {
     return {
       show_status: false,
       alert: false,
-      show_img: null,
+      show_img: require(`../../../../backend${this.item.img}`),
       category: "",
-      categories: ["A", "B", "C", "Fresh Food"],
     };
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     onFileChange(e) {
       this.show_img = e.target.files[0];
