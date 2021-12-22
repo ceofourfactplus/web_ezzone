@@ -92,6 +92,7 @@ export default {
     this.fetchRMCategories();
     this.fetchRawMaterials();
   },
+  
   data() {
     return {
       category: "",
