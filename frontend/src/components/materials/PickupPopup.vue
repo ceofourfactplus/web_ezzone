@@ -114,9 +114,9 @@ export default {
     },
     confirm() {
         this.alert = true
+        this.$emit("show_status", this.pickup_amount, this.item)
         setTimeout(() => {
           this.alert = false;
-          this.$emit("show_status")
         }, 2000);
         this.name = ''
         this.qty = 0

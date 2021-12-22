@@ -60,7 +60,7 @@
                 <input
                   list="categories"
                   type="text"
-                  v-model="category"
+                  :value="category_item.name"
                   class="select-input"
                 />
                 <datalist id="categories">
@@ -76,13 +76,16 @@
               style="margin-top: 15px; text-align: left; margin-bottom: 0px"
             >
               <div class="col-12">
-                <p>Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: sth</p>
+                <p>Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+                <img style="margin-right: 0px;" :src="$store.state.raw_material.status_image[item.status]" alt="img" />
+                </p>
               </div>
             </div>
             <!-- Frigde -->
             <div class="row" style="margin-top: 10px; text-align: left">
-              <div class="col-12">
-                <p>Frigde&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: sth</p>
+              <div class="col-12" style="display: inline-block;">
+                Frigde&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+              <div class="switch"><Switch @switch="fridge" /></div>
               </div>
             </div>
           </div>
@@ -96,10 +99,10 @@
             <label style="margin-left: 20px"
               >Qty&nbsp;&nbsp;&nbsp;&nbsp;: {{item.remain}}&nbsp;</label
             >
-            <!-- <input
+            <input
               list="categories"
               type="text"
-              v-model="item.unit_set.unit"
+              :value="item.unit_set.unit"
               class="select-input"
               style="width: 96px; height: 40px"
             />
@@ -107,7 +110,7 @@
               <option v-for="(cate, idx) in categories" :key="idx">
                 {{ cate.name }}
               </option>
-            </datalist> -->
+            </datalist>
           </div>
           <!-- Second Row -->
           <div class="col-6" style="width: 100%; margin-top: 15px">
@@ -143,15 +146,17 @@
 
 
 <script>
+import Switch from "../../components/main_component/Switch.vue";
 export default {
   name: "RMDetailPopup",
-  props: ["item", "categories"],
+  props: ["item", "categories", "category_item"],
+  components: {Switch},
   data() {
     return {
       show_status: false,
       alert: false,
       show_img: require(`../../../../backend${this.item.img}`),
-      category: "",
+      category: this.category_item.name,
     };
   },
   mounted() {
@@ -177,6 +182,11 @@ export default {
 </script>
 
 <style scoped>
+.switch {
+    display: inline-block;
+    top: 10px;
+    left: 10px;
+}
 .mini-content-wrapper {
   width: 590px;
   height: 134px;

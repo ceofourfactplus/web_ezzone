@@ -51,7 +51,7 @@
     </div>
     <!-- RM Detail -->
     <div v-if="show_rm_detail_status">
-      <RMDetailPopup :item="raw_material_item" :categories="categories" @show_status="changeRmDetailStatus" />
+      <RMDetailPopup :item="raw_material_item" :category_item="category" :categories="categories" @show_status="changeRmDetailStatus" />
     </div>
   </div>
 </template>
@@ -172,7 +172,7 @@ export default {
       this.show_rm_detail_status = true;
       this.raw_material_item = item
       api_raw_material.get(`/category/${item.category_id}`).then((response) => {
-        console.log(response.data, 'category');
+        this.category = response.data.name;
       });
     },
     queryCategory(cate) {
@@ -199,7 +199,11 @@ export default {
             this.raw_materials = temp
           }
     },
-    changeShowPickupStatus() {
+    changeShowPickupStatus(pickup_val, item) {
+      console.log(pickup_val, item,  'pickup_val')
+      api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`).then((response) => {
+        console.log(response.data, 'data')
+      })
       this.show_pickup_status = false
     },
     changeRmDetailStatus() {

@@ -7,10 +7,23 @@ from .serializers import RawMaterialCategorySerializer,UnitSerializer,RawMateria
 
 
 class RawMaterialListAPIView(APIView):
+    def get_object(self, pk):
+        try:
+            return RawMaterial.objects.get(pk=pk)
+        except RawMaterial.DoesNotExist:
+            raise 404
+    
     def get(self, request):
         RawMaterials = RawMaterial.objects.all()
         serializer = RawMaterialSerializer(RawMaterials, many=True)
         return Response(serializer.data)
+    
+    def put(self, request, pk, pa):
+        raw_material = self.get_object(pk)
+        raw_material.remain -= pa
+        raw_material.save()
+        serializer = RawMaterialSerializer(raw_material)
+        return Response(serializer.data, status=200)
 
     def post(self, request):
         if Unit.objects.filter(unit=request.data['unit']).exists():
@@ -131,7 +144,7 @@ class CategoryAPIView(APIView):
  
 
 class RMCategoryDetailAPIView(APIView):
-    def get(self, pk):
+    def get(self,request, pk):
         category = RawMaterialCategory.objects.get(id=pk)
         serializer = RawMaterialCategorySerializer(category)
         return Response(serializer.data)
