@@ -214,13 +214,13 @@ export default {
       }
     },
     changeShowPickupStatus(pickup_val, item) {
-      console.log(pickup_val, item, "pickup_val");
-      api_raw_material
-        .put(`raw-material/${item.id}/${pickup_val}/`)
-        .then((response) => {
-          console.log(response.data, "data");
-        });
-      this.show_pickup_status = false;
+      console.log(pickup_val, item,  'pickup_val')
+      api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`).then((response) => {
+        console.log(response.data, 'data')
+      })
+    },
+    hideShowPickup() {
+      this.show_pickup_status = false
     },
     changeRmDetailStatus() {
       this.show_rm_detail_status = false;
