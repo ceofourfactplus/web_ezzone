@@ -4,7 +4,7 @@
     <nav-app @back="back">Raw Material</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
-        <SearchBar @search="serchByTyping" />
+        <SearchBar @search="serchByTyping" style="width:98%" />
       </div>
       <div style="padding-left: 0px">
         <button class="btn-ghost" @click="$router.push({ name: 'CreateRM' })">
