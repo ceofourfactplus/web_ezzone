@@ -27,7 +27,7 @@
             <div class="row">
               <div class="col-12" style="padding: 0px">
                 <label id="select_img" for="file">
-                  <img :src="show_img" class="image" v-if="show_img != null" />
+                  <img :src="show_img" class="image" v-if="show_img != null"/>
                   <div class="edit-block">Edit</div>
                 </label>
                 <input
@@ -45,7 +45,7 @@
             <div class="row" style="text-align: left">
               <div class="col-12">
                 <p style="margin-bottom: 0px">
-                  Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: sth
+                  Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{item.name}}
                 </p>
               </div>
             </div>
@@ -60,12 +60,12 @@
                 <input
                   list="categories"
                   type="text"
-                  v-model="category"
+                  :value="category_item.name"
                   class="select-input"
                 />
                 <datalist id="categories">
                   <option v-for="(cate, idx) in categories" :key="idx">
-                    {{ cate }}
+                    {{ cate.name }}
                   </option>
                 </datalist>
               </div>
@@ -76,13 +76,16 @@
               style="margin-top: 15px; text-align: left; margin-bottom: 0px"
             >
               <div class="col-12">
-                <p>Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: sth</p>
+                <p>Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+                <img style="margin-right: 0px;" :src="$store.state.raw_material.status_image[item.status]" alt="img" />
+                </p>
               </div>
             </div>
             <!-- Frigde -->
             <div class="row" style="margin-top: 10px; text-align: left">
-              <div class="col-12">
-                <p>Frigde&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: sth</p>
+              <div class="col-12" style="display: inline-block;">
+                Frigde&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+              <div class="switch"><Switch @switch="fridge" /></div>
               </div>
             </div>
           </div>
@@ -94,18 +97,18 @@
           <div class="col-6" style="width: 100%; margin-top: 15px">
             <!-- Input Datalist -->
             <label style="margin-left: 20px"
-              >Qty&nbsp;&nbsp;&nbsp;&nbsp;: 100&nbsp;</label
+              >Qty&nbsp;&nbsp;&nbsp;&nbsp;: {{item.remain}}&nbsp;</label
             >
             <input
               list="categories"
               type="text"
-              v-model="category"
+              :value="item.unit_set.unit"
               class="select-input"
               style="width: 96px; height: 40px"
             />
             <datalist id="categories">
               <option v-for="(cate, idx) in categories" :key="idx">
-                {{ cate }}
+                {{ cate.name }}
               </option>
             </datalist>
           </div>
@@ -143,19 +146,21 @@
 
 
 <script>
+import Switch from "../../components/main_component/Switch.vue";
 export default {
   name: "RMDetailPopup",
-  props: [],
+  props: ["item", "categories", "category_item"],
+  components: {Switch},
   data() {
     return {
       show_status: false,
       alert: false,
-      show_img: null,
-      category: "",
-      categories: ["A", "B", "C", "Fresh Food"],
+      show_img: require(`../../../../backend${this.item.img}`),
+      category: this.category_item.name,
     };
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     onFileChange(e) {
       this.show_img = e.target.files[0];
@@ -177,6 +182,11 @@ export default {
 </script>
 
 <style scoped>
+.switch {
+    display: inline-block;
+    top: 10px;
+    left: 10px;
+}
 .mini-content-wrapper {
   width: 590px;
   height: 134px;

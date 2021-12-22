@@ -3,8 +3,9 @@ from . import views
 
 urlpatterns = [
     path('raw-material/', views.RawMaterialListAPIView().as_view()),
+    path('raw-material/<int:pk>/<int:pa>/', views.RawMaterialListAPIView().as_view()),
     path('category/', views.CategoryAPIView.as_view()),
-    
+    path('category/<int:pk>', views.RMCategoryDetailAPIView.as_view()),
 #     path('supplier/', views.SupplierListAPIView.as_view()),
     path('unit', views.UnitListAPIView.as_view()),
 #     path('stock/', views.StockListAPIView.as_view()),
@@ -12,7 +13,7 @@ urlpatterns = [
 #     path('payer/', views.PayerListAPIView.as_view()),
 #     path('invoice/', views.InvoiceListAPIView.as_view()),
 #     path('invoice-detail/', views.InvoiceDetailListAPIView.as_view()),
-#     path('category/<int:pk>', views.CategoryDetailAPIView.as_view()),
+
 #     path('supplier/<int:pk>/', views.SupplierDetailAPIView.as_view()),
 #     path('unit/<int:pk>/', views.UnitDetailAPIView.as_view()),
 #     path('stock/<int:pk>/', views.StockDetailAPIView.as_view()),

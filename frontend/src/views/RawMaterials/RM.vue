@@ -51,13 +51,12 @@
     </div>
     <!-- RM Detail -->
     <div v-if="show_rm_detail_status">
-      <RMDetailPopup @show_status="changeRmDetailStatus" />
+      <RMDetailPopup :item="raw_material_item" :category_item="category" :categories="categories" @show_status="changeRmDetailStatus" />
     </div>
   </div>
 </template>
 
 <script>
-// import RawMaterial from '../../components/materials/RawMaterial.vue'
 import { api_raw_material } from "../../api/api_raw_material";
 import Tabs from "../../components/materials/Tabs.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
@@ -79,6 +78,7 @@ export default {
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     this.fetchRMCategories();
+    this.fetchRawMaterials()
   },
   data() {
     return {
@@ -111,44 +111,24 @@ export default {
       },
       categories: [],
       img: require("../../assets/icon/frame.png"),
-      raw_materials: [
-        {
-          name: "นมข้นหวานหวานสุดๆๆๆๆๆ",
-          qty: 2,
-          unit: "pack",
-          status: "1",
-        },
-        {
-          name: "นมข้นจืด",
-          qty: 2,
-          unit: "pack",
-          status: "3",
-        },
-        {
-          name: "โซดา",
-          qty: 20,
-          unit: "bag",
-          status: "2",
-        },
-        {
-          name: "สไปรท์",
-          qty: 10,
-          unit: "bag",
-          status: "1",
-        },
-      ],
+      raw_materials: [],
+      temp_rm: [],
     };
   },
   methods: {
     fetchRMCategories() {
       api_raw_material.get("/category/").then((response) => {
-        console.log(response.data);
+        console.log(response.data, 'categories');
         this.categories = response.data;
       });
     },
-    // fetchRawMaterials() {
-
-    // },
+    fetchRawMaterials() {
+      api_raw_material.get('raw-material/').then((response) => {
+        console.log(response.data, 'data')
+        this.raw_materials = response.data;
+        this.temp_rm = response.data;
+      })
+    },
     saveChange() {
       console.log(this.raw_material_item);
       this.alert = true;
@@ -190,6 +170,10 @@ export default {
     showRmDetial(item) {
       console.log(item, "item");
       this.show_rm_detail_status = true;
+      this.raw_material_item = item
+      api_raw_material.get(`/category/${item.category_id}`).then((response) => {
+        this.category = response.data.name;
+      });
     },
     queryCategory(cate) {
       console.log(cate);
@@ -202,14 +186,24 @@ export default {
       console.log(this.category);
     },
     serchByTyping(val) {
-      this.texts = val;
-      console.log(val, "views");
-      // api_raw_material.get(`serch_by_typing/${val}`).then((response) => {
-      //   this.materials = response.data
-      //   console.log(response.data);
-      // });
+      console.log(val, 'val')
+          var temp = []
+          if (val == '') {
+              this.raw_materials = this.temp_rm
+          } else {
+              this.temp_rm.forEach(element => {
+                if(element.name.indexOf(val) + 1 != 0) {
+                    temp.push(element)
+                }
+            });
+            this.raw_materials = temp
+          }
     },
-    changeShowPickupStatus() {
+    changeShowPickupStatus(pickup_val, item) {
+      console.log(pickup_val, item,  'pickup_val')
+      api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`).then((response) => {
+        console.log(response.data, 'data')
+      })
       this.show_pickup_status = false
     },
     changeRmDetailStatus() {

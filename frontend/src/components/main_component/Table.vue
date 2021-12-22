@@ -78,7 +78,6 @@
             class="row table-item"
             v-for="(item, idx) in elements"
             :key="idx"
-            @click="showRmDetial(item)"
             style="
               padding-right: 0px;
               background-color: #303344;
@@ -87,16 +86,16 @@
               margin-top: 5px;
             "
           >
-            <div class="col-6" style="text-align: left; width: 100%; font-size: 24px;">
+            <div class="col-6" @click="showRmDetial(item)" style="text-align: left; width: 100%; font-size: 24px;">
               {{ item.name }}
             </div>
-            <div class="col-1" style="margin-right: 40px;">{{ item.qty }}</div>
-            <div class="col-1" style="margin-right: 37px;">{{ item.unit }}</div>
-            <div class="col-1">
+            <div class="col-1" @click="showRmDetial(item)" style="margin-right: 40px;">{{ item.remain }}</div>
+            <div class="col-1" @click="showRmDetial(item)" style="margin-right: 37px;">{{ item.unit_set.unit }}</div>
+            <div class="col-1" @click="showRmDetial(item)">
               <img style="margin-right: 0px;" :src="$store.state.raw_material.status_image[item.status]" alt="img" />
             </div>
-            <div class="col-1">
-              <img @click="show_pickup(item)" style="margin-right: -150px;" src="../../assets/icon/pickup.png" alt="img" />
+            <div class="col-1" @click="show_pickup(item)">
+              <img style="margin-right: -150px;" src="../../assets/icon/pickup.png" alt="img" />
             </div>
           </div>
         </div>
