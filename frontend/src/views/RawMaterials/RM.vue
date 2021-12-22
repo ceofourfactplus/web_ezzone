@@ -4,7 +4,7 @@
     <nav-app @back="back">Raw Material</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
-        <SearchBar @search="serchByTyping" style="width:98%" />
+        <SearchBar @search="serchByTyping" style="width: 98%" />
       </div>
       <div style="padding-left: 0px">
         <button class="btn-ghost" @click="$router.push({ name: 'CreateRM' })">
@@ -12,7 +12,11 @@
         </button>
       </div>
     </div>
-    <SearchBar v-else style="width: 90%; margin-left: 30px;" @search="serchByTyping" />
+    <SearchBar
+      v-else
+      style="width: 90%; margin-left: 30px"
+      @search="serchByTyping"
+    />
     <div>
       <Tabs :elements="categories" @select_item="queryCategory" />
     </div>
@@ -38,20 +42,29 @@
       :elements="raw_materials"
     />
     <!-- Card Popup -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="" />
+
+      <div class="card" :class="{ 'card-active': alert }">
+        <div class="icon">
+          <img src="../../assets/icon/btn-pass.png" alt="" />
+        </div>
+        <div class="main-text">Saved successfully</div>
       </div>
-      <div class="main-text">Saved successfully</div>
-    </div>
 
     <!-- Show Pickup Popup -->
-    <div v-if="show_pickup_status">
-      <PickupPopup :item="raw_material_item" @show_status="changeShowPickupStatus" />
+    <div class="blur" v-if="show_pickup_status" @click="sjot = false">
+      <PickupPopup
+        :item="raw_material_item"
+        @show_status="changeShowPckupStatus"
+      />
     </div>
     <!-- RM Detail -->
     <div v-if="show_rm_detail_status">
-      <RMDetailPopup :item="raw_material_item" :category_item="category" :categories="categories" @show_status="changeRmDetailStatus" />
+      <RMDetailPopup
+        :item="raw_material_item"
+        :category_item="category"
+        :categories="categories"
+        @show_status="changeRmDetailStatus"
+      />
     </div>
   </div>
 </template>
@@ -65,7 +78,6 @@ import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
 import RMDetailPopup from "../../components/materials/RMDetailPopup.vue";
 
-
 export default {
   components: {
     Tabs,
@@ -73,12 +85,12 @@ export default {
     NavApp,
     Table,
     PickupPopup,
-    RMDetailPopup
+    RMDetailPopup,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     this.fetchRMCategories();
-    this.fetchRawMaterials()
+    this.fetchRawMaterials();
   },
   data() {
     return {
@@ -113,21 +125,22 @@ export default {
       img: require("../../assets/icon/frame.png"),
       raw_materials: [],
       temp_rm: [],
+      blur:false
     };
   },
   methods: {
     fetchRMCategories() {
       api_raw_material.get("/category/").then((response) => {
-        console.log(response.data, 'categories');
+        console.log(response.data, "categories");
         this.categories = response.data;
       });
     },
     fetchRawMaterials() {
-      api_raw_material.get('raw-material/').then((response) => {
-        console.log(response.data, 'data')
+      api_raw_material.get("raw-material/").then((response) => {
+        console.log(response.data, "data");
         this.raw_materials = response.data;
         this.temp_rm = response.data;
-      })
+      });
     },
     saveChange() {
       console.log(this.raw_material_item);
@@ -163,14 +176,14 @@ export default {
     },
     showPickup(item) {
       console.log(item, "item");
-      this.raw_material_item = item
+      this.raw_material_item = item;
       this.show_pickup_status = true;
       this.show_rm_detail_status = false;
     },
     showRmDetial(item) {
       console.log(item, "item");
       this.show_rm_detail_status = true;
-      this.raw_material_item = item
+      this.raw_material_item = item;
       api_raw_material.get(`/category/${item.category_id}`).then((response) => {
         this.category = response.data.name;
       });
@@ -186,28 +199,30 @@ export default {
       console.log(this.category);
     },
     serchByTyping(val) {
-      console.log(val, 'val')
-          var temp = []
-          if (val == '') {
-              this.raw_materials = this.temp_rm
-          } else {
-              this.temp_rm.forEach(element => {
-                if(element.name.indexOf(val) + 1 != 0) {
-                    temp.push(element)
-                }
-            });
-            this.raw_materials = temp
+      console.log(val, "val");
+      var temp = [];
+      if (val == "") {
+        this.raw_materials = this.temp_rm;
+      } else {
+        this.temp_rm.forEach((element) => {
+          if (element.name.indexOf(val) + 1 != 0) {
+            temp.push(element);
           }
+        });
+        this.raw_materials = temp;
+      }
     },
     changeShowPickupStatus(pickup_val, item) {
-      console.log(pickup_val, item,  'pickup_val')
-      api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`).then((response) => {
-        console.log(response.data, 'data')
-      })
-      this.show_pickup_status = false
+      console.log(pickup_val, item, "pickup_val");
+      api_raw_material
+        .put(`raw-material/${item.id}/${pickup_val}/`)
+        .then((response) => {
+          console.log(response.data, "data");
+        });
+      this.show_pickup_status = false;
     },
     changeRmDetailStatus() {
-      this.show_rm_detail_status = false
+      this.show_rm_detail_status = false;
     },
   },
 };
