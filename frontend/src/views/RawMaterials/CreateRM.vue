@@ -53,7 +53,7 @@
                 <button
                   class="btn-y"
                   style="width: 100px; display: inilne"
-                  :class="{ 'btn-g': remain > minimum }"
+                  :class="{ 'btn-g': remain > minimum , 'btn-r':remain == 0 }"
                 >
                   {{ status_am }}
                 </button></label
@@ -66,6 +66,7 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
       <div class="frame f-2" style="height: 220px">
         <!-- Head Of Section 2 -->
         <div class="row">
@@ -74,6 +75,10 @@
           </div>
         </div>
         <!-- Content -->
+=======
+
+      <div class="frame f-2">
+>>>>>>> 20efbad103adf215e93063991beefd95e0f41825
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;&nbsp;&nbsp;:</label
@@ -93,6 +98,7 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
       <div class="frame f-2" style="height: 286px">
         <!-- Head Of Section 3 -->
         <div class="row">
@@ -101,6 +107,13 @@
           </div>
         </div>
         <!-- First Row -->
+=======
+
+      <div class="frame f-3">
+        <div class="row">
+          <h2>Exchange&#160;Unit</h2>
+        </div>
+>>>>>>> 20efbad103adf215e93063991beefd95e0f41825
         <div class="row" style="width: 99%">
           <input type="number" class="i-25 g" value="1" disabled style="text-align: right; border-radius: 10px;" />
           <select v-model="unit_id" class="i-25 ig" style="border-radius: 10px;">
@@ -174,7 +187,7 @@ export default {
   data() {
     return {
       category_id: null,
-      status: true,
+      status:1,
       remain: null,
       unit_id: null,
       minimum: null,
@@ -186,8 +199,8 @@ export default {
       show_img: null,
       avg: null,
       categories: [],
-      to_unit_id: null,
-      next_unit_id: null,
+      to_unit_id: '',
+      next_unit_id: '',
       to_amount: 1,
       next_amount: 0,
       units: [],
@@ -219,29 +232,30 @@ export default {
       data.append("next_unit_id", this.next_unit_id);
       data.append("to_amount", this.to_amount);
       data.append("next_amount", this.next_amount);
+      data.append("status", this.status);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
-
+      if(this.remain < this.minimum){
+        this.status = 2
+      }
       api_raw_material.post("raw-material/", data).then(() => {
-        this.$router.push({ name: "CreateRM" });
+        this.$router.go(-1);
       });
-    },
-  },
-  watch: {
-    remain() {
-      this.total_price = this.remain * this.avg_price;
-    },
-    avg_price() {
-      this.total_price = this.remain * this.avg_price;
     },
   },
   computed: {
     status_am: function () {
       if (this.remain > this.minimum) {
+        this.status = 1
         return "success";
-      } else {
+      }else if(this.remain != 0) {
+        this.status = 2
         return "ไม่พอ";
+      }else{
+        this.status=3
+        return 'out'
       }
+
     },
   },
   mounted() {
@@ -260,6 +274,12 @@ export default {
   width: 140px;
   border-radius: 10px;
 }
+
+h2{
+  color:#fff;
+  margin-bottom:30px
+}
+
 .frame {
   margin-top: 16px;
   margin-bottom: 0px;

@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     select_item(item) {
-      this.$emit("select_item", item);
+      this.$emit("select_item", item.id);
     },
   },
 };

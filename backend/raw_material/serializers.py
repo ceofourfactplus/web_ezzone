@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail
+from rest_framework.utils import field_mapping
+from .models import  RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail
 from user.serializers import UserSerializer
 
 
@@ -25,9 +26,6 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = '__all__'
-
-
-
 
 class RawMaterialSerializer(serializers.ModelSerializer):
     unit_id = serializers.IntegerField(required=True)

@@ -25,6 +25,7 @@ class User(AbstractUser):
   birth_date = models.DateField(blank=True,null=True)
   is_working = models.IntegerField(default=WORKING,choices=STATUS_WORK)
   gender = models.CharField(max_length=30)
+  address = models.TextField()
   id_card = models.CharField(blank=True,null=True,max_length=13)
   img = models.ImageField(_("Image"), upload_to=upload_to_user,default='',null=True,blank=True)
 
