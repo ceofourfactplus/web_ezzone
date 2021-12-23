@@ -66,30 +66,31 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
+      <div class="frame f-2" style="height: 220px">
+        <!-- Head Of Section 2 -->
+        <div class="row">
+          <div class="col-12">
+            <div style="width: 100%; font-size: 30px; color: white; text-align: left; margin-top: -10px; margin-bottom: 20px">Smallest Unit Detail</div>
+          </div>
+        </div>
+        <!-- Content -->
+=======
 
       <div class="frame f-2">
+>>>>>>> 20efbad103adf215e93063991beefd95e0f41825
         <div class="row">
           <div class="col-6 label-input">
-            <label for="">Qty&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 74%" v-model="remain" />
+            <label for="">Qty&nbsp;&nbsp;&nbsp;&nbsp;:</label
+            ><input type="number" style="width: 220px;" v-model="remain" />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
             ><input type="number" style="width: 55%" v-model="minimum" />
           </div>
           <div class="col-6 label-input m-15">
-            <label for="unit">Unit&nbsp;:</label>
-            <select
-              name="unit"
-              id="unit"
-              v-model="unit_id"
-              style="height: 50px"
-            >
-              <option value="" selected disabled>unit</option>
-              <option v-for="unit in units" :key="unit.id" :value="unit.id">
-                {{ unit.unit }}
-              </option>
-            </select>
+            <label for="">Avg P&nbsp;:</label>
+            ><input type="number" style="width: 55%" v-model="avg" />
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Max&nbsp;Qty&nbsp;:</label
@@ -97,14 +98,25 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
+      <div class="frame f-2" style="height: 286px">
+        <!-- Head Of Section 3 -->
+        <div class="row">
+          <div class="col-12">
+            <div style="width: 100%; font-size: 30px; color: white; text-align: left; margin-top: -10px; margin-bottom: 20px">Exchange Unit</div>
+          </div>
+        </div>
+        <!-- First Row -->
+=======
 
       <div class="frame f-3">
         <div class="row">
           <h2>Exchange&#160;Unit</h2>
         </div>
+>>>>>>> 20efbad103adf215e93063991beefd95e0f41825
         <div class="row" style="width: 99%">
-          <input type="number" class="i-25 g" value="1" disabled style="text-align: right" />
-          <select v-model="unit_id" class="i-25 ig">
+          <input type="number" class="i-25 g" value="1" disabled style="text-align: right; border-radius: 10px;" />
+          <select v-model="unit_id" class="i-25 ig" style="border-radius: 10px;">
             <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
@@ -113,17 +125,18 @@
 
           <span style="color: #fff; font-size: 30px">=</span>
 
-          <input type="number" class="i-25 g" model="to_amount" style="text-align: right" />
-          <select name="" id="" v-model="to_unit_id" class="i-25 ig">
+          <input type="number" class="i-25 g" model="to_amount" style="text-align: right; border-radius: 10px;" />
+          <select name="" id="" v-model="to_unit_id" class="i-25 ig" style=" border-radius: 10px;">
             <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
         </div>
+        <!-- Second Row -->
         <div class="row m-15" style="width: 99%">
-          <input type="number" class="i-25 g" value="1" disabled style="text-align: right" />
-          <select v-model="to_unit_id" class="i-25 ig">
+          <input type="number" class="i-25 g" value="1" disabled style="text-align: right; border-radius: 10px;" />
+          <select v-model="to_unit_id" class="i-25 ig" style=" border-radius: 10px;">
             <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
@@ -132,8 +145,28 @@
 
           <span style="color: #fff; font-size: 30px">=</span>
 
-          <input type="number" v-model="next_amount" class="i-25 g" style="text-align: right" />
-          <select name="" id="" v-model="next_unit_id" class="i-25 ig">
+          <input type="number" v-model="next_amount" class="i-25 g" style="text-align: right; border-radius: 10px;" />
+          <select name="" id="" v-model="next_unit_id" class="i-25 ig" style=" border-radius: 10px;">
+            <option value="" selected disabled>unit</option>
+            <option v-for="unit in units" :key="unit.id" value="">
+              {{ unit.unit }}
+            </option>
+          </select>
+        </div>
+        <!-- Third Row -->
+        <div class="row m-15" style="width: 99%">
+          <input type="number" class="i-25 g" value="1" disabled style="text-align: right; border-radius: 10px;" />
+          <select v-model="to_unit_id" class="i-25 ig" style=" border-radius: 10px;">
+            <option value="" selected disabled>unit</option>
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
+              {{ unit.unit }}
+            </option>
+          </select>
+
+          <span style="color: #fff; font-size: 30px">=</span>
+
+          <input type="number" v-model="next_amount" class="i-25 g" style="text-align: right; border-radius: 10px;" />
+          <select name="" id="" v-model="next_unit_id" class="i-25 ig" style=" border-radius: 10px;">
             <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" value="">
               {{ unit.unit }}
@@ -164,6 +197,7 @@ export default {
       name: "",
       total_price: 0,
       show_img: null,
+      avg: null,
       categories: [],
       to_unit_id: '',
       next_unit_id: '',
@@ -238,6 +272,7 @@ export default {
 <style scoped>
 .i-25 {
   width: 140px;
+  border-radius: 10px;
 }
 
 h2{
@@ -246,8 +281,8 @@ h2{
 }
 
 .frame {
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin-top: 16px;
+  margin-bottom: 0px;
   background-color: #303344;
   border-radius: 20px;
   padding-top: 20px;
@@ -311,7 +346,7 @@ label {
   position: absolute;
   width: 74px;
   height: 28.23px;
-  left: 80px;
+  left: 70px;
   top: 320px;
 
   background-color: #c4c4c4;
@@ -355,7 +390,8 @@ label {
 }
 .g {
   border-radius: 10px 0px 0px 10px;
-  width: 165px;
+  margin-right: 10px;
+  width: 145px;
 }
 .ig {
   border-radius: 0px 10px 10px 0px;

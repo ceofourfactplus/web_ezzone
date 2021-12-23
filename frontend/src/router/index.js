@@ -26,6 +26,14 @@ import EditSupplier from '../views/RawMaterials/EditSup.vue'
 
 const routes = [
   {
+    path: "/rm/edit-rm",
+    name: "EditRM",
+    component: EditRM,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
     path: "/raw-material-category",
     name: "RawMaterialCategory",
     component: RawMaterialCategory,

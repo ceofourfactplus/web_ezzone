@@ -36,7 +36,7 @@
       :elements="raw_materials"
       :category="'raw_material'"
       @show_pickup="showPickup"
-      @show_rm_detail="showRmDetial"
+      @show_rm_detail="editRM"
     />
 
     <!-- for user -->
@@ -61,19 +61,12 @@
     <div class="blur" v-if="show_pickup_status" @click="sjot = false">
       <PickupPopup
         :item="raw_material_item"
-        @show_status="changeShowPckupStatus"
+        @show_status="hideShowPickup"
+        @confirm="pickup"
       />
     </div>
 
     <!-- RM Detail -->
-    <div v-if="show_rm_detail_status">
-      <RMDetailPopup
-        :item="raw_material_item"
-        :category_item="category"
-        :categories="categories"
-        @show_status="changeRmDetailStatus"
-      />
-    </div>
   </div>
 </template>
 
@@ -84,7 +77,6 @@ import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
-import RMDetailPopup from "../../components/materials/RMDetailPopup.vue";
 
 export default {
   components: {
@@ -93,7 +85,6 @@ export default {
     NavApp,
     Table,
     PickupPopup,
-    RMDetailPopup,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
@@ -107,7 +98,6 @@ export default {
       image: "",
       show_img: null,
       show_pickup_status: false,
-      show_rm_detail_status: false,
       is_staff: false,
       add_rm: false,
       unit: "",
@@ -208,15 +198,25 @@ export default {
         this.raw_materials = temp;
       }
     },
-    changeShowPickupStatus(pickup_val, item) {
-      api_raw_material.put(`raw-material/${item.id}/${pickup_val}/`);
+    pickup(pickup_val, item) {
+      console.log(pickup_val, item,  'pickup_val')
+      var data = {
+        raw_material_id: item.id,
+        amount: pickup_val,
+        create_by_id: this.$store.state.auth.userInfo.id
+      }
+      api_raw_material.put(`raw-material/`, data).then((response) => {
+        console.log(response.data.id, 'data')
+        this.fetchRawMaterials()
+      })
+      this.show_pickup_status = false
     },
     hideShowPickup() {
       this.show_pickup_status = false;
     },
-    changeRmDetailStatus() {
-      this.show_rm_detail_status = false;
-    },
+    editRM(item) {
+      this.$router.push({ name: 'EditRM', params: {id: item.id} })
+    }
   },
 };
 </script>
