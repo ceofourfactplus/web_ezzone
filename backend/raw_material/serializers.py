@@ -28,7 +28,6 @@ class UnitSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RawMaterialSerializer(serializers.ModelSerializer):
-    unit_id = serializers.IntegerField(required=True)
     category_id = serializers.IntegerField(required=True)
     create_by_id = serializers.IntegerField(required=True)
     update_by_id = serializers.IntegerField()
@@ -52,7 +51,14 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'create_by_id',
             'update_by_id',
             'category_id',
-            'unit_id',
+            'unit_l_id',
+            'unit_m_id',
+            'unit_s_id',
+            'l_to_m',
+            'm_to_s',
+            'avg_l',
+            'avg_m',
+            'avg_s',
             'create_at',
             'update_at',
             'category_set',

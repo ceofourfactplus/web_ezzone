@@ -127,7 +127,7 @@
               @click="showRmDetial(item)"
               style="margin-right: 37px"
             >
-              {{ item.unit_set.unit }}
+              {{ item.status }}
             </div>
             <div class="col-1" @click="showRmDetial(item)">
               <img

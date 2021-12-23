@@ -10,7 +10,7 @@ export default {
       is_chef: true,
       is_purchesing: true,
       is_receptionist: false,
-      id: 2,
+      id: 1,
     },
     error: {
       status: false,

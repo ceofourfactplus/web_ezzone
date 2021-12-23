@@ -53,7 +53,7 @@
                 <button
                   class="btn-y"
                   style="width: 100px; display: inilne"
-                  :class="{ 'btn-g': remain > minimum , 'btn-r':remain == 0 }"
+                  :class="{ 'btn-g': remain > minimum }"
                 >
                   {{ status_am }}
                 </button></label
@@ -66,23 +66,29 @@
           </div>
         </div>
       </div>
-<<<<<<< HEAD
       <div class="frame f-2" style="height: 220px">
         <!-- Head Of Section 2 -->
         <div class="row">
           <div class="col-12">
-            <div style="width: 100%; font-size: 30px; color: white; text-align: left; margin-top: -10px; margin-bottom: 20px">Smallest Unit Detail</div>
+            <div
+              style="
+                width: 100%;
+                font-size: 30px;
+                color: white;
+                text-align: left;
+                margin-top: -10px;
+                margin-bottom: 20px;
+              "
+            >
+              Smallest Unit Detail
+            </div>
           </div>
         </div>
         <!-- Content -->
-=======
-
-      <div class="frame f-2">
->>>>>>> 20efbad103adf215e93063991beefd95e0f41825
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 220px;" v-model="remain" />
+            ><input type="number" style="width: 220px" v-model="remain" />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
@@ -90,7 +96,7 @@
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Avg P&nbsp;:</label>
-            ><input type="number" style="width: 55%" v-model="avg" />
+            ><input type="number" style="width: 55%" v-model="avg_s" />
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Max&nbsp;Qty&nbsp;:</label
@@ -98,26 +104,35 @@
           </div>
         </div>
       </div>
-<<<<<<< HEAD
       <div class="frame f-2" style="height: 286px">
         <!-- Head Of Section 3 -->
         <div class="row">
           <div class="col-12">
-            <div style="width: 100%; font-size: 30px; color: white; text-align: left; margin-top: -10px; margin-bottom: 20px">Exchange Unit</div>
+            <div
+              style="
+                width: 100%;
+                font-size: 30px;
+                color: white;
+                text-align: left;
+                margin-top: -10px;
+                margin-bottom: 20px;
+              "
+            >
+              Exchange Unit
+            </div>
           </div>
         </div>
         <!-- First Row -->
-=======
-
-      <div class="frame f-3">
-        <div class="row">
-          <h2>Exchange&#160;Unit</h2>
-        </div>
->>>>>>> 20efbad103adf215e93063991beefd95e0f41825
         <div class="row" style="width: 99%">
-          <input type="number" class="i-25 g" value="1" disabled style="text-align: right; border-radius: 10px;" />
-          <select v-model="unit_id" class="i-25 ig" style="border-radius: 10px;">
-            <option value="" selected disabled>unit</option>
+          <input
+            type="number"
+            class="i-25 g"
+            v-model="l_to_m"
+            placeholder="Smallest Unit"
+            style="text-align: right; border-radius: 10px"
+          />
+          <select v-model="unit_s_id" class="i-25 ig" style="border-radius: 10px">
+            <option value="" selected disabled style="color: white;">unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -125,9 +140,22 @@
 
           <span style="color: #fff; font-size: 30px">=</span>
 
-          <input type="number" class="i-25 g" model="to_amount" style="text-align: right; border-radius: 10px;" />
-          <select name="" id="" v-model="to_unit_id" class="i-25 ig" style=" border-radius: 10px;">
-            <option value="" selected disabled>unit</option>
+          <input
+            type="number"
+            class="i-25 g"
+            model="to_amount"
+            value="1"
+            readonly
+            style="text-align: right; border-radius: 10px"
+          />
+          <select
+            name=""
+            id=""
+            v-model="unit_l_id"
+            class="i-25 ig"
+            style="border-radius: 10px"
+          >
+            <option value="" selected disabled style="color: white;">unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -135,9 +163,19 @@
         </div>
         <!-- Second Row -->
         <div class="row m-15" style="width: 99%">
-          <input type="number" class="i-25 g" value="1" disabled style="text-align: right; border-radius: 10px;" />
-          <select v-model="to_unit_id" class="i-25 ig" style=" border-radius: 10px;">
-            <option value="" selected disabled>unit</option>
+          <input
+            type="number"
+            class="i-25 g"
+            v-model="m_to_s"
+            placeholder="Small to Large Units"
+            style="text-align: right; border-radius: 10px"
+          />
+          <select
+            v-model="unit_s_id"
+            class="i-25 ig"
+            style="border-radius: 10px; color: white;"
+          >
+            <option value="" selected disabled style="color: white;">unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -145,9 +183,20 @@
 
           <span style="color: #fff; font-size: 30px">=</span>
 
-          <input type="number" v-model="next_amount" class="i-25 g" style="text-align: right; border-radius: 10px;" />
-          <select name="" id="" v-model="next_unit_id" class="i-25 ig" style=" border-radius: 10px;">
-            <option value="" selected disabled>unit</option>
+          <input
+            type="number"
+            value="1"
+            class="i-25 g"
+            style="text-align: right; border-radius: 10px"
+          />
+          <select
+            name=""
+            id=""
+            v-model="unit_m_id"
+            class="i-25 ig"
+            style="border-radius: 10px"
+          >
+            <option value="" selected disabled style="color: white;">unit</option>
             <option v-for="unit in units" :key="unit.id" value="">
               {{ unit.unit }}
             </option>
@@ -155,18 +204,39 @@
         </div>
         <!-- Third Row -->
         <div class="row m-15" style="width: 99%">
-          <input type="number" class="i-25 g" value="1" disabled style="text-align: right; border-radius: 10px;" />
-          <select v-model="to_unit_id" class="i-25 ig" style=" border-radius: 10px;">
+          <input
+            type="number"
+            class="i-25 g"
+            v-model="avg_m"
+            placeholder="Avg of M"
+            style="text-align: right; border-radius: 10px"
+          />
+          <select
+            v-model="to_unit_id"
+            class="i-25 ig"
+            style="border-radius: 10px"
+          >
             <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
 
-          <span style="color: #fff; font-size: 30px">=</span>
 
-          <input type="number" v-model="next_amount" class="i-25 g" style="text-align: right; border-radius: 10px;" />
-          <select name="" id="" v-model="next_unit_id" class="i-25 ig" style=" border-radius: 10px;">
+          <input
+            type="number"
+            v-model="avg_l"
+            class="i-25 g"
+            placeholder="Avg of L"
+            style="text-align: right; border-radius: 10px; margin-left: 50px;"
+          />
+          <select
+            name=""
+            id=""
+            v-model="next_unit_id"
+            class="i-25 ig"
+            style="border-radius: 10px"
+          >
             <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" value="">
               {{ unit.unit }}
@@ -186,21 +256,31 @@ export default {
   components: { NavApp, Switch },
   data() {
     return {
-      category_id: null,
-      status:1,
-      remain: null,
-      unit_id: null,
-      minimum: null,
-      maximum: null,
       img: null,
-      is_refrigerator: false,
-      name: "",
+      status: null,
+      name: null,
+      minimum: null,
+      remain: null,
+      maximum: null,
+      in_refrigerator: null,
+      create_by_id: null,
+      update_by_id: null,
+      category_id: null,
+      unit_l_id: null,
+      unit_m_id: null,
+      unit_s_id: null,
+      l_to_m: null,
+      m_to_s: null,
+      avg_l: null,
+      avg_m: null,
+      avg_s: null,
+      unit_id: null,
       total_price: 0,
       show_img: null,
       avg: null,
       categories: [],
-      to_unit_id: '',
-      next_unit_id: '',
+      to_unit_id: null,
+      next_unit_id: null,
       to_amount: 1,
       next_amount: 0,
       units: [],
@@ -227,35 +307,41 @@ export default {
       data.append("name", this.name);
       data.append("is_refrigerator", this.is_refrigerator);
       data.append("img", this.img, this.img.name);
-      data.append("unit_id", this.unit_id);
       data.append("to_unit_id", this.to_unit_id);
       data.append("next_unit_id", this.next_unit_id);
       data.append("to_amount", this.to_amount);
       data.append("next_amount", this.next_amount);
-      data.append("status", this.status);
+      data.append("unit_l_id", this.unit_l_id);
+      data.append("unit_m_id", this.unit_m_id);
+      data.append("unit_s_id", this.unit_s_id);
+      data.append("l_to_m", this.l_to_m);
+      data.append("m_to_s", this.m_to_s);
+      data.append("avg_l", this.avg_l);
+      data.append("avg_m", this.avg_m);
+      data.append("avg_s", this.avg_s);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
-      if(this.remain < this.minimum){
-        this.status = 2
-      }
+
       api_raw_material.post("raw-material/", data).then(() => {
-        this.$router.go(-1);
+        this.$router.push({ name: "CreateRM" });
       });
+    },
+  },
+  watch: {
+    remain() {
+      this.total_price = this.remain * this.avg_price;
+    },
+    avg_price() {
+      this.total_price = this.remain * this.avg_price;
     },
   },
   computed: {
     status_am: function () {
       if (this.remain > this.minimum) {
-        this.status = 1
         return "success";
-      }else if(this.remain != 0) {
-        this.status = 2
+      } else {
         return "ไม่พอ";
-      }else{
-        this.status=3
-        return 'out'
       }
-
     },
   },
   mounted() {
@@ -270,16 +356,15 @@ export default {
 </script>
 
 <style scoped>
+::placeholder {
+  text-align: left;
+  color: white;
+  font-size: 12px;
+}
 .i-25 {
   width: 140px;
   border-radius: 10px;
 }
-
-h2{
-  color:#fff;
-  margin-bottom:30px
-}
-
 .frame {
   margin-top: 16px;
   margin-bottom: 0px;

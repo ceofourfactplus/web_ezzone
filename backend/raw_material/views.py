@@ -2,7 +2,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import RawMaterial, RawMaterialCategory, Unit,Supplier
-from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer,SupplierSerializer
+from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer,SupplierSerializer, PickUpRawMaterialSerializer
+
 from django.db.models import F
 from rest_framework.parsers import FormParser, MultiPartParser
 
@@ -37,6 +38,7 @@ class RawMaterialListAPIView(APIView):
     
 
     def post(self, request):
+        print(request.data, 'data')
         serializer = RawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
