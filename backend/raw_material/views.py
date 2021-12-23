@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import PriceUnit, MultiUnit, RawMaterial, RawMaterialCategory, Unit
-from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer
+from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer, PickUpRawMaterialSerializer
 # Create your views here.
 
 
@@ -18,12 +18,21 @@ class RawMaterialListAPIView(APIView):
         serializer = RawMaterialSerializer(RawMaterials, many=True)
         return Response(serializer.data)
     
-    def put(self, request, pk, pa):
-        raw_material = self.get_object(pk)
-        raw_material.remain -= pa
-        raw_material.save()
-        serializer = RawMaterialSerializer(raw_material)
-        return Response(serializer.data, status=200)
+    def put(self, request):
+        pickup_serializer = PickUpRawMaterialSerializer(data=request.data)
+        if pickup_serializer.is_valid():
+            pickup_serializer.save()
+            raw_material = self.get_object(request.data['raw_material_id'])
+            raw_material.remain -= int(request.data['amount'])
+            if raw_material.remain <= raw_material.minimum and raw_material.remain != 0:
+                raw_material.status = 2
+            elif raw_material.remain == 0:
+                raw_material.status = 3
+            raw_material.save()
+            serializer = RawMaterialSerializer(raw_material)
+            return Response(serializer.data, status=200)
+        return Response(pickup_serializer.errors, status=400)
+    
 
     def post(self, request):
         serializer = RawMaterialSerializer(data=request.data)
@@ -52,6 +61,27 @@ class RawMaterialListAPIView(APIView):
                 #     return Response(serializer.data, status=201)
                 return Response(serializer.data, status=201)
             return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+class RMAPIView(APIView):
+    def get_object(self, pk):
+        try:
+            return RawMaterial.objects.get(pk=pk)
+        except RawMaterial.DoesNotExist:
+            raise 404
+    
+    def get(self, request, pk):
+        raw_material = self.get_object(pk)
+        serializer = RawMaterialSerializer(raw_material)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        raw_material = self.get_object(int(request.data['raw_material_id'][0]))
+        serializer = RawMaterialSerializer(raw_material, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
 

@@ -10,11 +10,11 @@
             @click="$emit('show_status')"
             src="../../assets/icon/Union.png"
             style="
-              top: 10px;
+              top: 15px;
               right: 10px;
               position: absolute;
-              width: 50px;
-              height: 50px;
+              width: 25px;
+              height: 25px;
             "
           />
         </div>
@@ -72,7 +72,7 @@
         </div>
       </div>
       <div>
-        <button class="btn-confirm" @click="confirm">
+        <button :disabled="item.remain <= 0" class="btn-confirm" @click="confirm">
           <span class="icon-save"></span>Confirm
         </button>
       </div>
@@ -114,10 +114,10 @@ export default {
     },
     confirm() {
         this.alert = true
-        this.$emit("confirm", this.pickup_amount, this.item)
         setTimeout(() => {
           this.alert = false;
         }, 2000);
+        this.$emit("confirm", this.pickup_amount, this.item)
         this.name = ''
         this.qty = 0
         this.pickup_amount = 0

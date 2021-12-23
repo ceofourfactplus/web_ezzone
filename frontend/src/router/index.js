@@ -6,6 +6,7 @@ import UserStatus from '../views/User/UserStatus.vue'
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RM.vue"
 import CreateRM from "../views/RawMaterials/CreateRM.vue"
+import EditRM from "../views/RawMaterials/EditRM.vue"
 // import Suppliers from "../views/RawMaterials/Suppliers.vue"
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
@@ -24,6 +25,14 @@ import RawMaterialCategory from '../views/RawMaterials/RMCategory.vue'
 
 
 const routes = [
+  {
+    path: "/rm/edit-rm",
+    name: "EditRM",
+    component: EditRM,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/raw-material-category",
     name: "RawMaterialCategory",
