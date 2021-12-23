@@ -130,6 +130,7 @@ export default {
     },
     fetchRawMaterials() {
       api_raw_material.get("raw-material/").then((response) => {
+        console.log(response.data, 'response')
         this.raw_materials = response.data;
         this.temp_rm = response.data;
       });
