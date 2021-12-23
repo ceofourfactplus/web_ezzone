@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Head -->
-    <nav-app>Raw Material</nav-app>
+    <nav-app>PO&#160;Notice</nav-app>
     <div class="row" style="width: 100%; margin-left: 25px" v-if="permisstion">
       <div class="col-9 wrap-search w-100">
         <SearchBar @search="serchByTyping" style="width: 98%" />
@@ -28,6 +28,7 @@
               style="margin: auto; margin-left: 0px; text-align: left"
             ></div>
             <div class="col-1 w-100" style="margin: auto; text-align: left">
+
               {{ item.remain }}
             </div>
             <div
@@ -63,15 +64,13 @@ import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
 import RMDetailPopup from "../../components/materials/RMDetailPopup.vue";
+import { resolveTransitionHooks } from '@vue/runtime-core';
 
 export default {
   components: {
-    Tabs,
     SearchBar,
     NavApp,
     Table,
-    PickupPopup,
-    RMDetailPopup,
   },
   mounted() {
     this.get_raw();
@@ -93,6 +92,10 @@ export default {
       api_raw_material.get('rm/get-sup',item.id).then((response)=>{
         return response.data.supplier
       })
+    },
+    get_status(status){
+      if(status == 2){return require('../../assets/icon/warning.png')}
+      if(status == 3){return require('../../assets/icon/incorrect.png')}
     }
   },
 };

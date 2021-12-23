@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import RawMaterial, RawMaterialCategory, Unit
 from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer
-# Create your views here.
+from django.db.models import F
 
 
 class RawMaterialListAPIView(APIView):
@@ -31,26 +31,6 @@ class RawMaterialListAPIView(APIView):
             serializer.save()
             print('serializer', serializer.data['id'])
             print('request', request.data)
-            if request.data['to_unit_id'] != '':
-                MultiUnit.objects.create(
-                    raw_material_id=serializer.data['id'],
-                    unit_id=serializer.data['unit_id'],
-                    to_unit_id=request.data['to_unit_id'],
-                    to_amount=request.data['to_amount']
-                )
-                PriceUnit.objects.create(avg_price=0, max_price=0, min_price=0,
-                                         raw_material_id=serializer.data['id'], unit_id=serializer.data['unit_id'])
-                # if request.data['next_unit_id'] != None:
-                #     MultiUnit.objects.create(
-                #         raw_material_id=serializer.data['id'],
-                #         unit_id=request.data['to_unit_id'],
-                #         to_unit_id=request.data['next_unit_id'],
-                #         to_amount=request.data['next_amount']
-                #     )
-                #     PriceUnit.objects.create(avg_price=0, max_price=0, min_price=0,
-                #                              raw_material_id=serializer.data['id'], unit_id=serializer.data['unit_id'])
-                #     return Response(serializer.data, status=201)
-                return Response(serializer.data, status=201)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
@@ -181,12 +161,10 @@ class FilCategoryRaw(APIView):
 
 class PONotice(APIView):
     def get(self, request):
-        raw_material = RawMaterial.objects.filter(status__gt=1)
+        raw_material = RawMaterial.objects.filter(remain__lte = F('minimum'))
         serializer = RawMaterialSerializer(raw_material, many=True)
         return Response(serializer.data)
 
+    def post(self,request):
+        return Response('ok')
 
-class GetSupplier(APIView):
-   def get(self,request,raw_id):
-       get_max_unit(raw_id)
-       return Response('ok')

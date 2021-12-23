@@ -8,6 +8,6 @@ urlpatterns = [
     path('category/', views.CategoryAPIView.as_view()),
     path('category/<int:pk>', views.RMCategoryDetailAPIView.as_view()),
     path('unit', views.UnitListAPIView.as_view()),
+    path('unit/<int:pk>', views.UnitDetailAPIView.as_view()),
     path('query_category/<int:pk>', views.FilCategoryRaw.as_view()),
-    path('get-sup/<int:raw_id>', views.GetSupplier.as_view()),
 ]

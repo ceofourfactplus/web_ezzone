@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <nav-app @back="back">RM Category</nav-app>
+    <nav-app @back="back">RM Unit</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
@@ -18,9 +18,8 @@
       <div class="table-header">
         <!-- Is Staff -->
         <div v-if="is_staff" class="row" style="padding-right: 80px">
-          <div class="col-6" style="margin-left: 90px">Name</div>
-          <div class="col-3" style="padding-left: 10px">Product</div>
-          <div class="col-3" style="padding-left: 20px">Amount</div>
+          <div class="col-6" style="margin-left: 90px">Unit</div>
+          <div class="col-6" style="padding-left: 20px">Amount</div>
         </div>
       </div>
       <div
@@ -34,7 +33,7 @@
         <div v-if="is_staff">
           <div
             class="row table-item"
-            v-for="(item, idx) in rm_categories"
+            v-for="(item, idx) in all_unit"
             :key="idx"
             style="
               padding-right: 0px;
@@ -43,14 +42,13 @@
               border-radius: 10px;
             "
           >
-            <div class="col-6" style="text-align: left; width: 100%">
-              {{ item.name }}
+            <div class="col-6" style="text-align: left; width: 100%;margin-left:20px">
+              {{ item.unit }}
             </div>
             <div class="col-2" style="margin-left: -5px">100</div>
-            <div class="col-2" style="margin-left: 40px">1000</div>
-            <div class="col-1" style="position: absolute; right: 50px">
+            <div class="col-1" style="position: absolute; right: 70px">
               <img
-                @click="edit(item)"
+                @click="SelectUnit(item)"
                 src="../../assets/icon/edit.png"
                 alt="img"
               />
@@ -68,8 +66,8 @@
           style="position: absolute; right: 10px; top: 10px"
           src="../../assets/icon/delete.png"
         />
-        <h2>Create RM Category</h2>
-        <label for="category" style="color: white">category : &nbsp;</label>
+        <h2>Create RM Unit</h2>
+        <label for="category" style="color: white">Unit : &nbsp;</label>
         <input
           v-model="category"
           type="text"
@@ -77,29 +75,29 @@
           class="for-category"
         />
         <br />
-        <button class="btn-save" @click="save">
+        <button class="btn-save" @click="create()">
           <span class="icon-save"></span>Save
         </button>
       </div>
     </div>
-    <!-- pop up edit -->
-    <div class="blur" v-if="edit_category">
-      <div class="category-popup" v-if="edit_category">
+    <!-- edit pop up -->
+    <div class="blur" v-if="edit_unit">
+      <div class="category-popup" v-if="edit_unit">
         <img
-          @click="edit_category = false"
+          @click="edit_unit = false"
           style="position: absolute; right: 10px; top: 10px"
           src="../../assets/icon/delete.png"
         />
-        <h2>Edit RM Category</h2>
-        <label for="category" style="color: white">category : &nbsp;</label>
+        <h2>Edit RM Unit</h2>
+        <label for="category" style="color: white">Unit : &nbsp;</label>
         <input
-          v-model="select.name"
+          v-model="select_unit.unit"
           type="text"
           name="category"
           class="for-category"
         />
         <br />
-        <button class="btn-save" @click="save">
+        <button class="btn-save" @click="edit()">
           <span class="icon-save"></span>Save
         </button>
       </div>
@@ -140,14 +138,14 @@ import NavApp from "../../components/main_component/NavAppHam.vue";
 import { api_raw_material } from "../../api/api_raw_material";
 
 export default {
+  name: "RMUnit",
   components: {
     SearchBar,
     NavApp,
-    // Table,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
-    this.fetchRMCategories();
+    this.fetchRMUnit();
   },
   data() {
     return {
@@ -155,43 +153,60 @@ export default {
       alert: false,
       add_category_status: false,
       category: "",
-      rm_categories: [],
+      all_unit: [],
       temp_categories: [],
-      
+      select_unit: {},
+      edit_unit: false,
     };
   },
   methods: {
-    fetchRMCategories() {
-      api_raw_material.get("/category/").then((response) => {
-        this.rm_categories = response.data;
+    fetchRMUnit() {
+      api_raw_material.get("/unit").then((response) => {
+        this.all_unit = response.data;
         this.temp_categories = response.data;
       });
     },
-    save() {
+    create() {
       this.alert = true;
       var data = {
-        name: this.category,
+        unit: this.category,
       };
-      api_raw_material.post("/category/", data).then((response) => {
+      api_raw_material.post("/unit", data).then((response) => {
         setTimeout(() => {
           this.alert = false;
           this.add_category_status = false;
-          this.rm_categories.push(response.data);
-        }, 2000);
+          this.fetchRMUnit();
+        }, 1000);
       });
     },
     search_by_typing(val) {
       var temp = [];
       if (val == "") {
-        this.rm_categories = this.temp_categories;
+        this.all_unit = this.temp_categories;
       } else {
         this.temp_categories.forEach((element) => {
-          if (element.name.indexOf(val) + 1 != 0) {
+          if (element.unit.indexOf(val) + 1 != 0) {
             temp.push(element);
           }
         });
-        this.rm_categories = temp;
+        this.all_unit = temp;
       }
+    },
+    edit() {
+      this.alert = true;
+      api_raw_material
+        .put("/unit/" + this.select_unit.id, this.select_unit)
+        .then((response) => {
+          setTimeout(() => {
+            this.alert = false;
+            this.edit_unit = false;
+            this.fetchRMUnit();
+          }, 1000);
+        });
+    },
+    SelectUnit(item) {
+      this.select_unit = item;
+      this.edit_unit = true;
     },
   },
 };

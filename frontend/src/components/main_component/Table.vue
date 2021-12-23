@@ -250,16 +250,4 @@ export default {
 </script>
 
 <style scoped>
-.po {
-  padding-right: 0px;
-  font-size: 28px;
-  width: 90.5%;
-  left: 45px;
-  position: absolute;
-}
-.po-item {
-  padding-right: 0px;
-  font-size: 28px;
-  left: 45px;
-}
 </style>

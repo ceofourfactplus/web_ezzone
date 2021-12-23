@@ -51,15 +51,19 @@ class RawMaterial(models.Model):
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_update_by", null=True, blank=True)
     img = models.ImageField(
-        _("Image"), upload_to=upload_to_raw_material, default=None,) 
-    unit_l = models.ForeignKey(Unit,on_delete=models.PROTECT, related_name="raw_material_unit_l",)
-    unit_m = models.ForeignKey(Unit,on_delete=models.PROTECT, related_name="raw_material_unit_m",)
-    unit_s = models.ForeignKey(Unit,on_delete=models.PROTECT, related_name="raw_material_unit_s",)
-    l_to_m = models.IntegerField()
-    m_to_s = models.IntegerField()
-    avg_l = models.DecimalField(max_digits=5, decimal_places=2)
-    avg_m = models.DecimalField(max_digits=5, decimal_places=2)
-    avg_s = models.DecimalField(max_digits=5, decimal_places=2)
+        _("Image"), upload_to=upload_to_raw_material, default=None,null=True)
+    unit_l = models.ForeignKey(Unit, on_delete=models.PROTECT,
+                               related_name="raw_material_unit_l", null=True, blank=True, default=None)
+    unit_m = models.ForeignKey(Unit, on_delete=models.PROTECT,
+                               related_name="raw_material_unit_m", null=True, blank=True, default=None)
+    unit_s = models.ForeignKey(Unit, on_delete=models.PROTECT,
+                               related_name="raw_material_unit_s", null=True, blank=True, default=None)
+    l_to_m = models.IntegerField(null=True, blank=True, default=None)
+    m_to_s = models.IntegerField(null=True, blank=True, default=None)
+    avg_l = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+    avg_m = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+    avg_s = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+
 
 class PickUpRawMaterial(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)
@@ -112,3 +116,6 @@ class OP(models.Model):
     amount = models.IntegerField()
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     create_at = models.DateTimeField(auto_now_add=True)
+    create_by = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT)
+
+    

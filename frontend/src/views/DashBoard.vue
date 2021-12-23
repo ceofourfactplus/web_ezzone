@@ -139,14 +139,14 @@ export default {
                 "is_receptionist",
               ],
               img: require("../../src/assets/icon/pick_up.png"),
-              txt: "Pick RM",
-              link: "DashBoard",
+              txt: "RMUnit",
+              link: "RMUnit"
             },
             {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/category_rm.png"),
               txt: "Categories",
-              link: "DashBoard",
+              link: "RawMaterialCategory",
             },
           ],
         },
@@ -270,8 +270,6 @@ body {
 .image {
   width: 130px;
   height: 130px;
-}
-.row {
 }
 .hamburger {
   top: 30px;

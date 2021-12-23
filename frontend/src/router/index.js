@@ -1,26 +1,26 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Login from "../views/User/Login.vue";
 import Register from "../views/User/Register.vue";
-import new2 from '../views/test/new.vue'
-import UserStatus from '../views/User/UserStatus.vue'
+import new2 from "../views/test/new.vue";
+import UserStatus from "../views/User/UserStatus.vue";
 import store from "../store";
-import RawMaterials from "../views/RawMaterials/RM.vue"
-import CreateRM from "../views/RawMaterials/CreateRM.vue"
+import RawMaterials from "../views/RawMaterials/RM.vue";
+import CreateRM from "../views/RawMaterials/CreateRM.vue";
 // import Suppliers from "../views/RawMaterials/Suppliers.vue"
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
-import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue"
-import PO from "../views/RawMaterials/PO.vue"
-import EditUser from '../views/User/EditUser.vue'
-import DashBoard from '../views/DashBoard.vue'
-import ForgotPassword from '../views/User/ForgotPassword.vue'
-import Customer from '../views/Customer/Customer.vue'
-import CreateCustomer from '../views/Customer/CreateCustomer.vue'
-import EditCustomer from '../views/Customer/EditCustomer.vue'
-import Products from '../views/Product/Products.vue'
-import CreateProduct from '../views/Product/CreateProduct.vue'
-import ProductCategory from '../views/Product/ProductCategory.vue'
-import RawMaterialCategory from '../views/RawMaterials/RMCategory.vue'
-
+import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
+import PO from "../views/RawMaterials/PO.vue";
+import EditUser from "../views/User/EditUser.vue";
+import DashBoard from "../views/DashBoard.vue";
+import ForgotPassword from "../views/User/ForgotPassword.vue";
+import Customer from "../views/Customer/Customer.vue";
+import CreateCustomer from "../views/Customer/CreateCustomer.vue";
+import EditCustomer from "../views/Customer/EditCustomer.vue";
+import Products from "../views/Product/Products.vue";
+import CreateProduct from "../views/Product/CreateProduct.vue";
+import ProductCategory from "../views/Product/ProductCategory.vue";
+import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
+import RMUnit from "../views/RawMaterials/UnitRM.vue";
 
 const routes = [
   {
@@ -71,15 +71,10 @@ const routes = [
       requiresLogin: false,
     },
   },
-  // {
-  //   path: "/suppliers",
-  //   name: "Suppliers",
-  //   component: Suppliers,
-  // },
   {
     path: "/pickup-raw-material",
     name: "PickupRawMaterial",
-    component: PickupRawMaterial, 
+    component: PickupRawMaterial,
   },
   // {
   //   path: "/minimum",
@@ -117,39 +112,44 @@ const routes = [
     component: new2,
   },
   {
-    path:'/user-status',
-    name:'UserStatus',
+    path: "/user-status",
+    name: "UserStatus",
     component: UserStatus,
   },
   {
-    path:'/edit-user/:id',
+    path: "/edit-user/:id",
     props: true,
     component: EditUser,
-    name:'EditUser'
+    name: "EditUser",
   },
   {
-    path:'/customer',
+    path: "/customer",
     props: true,
     component: Customer,
-    name:'Customer'
+    name: "Customer",
   },
   {
-    path:'/create-customer',
+    path: "/create-customer",
     props: true,
     component: CreateCustomer,
-    name:'CreateCustomer'
+    name: "CreateCustomer",
   },
   {
-    path:'/edit-customer/:id',
+    path: "/edit-customer/:id",
     props: true,
     component: EditCustomer,
-    name:'EditCustomer'
-  }, 
+    name: "EditCustomer",
+  },
   {
-    path:'/rm/po-notice',
-    name:'PO',
-    component:PO
-  }
+    path: "/rm/po-notice",
+    name: "PO",
+    component: PO,
+  },
+  {
+    path: "/rm/unit",
+    component: RMUnit,
+    name:"RMUnit"
+  },
 ];
 
 const router = createRouter({
