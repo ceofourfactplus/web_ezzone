@@ -6,7 +6,8 @@ import UserStatus from "../views/User/UserStatus.vue";
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RM.vue";
 import CreateRM from "../views/RawMaterials/CreateRM.vue";
-// import Suppliers from "../views/RawMaterials/Suppliers.vue"
+import Supplier from "../views/RawMaterials/Supplier.vue"
+import CreateSupplier from "../views/RawMaterials/CreateSup.vue"
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
 import PO from "../views/RawMaterials/PO.vue";
@@ -21,6 +22,7 @@ import CreateProduct from "../views/Product/CreateProduct.vue";
 import ProductCategory from "../views/Product/ProductCategory.vue";
 import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
 import RMUnit from "../views/RawMaterials/UnitRM.vue";
+import EditSupplier from '../views/RawMaterials/EditSup.vue'
 
 const routes = [
   {
@@ -150,6 +152,22 @@ const routes = [
     component: RMUnit,
     name:"RMUnit"
   },
+  {
+    path:'/rm/supplier',
+    name:'Supplier',
+    component:Supplier
+  },
+  {
+    path:'/rm/supplier/create',
+    name:'CreateSupplier',
+    component:CreateSupplier
+  },
+  {
+    path:'/rm/supplier/edit/:id',
+    props:true,
+    name:'EditSupplier',
+    component:EditSupplier
+  }
 ];
 
 const router = createRouter({

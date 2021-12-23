@@ -1,9 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import RawMaterial, RawMaterialCategory, Unit
-from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer
+from .models import RawMaterial, RawMaterialCategory, Unit,Supplier
+from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer,SupplierSerializer
 from django.db.models import F
+from rest_framework.parsers import FormParser, MultiPartParser
+
 
 
 class RawMaterialListAPIView(APIView):
@@ -36,7 +38,6 @@ class RawMaterialListAPIView(APIView):
 
 
 class SupplierListAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         Suppliers = Supplier.objects.all()
@@ -52,6 +53,8 @@ class SupplierListAPIView(APIView):
 
 
 class SupplierDetailAPIView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+    
     def get_object(self, pk):
         try:
             return Supplier.objects.get(pk=pk)
@@ -60,7 +63,7 @@ class SupplierDetailAPIView(APIView):
 
     def get(self, request, pk):
         supplier = self.get_object(pk)
-        serializer = SupplierSerializer(supplier)
+        serializer = SupplierSerializer(supplier, context={"request": request})
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -135,10 +138,24 @@ class CategoryAPIView(APIView):
 
 
 class RMCategoryDetailAPIView(APIView):
+    def get_object(self, pk):
+        try:
+            return RawMaterialCategory.objects.get(pk=pk)
+        except RawMaterialCategory.DoesNotExist:
+            raise 404
+
     def get(self, request, pk):
         category = RawMaterialCategory.objects.get(id=pk)
         serializer = RawMaterialCategorySerializer(category)
         return Response(serializer.data)
+
+    def put(self, request, pk):
+        unit = self.get_object(pk)
+        serializer = RawMaterialCategorySerializer(unit, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 
 class CategoryFilter(APIView):

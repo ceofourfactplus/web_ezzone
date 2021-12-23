@@ -38,16 +38,16 @@ export default {
 
 <style scoped>
 .search-bar {
-  background-size: contain;
+  background-size: 40px;
   background-repeat: no-repeat;
   background-color: #3a3d49;
   text-indent: 60px;
   padding-left: 10px;
   margin-left: 3px;
-  border-radius: 20px;
+  border-radius: 10px;
   width: 100%;
-  height: 45px;
-  background-image: url("../../assets/icon/Search-19x18-1.png");
+  height: 50px;
+  background-image: url("../../assets/icon/search.png");
   background-position: 2% 50%;
   /* Extra Styling */
 }

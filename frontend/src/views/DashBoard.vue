@@ -193,7 +193,7 @@ export default {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/supplier.png"),
               txt: "Supplier",
-              link: "DashBoard",
+              link: "Supplier",
             },
             {
               permissions: ["is_staff"],

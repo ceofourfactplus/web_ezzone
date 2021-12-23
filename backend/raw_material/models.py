@@ -25,7 +25,7 @@ class Supplier(models.Model):
     phone = models.IntegerField()
     address = models.CharField(max_length=500)
     email = models.EmailField(null=True)
-    descriptions = models.TextField(blank=True)
+    google_map = models.URLField(max_length=400)
     create_at = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True)
     create_by = models.ForeignKey(

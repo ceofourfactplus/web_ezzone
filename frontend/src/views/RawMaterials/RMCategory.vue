@@ -50,7 +50,7 @@
             <div class="col-2" style="margin-left: 40px">1000</div>
             <div class="col-1" style="position: absolute; right: 50px">
               <img
-                @click="edit(item)"
+                @click="SelectCategory(item)"
                 src="../../assets/icon/edit.png"
                 alt="img"
               />
@@ -99,7 +99,7 @@
           class="for-category"
         />
         <br />
-        <button class="btn-save" @click="save">
+        <button class="btn-save" @click="edit()">
           <span class="icon-save"></span>Save
         </button>
       </div>
@@ -136,7 +136,6 @@
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavAppHam.vue";
-// import Table from "../../components/main_component/Table.vue";
 import { api_raw_material } from "../../api/api_raw_material";
 
 export default {
@@ -157,7 +156,8 @@ export default {
       category: "",
       rm_categories: [],
       temp_categories: [],
-      
+      edit_category: false,
+      select:{},
     };
   },
   methods: {
@@ -172,12 +172,12 @@ export default {
       var data = {
         name: this.category,
       };
-      api_raw_material.post("/category/", data).then((response) => {
+      api_raw_material.post("/category/", data).then(() => {
         setTimeout(() => {
           this.alert = false;
           this.add_category_status = false;
-          this.rm_categories.push(response.data);
-        }, 2000);
+          this.fetchRMCategories();
+        }, 1000);
       });
     },
     search_by_typing(val) {
@@ -192,6 +192,22 @@ export default {
         });
         this.rm_categories = temp;
       }
+    },
+    edit() {
+      this.alert = true;
+      api_raw_material
+        .put("/category/" + this.select.id, this.select)
+        .then(() => {
+          setTimeout(() => {
+            this.alert = false;
+            this.edit_category = false;
+            this.fetchRMCategories();
+          }, 1000);
+        });
+    },
+    SelectCategory(item) {
+      this.select = item;
+      this.edit_category = true;
     },
   },
 };
