@@ -40,9 +40,9 @@ class RawMaterial(models.Model):
     category = models.ForeignKey(RawMaterialCategory, on_delete=models.PROTECT)
     status = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
-    remain = models.IntegerField()
-    minimum = models.IntegerField(default=1)
-    maximum = models.IntegerField(default=10)
+    remain = models.IntegerField(null=True, blank=True, default=None)
+    minimum = models.IntegerField(null=True, blank=True, default=None)
+    maximum = models.IntegerField(null=True, blank=True, default=None)
     in_refrigerator = models.BooleanField(default=False)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True, blank=True)
@@ -64,6 +64,12 @@ class RawMaterial(models.Model):
     avg_m = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
     avg_s = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
 
+class PriceRawMaterial(models.Model):
+    avg_price = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+    last_price = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+    raw_material = models.ForeignKey(RawMaterial,on_delete=models.PROTECT)
+    unit = models.ForeignKey(Unit,on_delete=models.PROTECT)
+    supplier = models.ForeignKey(Supplier,on_delete=models.PROTECT)
 
 class PickUpRawMaterial(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)

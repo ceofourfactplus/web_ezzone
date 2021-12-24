@@ -215,7 +215,7 @@ class FilCategoryRaw(APIView):
         serializer = RawMaterialSerializer(raw_material, many=True)
         return Response(serializer.data)
     
-class PO(APIView):
+class POList(APIView):
     def get(self, request):
         po = PO.objects.all()
         serializer = POSerializer(po, many=True)
@@ -291,9 +291,3 @@ class CalPO(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-
-class POList(APIView):
-    def get(self,request):
-        po = PO.objects.all()
-        serializer = POSerializer(po,many=True)
-        return Response(serializer.data)

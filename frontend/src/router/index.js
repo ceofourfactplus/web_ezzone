@@ -15,7 +15,6 @@ import CreateSupplier from "../views/RawMaterials/CreateSup.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
 import PONotice from "../views/RawMaterials/PONotice.vue";
 import PO from "../views/RawMaterials/PO.vue";
-import PONotice from "../views/RawMaterials/PONotice.vue";
 import EditUser from "../views/User/EditUser.vue";
 import DashBoard from "../views/DashBoard.vue";
 import ForgotPassword from "../views/User/ForgotPassword.vue";
@@ -27,8 +26,7 @@ import CreateProduct from "../views/Product/CreateProduct.vue";
 import ProductCategory from "../views/Product/ProductCategory.vue";
 import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
 import RMUnit from "../views/RawMaterials/UnitRM.vue";
-import EditSupplier from '../views/RawMaterials/EditSup.vue'
-import EditRM from '../views/RawMaterials/EditRM.vue'
+import EditSupplier from '../views/RawMaterials/EditSup.vue';
 
 const routes = [
   {
