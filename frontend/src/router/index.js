@@ -6,8 +6,11 @@ import UserStatus from "../views/User/UserStatus.vue";
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RM.vue";
 import CreateRM from "../views/RawMaterials/CreateRM.vue";
+import EditRM from "../views/RawMaterials/EditRM.vue";
+import PickupList from "../views/RawMaterials/PickupList.vue";
 import Supplier from "../views/RawMaterials/Supplier.vue"
 import CreateSupplier from "../views/RawMaterials/CreateSup.vue"
+
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
 import PONotice from "../views/RawMaterials/PONotice.vue";
@@ -27,6 +30,14 @@ import EditSupplier from '../views/RawMaterials/EditSup.vue'
 import EditRM from '../views/RawMaterials/EditRM.vue'
 
 const routes = [
+  {
+    path: "/rm/pickup-list",
+    name: "PickupList",
+    component: PickupList,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/rm/edit-rm",
     name: "EditRM",

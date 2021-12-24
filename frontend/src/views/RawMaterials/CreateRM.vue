@@ -127,8 +127,8 @@
           <input
             type="number"
             class="i-25 g"
-            v-model="l_to_m"
-            placeholder="Smallest Unit"
+            v-model="s_to_m"
+            placeholder="S Unit"
             style="text-align: right; border-radius: 10px"
           />
           <select v-model="unit_s_id" class="i-25 ig" style="border-radius: 10px">
@@ -151,7 +151,7 @@
           <select
             name=""
             id=""
-            v-model="unit_l_id"
+            v-model="unit_m_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
@@ -166,12 +166,12 @@
           <input
             type="number"
             class="i-25 g"
-            v-model="m_to_s"
-            placeholder="Small to Large Units"
+            v-model="m_to_l"
+            placeholder="M to L Unit"
             style="text-align: right; border-radius: 10px"
           />
           <select
-            v-model="unit_s_id"
+            v-model="unit_m_id"
             class="i-25 ig"
             style="border-radius: 10px; color: white;"
           >
@@ -192,18 +192,18 @@
           <select
             name=""
             id=""
-            v-model="unit_m_id"
+            v-model="unit_l_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
             <option value="" selected disabled style="color: white;">unit</option>
-            <option v-for="unit in units" :key="unit.id" value="">
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
         </div>
         <!-- Third Row -->
-        <div class="row m-15" style="width: 99%">
+        <div class="row m-15" style="width: 99%; text-align: left;">
           <input
             type="number"
             class="i-25 g"
@@ -212,7 +212,7 @@
             style="text-align: right; border-radius: 10px"
           />
           <select
-            v-model="to_unit_id"
+            v-model="unit_m_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
@@ -231,14 +231,12 @@
             style="text-align: right; border-radius: 10px; margin-left: 50px;"
           />
           <select
-            name=""
-            id=""
-            v-model="next_unit_id"
+            v-model="unit_l_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
             <option value="" selected disabled>unit</option>
-            <option v-for="unit in units" :key="unit.id" value="">
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
@@ -269,8 +267,8 @@ export default {
       unit_l_id: null,
       unit_m_id: null,
       unit_s_id: null,
-      l_to_m: null,
-      m_to_s: null,
+      m_to_l: null,
+      s_to_m: null,
       avg_l: null,
       avg_m: null,
       avg_s: null,
@@ -288,12 +286,14 @@ export default {
   },
   methods: {
     onFileChange(e) {
+      console.log(e, 'e')
       this.img = e.target.files[0];
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
         reader.readAsDataURL(this.img);
       }
+      console.log(this.img, 'img')
     },
     fridge(val) {
       this.is_refrigerator = val;
@@ -314,15 +314,16 @@ export default {
       data.append("unit_l_id", this.unit_l_id);
       data.append("unit_m_id", this.unit_m_id);
       data.append("unit_s_id", this.unit_s_id);
-      data.append("l_to_m", this.l_to_m);
-      data.append("m_to_s", this.m_to_s);
+      data.append("m_to_l", this.m_to_l);
+      data.append("s_to_m", this.s_to_m);
       data.append("avg_l", this.avg_l);
       data.append("avg_m", this.avg_m);
       data.append("avg_s", this.avg_s);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
 
-      api_raw_material.post("raw-material/", data).then(() => {
+      api_raw_material.post("raw-material/", data).then((response) => {
+        console.log(response.data, 'response data')
         this.$router.push({ name: "CreateRM" });
       });
     },
@@ -349,6 +350,7 @@ export default {
       this.categories = response.data;
     });
     api_raw_material.get("unit").then((response) => {
+      console.log(response.data, 'unit')
       this.units = response.data;
     });
   },
@@ -359,7 +361,7 @@ export default {
 ::placeholder {
   text-align: left;
   color: white;
-  font-size: 12px;
+  font-size: 22px;
 }
 .i-25 {
   width: 140px;

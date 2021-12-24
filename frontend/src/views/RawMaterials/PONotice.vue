@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <!-- Head -->
@@ -64,46 +65,53 @@
 </template>
 
 <script>
-import { api_raw_material } from "../../api/api_raw_material";
-import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
-import Table from "../../components/main_component/Table.vue";
-
+import Switch from "../../components/main_component/Switch.vue";
+import SearchBar from "../../components/materials/SearchBar.vue";
+import { api_raw_material } from "../../api/api_raw_material.js";
 export default {
-  components: {
-    SearchBar,
-    NavApp,
-    Table,
-  },
-  mounted() {
-    this.get_raw();
-  },
-
+  components: { NavApp, Switch, SearchBar },
   data() {
     return {
-      filter_by:1
+      categories: [],
+      units: [],
+      pickup_items: [],
+      temp_pickup: [],
     };
   },
   methods: {
-    get_raw() {
-      api_raw_material.get("rm-po/notice").then((response) => {
-        console.log(response.data, "data");
-        this.raw_materials = response.data;
-        this.temp_rm = response.data;
+    fetchPickupItems() {
+      api_raw_material.get("/pickup/").then((response) => {
+        console.log(response.data, "pickup data");
+        console.log(response.data.unit_set, "unit_set");
+        this.pickup_items = response.data;
+        this.temp_pickup = response.data;
       });
+    }, 
+    serchByTyping(val) {
+      var temp = [];
+      if (val == "") {
+        this.pickup_items = this.temp_pickup;
+      } else {
+        this.temp_pickup.forEach((element) => {
+          if (element.raw_material_set.name.indexOf(val) + 1 != 0) {
+            temp.push(element);
+          }
+        });
+        this.pickup_items = temp;
+      }
     },
-    get_sup(item){
-      api_raw_material.get('rm/get-sup',item.id).then((response)=>{
-        return response.data.supplier
-      })
+  },
+  watch: {
+    remain() {
+      this.total_price = this.remain * this.avg_price;
     },
-    get_status(status){
-      if(status == 2){return require('../../assets/icon/warning.png')}
-      if(status == 3){return require('../../assets/icon/incorrect.png')}
+    avg_price() {
+      this.total_price = this.remain * this.avg_price;
     },
-    search_raw(query){
+  },
+  mounted() {
 
-    }
   },
 };
 </script>

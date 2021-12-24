@@ -27,16 +27,15 @@ class RawMaterialListAPIView(APIView):
             pickup_serializer.save()
             raw_material = self.get_object(request.data['raw_material_id'])
             raw_material.remain -= int(request.data['amount'])
-            if raw_material.remain <= raw_material.minimum and raw_material.remain != 0:
+            if raw_material.remain <= raw_material.minimum and raw_material.remain > 0:
                 raw_material.status = 2
-            elif raw_material.remain == 0:
+            elif raw_material.remain <= 0:
                 raw_material.status = 3
             raw_material.save()
             serializer = RawMaterialSerializer(raw_material)
             return Response(serializer.data, status=200)
         return Response(pickup_serializer.errors, status=400)
     
-
     def post(self, request):
         print(request.data, 'data')
         serializer = RawMaterialSerializer(data=request.data)
@@ -48,6 +47,13 @@ class RawMaterialListAPIView(APIView):
         return Response(serializer.errors, status=400)
 
 
+class PickupAPIView(APIView):
+    def get(self, request):
+        pickup = PickUpRawMaterial.objects.all()
+        serializer = PickUpRawMaterialSerializer(pickup, many=True)
+        return Response(serializer.data)
+    
+    
 class RMAPIView(APIView):
     def get_object(self, pk):
         try:
@@ -61,6 +67,7 @@ class RMAPIView(APIView):
         return Response(serializer.data)
     
     def put(self, request):
+        print(request.data)
         raw_material = self.get_object(int(request.data['raw_material_id'][0]))
         serializer = RawMaterialSerializer(raw_material, data=request.data)
         if serializer.is_valid():
@@ -70,7 +77,6 @@ class RMAPIView(APIView):
 
 
 class SupplierListAPIView(APIView):
-
     def get(self, request):
         Suppliers = Supplier.objects.all()
         serializer = SupplierSerializer(Suppliers, many=True)
