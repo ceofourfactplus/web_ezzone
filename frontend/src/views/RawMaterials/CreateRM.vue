@@ -88,19 +88,19 @@
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 220px" v-model="remain" />
+            ><input type="number" style="background: #717171; width: 220px" v-model="remain" />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="width: 55%" v-model="minimum" />
+            ><input type="number" style="background: #717171; width: 55%" v-model="minimum" />
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Avg P&nbsp;:</label>
-            ><input type="number" style="width: 55%" v-model="avg_s" />
+            ><input type="number" style="background: #717171; width: 55%" v-model="avg_s" />
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Max&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="width: 53%" v-model="maximum" />
+            ><input type="number" style="background: #717171; width: 53%" v-model="maximum" />
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@
             class="i-25 g"
             v-model="s_to_m"
             placeholder="S Unit"
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171;"
           />
           <select v-model="unit_s_id" class="i-25 ig" style="border-radius: 10px">
             <option value="" selected disabled style="color: white;">unit</option>
@@ -146,7 +146,7 @@
             model="to_amount"
             value="1"
             readonly
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171;"
           />
           <select
             name=""
@@ -168,7 +168,7 @@
             class="i-25 g"
             v-model="m_to_l"
             placeholder="M to L Unit"
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171;"
           />
           <select
             v-model="unit_m_id"
@@ -187,7 +187,7 @@
             type="number"
             value="1"
             class="i-25 g"
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171;"
           />
           <select
             name=""
@@ -209,7 +209,7 @@
             class="i-25 g"
             v-model="avg_m"
             placeholder="Avg of M"
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171;"
           />
           <select
             v-model="unit_m_id"
@@ -228,7 +228,7 @@
             v-model="avg_l"
             class="i-25 g"
             placeholder="Avg of L"
-            style="text-align: right; border-radius: 10px; margin-left: 50px;"
+            style="text-align: right; border-radius: 10px; margin-left: 50px; background: #717171;"
           />
           <select
             v-model="unit_l_id"
