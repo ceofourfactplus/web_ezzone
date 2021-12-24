@@ -49,7 +49,7 @@
                 {{ recept.supplier.company_name }}
               </div>
               <div class="col-5 w-100"></div>
-              <div class="col-4 w-100 a">
+              <div class="col-4 w-100">
                 <pre>Total  {{ recept.total_price }}</pre>
               </div>
             </div>
@@ -210,7 +210,7 @@
           </div>
           <div class="row">
             <label for="name">
-              <pre>Total Cost :    {{ total_cost }} บาท</pre>
+              <pre>Total Cost :    {{ cal_total_cost }} บาท</pre>
             </label>
           </div>
         </div>
