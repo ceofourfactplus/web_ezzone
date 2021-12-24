@@ -125,7 +125,7 @@ export default {
         this.nearly_items = this.temp_items;
       } else {
         this.temp_items.forEach((element) => {
-          if (element.raw_material_set.name.indexOf(val) + 1 != 0) {
+          if (element.name.indexOf(val) + 1 != 0) {
             temp.push(element);
           }
         });
