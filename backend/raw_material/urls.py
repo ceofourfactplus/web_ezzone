@@ -18,4 +18,7 @@ urlpatterns = [
     path('query_category/<int:pk>', views.FilCategoryRaw.as_view()),
     path('supplier', views.SupplierListAPIView.as_view()),
     path('supplier/<int:pk>', views.SupplierDetailAPIView.as_view()),
+    path('po/cal-add',views.CalPO.as_view()),
+    path('po/',views.POList.as_view()),
+    # path('po/query-item/<str:query>',views.)
 ]

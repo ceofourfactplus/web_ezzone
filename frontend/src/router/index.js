@@ -13,6 +13,7 @@ import CreateSupplier from "../views/RawMaterials/CreateSup.vue"
 
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
+import PONotice from "../views/RawMaterials/PONotice.vue";
 import PO from "../views/RawMaterials/PO.vue";
 import PONotice from "../views/RawMaterials/PONotice.vue";
 import EditUser from "../views/User/EditUser.vue";
@@ -27,6 +28,7 @@ import ProductCategory from "../views/Product/ProductCategory.vue";
 import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
 import RMUnit from "../views/RawMaterials/UnitRM.vue";
 import EditSupplier from '../views/RawMaterials/EditSup.vue'
+import EditRM from '../views/RawMaterials/EditRM.vue'
 
 const routes = [
   {
@@ -171,9 +173,9 @@ const routes = [
     name: "EditCustomer",
   },
   {
-    path: "/rm/po-notic",
-    name: "PO",
-    component: PO,
+    path: "/rm/po-notice",
+    name: "PONotice",
+    component: PONotice,
   },
   {
     path: "/rm/unit",
@@ -195,6 +197,11 @@ const routes = [
     props:true,
     name:'EditSupplier',
     component:EditSupplier
+  },
+  {
+    path:'/rm/po',
+    name:"PO",
+    component:PO,
   }
 ];
 

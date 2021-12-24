@@ -22,7 +22,7 @@ class Unit(models.Model):
 class Supplier(models.Model):
     company_name = models.CharField(max_length=255)  # company_name
     contact = models.CharField(max_length=100)  # ติดต่อใคร
-    phone = models.IntegerField()
+    phone = models.CharField(max_length=13)
     address = models.CharField(max_length=500)
     email = models.EmailField(null=True)
     google_map = models.URLField(max_length=400, default='')
@@ -119,5 +119,4 @@ class PO(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     create_at = models.DateTimeField(auto_now_add=True)
     create_by = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT)
-
-    
+    last_price = models.DecimalField(max_digits=5, decimal_places=2)

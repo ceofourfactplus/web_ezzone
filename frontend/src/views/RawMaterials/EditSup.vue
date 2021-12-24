@@ -30,7 +30,7 @@
       </div>
       <input type="text" v-model="supplier.company_name" placeholder="Supplier Name"/>
       <input type="text" v-model="supplier.contact" placeholder="Contact Person"/>
-      <input type="number" v-model="supplier.phone" placeholder="Phone"/>
+      <input type="text" v-model="supplier.phone" placeholder="Phone"/>
       <input type="email" v-model="supplier.email" placeholder="E-mail"/>
       <textarea name="text" v-model="supplier.address" id="" placeholder="Address"></textarea>
       <input type="url" v-model="supplier.google_map" placeholder="Google Map"/>

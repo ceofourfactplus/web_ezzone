@@ -399,9 +399,6 @@ input[type="checkbox"] {
   background-repeat: no-repeat;
   background-size: contain;
 }
-::placeholder {
-  color: #889898;
-}
 .popup-add-rm {
   width: 625px;
   height: 756px;
@@ -444,5 +441,8 @@ input[type="checkbox"] {
   background-repeat: no-repeat;
   background-position: 2% 50%;
   /* Extra Styling */
+}
+::placeholder{
+  font-size: 130px !important;
 }
 </style>
