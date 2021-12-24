@@ -15,6 +15,7 @@ import CreateSupplier from "../views/RawMaterials/CreateSup.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
 import PONotice from "../views/RawMaterials/PONotice.vue";
 import PO from "../views/RawMaterials/PO.vue";
+import PONotice from "../views/RawMaterials/PONotice.vue";
 import EditUser from "../views/User/EditUser.vue";
 import DashBoard from "../views/DashBoard.vue";
 import ForgotPassword from "../views/User/ForgotPassword.vue";
@@ -30,6 +31,14 @@ import EditSupplier from '../views/RawMaterials/EditSup.vue'
 import EditRM from '../views/RawMaterials/EditRM.vue'
 
 const routes = [
+  {
+    path: "/rm/po-notice",
+    name: "PONotice",
+    component: PONotice,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/rm/pickup-list",
     name: "PickupList",

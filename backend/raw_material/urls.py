@@ -7,6 +7,8 @@ urlpatterns = [
     path('rm-po/notice', views.PONotice.as_view()),
     path('rm-update/', views.RMAPIView().as_view()),
     path('pickup/', views.PickupAPIView.as_view()),
+    path('po/', views.PO.as_view()),
+    path('get-nearly-sold-out/', views.PONotice.as_view()),
     path('get_unit/<int:pk>', views.UnitDetailAPIView.as_view()),
     # path('edit/', views.RMAPIView().as_view()),
     path('category/', views.CategoryAPIView.as_view()),

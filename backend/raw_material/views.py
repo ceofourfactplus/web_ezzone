@@ -9,6 +9,8 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 
 
+
+
 class RawMaterialListAPIView(APIView):
     def get_object(self, pk):
         try:
@@ -212,12 +214,32 @@ class FilCategoryRaw(APIView):
         raw_material = RawMaterial.objects.filter(category_id=pk)
         serializer = RawMaterialSerializer(raw_material, many=True)
         return Response(serializer.data)
+    
+class PO(APIView):
+    def get(self, request):
+        po = PO.objects.all()
+        serializer = POSerializer(po, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = POSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
 class PONotice(APIView):
     def get(self, request):
-        raw_material = RawMaterial.objects.filter(remain__lte = F('minimum'))
-        serializer = RawMaterialSerializer(raw_material, many=True)
+        RawMaterials = RawMaterial.objects.filter(minimum__gt = F('remain'))
+        print(RawMaterials)
+        for item in RawMaterials:
+            if item.remain <= item.minimum and item.remain > 0:
+                item.status = 2
+            elif item.remain <= 0:
+                item.status = 3
+            item.save()
+        serializer = RawMaterialSerializer(RawMaterials, many=True)
         return Response(serializer.data)
 
     def post(self,request):
