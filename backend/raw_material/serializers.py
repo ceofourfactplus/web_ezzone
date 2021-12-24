@@ -36,6 +36,9 @@ class RawMaterialSerializer(serializers.ModelSerializer):
     category_set = RawMaterialCategorySerializer(
         read_only=True, source="raw_material_category")
     unit_set = UnitSerializer(read_only=True, source="unit")
+    unit_l_id = serializers.IntegerField()
+    unit_m_id = serializers.IntegerField()
+    unit_s_id = serializers.IntegerField()
 
     class Meta:
         model = RawMaterial
@@ -46,7 +49,7 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'name',
             'minimum',
             'remain',
-            'maximum',
+            'maximum',  
             'in_refrigerator',
             'create_by_id',
             'update_by_id',
@@ -54,8 +57,8 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'unit_l_id',
             'unit_m_id',
             'unit_s_id',
-            'l_to_m',
-            'm_to_s',
+            'm_to_l',
+            's_to_m',
             'avg_l',
             'avg_m',
             'avg_s',
@@ -69,16 +72,26 @@ class RawMaterialSerializer(serializers.ModelSerializer):
 
 
 class PickUpRawMaterialSerializer(serializers.ModelSerializer):
+    unit_set = UnitSerializer(read_only=True, source="unit")
     raw_material_set = RawMaterialSerializer(
         read_only=True, source="raw_material")
     raw_material_id = serializers.IntegerField()
+    unit_id = serializers.IntegerField()
     create_by_id = serializers.IntegerField()
     create_by = UserSerializer(read_only=True, source="user")
-
     class Meta:
         model = PickUpRawMaterial
-        fields = ['id', 'raw_material_set', 'raw_material_id',
-                  'amount', 'create_at', 'create_by', 'create_by_id']
+        fields = [
+            'id', 
+            'raw_material_set', 
+            'unit_id',
+            'unit_set', 
+            'raw_material_id',
+            'amount', 
+            'create_at', 
+            'create_by', 
+            'create_by_id',
+            ]
 
 
 class ReceiptRawMaterialDetailSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="save()">New&#160;RM</nav-app>
+    <nav-app save="true" @save="edit()">New&#160;RM</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -127,11 +127,18 @@
           <input
             type="number"
             class="i-25 g"
-            v-model="rm_item.l_to_m"
+            v-model="rm_item.s_to_m"
+            placeholder="S Unit"
             style="text-align: right; border-radius: 10px"
           />
-          <select v-model="empty" class="i-25 ig" style="border-radius: 10px">
-            <option value="" selected disabled>unit</option>
+          <select
+            v-model="rm_item.unit_s_id"
+            class="i-25 ig"
+            style="border-radius: 10px"
+          >
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -150,11 +157,13 @@
           <select
             name=""
             id=""
-            v-model="empty"
+            v-model="rm_item.unit_m_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
-            <option value="" selected disabled>unit</option>
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -165,15 +174,18 @@
           <input
             type="number"
             class="i-25 g"
-            v-model="rm_item.m_to_s"
+            v-model="rm_item.m_to_l"
+            placeholder="M to L Unit"
             style="text-align: right; border-radius: 10px"
           />
           <select
-            v-model="empty"
+            v-model="rm_item.unit_m_id"
             class="i-25 ig"
-            style="border-radius: 10px"
+            style="border-radius: 10px; color: white"
           >
-            <option value="" selected disabled>unit</option>
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -190,26 +202,29 @@
           <select
             name=""
             id=""
-            v-model="empty"
+            v-model="rm_item.unit_l_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
-            <option value="" selected disabled>unit</option>
-            <option v-for="unit in units" :key="unit.id" value="">
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
         </div>
         <!-- Third Row -->
-        <div class="row m-15" style="width: 99%">
+        <div class="row m-15" style="width: 99%; text-align: left">
           <input
             type="number"
             class="i-25 g"
             v-model="rm_item.avg_m"
+            placeholder="Avg of M"
             style="text-align: right; border-radius: 10px"
           />
           <select
-            v-model="empty"
+            v-model="rm_item.unit_m_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
@@ -219,22 +234,20 @@
             </option>
           </select>
 
-
           <input
             type="number"
             v-model="rm_item.avg_l"
             class="i-25 g"
-            style="text-align: right; border-radius: 10px"
+            placeholder="Avg of L"
+            style="text-align: right; border-radius: 10px; margin-left: 50px"
           />
           <select
-            name=""
-            id=""
-            v-model="empty"
+            v-model="rm_item.unit_l_id"
             class="i-25 ig"
             style="border-radius: 10px"
           >
             <option value="" selected disabled>unit</option>
-            <option v-for="unit in units" :key="unit.id" value="">
+            <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
@@ -253,18 +266,24 @@ export default {
   data() {
     return {
       rm_item: {},
-      empty: '',
+      new_img: false,
+      img: '',
+      categories: [],
+      units: [],
     };
   },
   methods: {
     fetchRawMaterials() {
-      api_raw_material.get(`raw-material/${this.$route.params.id}`).then((response) => {
-        console.log(response.data, 'response')
-        this.rm_item = response.data
-      });
+      api_raw_material
+        .get(`raw-material/${this.$route.params.id}`)
+        .then((response) => {
+          console.log(response.data, "response");
+          this.rm_item = response.data;
+        });
     },
     onFileChange(e) {
       this.img = e.target.files[0];
+      this.new_img = true
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
@@ -272,34 +291,38 @@ export default {
       }
     },
     fridge(val) {
-      this.is_refrigerator = val;
+      this.rm_item.is_refrigerator = val;
     },
-    save() {
+    edit() {
       const data = new FormData();
-      data.append("maximum", this.maximum);
-      data.append("minimum", this.minimum);
-      data.append("remain", this.remain);
-      data.append("category_id", this.category_id);
-      data.append("name", this.name);
-      data.append("is_refrigerator", this.is_refrigerator);
-      data.append("img", this.img, this.img.name);
-      data.append("to_unit_id", this.to_unit_id);
-      data.append("next_unit_id", this.next_unit_id);
-      data.append("to_amount", this.to_amount);
-      data.append("next_amount", this.next_amount);
-      data.append("unit_l_id", this.unit_l_id);
-      data.append("unit_m_id", this.unit_m_id);
-      data.append("unit_s_id", this.unit_s_id);
-      data.append("l_to_m", this.l_to_m);
-      data.append("m_to_s", this.m_to_s);
-      data.append("avg_l", this.avg_l);
-      data.append("avg_m", this.avg_m);
-      data.append("avg_s", this.avg_s);
+      data.append("raw_material_id", this.rm_item.id);
+      data.append("maximum", this.rm_item.maximum);
+      data.append("minimum", this.rm_item.minimum);
+      data.append("remain", this.rm_item.remain);
+      data.append("category_id", this.rm_item.category_id);
+      data.append("name", this.rm_item.name);
+      data.append("is_refrigerator", this.rm_item.is_refrigerator);
+      data.append("to_unit_id", this.rm_item.to_unit_id);
+      data.append("next_unit_id", this.rm_item.next_unit_id);
+      data.append("to_amount", this.rm_item.to_amount);
+      data.append("next_amount", this.rm_item.next_amount);
+      data.append("unit_l_id", this.rm_item.unit_l_id);
+      data.append("unit_m_id", this.rm_item.unit_m_id);
+      data.append("unit_s_id", this.rm_item.unit_s_id);
+      data.append("m_to_l", this.rm_item.m_to_l);
+      data.append("s_to_m", this.rm_item.s_to_m);
+      data.append("avg_l", this.rm_item.avg_l);
+      data.append("avg_m", this.rm_item.avg_m);
+      data.append("avg_s", this.rm_item.avg_s);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
+      if (this.new_img) {
+        data.append("img", this.rm_item.img, this.rm_item.name);
+      }
 
-      api_raw_material.post("raw-material/", data).then(() => {
-        this.$router.push({ name: "CreateRM" });
+      api_raw_material.put("rm-update/", data).then((response) => {
+        console.log(response.data, "response data");
+        this.$router.push({ name: "EditRM" });
       });
     },
   },
@@ -326,6 +349,7 @@ export default {
       this.categories = response.data;
     });
     api_raw_material.get("unit").then((response) => {
+      console.log(response.data, "unit");
       this.units = response.data;
     });
   },
@@ -333,6 +357,11 @@ export default {
 </script>
 
 <style scoped>
+::placeholder {
+  text-align: left;
+  color: white;
+  font-size: 22px;
+}
 .i-25 {
   width: 140px;
   border-radius: 10px;

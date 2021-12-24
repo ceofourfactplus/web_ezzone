@@ -201,15 +201,17 @@ export default {
     },
     pickup(pickup_val, item) {
       console.log(pickup_val, item,  'pickup_val')
+      console.log(item.unit_s_id, 'id')
       var data = {
         raw_material_id: item.id,
         amount: pickup_val,
+        unit_id: item.unit_s_id,
         create_by_id: this.$store.state.auth.userInfo.id
       }
       api_raw_material.put(`raw-material/`, data).then((response) => {
         console.log(response.data.id, 'data')
         this.fetchRawMaterials()
-      })
+      }).catch(err => { console.log(err, 'err') })
       this.show_pickup_status = false
     },
     hideShowPickup() {
