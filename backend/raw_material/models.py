@@ -101,7 +101,7 @@ class ReceiptRawMaterialDetail(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     total_price = models.DecimalField(max_digits=5, decimal_places=2)
     amount = models.IntegerField()
-    remark = models.TextField(blank=True)
+    remark = models.TextField(blank=False)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True, blank=True)
@@ -111,10 +111,11 @@ class ReceiptRawMaterialDetail(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_update_by", null=True, blank=True)
 
 
-class OP(models.Model):
+class PO(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
     amount = models.IntegerField()
+    status = models.BooleanField(default=True)
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     create_at = models.DateTimeField(auto_now_add=True)
     create_by = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT)

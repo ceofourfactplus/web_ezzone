@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.utils import field_mapping
-from .models import  RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail
+from .models import  RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail, PO
 from user.serializers import UserSerializer
 
 
@@ -26,6 +26,29 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = '__all__'
+        
+        
+class POSerializer(serializers.ModelSerializer):
+    raw_material_id = serializers.IntegerField(required=True)
+    supplier_id = serializers.IntegerField(required=True)
+    create_by_id = serializers.IntegerField(required=True)
+    unit_id = serializers.IntegerField(required=True)
+    supplier_set = SupplierSerializer(read_only=True, source="supplier")
+    raw_material_set = RawMaterialListSeriallizer(
+        read_only=True, source="raw_material")
+    class Meta:
+        model = PO
+        fields = [
+            'amount',
+            'status',
+            'unit_id',
+            'supplier_set',
+            'raw_material_set',
+            'raw_material_id',
+            'supplier_id',
+            'create_by_id',
+            'create_at',
+        ]
 
 class RawMaterialSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(required=True)

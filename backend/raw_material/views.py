@@ -1,11 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import RawMaterial, RawMaterialCategory, Unit, Supplier, PickUpRawMaterial
-from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer,SupplierSerializer, PickUpRawMaterialSerializer
+from .models import RawMaterial, RawMaterialCategory, Unit, Supplier, PickUpRawMaterial, PO
+from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer, SupplierSerializer, PickUpRawMaterialSerializer, POSerializer
 
 from django.db.models import F
 from rest_framework.parsers import FormParser, MultiPartParser
+
+
 
 
 
@@ -212,12 +214,32 @@ class FilCategoryRaw(APIView):
         raw_material = RawMaterial.objects.filter(category_id=pk)
         serializer = RawMaterialSerializer(raw_material, many=True)
         return Response(serializer.data)
+    
+class PO(APIView):
+    def get(self, request):
+        po = PO.objects.all()
+        serializer = POSerializer(po, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = POSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
 class PONotice(APIView):
     def get(self, request):
-        raw_material = RawMaterial.objects.filter(remain__lte = F('minimum'))
-        serializer = RawMaterialSerializer(raw_material, many=True)
+        RawMaterials = RawMaterial.objects.filter(minimum__gt = F('remain'))
+        print(RawMaterials)
+        for item in RawMaterials:
+            if item.remain <= item.minimum and item.remain > 0:
+                item.status = 2
+            elif item.remain <= 0:
+                item.status = 3
+            item.save()
+        serializer = RawMaterialSerializer(RawMaterials, many=True)
         return Response(serializer.data)
 
     def post(self,request):
