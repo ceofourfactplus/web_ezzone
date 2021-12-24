@@ -66,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div class="frame f-2" style="height: 220px">
+      <div class="frame f-2" style="height: 220px; padding-left: 0px">
         <!-- Head Of Section 2 -->
         <div class="row">
           <div class="col-12">
@@ -86,21 +86,27 @@
         </div>
         <!-- Content -->
         <div class="row">
-          <div class="col-6 label-input">
-            <label for="">Qty&nbsp;&nbsp;&nbsp;&nbsp;:</label
-            ><input type="number" style="background: #717171; width: 220px" v-model="remain" />
+          <div class="col-4" style="width: 100%; padding: 0px;">
+            <label for="">Qty&nbsp;:</label>
+            <input type="number" style="background: #717171; width: 100px; height: 50px;" v-model="remain" />
           </div>
-          <div class="col-6 label-input">
+          <div class="col-4" style="width: 100%; padding: 0px;">
             <label for="">Min&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="background: #717171; width: 55%" v-model="minimum" />
+            ><input type="number" style="background: #717171; width: 100px; height: 50px;" v-model="minimum" />
           </div>
-          <div class="col-6 label-input m-15">
-            <label for="">Avg P&nbsp;:</label>
-            ><input type="number" style="background: #717171; width: 55%" v-model="avg_s" />
+          <div class="col-4" style="width: 100%; padding: 0px;">
+            <label for="">Max Qty&nbsp;:</label
+            ><input type="number" style="background: #717171; width: 100px; height: 50px;" v-model="maximum" />
           </div>
-          <div class="col-6 label-input m-15">
-            <label for="">Max&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="background: #717171; width: 53%" v-model="maximum" />
+        </div>
+        <div class="row" style="margin-top: 30px;">
+          <div class="col-6" style="width: 100%; padding: 0px;">
+            <label for="">Price&nbsp;:</label
+            ><input type="number" style="background: #717171; width: 234px; height: 50px; margin-left: -10px" v-model="maximum" />
+          </div>
+          <div class="col-6" style="width: 100%; padding: 0px;">
+            <label for="">Supplier&nbsp;:</label
+            ><input type="number" style="background: #717171; width: 234px; height: 50px;" v-model="maximum" />
           </div>
         </div>
       </div>
@@ -197,45 +203,6 @@
             style="border-radius: 10px"
           >
             <option value="" selected disabled style="color: white;">unit</option>
-            <option v-for="unit in units" :key="unit.id" :value="unit.id">
-              {{ unit.unit }}
-            </option>
-          </select>
-        </div>
-        <!-- Third Row -->
-        <div class="row m-15" style="width: 99%; text-align: left;">
-          <input
-            type="number"
-            class="i-25 g"
-            v-model="avg_m"
-            placeholder="Avg of M"
-            style="text-align: right; border-radius: 10px; background: #717171;"
-          />
-          <select
-            v-model="unit_m_id"
-            class="i-25 ig"
-            style="border-radius: 10px"
-          >
-            <option value="" selected disabled>unit</option>
-            <option v-for="unit in units" :key="unit.id" :value="unit.id">
-              {{ unit.unit }}
-            </option>
-          </select>
-
-
-          <input
-            type="number"
-            v-model="avg_l"
-            class="i-25 g"
-            placeholder="Avg of L"
-            style="text-align: right; border-radius: 10px; margin-left: 50px; background: #717171;"
-          />
-          <select
-            v-model="unit_l_id"
-            class="i-25 ig"
-            style="border-radius: 10px"
-          >
-            <option value="" selected disabled>unit</option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -377,15 +344,15 @@ export default {
   padding-left: 20px;
 }
 .f-1 {
-  width: 680px;
+  width: 725px;
   height: 270px;
 }
 .f-2 {
-  width: 680px;
+  width: 725px;
   height: 170px;
 }
 .f-3 {
-  width: 680px;
+  width: 725px;
   height: 230px;
 }
 .container-f {
