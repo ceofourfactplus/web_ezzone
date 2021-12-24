@@ -6,14 +6,12 @@ import UserStatus from "../views/User/UserStatus.vue";
 import store from "../store";
 import RawMaterials from "../views/RawMaterials/RM.vue";
 import CreateRM from "../views/RawMaterials/CreateRM.vue";
-import EditRM from "../views/RawMaterials/EditRM.vue";
 import PickupList from "../views/RawMaterials/PickupList.vue";
 import Supplier from "../views/RawMaterials/Supplier.vue"
 import CreateSupplier from "../views/RawMaterials/CreateSup.vue"
 
 // import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
-import PONotice from "../views/RawMaterials/PONotice.vue";
 import PO from "../views/RawMaterials/PO.vue";
 import PONotice from "../views/RawMaterials/PONotice.vue";
 import EditUser from "../views/User/EditUser.vue";
