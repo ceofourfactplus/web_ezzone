@@ -54,6 +54,7 @@ export default {
   margin-right: 1%;
   margin-left: 5%;
   margin-top: 10px;
+  text-align: left !important;
 }
 
 .tab-item {

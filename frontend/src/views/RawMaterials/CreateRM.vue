@@ -391,12 +391,7 @@ export default {
   margin-right: auto;
   margin-left: auto;
 }
-input {
-  background-color: #717171;
-  width: 150px;
-  height: 50px;
-  margin-left: 10px;
-}
+
 option {
   font-size: 20px;
 }
@@ -405,14 +400,11 @@ raw-img {
   height: 235px;
 }
 
-label {
-  color: #fff;
-  font-size: 30px;
-}
 
 ::placeholder {
-  text-indent: 10 px;
+  text-indent: 5 px;
   color: #fff;
+  font-size: 20px;
 }
 .h-25 {
   height: 25%;

@@ -1,14 +1,16 @@
+from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.utils import field_mapping
-from .models import  RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail
+from .models import PO, RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail
 from user.serializers import UserSerializer
 
 
 class RawMaterialListSeriallizer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = RawMaterial
         fields = '__all__'
+
 
 class RawMaterialCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,6 +28,7 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = '__all__'
+
 
 class RawMaterialSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(required=True)
@@ -74,6 +77,7 @@ class PickUpRawMaterialSerializer(serializers.ModelSerializer):
     raw_material_id = serializers.IntegerField()
     create_by_id = serializers.IntegerField()
     create_by = UserSerializer(read_only=True, source="user")
+    unit_set = UnitSerializer(read_only=True, source="unit")
 
     class Meta:
         model = PickUpRawMaterial
@@ -120,3 +124,19 @@ class ReceiptRawMaterialSerializer(serializers.ModelSerializer):
                   'create_at', 'create_by_id', 'update_by_id',
                   'update_at', 'supplier_set',
                   'create_by', 'update_by']
+
+
+class POSerializer(serializers.ModelSerializer):
+    raw_material_id = serializers.IntegerField()
+    supplier_id = serializers.IntegerField()
+    unit_id = serializers.IntegerField()
+    create_by_id = serializers.IntegerField()
+    supplier_set = SupplierSerializer(read_only=True,source="supplier")
+    raw_material_set = RawMaterialSerializer(read_only=True,source="raw_material")
+    unit_set = UnitSerializer(read_only=True,source="unit")
+    create_by_set = UserSerializer(read_only=True, source="create_by")
+    class Meta:
+        model = PO
+        fields = ['id', 'supplier_id', 'raw_material_id',
+                  'last_price', 'unit_id', 'unit_set', 'supplier_set', 
+                  'raw_material_set', 'amount', 'create_by_id', 'create_by_set', 'create_at']

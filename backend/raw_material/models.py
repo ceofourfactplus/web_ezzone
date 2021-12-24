@@ -22,7 +22,7 @@ class Unit(models.Model):
 class Supplier(models.Model):
     company_name = models.CharField(max_length=255)  # company_name
     contact = models.CharField(max_length=100)  # ติดต่อใคร
-    phone = models.IntegerField()
+    phone = models.CharField(max_length=13)
     address = models.CharField(max_length=500)
     email = models.EmailField(null=True)
     google_map = models.URLField(max_length=400)
@@ -110,12 +110,11 @@ class ReceiptRawMaterialDetail(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="receipt_raw_material_detail_update_by", null=True, blank=True)
 
 
-class OP(models.Model):
+class PO(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
     amount = models.IntegerField()
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     create_at = models.DateTimeField(auto_now_add=True)
     create_by = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT)
-
-    
+    last_price = models.DecimalField(max_digits=5, decimal_places=2)
