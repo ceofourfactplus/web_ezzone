@@ -1,8 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product"
-      >New&#160;Product&#160;Detail</nav-app
-    >
+    <nav-app save="true" @save="create_product">New&#160;Product&#160;Detail</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -38,12 +36,7 @@
             </div>
             <div class="col-12 h-20">
               <label for="">Category&nbsp;:</label
-              ><select
-                v-model="category_id"
-                style="width: 210px"
-                name="category"
-                id="category"
-              >
+              ><select v-model="category_id" name="category" id="category">
                 <option
                   v-for="category in categories"
                   :key="category.id"
@@ -69,8 +62,19 @@
               <div class="switch"><Switch @switch="switch_active" /></div>
             </div>
             <div class="col-12 h-20">
-              <label for="">Price&nbsp;&nbsp;:</label
-              ><input type="number" style="width: 69%" v-model="price" />
+              <label for="owner"
+                >Owner&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label
+              >
+              <select name="owner" id="owner" v-model="consignment_id">
+                <option value="form_ezzone">EZ Zone</option>
+                <option
+                  v-for="user in all_user"
+                  :key="user.id"
+                  :value="user.id"
+                >
+                  {{ user.nick_name }}
+                </option>
+              </select>
             </div>
           </div>
         </div>
@@ -79,7 +83,7 @@
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 74%" v-model="remain" />
+            ><input type="text" style="width: 74%" v-model="remain" />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
@@ -104,32 +108,36 @@
           </div>
         </div>
       </div>
-      <div class="frame f-2">
+      <div class="frame f-3">
         <div class="row">
           <div class="col-6 label-input">
+            <label for="">Price&nbsp;&nbsp;:</label
+            ><input type="number" style="width: 69%" v-model="price" />
+          </div>
+          <div class="col-6 label-input">
+            <label for="">Share&nbsp;(%)&nbsp;&nbsp;:</label
+            ><input type="number" style="width: 47%" v-model="share" />
+          </div>
+          <div class="col-6 label-input m-15">
             <label for="flavour">Flavour:</label
             ><select id="flavour" v-model="flavour">
               <option value="2">Sweet</option>
               <option value="1">Spicy</option>
             </select>
           </div>
-          <div class="col-6 label-input">
+          <div class="col-6 label-input m-15">
             <label for="stock">Stock:</label
-            ><select id="stock" style="width: 210px" v-model="stock">
+            ><select id="stock" style="width: 220px" v-model="stock">
               <option value="0">No Stock</option>
               <option value="1">Product</option>
               <option value="2" disabled>Material</option>
             </select>
           </div>
-          <div class="col-5 label-input m-15">
-            <label for="">Flavour Level&nbsp;&nbsp;:</label
-            ><Switch @switch="switch_flavour_level" />
-          </div>
-          <div class="col-7 label-input m-15">
+          <div class="col-6 label-input m-15">
             <label for="type_topping">Type Topping:</label
             ><select
               id="type_topping"
-              style="width: 165px"
+              style="width: 125px"
               v-model="type_topping"
             >
               <option value="0">not use</option>
@@ -137,6 +145,10 @@
               <option value="2">DRINK</option>
               <option value="3">FOOD</option>
             </select>
+          </div>
+          <div class="col-6 label-input m-15">
+            <label for="">Flavour Level&nbsp;&nbsp;:</label
+            ><Switch @switch="switch_flavour_level" />
           </div>
         </div>
       </div>
@@ -169,6 +181,7 @@ export default {
       category_id: null,
       status: 1,
       active: true,
+      consignment_id: "form_ezzone",
       unit_id: null,
       remain: 0,
       minimum: 0,
@@ -177,9 +190,11 @@ export default {
       flavour: 0,
       flavour_level: false,
       price: 0,
+      percent: false,
+      share: 0,
       show_img: null,
       name: "",
-      warehouse: 0,
+      stock: 0,
       type_topping: 0,
     };
   },
@@ -190,8 +205,8 @@ export default {
       });
     },
     get_category() {
-      api_product.get("product/").then((response) => {
-        this.all_product = response.data;
+      api_product.get("category/").then((response) => {
+        this.categories = response.data;
       });
     },
     get_unit() {
@@ -213,8 +228,11 @@ export default {
       if (this.img != null) {
         data.append("img", this.img, this.img.name);
       }
-      data.append("category_id", this.category_id);
-      data.append("unit_id", this.unit_id);
+      data.append("category", this.code);
+      data.append("unit", this.unit_id);
+      if (this.consignment_id != "form_ezzone") {
+        data.append("consignment", this.consignment_id);
+      }
       data.append("status", this.status);
       data.append("is_active", this.active);
       data.append("remain", this.remain);
@@ -223,11 +241,12 @@ export default {
       data.append("price", this.price);
       data.append("flavour", this.flavour);
       data.append("flavour_level", this.flavour_level);
-      data.append("share", 0);
+      data.append("share", this.share);
       data.append("name", this.name);
       data.append("warehouse", this.stock);
       data.append("type_topping", this.type_topping);
-      data.append("create_by_id", 1);
+      data.append("create_by", 1);
+
       api_product.post("product/", data).then(() => {
         this.$router.push({ name: "Product" });
       });
@@ -273,6 +292,10 @@ export default {
 .f-2 {
   width: 680px;
   height: 170px;
+}
+.f-3 {
+  width: 680px;
+  height: 235px;
 }
 .container-f {
   padding-left: 22px;
