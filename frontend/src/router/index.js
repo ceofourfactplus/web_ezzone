@@ -1,41 +1,134 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import store from "../store";
+
+// user
 import Login from "../views/User/Login.vue";
 import Register from "../views/User/Register.vue";
-import new2 from "../views/test/new.vue";
 import UserStatus from "../views/User/UserStatus.vue";
-import store from "../store";
+import EditUser from "../views/User/EditUser.vue";
+import ForgotPassword from "../views/User/ForgotPassword.vue";
+
+// raw material
 import RawMaterials from "../views/RawMaterials/RM.vue";
 import CreateRM from "../views/RawMaterials/CreateRM.vue";
 import EditRM from "../views/RawMaterials/EditRM.vue";
 import PickupList from "../views/RawMaterials/PickupList.vue";
-import Supplier from "../views/RawMaterials/Supplier.vue"
-import CreateSupplier from "../views/RawMaterials/CreateSup.vue"
-
-// import POForSuppliers from "../views/RawMaterials/POForSuppliers.vue"
+import RMUnit from "../views/RawMaterials/UnitRM.vue";
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
-import PO from "../views/RawMaterials/PO.vue";
+import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
+
+// supplier
+import Supplier from "../views/RawMaterials/Supplier.vue";
+import CreateSupplier from "../views/RawMaterials/CreateSup.vue";
+import EditSupplier from "../views/RawMaterials/EditSup.vue";
+
+// po
 import PONotice from "../views/RawMaterials/PONotice.vue";
-import EditUser from "../views/User/EditUser.vue";
-import DashBoard from "../views/DashBoard.vue";
-import ForgotPassword from "../views/User/ForgotPassword.vue";
+import PO from "../views/RawMaterials/PO.vue";
+
+// customer
 import Customer from "../views/Customer/Customer.vue";
 import CreateCustomer from "../views/Customer/CreateCustomer.vue";
 import EditCustomer from "../views/Customer/EditCustomer.vue";
-import Products from "../views/Product/Products.vue";
+
+// product
+import Product from "../views/Product/Products.vue";
 import CreateProduct from "../views/Product/CreateProduct.vue";
 import ProductCategory from "../views/Product/ProductCategory.vue";
-import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
-import RMUnit from "../views/RawMaterials/UnitRM.vue";
-import EditSupplier from '../views/RawMaterials/EditSup.vue';
+
+// dash board
+import DashBoard from "../views/DashBoard.vue";
 
 const routes = [
+  // product
   {
-    path: "/rm/po-notice",
-    name: "PONotice",
-    component: PONotice,
+    path: "/product/product-category",
+    name: "ProductCategory",
+    component: ProductCategory,
     meta: {
       requiresLogin: false,
     },
+  },
+  {
+    path: "/product/create-product",
+    name: "CreateProduct",
+    component: CreateProduct,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/product",
+    name: "Product",
+    component: Product,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+
+  // dash board
+  {
+    path: "/dash-board",
+    name: "DashBoard",
+    component: DashBoard,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+
+  // user
+  {
+    path: "/user/login",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/user/forgot-password",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+  },
+  {
+    path: "/user/register",
+    name: "Register",
+    component: Register,
+  },
+  {
+    path: "/user/status",
+    name: "UserStatus",
+    component: UserStatus,
+  },
+  {
+    path: "/user/edit/:id",
+    props: true,
+    component: EditUser,
+    name: "EditUser",
+  },
+
+  // customer
+  {
+    path: "/customer",
+    props: true,
+    component: Customer,
+    name: "Customer",
+  },
+  {
+    path: "/customer/create",
+    props: true,
+    component: CreateCustomer,
+    name: "CreateCustomer",
+  },
+  {
+    path: "/customer/edit/:id",
+    props: true,
+    component: EditCustomer,
+    name: "EditCustomer",
+  },
+
+  // raw material
+  {
+    path: "/rm/unit",
+    component: RMUnit,
+    name: "RMUnit",
   },
   {
     path: "/rm/pickup-list",
@@ -46,49 +139,18 @@ const routes = [
     },
   },
   {
-    path: "/rm/edit-rm",
+    path: "/rm/edit/:id",
     name: "EditRM",
     component: EditRM,
+    props: true,
     meta: {
       requiresLogin: false,
     },
   },
   {
-    path: "/raw-material-category",
+    path: "/rm/category",
     name: "RawMaterialCategory",
     component: RawMaterialCategory,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
-    path: "/product-category",
-    name: "ProductCategory",
-    component: ProductCategory,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
-    path: "/create-product/",
-    name: "CreateProduct",
-    component: CreateProduct,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
-    path: "/products",
-    name: "Products",
-    component: Products,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
-    path: "/dash-board",
-    name: "DashBoard",
-    component: DashBoard,
     meta: {
       requiresLogin: false,
     },
@@ -102,105 +164,48 @@ const routes = [
     },
   },
   {
-    path: "/pickup-raw-material",
+    path: "/rm//pick-up",
     name: "PickupRawMaterial",
     component: PickupRawMaterial,
   },
-  // {
-  //   path: "/minimum",
-  //   name: "Minimum",
-  //   component: Minimum,
-  // },
-  // {
-  //   path: "/manage-raw-material",
-  //   name: "ManageRawMaterial",
-  //   component: ManageRawMaterial,
-  // },
   {
     path: "/rm/raw-materials",
     name: "RawMaterials",
     component: RawMaterials,
   },
+
+  // supplier
   {
-    path: "/login",
-    name: "Login",
-    component: Login,
+    path: "/rm/supplier",
+    name: "Supplier",
+    component: Supplier,
   },
   {
-    path: "/forgot-password",
-    name: "ForgotPassword",
-    component: ForgotPassword,
+    path: "/rm/supplier/create",
+    name: "CreateSupplier",
+    component: CreateSupplier,
   },
   {
-    path: "/register",
-    name: "Register",
-    component: Register,
-  },
-  {
-    path: "/test",
-    name: "Test",
-    component: new2,
-  },
-  {
-    path: "/user-status",
-    name: "UserStatus",
-    component: UserStatus,
-  },
-  {
-    path: "/edit-user/:id",
+    path: "/rm/supplier/edit/:id",
     props: true,
-    component: EditUser,
-    name: "EditUser",
+    name: "EditSupplier",
+    component: EditSupplier,
   },
-  {
-    path: "/customer",
-    props: true,
-    component: Customer,
-    name: "Customer",
-  },
-  {
-    path: "/create-customer",
-    props: true,
-    component: CreateCustomer,
-    name: "CreateCustomer",
-  },
-  {
-    path: "/edit-customer/:id",
-    props: true,
-    component: EditCustomer,
-    name: "EditCustomer",
-  },
+
+  // po
   {
     path: "/rm/po-notice",
     name: "PONotice",
     component: PONotice,
+    meta: {
+      requiresLogin: false,
+    },
   },
   {
-    path: "/rm/unit",
-    component: RMUnit,
-    name:"RMUnit"
+    path: "/rm/po",
+    name: "PO",
+    component: PO,
   },
-  {
-    path:'/rm/supplier',
-    name:'Supplier',
-    component:Supplier
-  },
-  {
-    path:'/rm/supplier/create',
-    name:'CreateSupplier',
-    component:CreateSupplier
-  },
-  {
-    path:'/rm/supplier/edit/:id',
-    props:true,
-    name:'EditSupplier',
-    component:EditSupplier
-  },
-  {
-    path:'/rm/po',
-    name:"PO",
-    component:PO,
-  }
 ];
 
 const router = createRouter({

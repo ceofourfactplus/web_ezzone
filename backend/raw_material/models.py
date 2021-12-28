@@ -67,9 +67,9 @@ class RawMaterial(models.Model):
 class PriceRawMaterial(models.Model):
     avg_price = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
     last_price = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
-    raw_material = models.ForeignKey(RawMaterial,on_delete=models.PROTECT)
-    unit = models.ForeignKey(Unit,on_delete=models.PROTECT)
-    supplier = models.ForeignKey(Supplier,on_delete=models.PROTECT)
+    raw_material = models.ForeignKey(RawMaterial,on_delete=models.PROTECT, null=True, blank=True)
+    unit = models.ForeignKey(Unit,on_delete=models.PROTECT, null=True, blank=True)
+    supplier = models.ForeignKey(Supplier,on_delete=models.PROTECT, null=True, blank=True)
 
 class PickUpRawMaterial(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)
