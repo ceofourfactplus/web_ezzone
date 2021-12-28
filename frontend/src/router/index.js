@@ -39,10 +39,15 @@ import ProductCategory from "../views/Product/ProductCategory.vue";
 // dash board
 import DashBoard from "../views/DashBoard.vue";
 
+// sale channel
+import SaleChannel from "../views/SaleChannel/SaleChannel.vue"
+import EditSaleChannel from "../views/SaleChannel/EditSaleChannel.vue"
+import CreateSaleChannel from "../views/SaleChannel/CreateSaleChannel.vue"
+
 const routes = [
   // product
   {
-    path: "/product/product-category",
+    path: "/product/category",
     name: "ProductCategory",
     component: ProductCategory,
     meta: {
@@ -206,6 +211,24 @@ const routes = [
     name: "PO",
     component: PO,
   },
+
+  // sale channel
+  {
+    path: "/sale-channel",
+    name: "SaleChannel",
+    component:  SaleChannel,
+  },
+  {
+    path: "/sale-channel/create",
+    name: "CreateSaleChannel",
+    component: CreateSaleChannel,
+  },
+  {
+    path: "/sale-channel/edit",
+    name: "EditSaleChannel",
+    component: EditSaleChannel,
+  },
+
 ];
 
 const router = createRouter({

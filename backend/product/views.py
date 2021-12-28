@@ -16,6 +16,11 @@ from .forms import *
 
 # product category
 
+class AmountPorduct(APIView):
+    def get(self,request,category_id):
+        product_amount = Product.objects.filter(category_id=category_id).count()
+        return Response({'amount':product_amount},status=200)
+
 class ProductCategoryStatus(APIView):
     def get_object(self, pk):
         try:
@@ -145,6 +150,14 @@ class SaleChannelDetail(APIView):
         return Response(status=204)
 
 # topping
+class ProductByCategory(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request,category_id):
+        object = Product.objects.filter(category_id=category_id)
+        serializer = ProductSerializer(
+            object, context={"request": request}, many=True)
+        return Response(serializer.data)
 
 
 class ProductList(APIView):
@@ -157,13 +170,21 @@ class ProductList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        if not Product.objects.filter(code=request.data['code']).exists():
-            serializer = ProductSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=201)
-            return Response(serializer.errors, status=400)
-        return Response('this code is already taked', status=400)
+        # if not Product.objects.filter(code=request.data['code']).exists():
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # sale_channel =                  SaleChannel.objects.get(is_ezzone=True).id
+            # price = PriceProduct.objects.create(
+            #     sale_channel_id = sale_channel,
+            #     product_id = serializer.data['id'],
+            #     create_by_id = request.data['create_by_id'],
+            #     price =  request.data['price'],
+            # 
+            # print(price.id)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+        # return Response('this code is already taked', status=400)
 
 
 class ProductStatus(APIView):
@@ -286,5 +307,3 @@ class PriceProductMany(APIView):
                         return Response('ok',status=200)
                     return Response('bad request',status=400)
                 
-
-# product

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'raw_material',
     'material',
     'customer',
+    'consignment',
     'promotion',  
     'user',
 ]
