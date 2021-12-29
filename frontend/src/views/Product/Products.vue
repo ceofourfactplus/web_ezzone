@@ -57,7 +57,7 @@
               </span> -->
               {{ product.code }}
             </div>
-            <div class="col-4 w-100" style="margin: auto; text-align: center">
+            <div class="col-4 w-100" style="margin: auto; text-align: center" @click="$router.push({name:'EditProduct',params:{id:product.id}})">
               {{ product.name }}
             </div>
             <div class="col-2 w-100" style="margin: auto; text-align: center">

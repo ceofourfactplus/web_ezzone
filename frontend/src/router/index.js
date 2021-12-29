@@ -35,7 +35,14 @@ import EditCustomer from "../views/Customer/EditCustomer.vue";
 // product
 import Product from "../views/Product/Products.vue";
 import CreateProduct from "../views/Product/CreateProduct.vue";
+import EditProduct from "../views/Product/EditProduct.vue";
 import ProductCategory from "../views/Product/ProductCategory.vue";
+
+// topping
+import Topping from "../views/Topping/Topping.vue";
+import CreateTopping from "../views/Topping/CreateTopping.vue";
+import EditTopping from "../views/Topping/EditTopping.vue";
+import ToppingCategory from "../views/Topping/ToppingCategory.vue";
 
 // dash board
 import DashBoard from "../views/DashBoard.vue";
@@ -64,9 +71,53 @@ const routes = [
     },
   },
   {
+    path: "/product/edit-product/:id",
+    props:true,
+    name: "EditProduct",
+    component: EditProduct,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
     path: "/product",
     name: "Product",
     component: Product,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+
+  // topping
+  {
+    path: "/topping/category",
+    name: "ToppingCategory",
+    component: ToppingCategory,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/topping/create",
+    name: "CreateTopping",
+    component: CreateTopping,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/topping/edit/:id",
+    props:true,
+    name: "EditTopping",
+    component: EditTopping,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/topping",
+    name: "Topping",
+    component: Topping,
     meta: {
       requiresLogin: false,
     },

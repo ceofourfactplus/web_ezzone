@@ -186,12 +186,12 @@ export default {
   methods: {
     get_user() {
       api_user.get("read-all/").then((response) => {
-        this.all_user = response.data;
+        this.all_product = response.data;
       });
     },
     get_category() {
-      api_product.get("product/").then((response) => {
-        this.all_product = response.data;
+      api_product.get("category/").then((response) => {
+        this.categories = response.data;
       });
     },
     get_unit() {

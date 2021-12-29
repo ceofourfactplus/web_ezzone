@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.deletion import PROTECT
 from backend.settings import AUTH_USER_MODEL
 from django.utils.translation import gettext_lazy as _
 from raw_material.models import Unit
@@ -17,26 +18,6 @@ def upload_to_sale_channel(instance, filename):
     return 'sale_channel/{filename}'.format(filename=filename)
 
 
-class ProductCategory(models.Model):
-    DESSERT = 1
-    DRINK = 2
-    FOOD = 3
-    TYPE_CATEGORY = (
-        (DESSERT, 'ของหวาน'),
-        (DRINK, 'เครื่องดื่ม'),
-        (FOOD, 'อาหาร')
-    )
-    status = models.BooleanField(default=True)
-    category = models.CharField(max_length=100)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(null=True, blank=True)
-    type_category = models.IntegerField(choices=TYPE_CATEGORY)
-    create_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_create_by")
-    update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_update_by", null=True, blank=True)
-
-
 class SaleChannel(models.Model):
     status = models.BooleanField(default=True)
     img = models.ImageField(_("Image"), upload_to=upload_to_sale_channel)
@@ -48,6 +29,96 @@ class SaleChannel(models.Model):
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sale_channel_update_by", null=True, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True,default=None)
+    
+# topping
+class ToppingCategory(models.Model):
+    category = models.CharField(max_length=100)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(null=True, blank=True)
+    create_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="topping_category_create_by")
+    update_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="topping_category_update_by", null=True, blank=True)
+
+
+class Topping(models.Model):
+    NONE_PICK_UP = 0
+    PRODUCT = 1
+    MATERIAL = 2
+    WAREHOUSE = (
+        (NONE_PICK_UP, 'ไม่ต้องตัดสต็อก'),
+        (PRODUCT, 'สินค้าพร้อมขาย'),
+        (MATERIAL, 'วัตถุดิบ')
+    )
+
+    OUT_OF_STOCK = 0
+    ALMOST_OUT_OF_STOCK = 1
+    INSTOCK = 2
+    STATUS_STOCK = (
+        (OUT_OF_STOCK, 'สินค้าหมด'),
+        (ALMOST_OUT_OF_STOCK, 'สินค้าเกือบหมด'),
+        (INSTOCK, 'สินค้าพร้อมขาย')
+    )
+
+    DISH = 1
+    SWEET = 2
+    FLAVOUR = (
+        (DISH, 'ของคาว'),
+        (SWEET, 'ของหวาน')
+    )
+    old_product = models.ForeignKey(
+        "self", on_delete=models.PROTECT, null=True, blank=True, default=None)
+    img = models.ImageField(
+        _("Image"), upload_to=upload_to_topping, default=None, null=True)
+    code = models.CharField(max_length=6)
+    name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    status = models.IntegerField(default=INSTOCK, choices=STATUS_STOCK)
+    remain = models.IntegerField(default=0)
+    flavour = models.IntegerField(choices=FLAVOUR)
+    minimum = models.IntegerField(default=0)
+    maximum = models.IntegerField(default=None, null=True)
+    unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
+    warehouse = models.IntegerField(choices=WAREHOUSE, default=NONE_PICK_UP)
+    create_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="topping_create_by")
+    update_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="topping_update_by", 
+        null=True, blank=True, default=None)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+class PriceTopping(models.Model):
+    status = models.BooleanField(default=True)
+    topping = models.ForeignKey(Topping, on_delete=models.CASCADE)
+    sale_channel = models.ForeignKey(SaleChannel, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    old_price = models.ForeignKey(
+        'self', on_delete=models.PROTECT, null=True, blank=True)
+
+class SetTopping(models.Model):
+    topping = models.ForeignKey(Topping,on_delete=models.CASCADE)
+    category = models.ForeignKey(ToppingCategory,on_delete=models.CASCADE)
+
+class ProductCategory(models.Model):
+    DESSERT = 1
+    DRINK = 2
+    FOOD = 3
+    TOPPING = 4
+    TYPE_CATEGORY = (
+        (DESSERT, 'ของหวาน'),
+        (DRINK, 'เครื่องดื่ม'),
+        (FOOD, 'อาหาร'),
+    )
+
+    category = models.CharField(max_length=100)
+    type_category = models.IntegerField(choices=TYPE_CATEGORY)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(null=True, blank=True)
+    create_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_create_by")
+    update_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_category_update_by", null=True, blank=True)
+
 
 class Product(models.Model):
     NONE_PICK_UP = 0
@@ -68,17 +139,6 @@ class Product(models.Model):
         (INSTOCK, 'สินค้าพร้อมขาย')
     )
 
-    NOT_USE_TOPPING = 0
-    ROTI = 1
-    DRINK = 2
-    FOOD = 3
-    TYPE_TOPPING = (
-        (NOT_USE_TOPPING, 'ไม่มี toppping'),
-        (ROTI, 'โรตี'),
-        (DRINK, 'เครื่องดื่ม'),
-        (FOOD, 'อาหาร')
-    )
-
     SPICY = 1
     SWEET = 2
     FLAVOUR = (
@@ -91,7 +151,6 @@ class Product(models.Model):
         _("Image"), upload_to=upload_to_product, default=None, null=True)
     code = models.CharField(max_length=6)
     name = models.CharField(max_length=100)
-    is_topping = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     flavour_level = models.BooleanField(default=False)
     status = models.IntegerField(default=INSTOCK, choices=STATUS_STOCK)
@@ -100,7 +159,7 @@ class Product(models.Model):
     minimum = models.IntegerField(default=0)
     maximum = models.IntegerField(default=None, null=True)
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
-    type_topping = models.IntegerField(choices=TYPE_TOPPING)
+    topping_category = models.ForeignKey(ToppingCategory,on_delete=models.PROTECT, default=None, null=True)
     warehouse = models.IntegerField(choices=WAREHOUSE, default=NONE_PICK_UP)
     category = models.ForeignKey(
         ProductCategory, on_delete=models.PROTECT, null=True, default=None)
@@ -128,12 +187,8 @@ class PriceProduct(models.Model):
     status = models.BooleanField(default=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     sale_channel = models.ForeignKey(SaleChannel, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=4, decimal_places=2)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
     old_price = models.ForeignKey(
         'self', on_delete=models.PROTECT, null=True, blank=True)
-    create_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_product_create_by")
-    update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="price_product_update_by", null=True, blank=True,default=None)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(null=True, blank=True)
+
+

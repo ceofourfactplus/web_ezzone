@@ -1,9 +1,10 @@
 
 from django.db import models
 from promotion.models import PromotionPackage, Voucher, PointPromotion
-from product.models import SaleChannel, Product
+from product.models import SaleChannel, Product,Topping
 from backend.settings import AUTH_USER_MODEL
 from customer.models import Customer
+from consignment.models import ConsignmentProduct
 
 from django.utils.translation import gettext_lazy as _
 
@@ -74,6 +75,8 @@ class OrderItem(models.Model):
 
     flavour_level = models.IntegerField(choices=FLAVOUR_LEVEL, null=True)
     product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True)
+    topping = models.ForeignKey(Topping, on_delete=models.PROTECT, null=True)
+    conignment = models.ForeignKey(ConsignmentProduct, on_delete=models.PROTECT, null=True)
     package = models.ForeignKey(
         PromotionPackage, on_delete=models.PROTECT, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -86,6 +89,10 @@ class OrderItem(models.Model):
     clear_consignment = models.BooleanField(default=False)
     old_item = models.ForeignKey(
         'self', on_delete=models.PROTECT, null=True, blank=True)
+    voucher = models.ForeignKey(
+        Voucher, on_delete=models.PROTECT, null=True, blank=True)
+    promotion = models.ForeignKey(
+        PointPromotion, on_delete=models.PROTECT, null=True, blank=True)
 
 
 class OrderItemTopping(models.Model):
