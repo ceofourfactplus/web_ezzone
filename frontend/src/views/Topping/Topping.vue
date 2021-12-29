@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>Products</nav-app>
+    <nav-app>Topping</nav-app>
     <div class="row" style="margin: auto; width: 94%" v-if="is_staff">
       <div class="col-10 w-100">
         <SearchBar @search="search_by_typing" />
@@ -99,7 +99,7 @@ export default {
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     this.fetchProducts();
-    this.fetchProductCategories();
+    this.fetchToppingCategories();
   },
   data() {
     return {
@@ -111,13 +111,13 @@ export default {
   },
   methods: {
     fetchProducts() {
-      api_product.get("product/").then((response) => {
+      api_product.get("topping/").then((response) => {
         this.show_products = response.data;
         this.products = response.data;
       });
     },
-    fetchProductCategories() {
-      api_product.get("/category/").then((response) => {
+    fetchToppingCategories() {
+      api_product.get("topping-category/").then((response) => {
         console.log(response.data);
         this.products_categories = response.data;
       });

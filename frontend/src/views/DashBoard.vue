@@ -158,7 +158,7 @@ export default {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/product.png"),
               txt: "Products",
-              link: "Products",
+              link: "Product",
             },
             {
               permissions: [

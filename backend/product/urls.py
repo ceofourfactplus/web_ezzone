@@ -4,6 +4,9 @@ from product import views
 urlpatterns = [
     path('category/', views.ProductCategoryList.as_view()),
     path('category/<int:pk>', views.ProductCategoryDetail.as_view()),
+    path('topping/', views.ToppingList.as_view()),
+    path('topping-category/', views.ToppingCategoryList.as_view()),
+    path('topping-category/<int:category_id>', views.ToppingByCategory.as_view()),
     path('category/status/<int:pk>/', views.ProductCategoryStatus.as_view()),
     path('category/get-amount-product/<int:category_id>', views.AmountPorduct.as_view()),
     path('sale-channel/', views.SalechannelList.as_view()),
@@ -18,5 +21,6 @@ urlpatterns = [
     path('product/<int:pk>/', views.ProductDetail.as_view()),
     path('product/status/<int:pk>/', views.ProductStatus.as_view()),
     path('many-price-product/', views.PriceProductMany.as_view()),
+    path('check-category-topping/<str:category_name>', views.CheckCategoryTopping.as_view()),
 
 ]

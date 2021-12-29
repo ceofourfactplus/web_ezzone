@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-app save="true" @save="create_product"
-      >New&#160;Product&#160;Detail</nav-app
+      >New&#160;Topping&#160;</nav-app
     >
     <div class="container-f">
       <div class="frame f-1">

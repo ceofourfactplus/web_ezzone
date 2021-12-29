@@ -1,8 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product"
-      >New&#160;Product&#160;Detail</nav-app
-    >
+    <nav-app save="true" @save="create_product">Edit&#160;Product</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -10,7 +8,11 @@
             <div class="row">
               <div class="col-12 mb-4">
                 <label for="">Code :</label
-                ><input type="text" v-model="code" style="width: 150px" />
+                ><input
+                  type="text"
+                  v-model="product.code"
+                  style="width: 150px"
+                />
               </div>
               <div class="col-12" style="padding: 0px">
                 <label id="select_img" for="file" style="margin-top: 0px">
@@ -33,13 +35,13 @@
                 type="text"
                 style="width: 350px; margin: auto"
                 placeholder="Product Name"
-                v-model="name"
+                v-model="product.name"
               />
             </div>
             <div class="col-12 h-20">
               <label for="">Category&nbsp;:</label
               ><select
-                v-model="category_id"
+                v-model="product.category_id"
                 style="width: 210px"
                 name="category"
                 id="category"
@@ -70,7 +72,11 @@
             </div>
             <div class="col-12 h-20">
               <label for="">Price&nbsp;&nbsp;:</label
-              ><input type="number" style="width: 69%" v-model="price" />
+              ><input
+                type="number"
+                style="width: 69%"
+                v-model="product.price"
+              />
             </div>
           </div>
         </div>
@@ -79,11 +85,15 @@
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 74%" v-model="remain" />
+            ><input type="number" style="width: 74%" v-model="product.remain" />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="width: 55%" v-model="minimum" />
+            ><input
+              type="number"
+              style="width: 55%"
+              v-model="product.minimum"
+            />
           </div>
           <div class="col-6 label-input m-15">
             <label for="unit">Unit&nbsp;&nbsp;:</label
@@ -91,7 +101,7 @@
               name="unit"
               id="unit"
               style="width: 225px"
-              v-model="unit_id"
+              v-model="product.unit_id"
             >
               <option v-for="unit in all_unit" :key="unit.id" :value="unit.id">
                 {{ unit.unit }}
@@ -100,7 +110,11 @@
           </div>
           <div class="col-6 label-input m-15">
             <label for="">Max&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="width: 53%" v-model="maximum" />
+            ><input
+              type="number"
+              style="width: 53%"
+              v-model="product.maximum"
+            />
           </div>
         </div>
       </div>
@@ -108,14 +122,18 @@
         <div class="row">
           <div class="col-6 label-input">
             <label for="flavour">Flavour:</label
-            ><select id="flavour" v-model="flavour">
+            ><select id="flavour" v-model="product.flavour">
               <option value="2">Sweet</option>
               <option value="1">Spicy</option>
             </select>
           </div>
           <div class="col-6 label-input">
             <label for="stock">Stock:</label
-            ><select id="stock" style="width: 210px" v-model="stock">
+            ><select
+              id="stock"
+              style="width: 210px"
+              v-model="product.warehouse"
+            >
               <option value="0">No Stock</option>
               <option value="1">Product</option>
               <option value="2" disabled>Material</option>
@@ -130,7 +148,7 @@
             ><select
               id="type_topping"
               style="width: 165px"
-              v-model="type_topping"
+              v-model="product.type_topping"
             >
               <option value="0">not use</option>
               <option value="1">ROTI</option>
@@ -157,6 +175,7 @@ export default {
     this.get_unit();
     this.get_user();
     this.get_category();
+    this.get_product();
   },
   data() {
     return {
@@ -164,23 +183,24 @@ export default {
       all_user: [],
       categories: [],
       all_unit: [],
-      code: "",
-      img: null,
-      category_id: null,
-      status: 1,
-      active: true,
-      unit_id: null,
-      remain: 0,
-      minimum: 0,
-      maximum: 0,
-      price: 0,
-      flavour: 0,
-      flavour_level: false,
-      price: 0,
-      show_img: null,
-      name: "",
-      warehouse: 0,
-      type_topping: 0,
+      product: {},
+      // code: "",
+      // img: null,
+      // category_id: null,
+      // status: 1,
+      // active: true,
+      // unit_id: null,
+      // remain: 0,
+      // minimum: 0,
+      // maximum: 0,
+      // price: 0,
+      // flavour: 0,
+      // flavour_level: false,
+      // price: 0,
+      // show_img: null,
+      // name: "",
+      // warehouse: 0,
+      // type_topping: 0,
     };
   },
   methods: {
@@ -199,58 +219,56 @@ export default {
         this.all_unit = response.data;
       });
     },
+    get_product() {
+      api_product
+        .get("product/" + this.$route.params.id + "/")
+        .then((response) => {
+          this.product = response.data;
+        });
+    },
     onFileChange(e) {
-      this.show_img = e.target.files[0];
-      if (this.show_img) {
+      this.product.img = e.target.files[0];
+      if (this.product.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.show_img);
+        reader.readAsDataURL(this.product.img);
       }
     },
     create_product() {
       const data = new FormData();
-      data.append("code", this.code);
-      if (this.img != null) {
-        data.append("img", this.img, this.img.name);
+      data.append("code", this.product.code);
+      if (this.show_img != null) {
+        data.append("img", this.product.img, this.product.img.name);
       }
-      data.append("category_id", this.category_id);
-      data.append("unit_id", this.unit_id);
-      data.append("status", this.status);
-      data.append("is_active", this.active);
-      data.append("remain", this.remain);
-      data.append("minimum", this.minimum);
-      data.append("maximum", this.maximum);
-      data.append("price", this.price);
-      data.append("flavour", this.flavour);
-      data.append("flavour_level", this.flavour_level);
-      data.append("share", 0);
-      data.append("name", this.name);
-      data.append("warehouse", this.stock);
-      data.append("type_topping", this.type_topping);
+      data.append("category_id", this.product.category_id);
+      data.append("unit_id", this.product.unit_id);
+      data.append("status", this.product.status);
+      data.append("is_active", this.product.is_active);
+      data.append("remain", this.product.remain);
+      data.append("minimum", this.product.minimum);
+      data.append("maximum", this.product.maximum);
+      data.append("flavour", this.product.flavour);
+      data.append("flavour_level", this.product.flavour_level);
+      data.append("name", this.product.name);
+      data.append("warehouse", this.product.warehouse);
+      data.append("type_topping", this.product.type_topping);
       data.append("create_by_id", 1);
-      api_product.post("product/", data).then(() => {
+      api_product.put("product/" + this.$route.params.id+'/', data).then(() => {
         this.$router.push({ name: "Product" });
       });
     },
     switch_flavour_level(val) {
-      this.flavour_level = val;
+      this.product.flavour_level = val;
     },
     switch_active(val) {
-      this.active = val;
+      this.product.active = val;
     },
   },
   watch: {
-    maximum(newData) {
-      if (newData <= this.minimum) {
-        this.maximum = this.minimum + 1;
-      }
-    },
-    share(ND) {
-      if (ND == 0) {
-        this.percent = false;
-      } else {
-        this.percent = true;
-      }
+    'product.maximum':function (newData) {
+        if (newData <= this.product.minimum) {
+          this.product.maximum = this.product.minimum + 1;
+        }
     },
   },
 };
