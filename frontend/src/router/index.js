@@ -11,8 +11,8 @@ import ForgotPassword from "../views/User/ForgotPassword.vue";
 // raw material
 import RawMaterials from "../views/RawMaterials/RM.vue";
 import CreateRM from "../views/RawMaterials/CreateRM.vue";
-import PickupList from "../views/RawMaterials/PickupList.vue";
 import EditRM from "../views/RawMaterials/EditRM.vue";
+import PickupList from "../views/RawMaterials/PickupList.vue";
 import RMUnit from "../views/RawMaterials/UnitRM.vue";
 import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
 import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
@@ -195,9 +195,10 @@ const routes = [
     },
   },
   {
-    path: "/rm/edit'",
+    path: "/rm/edit/:id",
     name: "EditRM",
     component: EditRM,
+    props: true,
     meta: {
       requiresLogin: false,
     },

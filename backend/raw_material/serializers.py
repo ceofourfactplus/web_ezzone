@@ -1,16 +1,19 @@
 from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.utils import field_mapping
-from .models import  RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail, PO
+from .models import  RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail, PO, PriceRawMaterial
 from user.serializers import UserSerializer
 
 
 class RawMaterialListSeriallizer(serializers.ModelSerializer):
-
     class Meta:
         model = RawMaterial
         fields = '__all__'
 
+class PriceRawMaterialListSeriallizer(serializers.ModelSerializer):
+    class Meta:
+        model = PriceRawMaterial
+        fields = '__all__'
 
 class RawMaterialCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,6 +33,7 @@ class UnitSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
         
+
 class POSerializer(serializers.ModelSerializer):
     raw_material_id = serializers.IntegerField(required=True)
     supplier_id = serializers.IntegerField(required=True)
@@ -61,7 +65,7 @@ class RawMaterialSerializer(serializers.ModelSerializer):
     update_by_set = UserSerializer(read_only=True, source="user")
     category_set = RawMaterialCategorySerializer(
         read_only=True, source="raw_material_category")
-    unit_set = UnitSerializer(read_only=True, source="unit")
+    unit_set = UnitSerializer(read_only=True, source="unit_s")
     unit_l_id = serializers.IntegerField()
     unit_m_id = serializers.IntegerField()
     unit_s_id = serializers.IntegerField()
@@ -93,6 +97,30 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'category_set',
             'update_by_set',
             'create_by_set',
+            'unit_set',
+        ]
+        
+        
+class PriceRawMaterialSerializer(serializers.ModelSerializer):
+    raw_material_id = serializers.IntegerField()
+    unit_id = serializers.IntegerField()
+    supplier_id = serializers.IntegerField()
+    raw_material_set = RawMaterialSerializer(
+        read_only=True, source="raw_material")
+    supplier_set = SupplierSerializer(read_only=True, source="supplier")
+    unit_set = UnitSerializer(read_only=True, source="unit")
+    
+    class Meta:
+        model = PriceRawMaterial
+        fields = [
+            'id',
+            'avg_price',
+            'last_price',
+            'raw_material_id',
+            'unit_id',
+            'supplier_id',
+            'raw_material_set',
+            'supplier_set',
             'unit_set',
         ]
 
