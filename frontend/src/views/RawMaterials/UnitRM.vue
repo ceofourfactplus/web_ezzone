@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     fetchRMUnit() {
-      api_raw_material.get("/unit").then((response) => {
+      api_raw_material.get("/unit/").then((response) => {
         this.all_unit = response.data;
         this.temp_categories = response.data;
       });
@@ -171,11 +171,12 @@ export default {
       var data = {
         unit: this.category,
       };
-      api_raw_material.post("/unit", data).then(() => {
+      api_raw_material.post("/unit/", data).then(() => {
         setTimeout(() => {
           this.alert = false;
           this.add_category_status = false;
           this.fetchRMUnit();
+          this.unit = ''
         }, 1000);
       });
     },

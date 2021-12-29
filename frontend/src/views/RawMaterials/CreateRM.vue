@@ -22,6 +22,7 @@
             </div>
           </div>
           <div class="col-7 w-100">
+            <!-- Name -->
             <div class="col-12 h-25">
               <input
                 type="text"
@@ -30,6 +31,7 @@
                 v-model="name"
               />
             </div>
+            <!-- Category -->
             <div class="col-12 h-25">
               <label for="">Category&nbsp;:</label>
               <select
@@ -47,18 +49,20 @@
                 </option>
               </select>
             </div>
+            <!-- Status -->
             <div class="col-12 h-25">
               <label for="" style="display: inline"
                 >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
                 <button
                   class="btn-y"
-                  style="width: 100px; display: inilne"
+                  style="width: 120px; display: inilne"
                   :class="{ 'btn-g': remain > minimum }"
                 >
                   {{ status_am }}
                 </button></label
               >
             </div>
+            <!-- Fridge -->
             <div class="col-12 h-25">
               <label for="">Fridge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
               <div class="switch"><Switch @switch="fridge" /></div>
@@ -66,16 +70,17 @@
           </div>
         </div>
       </div>
-      <div class="frame f-2" style="height: 220px; padding-left: 0px">
+      <div class="frame f-2" style="height: 290px; padding-left: 0px">
         <!-- Head Of Section 2 -->
         <div class="row">
-          <div class="col-12">
+          <div class="col-12" style="margin-left: 20px">
             <div
               style="
                 width: 100%;
                 font-size: 30px;
                 color: white;
                 text-align: left;
+                margin-left: -10px;
                 margin-top: -10px;
                 margin-bottom: 20px;
               "
@@ -84,33 +89,99 @@
             </div>
           </div>
         </div>
-        <!-- Content -->
+        <!-- First Row -->
         <div class="row">
-          <div class="col-4" style="width: 100%; padding: 0px;">
-            <label for="">Qty&nbsp;:</label>
-            <input type="number" style="background: #717171; width: 100px; height: 50px;" v-model="remain" />
+          <div class="col-4 row-wrapper">
+            <label for="">Qty&nbsp;&nbsp;&nbsp;:&nbsp;</label>
+            <input
+              type="number"
+              style="background: #717171; width: 100px; height: 50px"
+              v-model="remain"
+            />
           </div>
-          <div class="col-4" style="width: 100%; padding: 0px;">
+          <div class="col-4 row-wrapper">
             <label for="">Min&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="background: #717171; width: 100px; height: 50px;" v-model="minimum" />
+            ><input
+              type="number"
+              style="background: #717171; width: 100px; height: 50px"
+              v-model="minimum"
+            />
           </div>
-          <div class="col-4" style="width: 100%; padding: 0px;">
+          <div class="col-4 row-wrapper" style="margin-right: 20px">
             <label for="">Max Qty&nbsp;:</label
-            ><input type="number" style="background: #717171; width: 100px; height: 50px;" v-model="maximum" />
+            ><input
+              type="number"
+              style="background: #717171; width: 100px; height: 50px"
+              v-model="maximum"
+            />
           </div>
         </div>
-        <div class="row" style="margin-top: 30px;">
-          <div class="col-6" style="width: 100%; padding: 0px;">
-            <label for="">Price&nbsp;:</label
-            ><input type="number" style="background: #717171; width: 234px; height: 50px; margin-left: -10px" v-model="maximum" />
+        <!-- Second Row -->
+        <div class="row" style="margin-top: 30px">
+          <div class="col-6 row-wrapper">
+            <label for="">Avg S&nbsp;:&nbsp;&nbsp;</label
+            ><input
+              type="number"
+              style="
+                background: #717171;
+                width: 220px;
+                height: 50px;
+                margin-left: -10px;
+              "
+              v-model="avg_s"
+            />
           </div>
-          <div class="col-6" style="width: 100%; padding: 0px;">
-            <label for="">Supplier&nbsp;:</label
-            ><input type="number" style="background: #717171; width: 234px; height: 50px;" v-model="maximum" />
+          <div class="col-6 row-wrapper" style="margin-right: 20px">
+            <label for="">Avg M&nbsp;:&nbsp;&nbsp;</label
+            ><input
+              type="number"
+              style="
+                background: #717171;
+                width: 200px;
+                height: 50px;
+                margin-right: -40px;
+              "
+              v-model="avg_m"
+            />
+          </div>
+        </div>
+        <!-- Third Row -->
+        <div class="row" style="margin-top: 30px">
+          <div class="col-6 row-wrapper" style="margin-right: 20px">
+            <label for="">Avg L&nbsp;:&nbsp;</label
+            ><input
+              type="number"
+              style="background: #717171; width: 220px; height: 50px"
+              v-model="avg_l"
+            />
+          </div>
+          <div class="col-6 row-wrapper">
+            <label for="">Supplier&nbsp;:&nbsp;&nbsp;</label>
+            <select
+              v-model="supplier_id"
+              class="i-25 ig"
+              style="
+                border-radius: 10px;
+                width: 190px;
+                margin-right: -30px;
+                height: 50px;
+              "
+            >
+              <option value="" selected disabled style="color: white">
+                unit
+              </option>
+              <option
+                v-for="supplier in suppliers"
+                :key="supplier.id"
+                :value="supplier.id"
+              >
+                {{ supplier.company_name }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
-      <div class="frame f-2" style="height: 286px">
+      <div class="frame f-2" style="height: 230px">
         <!-- Head Of Section 3 -->
         <div class="row">
           <div class="col-12">
@@ -129,16 +200,23 @@
           </div>
         </div>
         <!-- First Row -->
-        <div class="row" style="width: 99%">
+        <div class="row" style="width: 99%; margin-left: 5px;">
           <input
             type="number"
             class="i-25 g"
             v-model="s_to_m"
+            @input="makeAvgList(s_to_m, unit_s_id)"
             placeholder="S Unit"
-            style="text-align: right; border-radius: 10px; background: #717171;"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
-          <select v-model="unit_s_id" class="i-25 ig" style="border-radius: 10px">
-            <option value="" selected disabled style="color: white;">unit</option>
+          <select
+            v-model="unit_s_id"
+            class="i-25 ig"
+            style="border-radius: 10px; width: 170px;"
+          >
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -152,37 +230,47 @@
             model="to_amount"
             value="1"
             readonly
-            style="text-align: right; border-radius: 10px; background: #717171;"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
           <select
             name=""
             id=""
             v-model="unit_m_id"
             class="i-25 ig"
-            style="border-radius: 10px"
+            style="border-radius: 10px; width: 170px;"
           >
-            <option value="" selected disabled style="color: white;">unit</option>
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
         </div>
         <!-- Second Row -->
-        <div class="row m-15" style="width: 99%">
+        <div class="row m-15" style="width: 99%; margin-left: 5px;">
           <input
             type="number"
             class="i-25 g"
             v-model="m_to_l"
+            @input="makeAvgList(m_to_l, unit_m_id)"
             placeholder="M to L Unit"
-            style="text-align: right; border-radius: 10px; background: #717171;"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
           <select
             v-model="unit_m_id"
             class="i-25 ig"
-            style="border-radius: 10px; color: white;"
+            style="border-radius: 10px; color: white; width: 170px;"
           >
-            <option value="" selected disabled style="color: white;">unit</option>
-            <option v-for="unit in units" :key="unit.id" :value="unit.id">
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
+            <option
+              v-for="unit in units"
+              :key="unit.id"
+              :value="unit.id"
+              @click="console.log(unit.unit)"
+            >
               {{ unit.unit }}
             </option>
           </select>
@@ -193,16 +281,18 @@
             type="number"
             value="1"
             class="i-25 g"
-            style="text-align: right; border-radius: 10px; background: #717171;"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
           <select
             name=""
             id=""
             v-model="unit_l_id"
             class="i-25 ig"
-            style="border-radius: 10px"
+            style="border-radius: 10px; width: 170px;"
           >
-            <option value="" selected disabled style="color: white;">unit</option>
+            <option value="" selected disabled style="color: white">
+              unit
+            </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
@@ -221,6 +311,7 @@ export default {
   components: { NavApp, Switch },
   data() {
     return {
+      raw_material_id: null,
       img: null,
       status: null,
       name: null,
@@ -228,16 +319,17 @@ export default {
       remain: null,
       maximum: null,
       in_refrigerator: null,
+      supplier_id: null,
+      price: null,
       create_by_id: null,
       update_by_id: null,
       category_id: null,
-      unit_l_id: null,
-      unit_m_id: null,
-      unit_s_id: null,
-      m_to_l: null,
-      s_to_m: null,
+      unit_l_id: "",
+      unit_m_id: "",
+      unit_s_id: "",
+      m_to_l: "",
+      s_to_m: "",
       avg_l: null,
-      avg_m: null,
       avg_s: null,
       unit_id: null,
       total_price: 0,
@@ -248,19 +340,28 @@ export default {
       next_unit_id: null,
       to_amount: 1,
       next_amount: 0,
+      selected_unit_id: [],
+      selected_units: [],
       units: [],
+      suppliers: [],
     };
   },
   methods: {
+    fetchSuppliers() {
+      api_raw_material.get("/supplier/").then((response) => {
+        console.log(response.data, "suppliers");
+        this.suppliers = response.data;
+      });
+    },
     onFileChange(e) {
-      console.log(e, 'e')
+      console.log(e, "e");
       this.img = e.target.files[0];
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
         reader.readAsDataURL(this.img);
       }
-      console.log(this.img, 'img')
+      console.log(this.img, "img");
     },
     fridge(val) {
       this.is_refrigerator = val;
@@ -274,10 +375,8 @@ export default {
       data.append("name", this.name);
       data.append("is_refrigerator", this.is_refrigerator);
       data.append("img", this.img, this.img.name);
-      data.append("to_unit_id", this.to_unit_id);
-      data.append("next_unit_id", this.next_unit_id);
       data.append("to_amount", this.to_amount);
-      data.append("next_amount", this.next_amount);
+      data.append("supplier_id", this.supplier_id);
       data.append("unit_l_id", this.unit_l_id);
       data.append("unit_m_id", this.unit_m_id);
       data.append("unit_s_id", this.unit_s_id);
@@ -289,10 +388,63 @@ export default {
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
 
-      api_raw_material.post("raw-material/", data).then((response) => {
-        console.log(response.data, 'response data')
-        this.$router.push({ name: "CreateRM" });
+        api_raw_material.post("raw-material/", data).then((response) => {
+        console.log(response.data, "response data");
+        var unit_list = [this.unit_s_id, this.unit_m_id, this.unit_l_id];
+        var avg_list = [this.avg_s, this.avg_m, this.avg_l];
+        for (let index = 0; index < unit_list.length; index++) {
+          var prm_data = {
+            avg_price: avg_list[index],
+            last_price: avg_list[index],
+            raw_material_id: response.data.id,
+            unit_id: unit_list[index],
+            supplier_id: this.supplier_id,
+          };
+          api_raw_material
+            .post("price-raw-material/", prm_data)
+            .then((res) => {
+              console.log(res.data, "res data");
+            });
+        }
+        this.$router.push({ name: "RawMaterials" });
       });
+    },
+    makeAvgList() {
+      if (this.s_to_m != "" && this.unit_s_id != "") {
+        if (this.selected_unit_id.indexOf(this.unit_s_id) + 1 != 0) {
+          console.log(this.selected_unit_id, "haved");
+        } else {
+          this.selected_unit_id.push(this.unit_s_id);
+          console.log(this.selected_unit_id, "else");
+        }
+      }
+      if (this.m_to_l != "" && this.unit_m_id != "") {
+        if (this.selected_unit_id.indexOf(this.unit_m_id) + 1 != 0) {
+          console.log(this.selected_unit_id, "haved");
+        } else {
+          this.selected_unit_id.push(this.unit_m_id);
+          console.log(this.selected_unit_id, "else");
+        }
+      }
+
+      if (this.m_to_l != "" && this.unit_l_id != "") {
+        if (this.selected_unit_id.indexOf(this.unit_l_id) + 1 != 0) {
+          console.log(this.selected_unit_id, "haved");
+        } else {
+          this.selected_unit_id.push(this.unit_l_id);
+          console.log(this.selected_unit_id, "else");
+        }
+      }
+
+      this.units.forEach((element) => {
+        console.log(element, "el");
+        if (this.selected_unit_id.indexOf(element.id) + 1 != 0) {
+          if (this.selected_units.indexOf(element) + 1 == 0) {
+            this.selected_units.push(element);
+          }
+        }
+      });
+      console.log(this.selected_units, "units");
     },
   },
   watch: {
@@ -308,16 +460,20 @@ export default {
       if (this.remain > this.minimum) {
         return "success";
       } else {
-        return "ไม่พอ";
+        return "minimum";
       }
     },
   },
   mounted() {
+    this.fetchSuppliers();
+    setInterval(() => {
+      this.makeAvgList();
+    }, 2000);
     api_raw_material.get("category").then((response) => {
       this.categories = response.data;
     });
     api_raw_material.get("unit").then((response) => {
-      console.log(response.data, 'unit')
+      console.log(response.data, "unit");
       this.units = response.data;
     });
   },
@@ -325,6 +481,11 @@ export default {
 </script>
 
 <style scoped>
+.row-wrapper {
+  width: 100%;
+  padding: 0px;
+  margin-left: -10px;
+}
 ::placeholder {
   text-align: left;
   color: white;
@@ -368,7 +529,6 @@ raw-img {
   width: 236px;
   height: 235px;
 }
-
 
 ::placeholder {
   text-indent: 5 px;

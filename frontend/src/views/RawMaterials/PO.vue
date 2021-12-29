@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- nav bar -->
-    <nav-app>Purches&#160;Order</nav-app>
+    <nav-app>Purchase&#160;Order</nav-app>
     <div class="row" style="width: 90%; margin-left: 25px">
       <div class="col-8 wrap-search w-100">
         <SearchBar @search="search_raw" style="width: 98%" />
@@ -17,9 +17,9 @@
       </div>
       <div class="col-2 w-100" style="padding-left: 0px; text-align: left">
         <button
+          @click="confirm"
           class="btn-ghost-b"
           style="width: 120px; height: 50px"
-          @click="ConvertPOToReceptData"
         >
           Confirm
         </button>
@@ -27,33 +27,70 @@
     </div>
 
     <!-- table -->
-    <div class="table mt-3" style="height:100%">
+    <div class="table mt-3" style="height: 100%">
       <div class="table-header" style="line-height: 40px; font-size: 24px">
+        <!-- Table Head -->
         <div class="row">
-          <div class="col-8 w-100">Item</div>
-          <div class="col-1 w-100">Qty.</div>
+          <div class="col-1 w-100">
+            <div class="checkbox-white">
+              <input
+                type="checkbox"
+                :value="true"
+                style="margin-top: 12px; right: 0px; left: 23px; bottom: 3px"
+                @input="selectAllItem"
+              />
+            </div>
+          </div>
+          <div class="col-7 w-100">Item</div>
+          <div class="col-1 w-100" style="margin-right: 40px">Qty.</div>
           <div class="col-1 w-100">Unit</div>
           <div class="col-2 w-100">Price</div>
         </div>
       </div>
       <div style="overflow-x: auto; height: 650px">
         <div v-for="recept in all_recept" :key="recept">
+          <!-- Table Item Head -->
           <div class="table-item">
-            <div class="row" style="width: 100%; margin-left: 0px;text-align:center;">
+            <div
+              class="row"
+              style="
+                width: 100%;
+                margin-left: 0px;
+                text-align: center;
+                font-size: 28px;
+                font-weight: 800;
+              "
+            >
               <div class="col-1 w-100">
                 <div class="checkbox-orange">
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    style="margin-top: 8px; right: 0px"
+                    :id="recept.supplier.company_name"
+                    :value="recept.supplier.company_name"
+                    @input="selectAllItemInSupplier(recept)"
+                  />
                 </div>
               </div>
-              <div class="col-2 w-100">
-                {{ recept.supplier.company_name }}
+              <div
+                class="col-2 w-100"
+                style="margin-top: -1px; margin-left: -20px"
+              >
+                <label :for="recept.supplier.company_name">
+                  {{ recept.supplier.company_name }}</label
+                >
               </div>
               <div class="col-5 w-100"></div>
               <div class="col-4 w-100">
-                <pre>Total  {{ recept.total_price }}</pre>
+                <pre
+                  style="font-size: 28px; font-weight: 800"
+                >
+Total  {{ recept.total_price }}</pre
+                >
               </div>
             </div>
           </div>
+          <!-- Table Item -->
           <div
             v-for="item in recept.recept_detail"
             :key="item.id"
@@ -64,31 +101,56 @@
                 class="col-8 w-100"
                 style="margin-left: 75px; text-align: left"
               >
-                <span>
-                  <div class="checkbox-orange">
-                    <input
-                      type="checkbox"
-                      :id="item.raw_material_set.name"
-                      style="display: inline-block"
-                      class="ms-2"
-                    />
-                    <label :for="item.raw_material_set.name" class="ms-3">
-                      {{ item.raw_material_set.name }}</label
-                    >
+                <div class="row">
+                  <div class="col-8 w-100" style="text-align: left">
+                    <span>
+                      <div class="checkbox-orange">
+                        <input
+                          type="checkbox"
+                          :id="item.raw_material_set.name"
+                          style="display: inline-block; top: 5px"
+                          :value="item"
+                          v-model="selected"
+                          class="ms-2"
+                        />
+                        <label
+                          :for="item.raw_material_set.name"
+                          class="ms-3"
+                          @click="showPoPopup(item)"
+                        >
+                          {{ item.raw_material_set.name }}</label
+                        >
+                      </div>
+                    </span>
                   </div>
-                </span>
+                  <div class="col-4 w-100" @click="showPoPopup(item)"></div>
+                </div>
               </div>
-              <div class="col-1 w-100" style="margin: auto; text-align: left">
-                {{ item.amount }}
+              <div
+                class="col-1 w-100"
+                style="margin: auto; text-align: left"
+                @click="showPoPopup(item)"
+              >
+                {{ item.raw_material_set.remain }}
               </div>
-              <div class="col-1 w-100" style="margin: auto; text-align: center">
+              <div
+                class="col-1 w-100"
+                style="margin: auto; text-align: center; margin-right: -20px"
+                @click="showPoPopup(item)"
+              >
                 {{ item.unit_set.unit }}
               </div>
               <div
                 class="col-2 w-100"
-                style="margin: auto; text-align: center; padding: 0px"
+                style="
+                  margin: auto;
+                  text-align: center;
+                  padding: 0px;
+                  margin-left: 20px;
+                "
+                @click="showPoPopup(item)"
               >
-                {{ item.last_price }}
+                {{ item.total_price }}
               </div>
             </div>
           </div>
@@ -216,6 +278,154 @@
         </div>
       </div>
     </div>
+
+    <!-- PO Popup -->
+    <div class="po-popup">
+      <div class="blur" v-if="po_popup">
+        <div
+          class="card"
+          :class="{ 'card-active': po_popup }"
+          style="background-color: #252836; height: 600px"
+        >
+          <!-- Nav -->
+          <div class="row w-100" style="height: 80px">
+            <div class="col-2 w-100" @click="edit()">
+              <img
+                src="../../assets/icon/save.png"
+                style="margin: 17px 0px 0px 10px"
+              />
+            </div>
+            <div class="col-8 w-100 nav-txt">
+              {{ po_popup_item.raw_material_set.name }}
+            </div>
+            <div class="col-2 w-100" @click="po_popup = false">
+              <img
+                src="../../assets/icon/delete.png"
+                style="width: 29px; height: 32px; margin: 20px 0px 0px 50px"
+              />
+            </div>
+          </div>
+          <!-- Over Wrapper -->
+          <div class="row">
+            <!-- Image -->
+            <div class="col-4 w-100">
+              <img
+                :src="
+                  require(`../../../../backend${po_popup_item.raw_material_set.img}`)
+                "
+                class="image"
+              />
+            </div>
+            <!-- Item Detail -->
+            <div class="col-8 item-detail">
+              <!-- Name -->
+              <div class="row">
+                <div class="col-12 line-col" style="margin-top: 10px">
+                  Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{
+                    po_popup_item.raw_material_set.name
+                  }}
+                </div>
+              </div>
+              <!-- Category -->
+              <div class="row">
+                <div class="col-12 line-col">
+                  Category&nbsp;:&nbsp;{{ category }}
+                </div>
+              </div>
+              <!-- Status -->
+              <div class="row">
+                <div class="col-12 line-col">
+                  Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<img
+                    :src="
+                      $store.state.raw_material.status_image[
+                        po_popup_item.raw_material_set.status
+                      ]
+                    "
+                  />
+                </div>
+              </div>
+              <!-- Supplier -->
+              <div class="row">
+                <div class="col-12 line-col">
+                  Supplier&nbsp;&nbsp;&nbsp;:&nbsp;
+                  <select
+                    style="height: 50px"
+                    v-model="po_popup_item.supplier_id"
+                  >
+                    <option
+                      style="background-color: black;"
+                      v-for="supplier in all_supplier"
+                      :key="supplier.id"
+                      :value="supplier.id"
+                    >
+                      {{ supplier.company_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Under Wrapper -->
+          <div class="row under-wrapper">
+            <!-- Qty -->
+            <div class="col-12 w-100 line-col" style="margin-left: 50px">
+              Qty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+              <input
+                type="text"
+                class="under-wrapper-input"
+                v-model="po_popup_item.raw_material_set.remain"
+                @input="calc_total_price(po_popup_item)"
+              />
+              <select
+                style="margin-left: 10px;"
+                class="under-wrapper-input"
+                v-model="unit_id"
+              >
+                <option
+                  style="background-color: black;"
+                  v-for="unit in all_unit"
+                  :key="unit.id"
+                  :value="unit.id"
+                >
+                  {{ unit.unit }}
+                </option>
+              </select>
+            </div>
+            <!-- Price -->
+            <div class="col-12 w-100 line-col" style="margin-left: 50px">
+              Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+              <input
+                type="text"
+                class="under-wrapper-input"
+                v-model="po_popup_item.last_price"
+                @input="calc_total_price(po_popup_item)"
+              />
+              บาท
+            </div>
+            <!-- Discount -->
+            <div class="col-12 w-100 line-col" style="margin-left: 50px">
+              Discount&nbsp;&nbsp;&nbsp;:&nbsp;
+              <input
+                type="text"
+                class="under-wrapper-input"
+                v-model="po_popup_item.discount"
+              />
+              บาท/%
+            </div>
+            <!-- Total Cost -->
+            <div class="col-12 w-100 line-col" style="margin-left: 50px">
+              Total Cost&nbsp;:&nbsp;
+              <input
+                type="text"
+                class="under-wrapper-input"
+                :value="po_popup_item.raw_material_set.remain * po_popup_item.last_price"
+              />
+              บาท
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -234,9 +444,10 @@ export default {
     CheckBoxWhite,
   },
   mounted() {
-    this.get_raw();
-    this.get_po();
-    this.get_sup();
+    api_raw_material.get("category").then((response) => {
+      console.log(response.data, "categories");
+      this.categories = response.data;
+    });
     api_raw_material.get("unit").then((response) => {
       this.all_unit = response.data;
     });
@@ -248,11 +459,19 @@ export default {
   data() {
     return {
       filter_by: 1,
+      po_popup: false,
       add_po: false,
+      selected_status: false,
+      select_all_status: false,
+      supplier_id: null,
+      temp_supplier_id: null,
       supplier: "",
       raw_material: "",
       unit: "",
+      unit_id: "",
+      category: "",
       total_cost: 0,
+      dict_list: {},
       all_raw_material: [],
       all_unit: [],
       discount_choice: 0,
@@ -261,19 +480,80 @@ export default {
       amount: 0,
       discount: 0,
       new_po_id: null,
+      po_popup_item: {},
       po: [],
       all_recept: [],
+      data: [],
+      temp_all_recept: [],
+      head_selected: [],
+      selected: [],
+      categories: [],
     };
   },
   methods: {
+    selectAllItem() {
+      this.select_all_status = !this.select_all_status;
+      this.all_recept.forEach((recept) => {
+        recept.recept_detail.forEach((element) => {
+          if (this.select_all_status) {
+            if (this.selected.indexOf(element) + 1 == 0) {
+              this.selected.push(element);
+            }
+          } else {
+            this.selected = [];
+          }
+        });
+      });
+    },
+    selectAllItemInSupplier(recept) {
+      console.log(recept, "recept");
+      var not_have = false;
+      var have_all = false;
+      for (let index = 0; index < recept.recept_detail.length; index++) {
+        if (this.selected.indexOf(recept.recept_detail[index]) + 1 == 0) {
+          not_have = true;
+        } else {
+          not_have = false;
+          break;
+        }
+      }
+      if (not_have) {
+        for (let index = 0; index < recept.recept_detail.length; index++) {
+          this.selected.push(recept.recept_detail[index]);
+        }
+      } else {
+        for (let index = 0; index < recept.recept_detail.length; index++) {
+          if (this.selected.indexOf(recept.recept_detail[index]) + 1 != 0) {
+            have_all = true;
+          } else {
+            have_all = false;
+            break;
+          }
+        }
+      }
+      if (have_all) {
+        for (let index = 0; index < recept.recept_detail.length; index++) {
+          var idx = this.selected.indexOf(recept.recept_detail[index]);
+          this.selected.splice(idx, 1);
+        }
+      } else {
+        for (let index = 0; index < recept.recept_detail.length; index++) {
+          if (this.selected.indexOf(recept.recept_detail[index]) + 1 == 0) {
+            this.selected.push(recept.recept_detail[index]);
+          }
+        }
+      }
+    },
     get_raw() {
       api_raw_material.get("raw-material/").then((response) => {
+        console.log(response.data, "raw_materials");
         this.raw_materials = response.data;
         this.temp_rm = response.data;
       });
     },
     get_sup() {
       api_raw_material.get("supplier").then((response) => {
+        console.log(response.data, "all_supplier");
         this.all_supplier = response.data;
       });
     },
@@ -282,8 +562,9 @@ export default {
     //     return response.data.supplier;
     //   });
     // },
-    get_po() {
-      api_raw_material.get("po/").then((response) => {
+    async get_po() {
+      await api_raw_material.get("po/").then((response) => {
+        console.log(response.data, "po");
         this.po = response.data;
       });
     },
@@ -297,6 +578,21 @@ export default {
     },
     search_raw(query) {
       console.log(query);
+      var temp = [];
+      if (query == "") {
+        this.all_recept = this.temp_all_recept;
+      } else {
+        this.temp_all_recept.forEach((element) => {
+          console.log(element, "element");
+          element.recept_detail.forEach((el) => {
+            console.log(el, "el");
+            if (el.raw_material_set.name.indexOf(query) + 1 != 0) {
+              temp.push(element);
+            }
+          });
+        });
+        this.all_recept = temp;
+      }
     },
     create_po() {
       const data = {
@@ -314,7 +610,7 @@ export default {
       });
     },
     ConvertPOToReceptData() {
-      console.log(this.po);
+      console.log(this.po, "convert po");
       const only_supplier = [
         ...new Map(this.po.map((item) => [item["supplier_id"], item])).values(),
       ];
@@ -330,16 +626,17 @@ export default {
             const data = {
               po_id: item.id,
               supplier_id: item.supplier_id,
-              price: item.price,
               raw_material_id: item.raw_material_id,
               unit_id: item.unit,
-              dicount: 0,
+              discount: 0,
               is_percent: false,
               amount: item.amount,
               total_price: item.amount * item.last_price,
-              price: item.last_price,
+              last_price: item.last_price,
+              create_at: item.create_at,
               supplier_set: item.supplier_set,
               raw_material_set: item.raw_material_set,
+              create_by_set: item.create_by_set,
               unit_set: item.unit_set,
             };
             recept.recept_detail.push(JSON.parse(JSON.stringify(data)));
@@ -349,6 +646,135 @@ export default {
         all_recept.push(JSON.parse(JSON.stringify(recept)));
       }
       this.all_recept = all_recept;
+      this.temp_all_recept = all_recept;
+    },
+    showPoPopup(item) {
+      console.log(item, "item");
+      this.supplier_id = item.supplier_id;
+      this.temp_supplier_id = item.supplier_id;
+      this.categories.forEach((el) => {
+        if (el["id"] == item.raw_material_set.category_id) {
+          this.category = el["name"];
+        }
+      });
+      this.po_popup_item = item;
+      this.po_popup = true;
+    },
+    edit() {
+      console.log(this.po_popup_item, this.temp_supplier_id, "po_popup_item");
+      if (this.po_popup_item.supplier_id != this.temp_supplier_id) {
+        console.log("come, in");
+        for (let out = 0; out < this.all_recept.length; out++) {
+          var recept = this.all_recept[out];
+          console.log(recept, "recept");
+          for (let index = 0; index < recept.recept_detail.length; index++) {
+            if (
+              recept.recept_detail[index].supplier_id ==
+                this.po_popup_item.supplier_id &&
+              recept.recept_detail[index].supplier_set.company_name !=
+                this.po_popup_item.supplier_set.company_name
+            ) {
+              console.log("push");
+              recept.recept_detail.push(this.po_popup_item);
+              break;
+            } else {
+              console.log("remove");
+              if (
+                recept.recept_detail[index].raw_material_set.name ==
+                this.po_popup_item.raw_material_set.name
+              ) {
+                var idx = recept.recept_detail.indexOf(this.po_popup_item);
+                recept.recept_detail.splice(idx, 1);
+              }
+            }
+          }
+        }
+      }
+      this.po_popup = false
+
+    },
+    ConvertSlectedToReceptData() {
+      console.log(this.po, "convert po");
+      const only_supplier = [
+        ...new Map(
+          this.selected.map((item) => [item["supplier_id"], item])
+        ).values(),
+      ];
+      const all_recept = [];
+      for (const supplier of only_supplier) {
+        const recept = {
+          recept_detail: [],
+          total_price: 0,
+          supplier: supplier.supplier_set,
+        };
+        for (const item of this.selected) {
+          if (item.supplier_id == supplier.supplier_id) {
+            const data = {
+              po_id: item.id,
+              supplier_id: item.supplier_id,
+              raw_material_id: item.raw_material_id,
+              unit_id: item.unit,
+              discount: 0,
+              is_percent: false,
+              amount: item.amount,
+              total_price: item.amount * item.last_price,
+              last_price: item.last_price,
+              create_at: item.create_at,
+              supplier_set: item.supplier_set,
+              raw_material_set: item.raw_material_set,
+              create_by_set: item.create_by_set,
+              unit_set: item.unit_set,
+            };
+            recept.recept_detail.push(JSON.parse(JSON.stringify(data)));
+            recept.total_price += item.amount * item.last_price;
+          }
+        }
+        all_recept.push(JSON.parse(JSON.stringify(recept)));
+      }
+      this.data = all_recept;
+      console.log(this.data, "data");
+    },
+    async confirm() {
+      await this.ConvertSlectedToReceptData();
+      this.data.forEach((receipt) => {
+        const receipt_raw_material = {
+          supplier_id: receipt.supplier.id,
+          total_price: receipt.total_price,
+          total_amount: receipt.recept_detail.length,
+          payment: null,
+          create_by_id: this.$store.state.auth.userInfo.id,
+          update_by_id: this.$store.state.auth.userInfo.id
+        }
+        this.$store.state.raw_material.all_receipt.push(receipt_raw_material)
+        receipt.recept_detail.forEach((el) => {
+          const receipt_raw_material_detail = {
+            receipt_raw_material_id: null,
+            raw_material_id: el.raw_material_set.id,
+            supplier_id: el.supplier_id,
+            price: el.last_price,
+            total_price: el.total_price,
+            amount: el.amount,
+            remark: '',
+            discount: el.discount,
+            create_by_id: this.$store.state.auth.userInfo.id,
+            update_by_id: this.$store.state.auth.userInfo.id
+          }
+          this.$store.state.raw_material.all_receipt_detail.push(receipt_raw_material_detail)
+        })
+      });
+      this.$store.state.raw_material.all_po_selected = this.data
+      this.$router.push({ name: "ConfirmPO"})
+    },
+    calc_total_price(item) {
+      console.log(item, "item in calc")
+      this.all_recept.forEach((recept) => {
+        if (recept.recept_detail.includes(item)) {
+          var idx = recept.recept_detail.indexOf(item)
+          recept.recept_detail[idx].raw_material_set.remain = item.raw_material_set.remain
+          recept.recept_detail[idx].total_price = parseInt(item.raw_material_set.remain) * parseInt(item.last_price)
+          console.log(recept.recept_detail[idx].total_price, 'data')
+        }
+      })
     },
   },
   computed: {
@@ -366,10 +792,92 @@ export default {
       return this.total_cost;
     },
   },
+  async beforeMount() {
+    await this.get_po();
+    await this.ConvertPOToReceptData();
+    this.get_raw();
+    this.get_sup();
+  },
 };
 </script>
 
 <style scoped>
+.under-wrapper-unput {
+  width: 150px;
+  height: 40px;
+  background: #717171;
+  border-radius: 10px;
+}
+.under-wrapper {
+  width: 575px;
+  height: 242px;
+  background: #303344;
+  border-radius: 28px;
+  font-size: 30px;
+  color: white;
+  margin: 15px 0px 0px 10px;
+}
+.line-col {
+  text-align: left;
+  margin: 15px 0px 0px 5px;
+}
+.item-detail {
+  width: 340px;
+  height: 241px;
+  background: #303344;
+  border-radius: 24px;
+  color: white;
+  margin-left: 50px;
+  font-size: 30px;
+}
+.image {
+  width: 219.62px;
+  height: 219.62px;
+  border-radius: 30px;
+}
+.image[data-v-257d4ec0] {
+  width: 219px;
+  height: 219px;
+  border-radius: 25px;
+  margin: 10px 0px 0px 15px;
+}
+.nav-txt {
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+}
+.po-popup {
+  height: 615px;
+  width: 625px;
+  background: #252836;
+  border-radius: 20px;
+}
+.checkbox-white input:checked::after {
+  font-size: 20px;
+  top: -7px;
+  left: 1px;
+}
+.checkbox-white input::before {
+  height: 30px;
+  width: 30px;
+}
+.checkbox-white input {
+  height: 28px;
+  width: 28px;
+}
+.checkbox-orange input:checked::after {
+  font-size: 20px;
+  top: -1px;
+}
+.checkbox-orange input::before {
+  height: 30px;
+  width: 30px;
+}
+.checkbox-orange input {
+  height: 28px;
+  width: 28px;
+}
 .card {
   width: 600px;
   height: 498px;
@@ -413,7 +921,19 @@ select {
   margin-left: auto;
   margin-right: auto;
 }
-.a{
+.a {
   justify-content: center;
+}
+#select_img {
+  width: 236px;
+  height: 235px;
+  border-radius: 25px;
+  margin-right: 12px;
+  background-color: #717171;
+}
+.image {
+  width: 236px;
+  height: 235px;
+  border-radius: 25px;
 }
 </style>

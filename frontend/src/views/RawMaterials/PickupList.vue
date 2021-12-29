@@ -97,59 +97,6 @@ export default {
 </script>
 
 <style scoped>
-.item-in-table-item {
-  width: 100%;
-  text-align: center;
-}
-.item-in-table-head {
-  width: 100%;
-  text-align: center;
-}
-.table-item-in-po {
-  width: 100%;
-  height: 59px;
-  background: #303344;
-  border-radius: 10px;
-  margin-top: 10px;
-  font-size: 30px;
-}
-.table-head-in-po {
-  width: 100%;
-  height: 59px;
-  background: #889898;
-  border-radius: 10px;
-  margin-top: 10px;
-  font-size: 30px;
-  color: white;
-}
-.po-detail-img {
-  width: 218px;
-  height: 218px;
-  margin: 20px 20px 20px 20px;
-}
-.over-wrapper {
-  width: 619px;
-  height: 271.11px;
-}
-.po-detail-popup {
-  width: 619px;
-  height: 640px;
-  top: 20%;
-  left: 12%;
-  position: absolute;
-  background-color: #252836;
-  border: 2px solid #ea7c69;
-  border-radius: 20px;
-}
-.popup-header {
-  font-weight: 800;
-  font-size: 48px;
-  line-height: 56px;
-  text-align: center;
-  margin-top: 10px;
-  width: 100%;
-  color: white;
-}
 .item-in-row {
   text-align: center;
   font-size: 28px;

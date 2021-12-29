@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import RawMaterial, RawMaterialCategory, Unit,Supplier,PO, PriceRawMaterial
-from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer,SupplierSerializer, PickUpRawMaterialSerializer,POSerializer, PriceRawMaterialSerializer
+from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer,SupplierSerializer, PickUpRawMaterialSerializer,POSerializer, PriceRawMaterialSerializer, ReceiptRawMaterialSerializer, ReceiptRawMaterialDetailSerializer
 
 from django.db.models import F
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -10,6 +10,50 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 
 
+
+class ReceiptRawMaterial(APIView):
+    def get_object(self, pk):
+        try:
+            return ReceiptRawMaterial.objects.get(pk=pk)
+        except ReceiptRawMaterial.DoesNotExist:
+            raise 404
+        
+    def get(self, request):
+        ReceiptRawMaterial = ReceiptRawMaterial.objects.all()
+        serializer = ReceiptRawMaterialSerializer(ReceiptRawMaterial, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        print(request.data, 'data')
+        serializer = ReceiptRawMaterialSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            print('serializer', serializer.data['id'])
+            print('request', request.data)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+class ReceiptRawMaterialDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return ReceiptRawMaterialDetail.objects.get(pk=pk)
+        except ReceiptRawMaterialDetail.DoesNotExist:
+            raise 404
+        
+    def get(self, request):
+        ReceiptRawMaterialDetail = ReceiptRawMaterialDetail.objects.all()
+        serializer = ReceiptRawMaterialDetailSerializer(ReceiptRawMaterialDetail, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        print(request.data, 'data')
+        serializer = ReceiptRawMaterialDetailSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            print('serializer', serializer.data['id'])
+            print('request', request.data)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 class RawMaterialListAPIView(APIView):
     def get_object(self, pk):

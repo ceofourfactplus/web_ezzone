@@ -74,7 +74,7 @@ export default {
         user.append("phone", this.phone);
         user.append("img", this.img,this.img.name);
         user.append('create_by',1)
-      api_raw_material.post('supplier',user).then(()=>{
+      api_raw_material.post('/supplier/',user).then(()=>{
         this.$router.push({name:'Supplier'})
       })
     }

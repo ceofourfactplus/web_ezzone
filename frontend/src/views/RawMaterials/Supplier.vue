@@ -93,7 +93,7 @@ export default {
     };
   },
   mounted() {
-    api_raw_material.get('supplier').then((response)=>{
+    api_raw_material.get('/supplier/').then((response)=>{
       this.all_supplier = response.data
     })
   },
@@ -104,7 +104,7 @@ export default {
           this.all_user = response.data;
         });
       } else {
-        api_raw_material.get("supplier").then((response) => {
+        api_raw_material.get("/supplier/").then((response) => {
           this.all_user = response.data;
         });
       }
