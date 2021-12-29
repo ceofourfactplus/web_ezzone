@@ -77,7 +77,7 @@ class ProductCategoryDetail(APIView):
 
 class ToppingCategoryList(APIView):
     parser_classes = [MultiPartParser, FormParser]
-
+    
     def get(self, request):
         category = ToppingCategory.objects.all()
         serializer = ToppingCategorySerializer(
@@ -85,6 +85,8 @@ class ToppingCategoryList(APIView):
         return Response(serializer.data)
         
     def post(self, request):
+        print('31')
+        print(request.data)
         if not ToppingCategory.objects.filter(category=request.data['category']).exists():
             serializer = ToppingCategorySerializer(data=request.data)
             if serializer.is_valid():

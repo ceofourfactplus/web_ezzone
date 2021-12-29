@@ -16,8 +16,7 @@ class ToppingCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ToppingCategory
         fields = ['id', 'category',
-                  'create_by', 'update_by',
-                  'create_at', 'update_at']
+                  'create_by', 'update_by',]
 
 
 class PriceToppingSerializer(serializers.ModelSerializer):

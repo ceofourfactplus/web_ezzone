@@ -98,7 +98,7 @@ class PriceTopping(models.Model):
 class SetTopping(models.Model):
     topping = models.ForeignKey(Topping,on_delete=models.CASCADE)
     category = models.ForeignKey(ToppingCategory,on_delete=models.CASCADE)
-    
+
 class ProductCategory(models.Model):
     DESSERT = 1
     DRINK = 2

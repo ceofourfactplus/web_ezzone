@@ -164,18 +164,18 @@ export default {
   },
   methods: {
     fetchToppingCategories() {
-      api_product.get("topping-category/").then((response) => {
+      api_product.get("topping/category/").then((response) => {
         this.categories = response.data;
         this.temp_categories = response.data;
       });
     },
     save() {
-      this.alert = true;
+      this.alert = true; 
+      const data = new FormData
+      data.append('create_by',1)
+      data.append('category',this.category)
       api_product
-        .post("topping-category/", {
-        category: this.category,
-        create_by_id: 1,
-      })
+        .post("topping/category/", data)
         .then((response) => {
           setTimeout(() => {
             this.alert = false;
