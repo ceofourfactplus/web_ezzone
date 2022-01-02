@@ -10,9 +10,21 @@
       >
         {{ item.category }}
       </button>
-    <button class="tab-item" v-if="elements.length > 5">></button>
-  </div>
-  <div class="tab" v-else>
+      <button class="tab-item" v-if="elements.length > 5">></button>
+    </div>
+    <div class="tab" v-else-if="status = 'topping_category'">
+      <button
+        v-for="(item, idx) in elements"
+        :key="idx"
+        @click="select_item(item)"
+        class="tab-item"
+        style="height:50px"
+      >
+        {{ item.name }}
+      </button>
+      <button class="tab-item" v-if="elements.length > 5">></button>
+    </div>
+    <div class="tab" v-else>
       <button
         v-for="(item, idx) in elements"
         :key="idx"
@@ -21,8 +33,9 @@
       >
         {{ item.name }}
       </button>
-    <button class="tab-item" v-if="elements.length > 5">></button>
-  </div>
+      <button class="tab-item" v-if="elements.length > 5">></button>
+    </div>
+
   </div>
 </template>
 
@@ -30,7 +43,7 @@
 <script>
 export default {
   name: "Tabs",
-  props: ['elements', 'status'],
+  props: ["elements", "status"],
   data() {
     return {
       //   materials: [],
@@ -46,7 +59,6 @@ export default {
 
 
 <style>
-
 .tab {
   overflow: hidden;
   width: 90%;

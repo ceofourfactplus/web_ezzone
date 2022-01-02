@@ -28,14 +28,14 @@
       <div class="col-8 w-100">
         <div style="display: flex" class="mb-2">
           <label class="col-3" for="name">Name </label>
-          <input v-model="sale_channel" class="input" type="text" id="name" />
+          <input v-model="sale_channel_set.sale_channel" class="input" type="text" id="name" />
         </div>
         <div style="display: flex">
           <label class="col-3" for="gp">GP% </label>
           <input
             style="width: 120px"
             class="input"
-            v-model="gp"
+            v-model="sale_channel_set.gp"
             type="number"
             id="gp"
           />
@@ -75,6 +75,45 @@
           <search-bar />
         </div>
       </div>
+
+      <!-- select product -->
+      <div class="col-12 mt-2" style="text-align: left; padding: 0px">
+        <button
+          :class="{ 'btn-gray-active': type_item == 3 }"
+          @click="type_item = 3"
+          class="btn-gray me-2"
+        >
+          FOOD
+        </button>
+        <button
+          :class="{ 'btn-gray-active': type_item == 2 }"
+          @click="type_item = 2"
+          class="btn-gray me-2"
+        >
+          DRINK
+        </button>
+        <button
+          :class="{ 'btn-gray-active': type_item == 1 }"
+          @click="type_item = 1"
+          class="btn-gray me-2"
+        >
+          DRESSERT
+        </button>
+        <button
+          :class="{ 'btn-gray-active': type_item == 4 }"
+          @click="type_item = 4"
+          class="btn-gray me-2"
+        >
+          TOPPING
+        </button>
+        <button
+          :class="{ 'btn-gray-active': type_item == 5 }"
+          @click="type_item = 5"
+          class="btn-gray"
+        >
+          CONSIGNMENT
+        </button>
+      </div>
     </div>
     <div class="table" style="margin-top: 10px">
       <div class="table-header" style="line-height: 40px; font-size: 24px">
@@ -90,13 +129,12 @@
           </div>
         </div>
       </div>
-      <div style="overflow-x: auto; height: 650px">
-        <div class="table-item">
+      <div style="overflow-x: auto; height: 430px">
+        <div class="table-item" v-for="item in items" :key="item.id">
           <div class="row" style="width: 100%">
-            <div
-              class="col-4 w-100"
-              style="margin: auto; margin-left: 0px; text-align: left"
-            ></div>
+            <div class="col-4 w-100" style="margin: auto">
+              {{ item.name }}
+            </div>
             <div
               class="col-4 w-100"
               style="margin: auto; text-align: left"
@@ -122,10 +160,25 @@ export default {
   data() {
     return {
       show_img: null,
-      sale_channel:'',
-      gp:0,
-      status:0,
       img:null,
+      sale_channel_set: {
+        sale_channel: "hello",
+        gp: 0,
+        create_by:1,
+        price_product: [
+          {
+            product:1,
+            price:19
+          }
+        ],
+        price_topping: [
+          {
+            topping:1,
+            price:19
+          }],
+      },
+      type_item: 1,
+      items: [],
     };
   },
   methods: {
@@ -136,22 +189,36 @@ export default {
         reader.onload = (e) => (this.show_img = e.target.result);
         reader.readAsDataURL(this.img);
       }
-      console.log(this.img, "img");
     },
     create_sale_channel() {
-      const data = new FormData();
-      data.append("sale_channel", this.sale_channel);
-      data.append("gp", this.gp);
-      data.append("img", this.img,this.img.name);
-      data.append("status", this.status);
-      data.append("create_by", 1);
-      api_product.post("sale-channel/", data).then(()=>{
-        this.$router.push({name:"SaleChannel"})
+
+      api_product.post("sale-channel/create/", this.sale_channel_set)
+      // const data = new FormData();
+      // data.append("img", this.sale_channel_set.img,this.img.name)
+
+    },
+    status_switch(val) {
+      this.sale_channel_set.status = val;
+    },
+    get_price(list_price) {
+      list_price.forEach((item) => {
+        if (item.sale_channel == this.$store.state.ezzone_id) {
+          console.log(item.price);
+          return item.price;
+        }
       });
     },
-    status_switch(val){
-      this.status = val
-    }
+  },
+  watch: {
+    type_item(new_type) {
+      if (new_type == 1) {
+        this.items = this.sale_channel_set;
+        this.items.filter((item) => {
+          item;
+        });
+        dress;
+      }
+    },
   },
 };
 </script>
@@ -198,5 +265,9 @@ button {
 .switch {
   display: inline-block;
   top: 10px;
+}
+
+.btn-gray {
+  font-weight: 700;
 }
 </style>

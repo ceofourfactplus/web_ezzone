@@ -1,6 +1,18 @@
 <template><router-view /></template>
 
+<script>
+import { api_product } from './api/api_product';
+export default {
+  mounted(){
+    api_product.get('sale-channel/ezzone').then((response)=>{
+      this.$store.state.ezzone_id = response.data.id;
+    })
+  }
+}
+</script>
+
 <style>
+
 #app {
   font-family: "Sarabun", sans-serif;
   -webkit-font-smoothing: antialiased;

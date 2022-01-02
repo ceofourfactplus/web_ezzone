@@ -12,6 +12,7 @@ export default createStore({
     modal_id: "",
     chart_pickup_data: [],
     chart_dates_data: [],
+    ezzone_id:null
   },
   mutations: {},
   getters: {},
