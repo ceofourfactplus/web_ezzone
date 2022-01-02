@@ -20,7 +20,7 @@ def upload_to_sale_channel(instance, filename):
 
 class SaleChannel(models.Model):
     status = models.BooleanField(default=True)
-    img = models.ImageField(_("Image"), upload_to=upload_to_sale_channel)
+    img = models.ImageField(_("Image"), upload_to=upload_to_sale_channel,null=True,default=None)
     sale_channel = models.CharField(max_length=100)
     gp = models.IntegerField(null=True, blank=True)
     create_by = models.ForeignKey(
@@ -30,6 +30,14 @@ class SaleChannel(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True,default=None)
     
+    @property
+    def pricetopping(self):
+        return self.pricetopping_set.all()
+
+    @property
+    def priceproduct(self):
+        return self.priceproduct_set.all()
+
 # topping
 class ToppingCategory(models.Model):
     category = models.CharField(max_length=100)
@@ -60,11 +68,13 @@ class Topping(models.Model):
         (INSTOCK, 'สินค้าพร้อมขาย')
     )
 
-    DISH = 1
-    SWEET = 2
-    FLAVOUR = (
-        (DISH, 'ของคาว'),
-        (SWEET, 'ของหวาน')
+    DRESSERT = 1
+    DRINK = 2
+    FOOD = 3
+    TYPE_TOPPING = (
+        (FOOD, 'ของคาว'),
+        (DRINK, 'ของหวาน'),
+        (DRESSERT, 'ขนม'),
     )
     old_product = models.ForeignKey(
         "self", on_delete=models.PROTECT, null=True, blank=True, default=None)
@@ -75,7 +85,7 @@ class Topping(models.Model):
     is_active = models.BooleanField(default=True)
     status = models.IntegerField(default=INSTOCK, choices=STATUS_STOCK)
     remain = models.IntegerField(default=0)
-    flavour = models.IntegerField(choices=FLAVOUR)
+    type_topping = models.IntegerField(choices=TYPE_TOPPING)
     minimum = models.IntegerField(default=0)
     maximum = models.IntegerField(default=None, null=True)
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
@@ -103,7 +113,6 @@ class ProductCategory(models.Model):
     DESSERT = 1
     DRINK = 2
     FOOD = 3
-    TOPPING = 4
     TYPE_CATEGORY = (
         (DESSERT, 'ของหวาน'),
         (DRINK, 'เครื่องดื่ม'),
@@ -139,6 +148,15 @@ class Product(models.Model):
         (INSTOCK, 'สินค้าพร้อมขาย')
     )
 
+    DESSERT = 1
+    DRINK = 2
+    FOOD = 3
+    TYPE_PRODUCT = (
+        (DESSERT, 'ของหวาน'),
+        (DRINK, 'เครื่องดื่ม'),
+        (FOOD, 'อาหาร'),
+    )
+
     SPICY = 1
     SWEET = 2
     FLAVOUR = (
@@ -159,12 +177,14 @@ class Product(models.Model):
     minimum = models.IntegerField(default=0)
     maximum = models.IntegerField(default=None, null=True)
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
+    type_product = models.IntegerField(choices=TYPE_PRODUCT, default=FOOD)
     topping_category = models.ForeignKey(ToppingCategory,on_delete=models.PROTECT, default=None, null=True)
     warehouse = models.IntegerField(choices=WAREHOUSE, default=NONE_PICK_UP)
     category = models.ForeignKey(
         ProductCategory, on_delete=models.PROTECT, null=True, default=None)
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_create_by")
+
     update_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="product_update_by", 
         null=True, blank=True, default=None)

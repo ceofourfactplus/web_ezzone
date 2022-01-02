@@ -18,13 +18,13 @@
         <button
           class="btn-ghost-b"
           style="width: 125px; height: 50px"
-          @click="$router.push({ name: 'CreateChannel' })"
+          @click="$router.push({ name: 'CreateSaleChannel' })"
         >
           +&#160;New</button
         ><button
           class="btn-ghost-r"
           style="width: 125px; height: 50px"
-          @click="$router.push({ name: 'CreateChannel' })"
+          @click="$router.push({ name: 'CreateSaleChannel' })"
         >
           <img src="../../assets/icon/bin.png" width="20" alt="" />&#160;Delete
         </button>
@@ -35,11 +35,11 @@
       <div class="table-header" style="line-height: 40px; font-size: 24px">
         <div class="row">
           <div class="col-4 w-100" style="">Name</div>
-          <div class="col-1"></div>
-          <div class="col-2 w-100" style="">
-            Create&#160;at
-          </div>
-          <div class="col-1 w-100" style="padding:0px;text-align:right;margin:auto;">
+          <div class="col-3 w-100" style="">Create&#160;at</div>
+          <div
+            class="col-1 w-100"
+            style="padding: 0px; text-align: right; margin: auto"
+          >
             Qty
           </div>
           <div class="col-2 w-100">Status</div>
@@ -70,42 +70,40 @@
                 />
               </span>
             </div>
-            <div
-              class="col-3 w-100"
-              style="margin: auto; text-align: left"
-            >
+            <div class="col-3 w-100" style="margin: auto; text-align: left">
               {{ channel.sale_channel }}
             </div>
-            <div class="col-1"></div>
-            <div
-              class="col-2 w-100"
-              style="margin: auto; text-align: left"
-            >
-              {{ channel.create_at }}
+            <div class="col-3 w-100" style="margin: auto; text-align: left">
+              <pre>{{ get_date(channel.create_at) }}</pre>
             </div>
             <div
               class="col-1 w-100"
-               style="padding:0px;text-align:right;margin:auto;"
+              style="padding: 0px; text-align: right; margin: auto"
             >
-              {{ count_product(channel.id)}}
+              {{ count_product(channel.id) }}
             </div>
-            <div
-              class="col-2 w-100"
-              style="margin: auto;"
-            >
+            <div class="col-2 w-100" style="margin: auto">
               {{ channel.status }}
             </div>
             <div
               class="col-1 w-100"
               style="margin: auto; text-align: left; padding: 0px"
             >
-              <img src="../../assets/icon/edit-orange.png" style="width:55%" alt="">
+              <img
+                src="../../assets/icon/edit-orange.png"
+                style="width: 55%"
+                alt=""
+              />
             </div>
             <div
               class="col-1 w-100"
               style="margin: auto; text-align: left; padding: 0px"
             >
-              <img src="../../assets/icon/duplicate.png" style="width:70%" alt="">
+              <img
+                src="../../assets/icon/duplicate.png"
+                style="width: 70%"
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -121,7 +119,7 @@ import SearchBar from "../../components/materials/SearchBar.vue";
 export default {
   components: { NavApp, SearchBar },
   mounted() {
-    this.get_sale_channel()
+    this.get_sale_channel();
   },
   data() {
     return {
@@ -134,18 +132,24 @@ export default {
         this.sale_channels = response.data;
       });
     },
-    count_product(id){
-      return id
-    }
+    count_product(id) {
+      return id;
+    },
+    get_date(date) {
+      return date.slice(0, 10);
+    },
   },
 };
 </script>
 
 <style scoped>
-.row{
-  margin:auto
+.row {
+  margin: auto;
 }
-.img-user-status{
+.img-user-status {
   border-radius: 3px;
+}
+pre{
+  margin-bottom: 0px;
 }
 </style>

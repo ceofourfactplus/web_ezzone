@@ -54,15 +54,16 @@
               </select>
             </div>
             <div class="col-12 h-20">
-              <label for=""
-                >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<button
-                  class="btn-y"
-                  style="width: 100px; display: inilne; height: 50px"
-                  :class="{ 'btn-g': remain > minimum }"
-                >
-                  {{ status_label }}
-                </button></label
+              <label for="">Type Product&nbsp;:&nbsp;</label>
+              <select
+                id="type_topping"
+                style="width: 160px; margin-left: 0px"
+                v-model="type_product"
               >
+                <option value="1">DRESSERT</option>
+                <option value="2">DRINK</option>
+                <option value="3">FOOD</option>
+              </select>
             </div>
             <div class="col-12 h-20">
               <label for="">Active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
@@ -130,12 +131,15 @@
             ><select
               id="type_topping"
               style="width: 165px"
-              v-model="type_topping"
+              v-model="toppingcategory_id"
             >
-              <option value="0">not use</option>
-              <option value="1">ROTI</option>
-              <option value="2">DRINK</option>
-              <option value="3">FOOD</option>
+              <option
+                v-for="topcate in topping_categories"
+                :key="topcate.id"
+                :value="topcate.id"
+              >
+                {{ topcate.category }}
+              </option>
             </select>
           </div>
         </div>
@@ -157,9 +161,11 @@ export default {
     this.get_unit();
     this.get_user();
     this.get_category();
+    this.get_topping_categories()
   },
   data() {
     return {
+      topping_categories:[],
       show_img: null,
       all_user: [],
       categories: [],
@@ -167,7 +173,7 @@ export default {
       code: "",
       img: null,
       category_id: null,
-      status: 1,
+      type_product: 1,
       active: true,
       unit_id: null,
       remain: 0,
@@ -180,7 +186,7 @@ export default {
       show_img: null,
       name: "",
       warehouse: 0,
-      type_topping: 0,
+      toppingcategory_id: null,
     };
   },
   methods: {
@@ -192,6 +198,11 @@ export default {
     get_category() {
       api_product.get("category/").then((response) => {
         this.categories = response.data;
+      });
+    },
+    get_topping_categories() {
+      api_product.get("topping/category/").then((response) => {
+        this.topping_categories = response.data;
       });
     },
     get_unit() {
@@ -215,7 +226,7 @@ export default {
       }
       data.append("category_id", this.category_id);
       data.append("unit_id", this.unit_id);
-      data.append("status", this.status);
+      data.append("type_product", this.type_product);
       data.append("is_active", this.active);
       data.append("remain", this.remain);
       data.append("minimum", this.minimum);
@@ -226,7 +237,7 @@ export default {
       data.append("share", 0);
       data.append("name", this.name);
       data.append("warehouse", this.stock);
-      data.append("type_topping", this.type_topping);
+      data.append("topping_category_id", this.toppingcategory_id);
       data.append("create_by_id", 1);
       api_product.post("product/", data).then(() => {
         this.$router.push({ name: "Product" });

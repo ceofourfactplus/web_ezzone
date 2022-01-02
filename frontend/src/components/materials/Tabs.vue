@@ -33,12 +33,25 @@
         :key="idx"
         @click="select_item(item)"
         class="tab-item"
+        style="height:50px"
       >
       <p :class="{'tab-selected': item.name == $store.state.raw_material.tab}">{{ item.name }}</p>
         
       </button>
-    <button class="tab-item" v-if="elements.length > 5">></button>
-  </div>
+      <button class="tab-item" v-if="elements.length > 5">></button>
+    </div>
+    <div class="tab">
+      <button
+        v-for="(item, idx) in elements"
+        :key="idx"
+        @click="select_item(item)"
+        class="tab-item"
+      >
+        {{ item.name }}
+      </button>
+      <button class="tab-item" v-if="elements.length > 5">></button>
+    </div>
+
   </div>
 </template>
 
@@ -46,7 +59,7 @@
 <script>
 export default {
   name: "Tabs",
-  props: ['elements', 'status'],
+  props: ["elements", "status"],
   data() {
     return {
     };

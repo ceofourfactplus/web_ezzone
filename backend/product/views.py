@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from product.models import (PriceProduct, Product,
-                            ProductCategory, SaleChannel)
+                            ProductCategory, SaleChannel,Topping,ToppingCategory,SetTopping,PriceTopping)
 from product.serializers import (PriceProductSerializer,
                                  PriceProductSerializer,
                                  ProductCategorySerializer, ProductSerializer,
@@ -36,7 +36,35 @@ class ProductCategoryStatus(APIView):
         serializer = ProductCategorySerializer(sale_channel)
         return Response(serializer.data)
 
-class ProductCategoryList(APIView):
+class ToppingByType(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request,type):
+        category = Topping.objects.filter(type_topping=type)
+        serializer = ToppingSerializer(
+            category, context={"request": request}, many=True)
+        print(serializer.data)
+        return Response(serializer.data,status=200)
+
+class CategoryByType(APIView):
+    def get(self, request,type):
+        category = ProductCategory.objects.filter(type_category=type)
+        serializer = ProductCategorySerializer(
+            category, many=True)
+        print(serializer.data)
+        return Response(serializer.data,status=200)
+
+class ProductByType(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request,type):
+        category = Product.objects.filter(type_product=type)
+        serializer = ProductSerializer(
+            category, context={"request": request}, many=True)
+        print(serializer.data)
+        return Response(serializer.data,status=200)
+
+class ChangeList(APIView):
     def get(self, request):
         category = ProductCategory.objects.exclude(type_category=4)
         serializer = ProductCategorySerializer(
@@ -52,7 +80,6 @@ class ProductCategoryList(APIView):
                 return Response(serializer.data, status=201)
             return Response(serializer.errors, status=400)
         return Response('this caetgory name is already in use', status=400)
-
 
 class ProductCategoryDetail(APIView):
     def get_object(self, pk):
@@ -85,16 +112,26 @@ class ToppingCategoryList(APIView):
         return Response(serializer.data)
         
     def post(self, request):
-        print('31')
-        print(request.data)
         if not ToppingCategory.objects.filter(category=request.data['category']).exists():
             serializer = ToppingCategorySerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+
+                print( request.data['select_topping'])
+                for top_id in request.data['select_topping']:
+                    if(not top_id == ',') :
+                        SetTopping.objects.create(
+                            topping_id=top_id,
+                            category_id = serializer.data['id']
+                        )
                 return Response(serializer.data, status=201)
             return Response(serializer.errors, status=400)
         return Response('this caetgory name is already in use', status=400)
 
+class AmountTopping(APIView):
+    def get(self,request,category_id):
+        product_amount = SetTopping.objects.filter(category_id=category_id).count()
+        return Response({'amount':product_amount},status=200)
 
 class ToppingList(APIView):
     parser_classes = [MultiPartParser, FormParser]
@@ -113,7 +150,7 @@ class ToppingList(APIView):
                 ezzone = SaleChannel.objects.get(sale_channel = 'EZZone').id
                 PriceTopping.objects.create(
                     sale_channel_id = ezzone,
-                    product_id = serializer.data['id'],
+                    topping_id = serializer.data['id'],
                     price =  request.data['price']
                 )
                 return Response(serializer.data, status=201)
@@ -121,16 +158,45 @@ class ToppingList(APIView):
         return Response('this code is already in use', status=400)
 
 
-class ToppingByCategory(APIView):
-    parser_classes = [MultiPartParser, FormParser]
+class ToppingCategoryDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return ToppingCategory.objects.get(pk=pk)
+        except ToppingCategory.DoesNotExist:
+            raise 404
 
-    def get(self, request,category_id):
-        object = Topping.objects.filter(category_id=category_id)
-        serializer = ToppingSerializer(
-            object, context={"request": request}, many=True)
+    def get(self, request, pk):
+        sale_channel = ToppingCategory.objects.get(id=pk)
+        serializer = ToppingCategorySerializer(
+            sale_channel)
         return Response(serializer.data)
 
-# sale channel
+    def put(self, request, pk):
+        sale_channel = self.get_object(pk)
+        serializer = ToppingCategorySerializer(sale_channel, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            SetTopping.objects.filter(category=serializer.data['id']).delete()
+            for top_id in request.data['settopping_set']:
+                if(not top_id == ',') :
+                    SetTopping.objects.create(
+                        topping_id=top_id['topping'],
+                        category_id = serializer.data['id']
+                    )
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def delete(self, request, pk):
+        sale_channel = ToppingCategory.objects.get(id=pk)
+        sale_channel.delete()
+        return Response(status=204)
+
+
+class SaleChannelEzzone(APIView):
+    def get(self,request):
+        ezzone = SaleChannel.objects.get(sale_channel='EZZone')
+        return Response({'id':ezzone.id},status=200)
+
 
 class SalechannelList(APIView):
     parser_classes = [MultiPartParser, FormParser]
@@ -141,13 +207,14 @@ class SalechannelList(APIView):
             sale_channel, context={"request": request}, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = SaleChannelSerializer(data=request.data)
+class CreateSaleChannel(APIView):
+    def post(self,request):
+        serializer = SaleChannelSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-
 
 class SaleChannelStatus(APIView):
     def get_object(self, pk):
@@ -166,7 +233,6 @@ class SaleChannelStatus(APIView):
 
 
 class SaleChannelDetail(APIView):
-    parser_classes = [MultiPartParser, FormParser]
 
     def get_object(self, pk):
         try:
@@ -176,8 +242,7 @@ class SaleChannelDetail(APIView):
 
     def get(self, request, pk):
         sale_channel = self.get_object(pk)
-        serializer = SaleChannelSerializer(
-            sale_channel, context={"request": request}, many=True)
+        serializer = SaleChannelSerializer(sale_channel, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -233,7 +298,6 @@ class ProductList(APIView):
             PriceProduct.objects.create(
                 sale_channel_id = ezzone,
                 product_id = serializer.data['id'],
-                create_by_id = request.data['create_by_id'],
                 price =  request.data['price']
             )
             return Response(serializer.data, status=201)

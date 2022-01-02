@@ -43,6 +43,8 @@ import Topping from "../views/Topping/Topping.vue";
 import CreateTopping from "../views/Topping/CreateTopping.vue";
 import EditTopping from "../views/Topping/EditTopping.vue";
 import ToppingCategory from "../views/Topping/ToppingCategory.vue";
+import CreateCategoryTopping from "../views/Topping/CreateCategory.vue";
+import EditCategoryTopping from "../views/Topping/EditCategory.vue";
 
 // dash board
 import DashBoard from "../views/DashBoard.vue";
@@ -52,8 +54,11 @@ import SaleChannel from "../views/SaleChannel/SaleChannel.vue"
 import EditSaleChannel from "../views/SaleChannel/EditSaleChannel.vue"
 import CreateSaleChannel from "../views/SaleChannel/CreateSaleChannel.vue"
 
-// database settings
-import DataBaseSettings from "../views/DataBaseSettings/DataBaseSettings.vue"
+
+// pos
+import SelectSaleChannel from "../views/POS/SelectSaleChannel.vue"
+import KeyOrder from "../views/POS/KeyOrder.vue"
+import KeyProductDetail from "../views/POS/KeyProductDetail.vue"
 
 const routes = [
   // database settings
@@ -65,6 +70,28 @@ const routes = [
       requiresLogin: false,
     },
   },
+
+  // pos
+  {
+    path:'/pos/select-sale-channel',
+    name:"SelectSaleChannel",
+    component: SelectSaleChannel
+  },
+  {
+    path:'/pos/:sale_channel_id/key-order',
+    name:"KeyOrder",
+    component: KeyOrder,
+    props:true
+  },
+  {
+    path:'/pos/:sale_channel_id/key-order/:product_id/key-product-detail',
+    name:"KeyProductDetail",
+    component: KeyProductDetail,
+    props:true
+  },
+
+
+
   // product
   {
     path: "/product/category",
@@ -105,6 +132,23 @@ const routes = [
     path: "/topping/category",
     name: "ToppingCategory",
     component: ToppingCategory,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/topping/category/create",
+    name: "CreateCategoryTopping",
+    component: CreateCategoryTopping,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/topping/category/edit/:id",
+    props:true,
+    name: "EditCategoryTopping",
+    component: EditCategoryTopping,
     meta: {
       requiresLogin: false,
     },

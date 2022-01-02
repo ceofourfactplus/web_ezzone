@@ -478,3 +478,17 @@ h1 {
   padding-bottom: 20px;
   padding-left: 20px;
 }
+
+
+.btn-gray {
+  background-color: #303344;
+  height: 58px;
+  font-size: 24px;
+  font-weight: bolder;
+  border: 0px;
+  border-radius: 10px 10px 0px 0px;
+  color: #ffffff80;
+}
+.btn-gray-active{
+  color: #ffffff;
+}

@@ -8,10 +8,6 @@
         <div class="row h-100">
           <div class="col-5 w-100">
             <div class="row">
-              <div class="col-12 mb-4">
-                <label for="">Code :</label
-                ><input type="text" v-model="code" style="width: 150px" />
-              </div>
               <div class="col-12" style="padding: 0px">
                 <label id="select_img" for="file" style="margin-top: 0px">
                   <img :src="show_img" class="image" v-if="show_img != null" />
@@ -28,49 +24,28 @@
             </div>
           </div>
           <div class="col-7 w-100">
-            <div class="col-12 h-20">
-              <input
-                type="text"
-                style="width: 350px; margin: auto"
-                placeholder="Product Name"
-                v-model="name"
-              />
+            <div class="col-12 h-25">
+              <label for="">Code&nbsp;&nbsp;&nbsp;:</label
+              ><input type="text" style="width: 67%" v-model="code" />
             </div>
-            <div class="col-12 h-20">
-              <label for="">Category&nbsp;:</label
-              ><select
-                v-model="category_id"
-                style="width: 210px"
-                name="category"
-                id="category"
-              >
-                <option
-                  v-for="category in categories"
-                  :key="category.id"
-                  :value="category.id"
-                >
-                  {{ category.category }}
-                </option>
-              </select>
+            <div class="col-12 h-25">
+              <label for="">Name&nbsp;&nbsp;:</label
+              ><input type="text" style="width: 66%" v-model="name" />
             </div>
-            <div class="col-12 h-20">
+            <div class="col-12 h-25">
               <label for=""
-                >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<button
+                >Status&nbsp;&nbsp;:&nbsp;<button
                   class="btn-y"
-                  style="width: 100px; display: inilne; height: 50px"
+                  style="width: 100px; display: inilne; height: 30px"
                   :class="{ 'btn-g': remain > minimum }"
                 >
                   {{ status_label }}
                 </button></label
               >
             </div>
-            <div class="col-12 h-20">
-              <label for="">Active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+            <div class="col-12 h-25">
+              <label for="">Active&nbsp;&nbsp;:</label>
               <div class="switch"><Switch @switch="switch_active" /></div>
-            </div>
-            <div class="col-12 h-20">
-              <label for="">Price&nbsp;&nbsp;:</label
-              ><input type="number" style="width: 69%" v-model="price" />
             </div>
           </div>
         </div>
@@ -106,34 +81,30 @@
       </div>
       <div class="frame f-2">
         <div class="row">
-          <div class="col-6 label-input">
-            <label for="flavour">Flavour:</label
-            ><select id="flavour" v-model="flavour">
-              <option value="2">Sweet</option>
-              <option value="1">Spicy</option>
-            </select>
+          <div class="col-5 label-input">
+            <label for="flavour">Price&nbsp;:</label
+            ><input type="text" style="width:160px">
           </div>
-          <div class="col-6 label-input">
-            <label for="stock">Stock:</label
-            ><select id="stock" style="width: 210px" v-model="stock">
-              <option value="0">No Stock</option>
-              <option value="1">Product</option>
-              <option value="2" disabled>Material</option>
-            </select>
-          </div>
-          <div class="col-5 label-input m-15">
-            <label for="">Flavour Level&nbsp;&nbsp;:</label
-            ><Switch @switch="switch_flavour_level" />
-          </div>
-          <div class="col-7 label-input m-15">
-            <label for="type_topping">Type Topping:</label
+          <div class="col-7 label-input">
+            <label for="stock">Stock :</label
             ><select
               id="type_topping"
-              style="width: 165px"
+              style="width: 260px"
+              v-model="warehouse"
+            >
+              <option value="0">not pickup</option>
+              <option value="1">product</option>
+              <option value="2">material</option>
+            </select>
+          </div>
+          <div class="col-12 label-input m-15">
+            <label for="type_topping">Topping Type : </label>
+            <select
+              id="type_topping"
+              style="width: 445px"
               v-model="type_topping"
             >
-              <option value="0">not use</option>
-              <option value="1">ROTI</option>
+              <option value="1">DRESSERT</option>
               <option value="2">DRINK</option>
               <option value="3">FOOD</option>
             </select>
@@ -166,16 +137,12 @@ export default {
       all_unit: [],
       code: "",
       img: null,
-      category_id: null,
       status: 1,
       active: true,
       unit_id: null,
       remain: 0,
       minimum: 0,
       maximum: 0,
-      price: 0,
-      flavour: 0,
-      flavour_level: false,
       price: 0,
       show_img: null,
       name: "",
@@ -221,15 +188,13 @@ export default {
       data.append("minimum", this.minimum);
       data.append("maximum", this.maximum);
       data.append("price", this.price);
-      data.append("flavour", this.flavour);
-      data.append("flavour_level", this.flavour_level);
-      data.append("share", 0);
       data.append("name", this.name);
-      data.append("warehouse", this.stock);
+      data.append("warehouse", this.warehouse);
       data.append("type_topping", this.type_topping);
       data.append("create_by_id", 1);
-      api_product.post("product/", data).then(() => {
-        this.$router.push({ name: "Product" });
+      data.append("old_product_id", 1);
+      api_product.post("topping/", data).then(() => {
+        this.$router.push({ name: "Topping" });
       });
     },
     switch_flavour_level(val) {
@@ -268,7 +233,7 @@ export default {
 }
 .f-1 {
   width: 680px;
-  height: 375px;
+  height: 300px;
 }
 .f-2 {
   width: 680px;
@@ -307,7 +272,7 @@ label {
   height: 25%;
   text-align: left;
 }
-.h-20 {
+.h-25 {
   height: 20%;
   text-align: left;
 }
@@ -325,7 +290,7 @@ label {
   width: 74px;
   height: 28.23px;
   left: 60px;
-  top: 420px;
+  top: 350px;
 
   background-color: #c4c4c4;
   border-radius: 5px;

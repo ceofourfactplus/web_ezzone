@@ -15,8 +15,8 @@
             <div
               v-for="(dsh, idx) in category.btn"
               :key="idx"
-              class="col-3"
-              style="padding-left: 0px; padding-right: 0px"
+              class="col-3 w-100"
+              style="padding-left: 0px; padding-right: 0px;"
             >
               <div
                 v-if="has_permission(dsh.permissions)"
