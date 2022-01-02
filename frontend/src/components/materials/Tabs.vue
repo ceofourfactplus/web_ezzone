@@ -80,7 +80,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .tab-selected {
   color: white;
 }

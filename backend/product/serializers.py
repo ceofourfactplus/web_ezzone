@@ -96,7 +96,26 @@ class SaleChannelSerializer(serializers.ModelSerializer):
         return sale_channel
 
     def update(self, instance, validated_data):
+        pprint(validated_data)
+        print( validated_data['sale_channel'])
+        instance.sale_channel = validated_data['sale_channel']
+        instance.gp = validated_data['gp']
+        instance.status = validated_data['status']
+        instance.update_by = validated_data['update_by']
+        instance.update_at = datetime.datetime.now()
+        instance.save()
 
+        # create update delete pricetopping
+        pricetopping_id = [c['id'] for c in validated_data['pricetopping'] if c.get('id')]
+        PriceTopping.objects.filter(sale_channel_id=instance.id).exclude(id__in=pricetopping_id).delete()
+
+        to_be_create_topping = [c for c in validated_data['pricetopping'] if c.get('id') == None]
+        for p in to_be_create_topping: PriceTopping.objects.create(**p, sale_channel_id=instance.id)
+
+        to_be_update_topping = [c for c in validated_data['pricetopping'] if c.get('id')]
+        for p in to_be_update_topping: PriceTopping.objects.filter(id=p['id']).update(**p)
+
+        # create update delete priceproduct
         priceproduct_id = [c['id'] for c in validated_data['priceproduct'] if c.get('id')]
         PriceProduct.objects.filter(sale_channel_id=instance.id).exclude(id__in=priceproduct_id).delete()
 

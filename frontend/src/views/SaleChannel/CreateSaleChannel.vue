@@ -28,7 +28,12 @@
       <div class="col-8 w-100">
         <div style="display: flex" class="mb-2">
           <label class="col-3" for="name">Name </label>
-          <input v-model="sale_channel_set.sale_channel" class="input" type="text" id="name" />
+          <input
+            v-model="sale_channel_set.sale_channel"
+            class="input"
+            type="text"
+            id="name"
+          />
         </div>
         <div style="display: flex">
           <label class="col-3" for="gp">GP% </label>
@@ -118,13 +123,22 @@
     <div class="table" style="margin-top: 10px">
       <div class="table-header" style="line-height: 40px; font-size: 24px">
         <div class="row">
-          <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
+          <div
+            class="col-5 w-100"
+            style="margin-left: 10px; text-align: left; line-height: 100%"
+          >
             Product Name
           </div>
-          <div class="col-3 w-100" style="margin-left: 10px; text-align: left">
+          <div
+            class="col-3 w-100"
+            style="margin-left: 10px; text-align: left; line-height: 100%"
+          >
             Sale Price
           </div>
-          <div class="col-4 w-100" style="margin: auto; margin-left: -10px">
+          <div
+            class="col-4 w-100"
+            style="margin: auto; margin-left: -10px; line-height: 100%"
+          >
             Net Price
           </div>
         </div>
@@ -132,16 +146,21 @@
       <div style="overflow-x: auto; height: 430px">
         <div class="table-item" v-for="item in items" :key="item.id">
           <div class="row" style="width: 100%">
-            <div class="col-4 w-100" style="margin: auto">
+            <div class="col-4 w-100" style="margin: auto; line-height: 100%">
               {{ item.name }}
             </div>
             <div
               class="col-4 w-100"
-              style="margin: auto; text-align: left"
+              style="margin: auto; text-align: left; line-height: 100%"
             ></div>
             <div
               class="col-4 w-100"
-              style="margin: auto; width: 175px; text-align: left"
+              style="
+                margin: auto;
+                width: 175px;
+                text-align: left;
+                line-height: 100%;
+              "
             ></div>
           </div>
         </div>
@@ -160,22 +179,23 @@ export default {
   data() {
     return {
       show_img: null,
-      img:null,
+      img: null,
       sale_channel_set: {
         sale_channel: "hello",
         gp: 0,
-        create_by:1,
+        create_by: 1,
         price_product: [
           {
-            product:1,
-            price:19
-          }
+            product: 1,
+            price: 19,
+          },
         ],
         price_topping: [
           {
-            topping:1,
-            price:19
-          }],
+            topping: 1,
+            price: 19,
+          },
+        ],
       },
       type_item: 1,
       items: [],
@@ -191,11 +211,9 @@ export default {
       }
     },
     create_sale_channel() {
-
-      api_product.post("sale-channel/create/", this.sale_channel_set)
+      api_product.post("sale-channel/create/", this.sale_channel_set);
       // const data = new FormData();
       // data.append("img", this.sale_channel_set.img,this.img.name)
-
     },
     status_switch(val) {
       this.sale_channel_set.status = val;

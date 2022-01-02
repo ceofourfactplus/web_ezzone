@@ -32,17 +32,19 @@
     </div>
 
     <div class="table mt-3">
-      <div class="table-header" style="line-height: 40px; font-size: 24px">
+      <div class="table-header" style="font-size: 24px">
         <div class="row">
-          <div class="col-4 w-100" style="">Name</div>
-          <div class="col-3 w-100" style="">Create&#160;at</div>
+          <div class="col-4 w-100" style="line-height: 100%">Name</div>
+          <div class="col-3 w-100" style="line-height: 100%">
+            Create&#160;at
+          </div>
           <div
             class="col-1 w-100"
             style="padding: 0px; text-align: right; margin: auto"
           >
             Qty
           </div>
-          <div class="col-2 w-100">Status</div>
+          <div class="col-2 w-100" style="line-height: 100%">Status</div>
           <div class="col-1 w-100"></div>
           <div class="col-1 w-100"></div>
         </div>
@@ -53,10 +55,16 @@
           :key="channel.id"
           class="table-item"
         >
-          <div class="row" style="width: 100%">
+          <div class="row" style="width: 100%; line-height: 100%">
             <div
               class="col-1 w-100"
-              style="margin: auto; margin-left: 0px; text-align: right"
+              style="
+                margin: auto;
+                margin-left: 0px;
+                text-align: right;
+                line-height: 100%;
+                height: 100%;
+              "
             >
               <span>
                 <img
@@ -70,38 +78,67 @@
                 />
               </span>
             </div>
-            <div class="col-3 w-100" style="margin: auto; text-align: left">
+            <div
+              class="col-3 w-100"
+              style="
+                margin: auto;
+                text-align: left;
+                line-height: 100%;
+                height: 100%;
+              "
+            >
               {{ channel.sale_channel }}
             </div>
-            <div class="col-3 w-100" style="margin: auto; text-align: left">
+            <div
+              class="col-3 w-100"
+              style="
+                margin: auto;
+                text-align: left;
+                line-height: 100%;
+                height: 100%;
+              "
+            >
               <pre>{{ get_date(channel.create_at) }}</pre>
             </div>
             <div
               class="col-1 w-100"
-              style="padding: 0px; text-align: right; margin: auto"
+              style="
+                padding: 0px;
+                text-align: right;
+                margin: auto;
+                line-height: 100%;
+                height: 100%;
+              "
             >
               {{ count_product(channel.id) }}
             </div>
-            <div class="col-2 w-100" style="margin: auto">
+            <div
+              class="col-2 w-100"
+              style="margin: auto; line-height: 100%; height: 100%"
+            >
               {{ channel.status }}
             </div>
             <div
               class="col-1 w-100"
-              style="margin: auto; text-align: left; padding: 0px"
+              style="
+                margin: auto;
+                text-align: left;
+                padding: 0px;
+                line-height: 100%;
+                height: 100%;
+              "
             >
               <img
                 src="../../assets/icon/edit-orange.png"
-                style="width: 55%"
                 alt=""
               />
             </div>
             <div
               class="col-1 w-100"
-              style="margin: auto; text-align: left; padding: 0px"
+              style="margin: auto; text-align: left; padding: 0px; height: 100%"
             >
               <img
                 src="../../assets/icon/duplicate.png"
-                style="width: 70%"
                 alt=""
               />
             </div>
@@ -148,8 +185,12 @@ export default {
 }
 .img-user-status {
   border-radius: 3px;
+  width: 30px;
 }
-pre{
+pre {
   margin-bottom: 0px;
+}
+img{
+  height: 30px;
 }
 </style>
