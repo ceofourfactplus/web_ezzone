@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <nav-app @back="back">RM Unit</nav-app>
+    <nav-app @back="back">Unit</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
@@ -40,6 +40,7 @@
               margin: 10px 0px 0px 0px;
               background-color: #303344;
               border-radius: 10px;
+              line-height: 18px;
             "
           >
             <div class="col-6" style="text-align: left; width: 100%;margin-left:20px">
@@ -50,7 +51,7 @@
               <img
                 @click="SelectUnit(item)"
                 src="../../assets/icon/edit.png"
-                alt="img"
+                style="position: relative; bottom: 3px; width: 25px; height: 30px;"
               />
             </div>
           </div>
@@ -271,11 +272,11 @@ h2 {
   border-color: #65b0f6;
   color: #65b0f6;
   width: 119px;
-  height: 45px;
-  margin: 0px 30px 0px 0px;
+  height: 50px;
+  margin: 0px 40px 0px 0px;
 }
 .wrap-search {
-  min-width: 520px;
+  min-width: 550px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

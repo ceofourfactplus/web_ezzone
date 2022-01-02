@@ -167,14 +167,14 @@ export default {
         create_by:1,
         price_product: [
           {
-            product:1,
-            price:19
+            // product:1,
+            // price:19
           }
         ],
         price_topping: [
           {
-            topping:1,
-            price:19
+            // topping:1,
+            // price:19
           }],
       },
       type_item: 1,
