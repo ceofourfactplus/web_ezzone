@@ -151,10 +151,10 @@ class PickUpRawMaterialSerializer(serializers.ModelSerializer):
 
 
 class ReceiptRawMaterialDetailSerializer(serializers.ModelSerializer):
-    invoice_id = serializers.IntegerField()
     raw_material_id = serializers.IntegerField()
     raw_material_set = RawMaterialSerializer(
         read_only=True, source="raw_material")
+    receipt_raw_material_id = serializers.IntegerField()
     supplier_id = serializers.IntegerField()
     supplier_set = SupplierSerializer(read_only=True, source="supplier")
     create_by_id = serializers.IntegerField()
@@ -164,19 +164,18 @@ class ReceiptRawMaterialDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReceiptRawMaterialDetail
-        fields = ['id', 'invoice_id', 'raw_material_id', 'price',
+        fields = ['id', 'raw_material_id', 'price',
                   'total_price', 'amount', 'remark', 'discount',
                   'create_at', 'create_by_id', 'update_at',
                   'update_by_id', 'supplier_id', 'supplier_set',
-                  'invoice_set', 'raw_material_set', 'create_by',
-                  'update_by']
+                   'raw_material_set', 'create_by', 'update_by', 'receipt_raw_material_id']
 
 
 class ReceiptRawMaterialSerializer(serializers.ModelSerializer):
     supplier_set = SupplierSerializer(read_only=True, source="supplier")
     supplier_id = serializers.IntegerField()
-    receipt_raw_material_detail_list = ReceiptRawMaterialDetailSerializer(
-        read_only=True, many=True, source="receipt_raw_material_detail")
+    # receipt_raw_material_detail_list = ReceiptRawMaterialDetailSerializer(
+    #     read_only=True, many=True, source="receipt_raw_material_detail")
     create_by_id = serializers.IntegerField()
     update_by_id = serializers.IntegerField()
     create_by = UserSerializer(read_only=True, source="user")
@@ -185,7 +184,7 @@ class ReceiptRawMaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReceiptRawMaterial
         fields = ['id', 'supplier_id', 'total_price',
-                  'total_amount', 'payment', 'receipt_raw_material_detail_list'
+                  'total_amount', 'payment',
                   'create_at', 'create_by_id', 'update_by_id',
                   'update_at', 'supplier_set',
                   'create_by', 'update_by']

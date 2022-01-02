@@ -179,6 +179,7 @@ export default {
           this.fetchRMCategories();
         }, 1000);
       });
+      this.category = ''
     },
     search_by_typing(val) {
       var temp = [];

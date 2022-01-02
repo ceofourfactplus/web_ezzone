@@ -25,6 +25,7 @@ import EditSupplier from "../views/RawMaterials/EditSup.vue";
 // po
 import PONotice from "../views/RawMaterials/PONotice.vue";
 import PO from "../views/RawMaterials/PO.vue";
+import ConfirmPO from "../views/RawMaterials/ConfirmPO.vue";
 
 // customer
 import Customer from "../views/Customer/Customer.vue";
@@ -240,7 +241,7 @@ const routes = [
     meta: {
       requiresLogin: false,
     },
-  },
+  },  
   {
     path: "/rm/edit/:id",
     name: "EditRM",
@@ -308,6 +309,11 @@ const routes = [
     path: "/rm/po",
     name: "PO",
     component: PO,
+  },
+  {
+    path: "/rm/confirm-po",
+    name: "ConfirmPO",
+    component: ConfirmPO,
   },
 
   // sale channel

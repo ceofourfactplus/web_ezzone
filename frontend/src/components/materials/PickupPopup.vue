@@ -50,7 +50,7 @@
             <div class="row" style="margin-top: 20px; text-align: left">
               <div class="col-12">
                 <p>
-                  Qty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ item.remain }}
+                  Qty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ item.remain }}&nbsp;&nbsp;&nbsp;&nbsp; {{ item.unit_set.unit }}
                 </p>
               </div>
             </div>

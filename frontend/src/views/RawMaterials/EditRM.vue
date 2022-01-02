@@ -1,6 +1,10 @@
 <template>
   <div>
-    <nav-app save="true" @save="edit()">New&#160;RM</nav-app>
+    <div v-if="loading" style="color: white; font-size: 30px; margin-top: 20px;">
+      Loading ...
+    </div>
+    <div v-else>
+      <nav-app save="true" @save="edit()">Edit&#160;RM</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -8,7 +12,7 @@
             <div class="row">
               <div class="col-12" style="padding: 0px">
                 <label id="select_img" for="file" style="margin-top: 0px">
-                  <img :src="require(`../../../../backend${rm_item.img}`)" class="image" v-if="rm_item.img != null" />
+                  <img :src="require(`../../../../backend${rm_item.raw_material_set.img}`)" class="image" />
                   <div class="edit-block">Edit</div>
                 </label>
                 <input
@@ -22,21 +26,23 @@
             </div>
           </div>
           <div class="col-7 w-100">
+            <!-- Name -->
             <div class="col-12 h-25">
               <input
                 type="text"
                 style="width: 350px; margin: auto"
                 placeholder="Name"
-                v-model="rm_item.name"
+                v-model="rm_item.raw_material_set.name"
               />
             </div>
+            <!-- Category -->
             <div class="col-12 h-25">
               <label for="">Category&nbsp;:</label>
               <select
                 name="category"
                 id="category"
-                v-model="rm_item.category_id"
-                style="height: 50px"
+                v-model="rm_item.raw_material_set.category_id"
+                style="height: 50px; margin-top: 10px;"
               >
                 <option
                   v-for="category in categories"
@@ -47,18 +53,14 @@
                 </option>
               </select>
             </div>
-            <div class="col-12 h-25">
+            <!-- Status -->
+            <div class="col-12 h-25" style="margin-top: 10px;">
               <label for="" style="display: inline"
                 >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                <button
-                  class="btn-y"
-                  style="width: 100px; display: inilne"
-                  :class="{ 'btn-g': remain > minimum }"
-                >
-                  {{ status_am }}
-                </button></label
-              >
+                <img :src="$store.state.raw_material.status_image[rm_item.raw_material_set.status]">
+                </label>
             </div>
+            <!-- Fridge -->
             <div class="col-12 h-25">
               <label for="">Fridge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
               <div class="switch"><Switch @switch="fridge" /></div>
@@ -66,16 +68,17 @@
           </div>
         </div>
       </div>
-      <div class="frame f-2" style="height: 220px">
+      <div class="frame f-2" style="height: 290px; padding-left: 0px">
         <!-- Head Of Section 2 -->
         <div class="row">
-          <div class="col-12">
+          <div class="col-12" style="margin-left: 20px">
             <div
               style="
                 width: 100%;
                 font-size: 30px;
                 color: white;
                 text-align: left;
+                margin-left: -10px;
                 margin-top: -10px;
                 margin-bottom: 20px;
               "
@@ -84,27 +87,99 @@
             </div>
           </div>
         </div>
-        <!-- Content -->
+        <!-- First Row -->
         <div class="row">
-          <div class="col-6 label-input">
-            <label for="">Qty&nbsp;&nbsp;&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 220px" v-model="rm_item.remain" />
+          <div class="col-4 row-wrapper">
+            <label for="">Qty&nbsp;&nbsp;&nbsp;:&nbsp;</label>
+            <input
+              type="number"
+              style="background: #717171; width: 100px; height: 50px"
+              v-model="rm_item.raw_material_set.remain"
+            />
           </div>
-          <div class="col-6 label-input">
+          <div class="col-4 row-wrapper">
             <label for="">Min&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="width: 55%" v-model="rm_item.minimum" />
+            ><input
+              type="number"
+              style="background: #717171; width: 100px; height: 50px"
+              v-model="rm_item.raw_material_set.minimum"
+            />
           </div>
-          <div class="col-6 label-input m-15">
-            <label for="">Avg P&nbsp;:</label>
-            ><input type="number" style="width: 55%" v-model="rm_item.avg_s" />
+          <div class="col-4 row-wrapper" style="margin-right: 20px">
+            <label for="">Max Qty&nbsp;:</label
+            ><input
+              type="number"
+              style="background: #717171; width: 100px; height: 50px"
+              v-model="rm_item.raw_material_set.maximum"
+            />
           </div>
-          <div class="col-6 label-input m-15">
-            <label for="">Max&nbsp;Qty&nbsp;:</label
-            ><input type="number" style="width: 53%" v-model="rm_item.maximum" />
+        </div>
+        <!-- Second Row -->
+        <div class="row" style="margin-top: 30px">
+          <div class="col-6 row-wrapper">
+            <label for="">Avg S&nbsp;:&nbsp;&nbsp;</label
+            ><input
+              type="number"
+              style="
+                background: #717171;
+                width: 220px;
+                height: 50px;
+                margin-left: -10px;
+              "
+              v-model="rm_item.raw_material_set.avg_s"
+            />
+          </div>
+          <div class="col-6 row-wrapper" style="margin-right: 20px">
+            <label for="">Avg M&nbsp;:&nbsp;&nbsp;</label
+            ><input
+              type="number"
+              style="
+                background: #717171;
+                width: 200px;
+                height: 50px;
+                margin-right: -40px;
+              "
+              v-model="rm_item.raw_material_set.avg_m"
+            />
+          </div>
+        </div>
+        <!-- Third Row -->
+        <div class="row" style="margin-top: 30px">
+          <div class="col-6 row-wrapper" style="margin-right: 20px">
+            <label for="">Avg L&nbsp;:&nbsp;</label
+            ><input
+              type="number"
+              style="background: #717171; width: 220px; height: 50px"
+              v-model="rm_item.raw_material_set.avg_l"
+            />
+          </div>
+          <div class="col-6 row-wrapper">
+            <label for="">Supplier&nbsp;:&nbsp;&nbsp;</label>
+            <select
+              v-model="rm_item.supplier_id"
+              class="i-25 ig"
+              style="
+                border-radius: 10px;
+                width: 190px;
+                margin-right: -30px;
+                height: 50px;
+              "
+            >
+              <option value="" selected disabled style="color: white">
+                unit
+              </option>
+              <option
+                v-for="supplier in suppliers"
+                :key="supplier.id"
+                :value="supplier.id"
+              >
+                {{ supplier.company_name }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
-      <div class="frame f-2" style="height: 286px">
+      <div class="frame f-2" style="height: 230px">
         <!-- Head Of Section 3 -->
         <div class="row">
           <div class="col-12">
@@ -123,18 +198,18 @@
           </div>
         </div>
         <!-- First Row -->
-        <div class="row" style="width: 99%">
+        <div class="row" style="width: 99%; margin-left: 5px;">
           <input
             type="number"
             class="i-25 g"
-            v-model="rm_item.s_to_m"
+            v-model="rm_item.raw_material_set.s_to_m"
             placeholder="S Unit"
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
           <select
-            v-model="rm_item.unit_s_id"
+            v-model="rm_item.raw_material_set.unit_s_id"
             class="i-25 ig"
-            style="border-radius: 10px"
+            style="border-radius: 10px; width: 170px;"
           >
             <option value="" selected disabled style="color: white">
               unit
@@ -152,14 +227,14 @@
             model="to_amount"
             value="1"
             readonly
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
           <select
             name=""
             id=""
-            v-model="rm_item.unit_m_id"
+            v-model="rm_item.raw_material_set.unit_m_id"
             class="i-25 ig"
-            style="border-radius: 10px"
+            style="border-radius: 10px; width: 170px;"
           >
             <option value="" selected disabled style="color: white">
               unit
@@ -170,23 +245,27 @@
           </select>
         </div>
         <!-- Second Row -->
-        <div class="row m-15" style="width: 99%">
+        <div class="row m-15" style="width: 99%; margin-left: 5px;">
           <input
             type="number"
             class="i-25 g"
-            v-model="rm_item.m_to_l"
+            v-model="rm_item.raw_material_set.m_to_l"
             placeholder="M to L Unit"
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
           <select
-            v-model="rm_item.unit_m_id"
+            v-model="rm_item.raw_material_set.unit_m_id"
             class="i-25 ig"
-            style="border-radius: 10px; color: white"
+            style="border-radius: 10px; color: white; width: 170px;"
           >
             <option value="" selected disabled style="color: white">
               unit
             </option>
-            <option v-for="unit in units" :key="unit.id" :value="unit.id">
+            <option
+              v-for="unit in units"
+              :key="unit.id"
+              :value="unit.id"
+            >
               {{ unit.unit }}
             </option>
           </select>
@@ -197,14 +276,14 @@
             type="number"
             value="1"
             class="i-25 g"
-            style="text-align: right; border-radius: 10px"
+            style="text-align: right; border-radius: 10px; background: #717171"
           />
           <select
             name=""
             id=""
-            v-model="rm_item.unit_l_id"
+            v-model="rm_item.raw_material_set.unit_l_id"
             class="i-25 ig"
-            style="border-radius: 10px"
+            style="border-radius: 10px; width: 170px;"
           >
             <option value="" selected disabled style="color: white">
               unit
@@ -214,45 +293,8 @@
             </option>
           </select>
         </div>
-        <!-- Third Row -->
-        <div class="row m-15" style="width: 99%; text-align: left">
-          <input
-            type="number"
-            class="i-25 g"
-            v-model="rm_item.avg_m"
-            placeholder="Avg of M"
-            style="text-align: right; border-radius: 10px"
-          />
-          <select
-            v-model="rm_item.unit_m_id"
-            class="i-25 ig"
-            style="border-radius: 10px"
-          >
-            <option value="" selected disabled>unit</option>
-            <option v-for="unit in units" :key="unit.id" :value="unit.id">
-              {{ unit.unit }}
-            </option>
-          </select>
-
-          <input
-            type="number"
-            v-model="rm_item.avg_l"
-            class="i-25 g"
-            placeholder="Avg of L"
-            style="text-align: right; border-radius: 10px; margin-left: 50px"
-          />
-          <select
-            v-model="rm_item.unit_l_id"
-            class="i-25 ig"
-            style="border-radius: 10px"
-          >
-            <option value="" selected disabled>unit</option>
-            <option v-for="unit in units" :key="unit.id" :value="unit.id">
-              {{ unit.unit }}
-            </option>
-          </select>
-        </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -265,23 +307,32 @@ export default {
   components: { NavApp, Switch },
   data() {
     return {
-      rm_item: {},
+      loading: false,
       new_img: false,
-      img: '',
+      rm_item: {},
       categories: [],
       units: [],
+      suppliers: [],
     };
   },
   methods: {
+    fetchSuppliers() {
+      api_raw_material.get("/supplier/").then((response) => {
+        console.log(response.data, "suppliers");
+        this.suppliers = response.data;
+      });
+    },
     fetchRawMaterials() {
-      api_raw_material
-        .get(`raw-material/${this.$route.params.id}`)
-        .then((response) => {
-          console.log(response.data, "response");
-          this.rm_item = response.data;
-        });
+      this.loading = true
+      api_raw_material.get(`/raw-material/${this.$route.params.id}`).then((response) => {
+        console.log(response.data, "raw_material");
+        this.rm_item = response.data;
+        this.loading = false
+        console.log(this.rm_item, 'rm_item')
+      });
     },
     onFileChange(e) {
+      console.log(e, "e");
       this.img = e.target.files[0];
       this.new_img = true
       if (this.img) {
@@ -289,42 +340,41 @@ export default {
         reader.onload = (e) => (this.show_img = e.target.result);
         reader.readAsDataURL(this.img);
       }
+      console.log(this.img, "img");
     },
     fridge(val) {
-      this.rm_item.is_refrigerator = val;
+      this.is_refrigerator = val;
     },
     edit() {
       const data = new FormData();
-      data.append("raw_material_id", this.rm_item.id);
-      data.append("maximum", this.rm_item.maximum);
-      data.append("minimum", this.rm_item.minimum);
-      data.append("remain", this.rm_item.remain);
-      data.append("category_id", this.rm_item.category_id);
-      data.append("name", this.rm_item.name);
-      data.append("is_refrigerator", this.rm_item.is_refrigerator);
-      data.append("to_unit_id", this.rm_item.to_unit_id);
-      data.append("next_unit_id", this.rm_item.next_unit_id);
-      data.append("to_amount", this.rm_item.to_amount);
-      data.append("next_amount", this.rm_item.next_amount);
-      data.append("unit_l_id", this.rm_item.unit_l_id);
-      data.append("unit_m_id", this.rm_item.unit_m_id);
-      data.append("unit_s_id", this.rm_item.unit_s_id);
-      data.append("m_to_l", this.rm_item.m_to_l);
-      data.append("s_to_m", this.rm_item.s_to_m);
-      data.append("avg_l", this.rm_item.avg_l);
-      data.append("avg_m", this.rm_item.avg_m);
-      data.append("avg_s", this.rm_item.avg_s);
+      data.append("id", this.rm_item.raw_material_set.id);
+      data.append("maximum", this.rm_item.raw_material_set.maximum);
+      data.append("minimum", this.rm_item.raw_material_set.minimum);
+      data.append("remain", this.rm_item.raw_material_set.remain);
+      data.append("category_id", this.rm_item.raw_material_set.category_id);
+      data.append("name", this.rm_item.raw_material_set.name);
+      data.append("is_refrigerator", this.rm_item.raw_material_set.is_refrigerator);
+      data.append("supplier_id", this.rm_item.supplier_id);
+      data.append("unit_l_id", this.rm_item.raw_material_set.unit_l_id);
+      data.append("unit_m_id", this.rm_item.raw_material_set.unit_m_id);
+      data.append("unit_s_id", this.rm_item.raw_material_set.unit_s_id);
+      data.append("m_to_l", this.rm_item.raw_material_set.m_to_l);
+      data.append("s_to_m", this.rm_item.raw_material_set.s_to_m);
+      data.append("avg_l", this.rm_item.raw_material_set.avg_l);
+      data.append("avg_m", this.rm_item.raw_material_set.avg_m);
+      data.append("avg_s", this.rm_item.raw_material_set.avg_s);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
       if (this.new_img) {
-        data.append("img", this.rm_item.img, this.rm_item.name);
+        user_data.append("img", this.rm_item.raw_material_set.img, this.rm_item.raw_material_set.img.name);
       }
-
       api_raw_material.put("rm-update/", data).then((response) => {
         console.log(response.data, "response data");
-        this.$router.push({ name: "EditRM" });
       });
     },
+  },
+  beforeMount () {
+    this.fetchRawMaterials();
   },
   watch: {
     remain() {
@@ -339,12 +389,12 @@ export default {
       if (this.remain > this.minimum) {
         return "success";
       } else {
-        return "ไม่พอ";
+        return "minimum";
       }
     },
   },
   mounted() {
-    this.fetchRawMaterials()
+    this.fetchSuppliers();
     api_raw_material.get("category").then((response) => {
       this.categories = response.data;
     });
@@ -357,6 +407,11 @@ export default {
 </script>
 
 <style scoped>
+.row-wrapper {
+  width: 100%;
+  padding: 0px;
+  margin-left: -10px;
+}
 ::placeholder {
   text-align: left;
   color: white;
@@ -376,15 +431,15 @@ export default {
   padding-left: 20px;
 }
 .f-1 {
-  width: 680px;
+  width: 725px;
   height: 270px;
 }
 .f-2 {
-  width: 680px;
+  width: 725px;
   height: 170px;
 }
 .f-3 {
-  width: 680px;
+  width: 725px;
   height: 230px;
 }
 .container-f {
@@ -392,12 +447,7 @@ export default {
   margin-right: auto;
   margin-left: auto;
 }
-input {
-  background-color: #717171;
-  width: 150px;
-  height: 50px;
-  margin-left: 10px;
-}
+
 option {
   font-size: 20px;
 }
@@ -406,14 +456,10 @@ raw-img {
   height: 235px;
 }
 
-label {
-  color: #fff;
-  font-size: 30px;
-}
-
 ::placeholder {
-  text-indent: 10 px;
+  text-indent: 5 px;
   color: #fff;
+  font-size: 20px;
 }
 .h-25 {
   height: 25%;

@@ -21,12 +21,13 @@
       <!-- Over Wrapper -->
       <div class="row over-wrapper">
         <div class="col-3" style="width: 261px; height: 270px;">
-          <img src="../../assets/icon/star.png" class="po-detail-img">
+          <img :src="require(`../../../../backend${po_item.raw_material_set.img}`)" class="po-detail-img">
         </div>
         <div class="col-9" style="width: 357px; height: 270px;">
           <div style="font-size: 30px; color: white; height: 39px; margin-top: 10px; text-align: left;">soda</div>
           <div style="font-size: 30px; color: #EA7C69; height: 42px; margin-top: 10px; text-align: left;">
-            Remain&nbsp;:&nbsp;23&nbsp;ฟอง &nbsp;&nbsp;&nbsp; <img style="margin-bottom: 10px;" :src="$store.state.raw_material.status_image[2]">
+            Remain&nbsp;:&nbsp;{{ po_item.raw_material_set.remain }}&nbsp;{{ po_item.unit_set.unit }} &nbsp;&nbsp;&nbsp; 
+            <img style="margin-bottom: 10px;" :src="$store.state.raw_material.status_image[2]">
           </div>
           <!-- Table Head -->
           <div class="table-head-in-po">
@@ -40,10 +41,10 @@
           <!-- Table Item -->
           <div class="table-item-in-po">
             <div class="row">
-              <div class="col-3 item-in-table-item" style="margin-top: 5px;">50</div>
-              <div class="col-3 item-in-table-item" style="margin-top: 5px;">52</div>
-              <div class="col-3 item-in-table-item" style="margin-top: 5px;">60</div>
-              <div class="col-3 item-in-table-item" style="margin-top: 5px;">30</div>
+              <div class="col-3 item-in-table-item" style="margin-top: 5px;">{{ po_item.raw_material_set.minimum }}</div>
+              <div class="col-3 item-in-table-item" style="margin-top: 5px;">{{ po_item.avg_price }}</div>
+              <div class="col-3 item-in-table-item" style="margin-top: 5px;">{{ po_item.raw_material_set.maximum }}</div>
+              <div class="col-3 item-in-table-item" style="margin-top: 5px;">{{ po_item.last_price }}</div>
             </div>
           </div>
         </div>
@@ -63,10 +64,10 @@
         <!-- Table Item -->
         <div class="table-item" style="width: 100%;">
           <div class="row" style="font-size: 30px;">
-            <div class="col-4" style="width: 100%; text-align: left; margin-left: 20px;">Makro</div>
+            <div class="col-4" style="width: 100%; text-align: left; margin-left: 20px;">{{ po_item.supplier_set.company_name }}</div>
             <div class="col-2" style="width: 100%;">100</div>
-            <div class="col-4" style="width: 100%;">xxx-xxx-xxxx</div>
-            <div class="col-2" style="width: 100%;"><img style="width: 40px; height: 40px; margin: 0px 20px 10px 0px;" src="../../assets/icon/map-icon.png"></div>
+            <div class="col-4" style="width: 100%;">{{ po_item.supplier_set.phone }}</div>
+            <div class="col-2" style="width: 100%;"><img style="width: 40px; height: 40px; margin: 0px 20px 10px -10px;" src="../../assets/icon/map-icon.png"></div>
           </div>
         </div>
       </div>
@@ -76,7 +77,7 @@
 <script>
 export default {
   name: "PODetail",
-  props: [],
+  props: ['po_item'],
   components: {},
   data() {
     return {
@@ -88,3 +89,60 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.item-in-table-item {
+  width: 100%;
+  text-align: center;
+}
+.item-in-table-head {
+  width: 100%;
+  text-align: center;
+}
+.table-item-in-po {
+  width: 100%;
+  height: 59px;
+  color: white;
+  background: #303344;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 30px;
+}
+.table-head-in-po {
+  width: 100%;
+  height: 59px;
+  background: #889898;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 30px;
+  color: white;
+}
+.po-detail-img {
+  width: 218px;
+  height: 218px;
+  margin: 20px 20px 20px 20px;
+}
+.over-wrapper {
+  width: 619px;
+  height: 271.11px;
+}
+.po-detail-popup {
+  width: 619px;
+  height: 640px;
+  top: 20%;
+  left: 12%;
+  position: absolute;
+  background-color: #252836;
+  border: 2px solid #ea7c69;
+  border-radius: 20px;
+}
+.popup-header {
+  font-weight: 800;
+  font-size: 48px;
+  line-height: 56px;
+  text-align: center;
+  margin-top: 10px;
+  width: 100%;
+  color: white;
+}
+</style>

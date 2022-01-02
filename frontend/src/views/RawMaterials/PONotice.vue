@@ -5,7 +5,7 @@
     <!-- Second Nav -->
     <div class="row" style="width: 680px; margin-left: 20px">
       <div class="col-8" style="width: 100%">
-        <SearchBar @search="serchByTyping" />
+        <SearchBar style="width: 450px" @search="serchByTyping" />
       </div>
       <div class="col-2" style="width: 100%">
         <button
@@ -16,7 +16,7 @@
         </button>
       </div>
       <div class="col-2" style="width: 100%">
-        <button class="btn-ghost" @save="addPO()">+ PO</button>
+        <button class="btn-ghost" @click="addPO()">+ PO</button>
       </div>
     </div>
     <!-- Table -->
@@ -48,34 +48,38 @@
             />
           </div>
         </div>
-        <div class="col-4 item-in-row" style="text-align: left">
-          {{ item.name }}
+        <div class="col-4 item-in-row" style="text-align: left" @click="po_detail(item)">
+          {{ item.raw_material_set.name }}
         </div>
-        <div class="col-1 item-in-row">{{ item.remain }}</div>
-        <div class="col-2 item-in-row" style="padding-left: 10px">
-          {{ item.unit_s_id }}
+        <div class="col-1 item-in-row" @click="po_detail(item)">{{ item.raw_material_set.remain }}</div>
+        <div class="col-2 item-in-row" @click="po_detail(item)" style="padding-left: 10px">
+          {{ item.unit_set.unit }}
         </div>
-        <div class="col-3 item-in-row">Min Sup</div>
-        <div class="col-1 item-in-row" style="padding-right: 20px">
-          <img :src="$store.state.raw_material.status_image[item.status]" />
+        <div class="col-3 item-in-row" @click="po_detail(item)">{{ item.supplier_set.company_name }}</div>
+        <div class="col-1 item-in-row" @click="po_detail(item)" style="padding-right: 20px">
+          <img :src="$store.state.raw_material.status_image[item.raw_material_set.status]" />
         </div>
       </div>
     </div>
-
+    <!-- Dropdown List -->
     <div class="dropdown-list" v-if="dropdown_status">
       <div class="row">
         <div class="col-12">
-          <button style="width: 100%; height: 50px; background: trnasparent">
+          <button style="width: 100%; height: 50px; background: transparent">
             Item
           </button>
         </div>
         <div class="col-12">
-          <button style="width: 100%; height: 50px; background: trnasparent">
+          <button style="width: 100%; height: 50px; background: transparent">
             Sth
           </button>
         </div>
       </div>
     </div>
+
+    <!-- PO Detail -->
+    <PODetail v-if="po_detail_status" :po_item="po_item" @show_status="po_detail_status = false" />
+    
   </div>
 </template>
 
@@ -83,12 +87,15 @@
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
+import PODetail from "../../components/materials/PODetail.vue";
 import { api_raw_material } from "../../api/api_raw_material.js";
 export default {
-  components: { NavApp, Switch, SearchBar },
+  components: { NavApp, Switch, SearchBar, PODetail },
   data() {
     return {
       dropdown_status: false,
+      po_detail_status: false,
+      po_item: null,
       categories: [],
       units: [],
       nearly_items: [],
@@ -104,21 +111,32 @@ export default {
         this.temp_items = response.data;
       });
     },
+    fetchPriceRM() {
+      api_raw_material.get("/price-raw-material/").then((response) => {
+        console.log(response.data, "price-raw-material data");
+      });
+    },
     addPO() {
       this.selected_items.forEach((item) => {
-        console.log(item.unit_s_id, 'unit id')
+        console.log(item, 'unit id')
         var data = {
-          raw_material_id: item.id,
-          supplier_id: 1,
-          unit_id: item.unit_s_id,
+          raw_material_id: item.raw_material_id,
+          supplier_id: item.supplier_id,
+          unit_id: item.unit_id,
           create_by_id: this.$store.state.auth.userInfo.id,
-          amount: item.remain,
-          status: false,
+          amount: item.raw_material_set.remain,
+          status: item.raw_material_set.status,
+          last_price: item.last_price,
         };
         api_raw_material.post("/po/", data).then((response) => {
           console.log(response.data, "po");
         });
       });
+    },
+    po_detail(item) {
+      console.log(item, "item")
+      this.po_detail_status = true
+      this.po_item = item
     },
     serchByTyping(val) {
       var temp = [];
@@ -144,6 +162,7 @@ export default {
   },
   mounted() {
     this.fetchNearlySOItems();
+    this.fetchPriceRM();
   },
 };
 </script>
@@ -165,6 +184,7 @@ export default {
   width: 100px;
   border: 1px solid #65b0f6;
   color: #65b0f6;
+  margin-left: 28px;
 }
 .table {
   margin-top: 15px;
@@ -178,6 +198,7 @@ export default {
   font-size: 24px;
   border-radius: 10px;
   text-align: center;
+  margin-left: 20px;
 }
 span.icon-dropdown {
   background: url("../../assets/icon/down-arrow.png") no-repeat transparent;

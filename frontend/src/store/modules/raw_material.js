@@ -5,5 +5,8 @@ export default {
             2: require('../../assets/icon/warning.png') ,
             3: require('../../assets/icon/incorrect.png') ,
         },
+        all_receipt: [],
+        all_receipt_detail: [],
+        all_po_selected: [],
     }
   }
