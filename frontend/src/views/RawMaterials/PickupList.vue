@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="save()">Pickup&#160;List</nav-app>
+    <nav-app :rm_menu="true">Pickup&#160;List</nav-app>
     <SearchBar
       @search="serchByTyping"
       style="width: 680px; margin-left: 40px"
@@ -9,29 +9,30 @@
     <div class="table">
       <div class="table-header">
         <div class="row">
-          <div class="col-3 item-in-row" style="margin-left: 10px">Date</div>
-          <div class="col-5 item-in-row">Name</div>
-          <div class="col-2 item-in-row" style="margin-left: -7px">Qty</div>
-          <div class="col-2 item-in-row" style="margin-left: -12px">Unit</div>
+          <div class="col-3 w-100" style="margin-left: 10px">Date</div>
+          <div class="col-4 w-100" style="margin-left: 18px; text-align: left;">Name</div>
+          <div class="col-1 w-100">Qty</div>
+          <div class="col-1 w-100" style="margin-left: 14px;">Unit</div>
+          <div class="col-3 w-100">Pickup By</div>
         </div>
       </div>
       <div class="row table-item" v-for="item in pickup_items" :key="item.id">
-        <div class="col-3 item-in-row i">
+        <div class="col-3">
           {{ item.create_at.slice(0, 10).replace(/-/g, "/") }}
         </div>
         <div
-          class="col-5 i"
+          class="col-4"
           style="
             text-align: left;
             width: 100%;
-            font-size: 28px;
-            padding-left: 30px;
+            padding-left: 20px;
           "
         >
           {{ item.raw_material_set.name }}
         </div>
-        <div class="col-2 item-in-row i">{{ item.amount }}</div>
-        <div class="col-2 item-in-row i">{{ item.unit_set.unit }}</div>
+        <div class="col-1" style="margin-left: 5px">{{ item.amount }}</div>
+        <div class="col-1" style="margin-left: 20px; margin-right: -20px;">{{ item.unit_set.unit }}</div>
+        <div class="col-3 w-100" style="margin-left: 10px">{{ item.create_by_set.username }}</div>
       </div>
     </div>
   </div>
@@ -97,14 +98,6 @@ export default {
 </script>
 
 <style scoped>
-.item-in-row {
-  text-align: center;
-  font-size: 28px;
-  width: 100%;
-}
-.i {
-  padding: 0px;
-}
 .table {
   width: 680px;
   margin-top: 15px;

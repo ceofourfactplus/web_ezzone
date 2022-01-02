@@ -19,20 +19,43 @@
           <div class="col-6" style="margin-left: 90px; font-size: 28px">
             {{ head1 }}
           </div>
-          <div class="col-1" style="margin-left: 180px; font-size: 28px">
+          <div class="col-1" style="margin-left: 60px; font-size: 28px">
             {{ head2 }}
           </div>
-          <div class="col-1" style="margin-left: 15px; font-size: 28px">
+          <div class="col-2" style="margin-left: 23px; font-size: 28px">
             {{ head3 }}
           </div>
           <div class="col-1" style="margin-left: 10px; font-size: 28px">
             {{ head4 }}
           </div>
-          <div class="col-1" style="margin-left: 10px; font-size: 28px">
+          <div class="col-1" style="margin-right: -40px; font-size: 28px">
             {{ head5 }}
           </div>
         </div>
-        
+
+        <!-- Is PO Notice -->
+        <div
+          v-else-if="category == 'po_notice'"
+          class="row"
+          style="padding-right: 0px"
+        >
+          <div class="col-4" style="margin-left: 90px; font-size: 28px">
+            {{ head1 }}
+          </div>
+          <div class="col-1" style="margin-left: 180px; font-size: 28px">
+            {{ head2 }}
+          </div>
+          <div class="col-2" style="margin-left: 10px; font-size: 28px">
+            {{ head3 }}
+          </div>
+          <div class="col-4 w-100" style="font-size: 28px">
+            {{ head4 }}
+          </div>
+          <div class="col-1" style="margin-right: 10px; font-size: 28px">
+            {{ head5 }}
+          </div>
+        </div>
+
         <!-- Is Consignment -->
         <div
           v-else-if="category == 'Consignment'"
@@ -94,8 +117,7 @@
             </div>
           </div>
         </div>
-
-        <div v-else-if="category == 'raw_material'">
+        <div v-else-if="category == 'po_notice'">
           <div
             class="row table-item"
             v-for="(item, idx) in elements"
@@ -106,42 +128,119 @@
               border-radius: 10px;
               margin: 0px;
               margin-top: 5px;
+              line-height: 20px;
+            "
+          >
+            <div class="col-1">
+              <div class="checkbox-orange" style="position: relative; bottom: 6px;">
+                <input
+                  type="checkbox"
+                  class="me-3 mt-2"
+                  :value="item"
+                  @input="$emit('selected_items', item)"
+                />
+              </div>
+            </div>
+            <div
+              class="col-3 w-100"
+              @click="po_detail(item)"
+              style="text-align: left; font-size: 24px"
+            >
+              {{ item.raw_material_set.name }}
+            </div>
+            <div
+              class="col-2 w-100"
+              style="margin-left: 50px"
+              @click="po_detail(item)"
+            >
+              {{ item.raw_material_set.remain }}
+            </div>
+            <div
+              class="col-2 w-100"
+              style="margin-left: 15px"
+              @click="po_detail(item)"
+            >
+              <p>{{ item.unit_set.unit }}</p>
+            </div>
+            <div
+              class="col-3 w-100"
+              style="margin-left: -22px"
+              @click="po_detail(item)"
+            >
+              {{ item.supplier_set.company_name }}
+            </div>
+            <div
+              class="col-1"
+              style="margin-right: 10px; margin-left: -10px"
+              @click="po_detail(item)"
+            >
+              <img
+                style="margin-right: 5px; position: relative; bottom: 3px;"
+                :src="
+                  $store.state.raw_material.status_image[
+                    item.raw_material_set.status
+                  ]['img']
+                "
+                :style="$store.state.raw_material.status_image[item.raw_material_set.status]['style']"
+                alt="img"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-else-if="category == 'raw_material'">
+          <div
+            class="row table-item"
+            v-for="(item, idx) in elements"
+            :key="idx"
+            style="
+              padding-right: 0px;
+              background-color: #303344;
+              border-radius: 10px;
+              margin: 0px;
+              margin-top: 5px; line-height: 25px;
             "
           >
             <div
-              class="col-6"
+              class="col-6 w-100"
               @click="showRmDetial(item)"
-              style="text-align: left; width: 100%; font-size: 24px"
+              style="text-align: left;"
             >
               {{ item.name }}
             </div>
             <div
-              class="col-1"
+              class="col-2"
+              style="margin-left: -18px;"
               @click="showRmDetial(item)"
-              style="margin-right: 40px"
             >
               {{ item.remain }}
             </div>
             <div
-              class="col-1"
+              class="col-2"
+              style="margin-left: -45px;"
               @click="showRmDetial(item)"
-              style="margin-right: 37px"
             >
-              {{ item.status }}
+              <p>{{ item.unit_set.unit }}</p>
             </div>
-            <div class="col-1" @click="showRmDetial(item)">
+            <div
+              class="col-1"
+              style="margin-left: -54px;"
+              @click="showRmDetial(item)"
+            >
               <img
-                style="margin-right: 0px"
-                :src="$store.state.raw_material.status_image[item.status]"
+                :src="
+                  $store.state.raw_material.status_image[item.status]['img']
+                "
+                style="position: relative; bottom: 3px;"
+                :style="$store.state.raw_material.status_image[item.status]['style']"
                 alt="img"
               />
             </div>
-            <div class="col-1" @click="show_pickup(item)">
-              <img
-                style="margin-right: -150px"
-                src="../../assets/icon/pickup.png"
-                alt="img"
-              />
+            <div
+              class="col-1"
+              style="margin-right: 10px; margin-left: -10px;"
+              @click="show_pickup(item)"
+            >
+              <img style="width: 32px; height: 30px; position: relative; bottom: 3px;" src="../../assets/icon/pickup.png" alt="img" />
             </div>
           </div>
         </div>
@@ -227,9 +326,14 @@ export default {
   ],
   mounted() {},
   data() {
-    return {};
+    return {
+      selected_items: [],
+    };
   },
   methods: {
+    po_detail(item) {
+      this.$emit('po_detail', item)
+    },
     show_pickup(item) {
       this.$emit("show_pickup", item);
     },

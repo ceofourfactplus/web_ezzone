@@ -1,25 +1,41 @@
 <template>
   <!-- Tabs -->
   <div>
-    <div class="tab" v-if="status == 'category'">
+    <!-- <div class="tab" v-if="status == 'category'">
+      <button
+        @click="select_all()"
+        :class="{'tab-selected': 'All' == tab_selected}"
+        class="tab-item"
+      >
+        All
+      </button>
       <button
         v-for="(item, idx) in elements"
         :key="idx"
         @click="select_item(item)"
+        :class="{'tab-selected': item.name == tab_selected}"
         class="tab-item"
       >
         {{ item.category }}
       </button>
     <button class="tab-item" v-if="elements.length > 5">></button>
-  </div>
-  <div class="tab" v-else>
+  </div> -->
+
+  <div class="tab">
+    <button
+        @click="select_all()"
+        class="tab-item"
+      >
+        <p :class="{'tab-selected': 'All' == $store.state.raw_material.tab}">All</p>
+      </button>
       <button
         v-for="(item, idx) in elements"
         :key="idx"
         @click="select_item(item)"
         class="tab-item"
       >
-        {{ item.name }}
+      <p :class="{'tab-selected': item.name == $store.state.raw_material.tab}">{{ item.name }}</p>
+        
       </button>
     <button class="tab-item" v-if="elements.length > 5">></button>
   </div>
@@ -33,11 +49,17 @@ export default {
   props: ['elements', 'status'],
   data() {
     return {
-      //   materials: [],
     };
   },
   methods: {
+    select_all() {
+      this.$store.state.raw_material.tab = "All"
+      this.$emit('all_category')
+    },
     select_item(item) {
+      console.log(this.$store.state.raw_material.tab, 'tab1')
+      this.$store.state.raw_material.tab = item.name
+      console.log(this.$store.state.raw_material.tab, 'tab2')
       this.$emit("select_item", item.id);
     },
   },
@@ -46,6 +68,9 @@ export default {
 
 
 <style>
+.tab-selected {
+  color: white;
+}
 
 .tab {
   overflow: hidden;
@@ -60,7 +85,6 @@ export default {
 .tab-item {
   background-color: #2f3446;
   color: gray;
-  /* float: left; */
   border: none;
   outline: none;
   cursor: pointer;
@@ -68,7 +92,6 @@ export default {
   padding-top: 6px;
   transition: 0.3s;
   font-size: 26.5px;
-  /* font-weight: 700; */
   font-style: normal;
   border-radius: 15px 15px 0px 0px;
   margin-top: 0px;
@@ -79,11 +102,5 @@ export default {
   block-size: fit-content;
   text-decoration: none;
   line-height: 31px;
-}
-
-/* Change background color of buttons on hover */
-.tab,
-.tab-item:hover {
-  color: white;
 }
 </style>

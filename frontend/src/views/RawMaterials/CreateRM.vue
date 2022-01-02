@@ -26,7 +26,7 @@
             <div class="col-12 h-25">
               <input
                 type="text"
-                style="width: 350px; margin: auto"
+                style="width: 350px; margin: auto; background: #717171; height: 50px;"
                 placeholder="Name"
                 v-model="name"
               />
@@ -38,7 +38,7 @@
                 name="category"
                 id="category"
                 v-model="category_id"
-                style="height: 50px"
+                style="height: 40px"
               >
                 <option
                   v-for="category in categories"
@@ -54,9 +54,8 @@
               <label for="" style="display: inline"
                 >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
                 <button
-                  class="btn-y"
-                  style="width: 120px; display: inilne"
-                  :class="{ 'btn-g': remain > minimum }"
+                  style="width: 180px; display: inilne"
+                  :class="{ 'btn-g': remain > minimum , 'btn-r': remain == 0 || remain == '' || remain == null, 'btn-y': remain < minimum}"
                 >
                   {{ status_am }}
                 </button></label
@@ -458,9 +457,11 @@ export default {
   computed: {
     status_am: function () {
       if (this.remain > this.minimum) {
-        return "success";
+        return "In Stock";
+      } else if  (this.remain == 0 || this.remain == '' || this.remain == null) {
+        return "Out of Stock";
       } else {
-        return "minimum";
+        return "Minimum"
       }
     },
   },

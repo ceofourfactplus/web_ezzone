@@ -14,59 +14,91 @@
         </div>
         <div class="col-2" v-if="save">
           <img
-          @click="$emit('save')"
+            @click="$emit('save')"
             src="../../assets/icon/save.png"
             style="align-item: right"
             class="save"
             alt=""
           />
         </div>
+        <div class="col-2" v-else-if="rm_menu">
+          <img
+            src="../../assets/icon/Menu-icon.png"
+            class="hamburger"
+            @click="open_slide"
+          />
+        </div>
       </div>
     </nav>
+    <!-- Side Nav -->
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" @click="close_slide"
+        >&times;</a
+      >
+      <div
+        style="margin-top: 30px; color: #889898; margin-left: 0px;"
+        v-for="item in $store.state.raw_material.side_nav"
+        :key="item"
+      >
+        <img :src="item.img" style="margin-top: -10px; display: inline" />
+        <div
+          style="display: inline; text-align: left; font-size: 30px; margin-left: -20px;"
+          :style="item.style"
+          @click="select_page(item)"
+          :class="{
+            'rm-link-clicked': item.url_name == $store.state.raw_material.page,
+          }"
+        >
+          {{ item.name }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["save"],
+  props: ["save", "rm_menu"],
   data() {
     return {
-      pages: [
-        { name: "Raw Materials" },
-        { name: "Suppliers" },
-        { name: "PO for Suppliers" },
-        { name: "Add Raw Materials" },
-        { name: "Pickup Raw Materials" },
-      ],
-      ham_status: false,
-      ham_val: "",
+      page: "",
     };
   },
+  mounted() {
+    this.$store.state.raw_material.page = this.$route.name
+  },
   methods: {
-    select_page(page) {
-      this.ham_val = page.name;
-      console.log(page.name);
+    select_page(item) {
+      console.log(item.url_name, this.$route.name, "check");
+      this.$router.push({ name: item.url_name, query: { page: item.name } });
+      console.log(item.url_name, this.$route.name, "check2");
+      this.page = item.url_name;
+      this.$store.state.raw_material.page = item.url_name;
+      console.log(item.url_name == this.$store.state.raw_material.page, "page");
+    },
+    open_slide() {
+      document.getElementById("mySidenav").style.width = "310px";
+    },
+    close_slide() {
+      document.getElementById("mySidenav").style.width = "0";
     },
   },
 };
 </script>
 
 <style scoped>
-.selected {
+.rm-link-clicked {
   color: #ea7c69;
+}
+.rm-link {
+  text-decoration: none;
+  margin-left: 15px;
+}
+.selected {
+  color: #889898;
 }
 .txt {
   margin-top: 20px;
-}
-.side-bar {
-  width: 292px;
-  height: 880px;
-  color: #889898;
-  background-color: #2f414e;
-  position: absolute;
-  margin-left: 60%;
-  float: right;
-  font-size: 24px;
 }
 .hamburger {
   top: 2px;
@@ -83,7 +115,7 @@ export default {
   height: 90px;
 }
 .save {
-  right: 40px;
+  right: 55px;
   top: 25px;
   position: fixed;
 }
@@ -94,5 +126,47 @@ export default {
   color: #fafafa;
   display: inline;
   line-height: 80px;
+}
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #2f3344;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 20px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 20px 0px 0px 20px;
+}
+
+.sidenav div {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  /* color: #818181; */
+  display: block;
+  text-align: left;
+  transition: 0.3s;
+}
+
+.closebtn {
+  text-decoration: none;
+  color: #818181;
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
 }
 </style>

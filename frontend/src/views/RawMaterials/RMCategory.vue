@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <nav-app @back="back">RM Category</nav-app>
+    <nav-app :rm_menu="true">RM Category</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
@@ -43,12 +43,12 @@
               border-radius: 10px;
             "
           >
-            <div class="col-6" style="text-align: left; width: 100%">
+            <div class="col-6" style="text-align: left; width: 100%; position: relative; bottom: 8px;">
               {{ item.name }}
             </div>
-            <div class="col-2" style="margin-left: -5px">100</div>
-            <div class="col-2" style="margin-left: 40px">1000</div>
-            <div class="col-1" style="position: absolute; right: 50px">
+            <div class="col-2" style="margin-left: -20px; position: relative; bottom: 8px;">100</div>
+            <div class="col-2" style="margin-left: 30px; position: relative; bottom: 8px;">1000</div>
+            <div class="col-1" style="position: relative; bottom: 8px;">
               <img
                 @click="SelectCategory(item)"
                 src="../../assets/icon/edit.png"
@@ -135,7 +135,7 @@
 
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
-import NavApp from "../../components/main_component/NavAppHam.vue";
+import NavApp from "../../components/main_component/NavApp.vue";
 import { api_raw_material } from "../../api/api_raw_material";
 
 export default {
@@ -272,11 +272,11 @@ h2 {
   border-color: #65b0f6;
   color: #65b0f6;
   width: 119px;
-  height: 45px;
-  margin: 0px 30px 0px 0px;
+  height: 50px;
+  margin: 0px 38px 0px 0px;
 }
 .wrap-search {
-  min-width: 520px;
+  min-width: 560px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

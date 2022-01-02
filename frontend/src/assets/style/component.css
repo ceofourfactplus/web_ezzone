@@ -103,12 +103,12 @@ input::placeholder ,textarea::placeholder{
   border: 2px solid #ea7c69
 }
 .btn-y {
-  background-color: #fff500;
+  background-color: #FFB572;
   font-size: 24px;
   font-weight: bolder;
   color: #252836;
   border-radius: 10px;
-  border: 2px solid #fff500
+  border: 2px solid #FFB572
 
 }
 
@@ -370,22 +370,24 @@ h1 {
   background-color: #bd523f;
   color: white;
   width: 100%;
-  height: 60px;
+  height: 45px;
   border-radius: 10px;
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 25px;
 }
 
 .table-item {
   background-color: #303344 !important;
   color: white;
   width: 100%;
-  height: 60px;
+  height: 40px;
   border-radius: 10px;
   border-top: 0px !important;
   margin-top: 10px;
-  font-size: 24px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 37px;
 }
 
 .table {

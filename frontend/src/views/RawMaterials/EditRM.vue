@@ -4,14 +4,14 @@
       Loading ...
     </div>
     <div v-else>
-      <nav-app save="true" @save="edit()">Edit&#160;RM</nav-app>
+      <nav-app save="true" @save="edit()">{{ rm_item.raw_material_set.name }}</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
           <div class="col-5 w-100">
             <div class="row">
               <div class="col-12" style="padding: 0px">
-                <label id="select_img" for="file" style="margin-top: 0px">
+                <label id="select_img" for="file" style="margin-top: 0px; margin-left: -25px;">
                   <img :src="require(`../../../../backend${rm_item.raw_material_set.img}`)" class="image" />
                   <div class="edit-block">Edit</div>
                 </label>
@@ -30,7 +30,7 @@
             <div class="col-12 h-25">
               <input
                 type="text"
-                style="width: 350px; margin: auto"
+                style="width: 370px; margin: auto; font-size: 36px; background: #717171"
                 placeholder="Name"
                 v-model="rm_item.raw_material_set.name"
               />
@@ -42,7 +42,7 @@
                 name="category"
                 id="category"
                 v-model="rm_item.raw_material_set.category_id"
-                style="height: 50px; margin-top: 10px;"
+                style="height: 50px; margin-top: 10px; width: 230px;"
               >
                 <option
                   v-for="category in categories"
@@ -57,7 +57,10 @@
             <div class="col-12 h-25" style="margin-top: 10px;">
               <label for="" style="display: inline"
                 >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                <img :src="$store.state.raw_material.status_image[rm_item.raw_material_set.status]">
+                <button :class="$store.state.raw_material.status_image[rm_item.raw_material_set.status]['class']">
+                  {{ $store.state.raw_material.status_image[rm_item.raw_material_set.status]['txt'] }}
+                </button>
+                <img style="margin-left: 10px;" :src="$store.state.raw_material.status_image[rm_item.raw_material_set.status]['img']">
                 </label>
             </div>
             <!-- Fridge -->
@@ -71,7 +74,7 @@
       <div class="frame f-2" style="height: 290px; padding-left: 0px">
         <!-- Head Of Section 2 -->
         <div class="row">
-          <div class="col-12" style="margin-left: 20px">
+          <div class="col-12" style="margin-left: 40px">
             <div
               style="
                 width: 100%;
@@ -90,7 +93,7 @@
         <!-- First Row -->
         <div class="row">
           <div class="col-4 row-wrapper">
-            <label for="">Qty&nbsp;&nbsp;&nbsp;:&nbsp;</label>
+            <label style="margin-left: 30px">Qty&nbsp;&nbsp;&nbsp;:&nbsp;</label>
             <input
               type="number"
               style="background: #717171; width: 100px; height: 50px"
@@ -98,7 +101,7 @@
             />
           </div>
           <div class="col-4 row-wrapper">
-            <label for="">Min&nbsp;Qty&nbsp;:</label
+            <label for="">Min&nbsp;Qty&nbsp;:&nbsp;</label
             ><input
               type="number"
               style="background: #717171; width: 100px; height: 50px"
@@ -106,10 +109,10 @@
             />
           </div>
           <div class="col-4 row-wrapper" style="margin-right: 20px">
-            <label for="">Max Qty&nbsp;:</label
+            <label for="">Max Qty&nbsp;:&nbsp;</label
             ><input
               type="number"
-              style="background: #717171; width: 100px; height: 50px"
+              style="background: #717171; width: 100px; height: 50px; margin-right: 20px;"
               v-model="rm_item.raw_material_set.maximum"
             />
           </div>
@@ -117,7 +120,7 @@
         <!-- Second Row -->
         <div class="row" style="margin-top: 30px">
           <div class="col-6 row-wrapper">
-            <label for="">Avg S&nbsp;:&nbsp;&nbsp;</label
+            <label style="margin-left: 30px">Avg S&nbsp;:&nbsp;&nbsp;</label
             ><input
               type="number"
               style="
@@ -137,7 +140,7 @@
                 background: #717171;
                 width: 200px;
                 height: 50px;
-                margin-right: -40px;
+                margin-right: -10px;
               "
               v-model="rm_item.raw_material_set.avg_m"
             />
@@ -146,7 +149,7 @@
         <!-- Third Row -->
         <div class="row" style="margin-top: 30px">
           <div class="col-6 row-wrapper" style="margin-right: 20px">
-            <label for="">Avg L&nbsp;:&nbsp;</label
+            <label style="margin-left: 30px">Avg L&nbsp;:&nbsp;</label
             ><input
               type="number"
               style="background: #717171; width: 220px; height: 50px"
@@ -161,12 +164,12 @@
               style="
                 border-radius: 10px;
                 width: 190px;
-                margin-right: -30px;
+                margin-right: 0px;
                 height: 50px;
               "
             >
               <option value="" selected disabled style="color: white">
-                unit
+                supplier
               </option>
               <option
                 v-for="supplier in suppliers"
@@ -371,6 +374,7 @@ export default {
       api_raw_material.put("rm-update/", data).then((response) => {
         console.log(response.data, "response data");
       });
+      this.$router.push({name: "RawMaterials"})
     },
   },
   beforeMount () {
@@ -497,7 +501,6 @@ raw-img {
   width: 236px;
   height: 235px;
   border-radius: 25px;
-  margin-right: 12px;
   background-color: #717171;
 }
 .image {

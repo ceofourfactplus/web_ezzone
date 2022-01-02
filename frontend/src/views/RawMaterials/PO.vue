@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- nav bar -->
-    <nav-app>Purchase&#160;Order</nav-app>
+    <nav-app :rm_menu="true">Purchase&#160;Order</nav-app>
     <div class="row" style="width: 90%; margin-left: 25px">
       <div class="col-8 wrap-search w-100">
         <SearchBar @search="search_raw" style="width: 98%" />
@@ -30,7 +30,7 @@
     <div class="table mt-3" style="height: 100%">
       <div class="table-header" style="line-height: 40px; font-size: 24px">
         <!-- Table Head -->
-        <div class="row">
+        <div class="row" style="position: relative; bottom: 9px;">
           <div class="col-1 w-100">
             <div class="checkbox-white">
               <input
@@ -58,7 +58,9 @@
                 margin-left: 0px;
                 text-align: center;
                 font-size: 28px;
-                font-weight: 800;
+                font-weight: bold;
+                position: relative;
+                bottom: 9px;
               "
             >
               <div class="col-1 w-100">
@@ -96,7 +98,7 @@ Total  {{ recept.total_price }}</pre
             :key="item.id"
             class="table-item"
           >
-            <div class="row" style="width: 100%; margin-left: 0px">
+            <div class="row" style="width: 100%; margin-left: 0px;position: relative; bottom: 9px;">
               <div
                 class="col-8 w-100"
                 style="margin-left: 75px; text-align: left"
@@ -318,12 +320,10 @@ Total  {{ recept.total_price }}</pre
             </div>
             <!-- Item Detail -->
             <div class="col-8 item-detail">
-              <!-- Name -->
+              <!-- Name --> 
               <div class="row">
                 <div class="col-12 line-col" style="margin-top: 10px">
-                  Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{
-                    po_popup_item.raw_material_set.name
-                  }}
+                  {{ po_popup_item.raw_material_set.name }}
                 </div>
               </div>
               <!-- Category -->
@@ -335,13 +335,8 @@ Total  {{ recept.total_price }}</pre
               <!-- Status -->
               <div class="row">
                 <div class="col-12 line-col">
-                  Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<img
-                    :src="
-                      $store.state.raw_material.status_image[
-                        po_popup_item.raw_material_set.status
-                      ]
-                    "
-                  />
+                  Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                  <img style="margin-left: 10px;" :src="$store.state.raw_material.status_image[po_popup_item.raw_material_set.status]['img']" />
                 </div>
               </div>
               <!-- Supplier -->
@@ -855,7 +850,7 @@ export default {
 }
 .checkbox-white input:checked::after {
   font-size: 20px;
-  top: -7px;
+  top: -6px;
   left: 1px;
 }
 .checkbox-white input::before {
@@ -868,7 +863,7 @@ export default {
 }
 .checkbox-orange input:checked::after {
   font-size: 20px;
-  top: -1px;
+  top: -5px;
 }
 .checkbox-orange input::before {
   height: 30px;

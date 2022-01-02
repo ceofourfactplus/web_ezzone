@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import RawMaterial, RawMaterialCategory, Unit,Supplier,PO, PriceRawMaterial
+from .models import RawMaterial, RawMaterialCategory, Unit,Supplier,PO, PriceRawMaterial, PickUpRawMaterial
 from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer,SupplierSerializer, PickUpRawMaterialSerializer,POSerializer, PriceRawMaterialSerializer, ReceiptRawMaterialSerializer, ReceiptRawMaterialDetailSerializer
 
 from django.db.models import F

@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- Head -->
-    <nav-app @back="back">Raw Material</nav-app>
+    <nav-app :rm_menu="true">Raw Material</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
-        <SearchBar @search="serchByTyping" style="width: 98%" />
+        <SearchBar @search="serchByTyping" style="width: 108%" />
       </div>
       <div style="padding-left: 0px">
         <button class="btn-ghost" @click="$router.push({ name: 'CreateRM' })">
@@ -22,7 +22,11 @@
 
     <!-- select category -->
     <div>
-      <Tabs :elements="categories" @select_item="queryCategory" />
+      <Tabs
+        :elements="categories"
+        @select_item="queryCategory"
+        @all_category="fetchRawMaterials"
+      />
     </div>
 
     <!-- Table for admin -->
@@ -88,6 +92,7 @@ export default {
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
+    console.log(this.$route.name, 'query page')
     this.fetchRMCategories();
     this.fetchRawMaterials();
   },
@@ -102,6 +107,7 @@ export default {
       add_rm: false,
       unit: "",
       alert: false,
+      slide_show: false,
       raw_material_item: {
         img: "",
         status: 1,
@@ -130,7 +136,7 @@ export default {
     },
     fetchRawMaterials() {
       api_raw_material.get("raw-material/").then((response) => {
-        console.log(response.data, 'response')
+        console.log(response.data, "response");
         this.raw_materials = response.data;
         this.temp_rm = response.data;
       });
@@ -200,26 +206,31 @@ export default {
       }
     },
     pickup(pickup_val, item) {
-      console.log(pickup_val, item,  'pickup_val')
-      console.log(item.unit_s_id, 'id')
+      console.log(pickup_val, item, "pickup_val");
+      console.log(item.unit_s_id, "id");
       var data = {
         raw_material_id: item.id,
         amount: pickup_val,
         unit_id: item.unit_s_id,
-        create_by_id: this.$store.state.auth.userInfo.id
-      }
-      api_raw_material.put(`raw-material/`, data).then((response) => {
-        console.log(response.data.id, 'data')
-        this.fetchRawMaterials()
-      }).catch(err => { console.log(err, 'err') })
-      this.show_pickup_status = false
+        create_by_id: this.$store.state.auth.userInfo.id,
+      };
+      api_raw_material
+        .put(`raw-material/`, data)
+        .then((response) => {
+          console.log(response.data.id, "data");
+          this.fetchRawMaterials();
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+      this.show_pickup_status = false;
     },
     hideShowPickup() {
       this.show_pickup_status = false;
     },
     editRM(item) {
-      this.$router.push({ name: 'EditRM', params: {id: item.id} })
-    }
+      this.$router.push({ name: "EditRM", params: { id: item.id } });
+    },
   },
 };
 </script>
@@ -416,8 +427,9 @@ input[type="checkbox"] {
   border-color: #65b0f6;
   color: #65b0f6;
   width: 119px;
-  height: 45px;
+  height: 50px;
   margin-left: 15px;
+  margin-right: -12px;
 }
 
 .wrap-search {
@@ -442,7 +454,7 @@ input[type="checkbox"] {
   background-position: 2% 50%;
   /* Extra Styling */
 }
-::placeholder{
+::placeholder {
   font-size: 130px !important;
 }
 </style>

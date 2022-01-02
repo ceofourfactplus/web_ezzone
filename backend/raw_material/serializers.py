@@ -132,7 +132,7 @@ class PickUpRawMaterialSerializer(serializers.ModelSerializer):
     raw_material_id = serializers.IntegerField()
     unit_id = serializers.IntegerField()
     create_by_id = serializers.IntegerField()
-    create_by = UserSerializer(read_only=True, source="user")
+    create_by_set = UserSerializer(read_only=True, source="create_by")
     unit_set = UnitSerializer(read_only=True, source="unit")
 
     class Meta:
@@ -145,7 +145,7 @@ class PickUpRawMaterialSerializer(serializers.ModelSerializer):
             'raw_material_id',
             'amount', 
             'create_at', 
-            'create_by', 
+            'create_by_set', 
             'create_by_id',
             ]
 

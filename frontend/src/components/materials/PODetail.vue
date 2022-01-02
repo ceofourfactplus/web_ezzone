@@ -24,10 +24,10 @@
           <img :src="require(`../../../../backend${po_item.raw_material_set.img}`)" class="po-detail-img">
         </div>
         <div class="col-9" style="width: 357px; height: 270px;">
-          <div style="font-size: 30px; color: white; height: 39px; margin-top: 10px; text-align: left;">soda</div>
+          <div style="font-size: 30px; color: white; height: 39px; margin-top: 10px; text-align: left;">{{ po_item.raw_material_set.name }}</div>
           <div style="font-size: 30px; color: #EA7C69; height: 42px; margin-top: 10px; text-align: left;">
             Remain&nbsp;:&nbsp;{{ po_item.raw_material_set.remain }}&nbsp;{{ po_item.unit_set.unit }} &nbsp;&nbsp;&nbsp; 
-            <img style="margin-bottom: 10px;" :src="$store.state.raw_material.status_image[2]">
+            <img style="margin-bottom: 10px;" :src="$store.state.raw_material.status_image[po_item.raw_material_set.status]['img']">
           </div>
           <!-- Table Head -->
           <div class="table-head-in-po">
@@ -53,21 +53,21 @@
       <!-- Table -->
       <div class="table" style="width: 575px; margin-top: -10px;">
         <!-- Table Head -->
-        <div class="table-header" style="width: 100%;">
+        <div class="table-header w-100">
           <div class="row">
-            <div class="col-4" style="width: 100%;">Supplier</div>
-            <div class="col-2" style="width: 100%;">Price</div>
-            <div class="col-4" style="width: 100%;">Number</div>
-            <div class="col-2" style="width: 100%; padding-right: 40px;">Map</div>
+            <div class="col-4 w-100">Supplier</div>
+            <div class="col-2 w-100">Price</div>
+            <div class="col-4 w-100">Number</div>
+            <div class="col-2 w-100" style="padding-right: 40px;">Map</div>
           </div>
         </div>
         <!-- Table Item -->
-        <div class="table-item" style="width: 100%;">
-          <div class="row" style="font-size: 30px;">
-            <div class="col-4" style="width: 100%; text-align: left; margin-left: 20px;">{{ po_item.supplier_set.company_name }}</div>
-            <div class="col-2" style="width: 100%;">100</div>
-            <div class="col-4" style="width: 100%;">{{ po_item.supplier_set.phone }}</div>
-            <div class="col-2" style="width: 100%;"><img style="width: 40px; height: 40px; margin: 0px 20px 10px -10px;" src="../../assets/icon/map-icon.png"></div>
+        <div class="table-item w-100">
+          <div class="row" style="position: relative; bottom: 10px;">
+            <div class="col-4 w-100" style="text-align: left; margin-left: 20px;">{{ po_item.supplier_set.company_name }}</div>
+            <div class="col-2 w-100">100</div>
+            <div class="col-4 w-100">{{ po_item.supplier_set.phone }}</div>
+            <div class="col-2 w-100"><img style="width: 30px; height: 30px; margin: 0px 20px 0px -10px;" src="../../assets/icon/map-icon.png"></div>
           </div>
         </div>
       </div>
@@ -84,6 +84,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.po_item, 'po_item')
   },
   methods: {
   },

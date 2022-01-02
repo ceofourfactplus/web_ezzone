@@ -52,7 +52,19 @@ import SaleChannel from "../views/SaleChannel/SaleChannel.vue"
 import EditSaleChannel from "../views/SaleChannel/EditSaleChannel.vue"
 import CreateSaleChannel from "../views/SaleChannel/CreateSaleChannel.vue"
 
+// database settings
+import DataBaseSettings from "../views/DataBaseSettings/DataBaseSettings.vue"
+
 const routes = [
+  // database settings
+  {
+    path: "/dbs/dbs",
+    name: "DataBaseSettings",
+    component: DataBaseSettings,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   // product
   {
     path: "/product/category",
