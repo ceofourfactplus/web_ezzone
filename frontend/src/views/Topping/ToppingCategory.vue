@@ -6,7 +6,10 @@
         <SearchBar @search="search_by_typing" />
       </div>
       <div style="padding-left: 0px">
-        <button class="btn-ghost" @click="$router.push({name:'CreateCategoryTopping'})">
+        <button
+          class="btn-ghost"
+          @click="$router.push({ name: 'CreateCategoryTopping' })"
+        >
           + New
         </button>
       </div>
@@ -15,7 +18,7 @@
     <div class="table" style="margin-top: 10px">
       <div class="table-header">
         <!-- Is Staff -->
-        <div style="margin:auto" class="row">
+        <div style="margin: auto" class="row">
           <div class="col-1"></div>
           <div class="col-5 w-100" style="margin: auto">Name</div>
           <div class="col-5 w-100" style="margin: auto">Topping&#160;Qty</div>
@@ -40,12 +43,18 @@
               margin: 10px 0px 0px 0px;
               background-color: #303344;
               border-radius: 10px;
+              line-height: 100%;
             "
           >
             <div class="col-1" style="text-align: left; width: 100%">
-              <img src="../../assets/icon/trash.png" @click="delete_category(item.id)" style="width:100%" alt="">
+              <img
+                src="../../assets/icon/trash.png"
+                @click="delete_category(item.id)"
+                style="width: 90%"
+                alt=""
+              />
             </div>
-            <div class="col-5" style="margin:auto; width: 100%">
+            <div class="col-5" style="margin: auto; width: 100%">
               {{ item.category }}
             </div>
             <div class="col-5" style="margin-left: 40px">
@@ -53,9 +62,15 @@
             </div>
             <div class="col-1">
               <img
-                @click="$router.push({name:'EditCategoryTopping',params:{id:item.id}})"
+                @click="
+                  $router.push({
+                    name: 'EditCategoryTopping',
+                    params: { id: item.id },
+                  })
+                "
                 src="../../assets/icon/edit.png"
                 alt="img"
+                style="width: 20px"
               />
             </div>
           </div>
@@ -106,11 +121,11 @@ export default {
         this.categories = temp;
       }
     },
-    delete_category(id){
+    delete_category(id) {
       api_product
-        .delete("topping/category/"+id)
+        .delete("topping/category/" + id)
         .then(() => {
-          this.fetchToppingCategories()
+          this.fetchToppingCategories();
         })
         .catch((error) => {
           this.err = error;
@@ -120,7 +135,7 @@ export default {
       api_product
         .get("category/get-amount-topping/" + category_id)
         .then((response) => {
-          console.log(response.data.amount)
+          console.log(response.data.amount);
           return response.data.amount;
         });
       // return 'html'

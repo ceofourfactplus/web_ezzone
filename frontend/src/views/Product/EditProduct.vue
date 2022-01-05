@@ -148,12 +148,15 @@
             ><select
               id="type_topping"
               style="width: 165px"
-              v-model="product.type_topping"
+              v-model="product.topping_category_id"
             >
-              <option value="0">not use</option>
-              <option value="1">ROTI</option>
-              <option value="2">DRINK</option>
-              <option value="3">FOOD</option>
+              <option
+                v-for="topcate in topping_categories"
+                :key="topcate.id"
+                :value="topcate.id"
+              >
+                {{ topcate.category }}
+              </option>
             </select>
           </div>
         </div>
@@ -176,6 +179,7 @@ export default {
     this.get_user();
     this.get_category();
     this.get_product();
+    this.get_topping_categories();
   },
   data() {
     return {
@@ -184,26 +188,16 @@ export default {
       categories: [],
       all_unit: [],
       product: {},
-      // code: "",
-      // img: null,
-      // category_id: null,
-      // status: 1,
-      // active: true,
-      // unit_id: null,
-      // remain: 0,
-      // minimum: 0,
-      // maximum: 0,
-      // price: 0,
-      // flavour: 0,
-      // flavour_level: false,
-      // price: 0,
-      // show_img: null,
-      // name: "",
-      // warehouse: 0,
-      // type_topping: 0,
+      topping_categories: [],
+      change_img:false,
     };
   },
   methods: {
+    get_topping_categories() {
+      api_product.get("topping/category/").then((response) => {
+        this.topping_categories = response.data;
+      });
+    },
     get_user() {
       api_user.get("read-all/").then((response) => {
         this.all_product = response.data;
@@ -224,10 +218,12 @@ export default {
         .get("product/" + this.$route.params.id + "/")
         .then((response) => {
           this.product = response.data;
+          this.show_img = response.data.img
         });
     },
     onFileChange(e) {
       this.product.img = e.target.files[0];
+      this.change_img = true
       if (this.product.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
@@ -237,7 +233,7 @@ export default {
     create_product() {
       const data = new FormData();
       data.append("code", this.product.code);
-      if (this.show_img != null) {
+      if (this.change_img) {
         data.append("img", this.product.img, this.product.img.name);
       }
       data.append("category_id", this.product.category_id);
@@ -251,11 +247,13 @@ export default {
       data.append("flavour_level", this.product.flavour_level);
       data.append("name", this.product.name);
       data.append("warehouse", this.product.warehouse);
-      data.append("type_topping", this.product.type_topping);
+      data.append("topping_category_id", this.product.topping_category_id);
       data.append("create_by_id", 1);
-      api_product.put("product/" + this.$route.params.id+'/', data).then(() => {
-        this.$router.push({ name: "Product" });
-      });
+      api_product
+        .put("product/" + this.$route.params.id + "/", data)
+        .then(() => {
+          this.$router.push({ name: "Product" });
+        });
     },
     switch_flavour_level(val) {
       this.product.flavour_level = val;
@@ -265,10 +263,10 @@ export default {
     },
   },
   watch: {
-    'product.maximum':function (newData) {
-        if (newData <= this.product.minimum) {
-          this.product.maximum = this.product.minimum + 1;
-        }
+    "product.maximum": function (newData) {
+      if (newData <= this.product.minimum) {
+        this.product.maximum = this.product.minimum + 1;
+      }
     },
   },
 };

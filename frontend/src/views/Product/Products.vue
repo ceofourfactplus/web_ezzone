@@ -16,20 +16,25 @@
       </div>
     </div>
 
-    <div style="margin-left: 0px">
-      <Tabs
-        :elements="products_categories"
-        :status="'category'"
-        @select_item="select_category"
-      />
+     <div class="mt-2" style="margin: auto; width: 90%; display: flex;overflow:auto">
+      <button
+        v-for="category in products_categories"
+        :key="category.id"
+        class="btn-gray me-2"
+        style="min-width: 100px; height: 50px; opacity: 0.5;white-space:nowrap;"
+        @click="select_category_f(category.id)"
+        :class="{ 'type-active': select_category == category.id }"
+      >
+        {{category.category}}
+      </button>
     </div>
 
     <div class="table mt-1">
-      <div class="table-header" style="line-height: 40px; font-size: 30px">
+      <div class="table-header" style="line-height: 100%; font-size: 24px">
         <div class="row">
           <div class="col-2 w-100" style="margin: auto">Code</div>
           <div class="col-4 w-100" style="text-align: center">Name</div>
-          <div class="col-2 w-100" style="margin: auto; margin-left: -10px">
+          <div class="col-2 w-100" style="margin: auto;">
             Qty
           </div>
           <div class="col-2 w-100" style="margin: auto">Price</div>
@@ -38,11 +43,18 @@
       </div>
 
       <div style="overflow-x: auto; height: 650px">
-        <div v-for="product in show_products" :key="product.id" class="table-item">
-          <div class="row" style="width: 100%">
+        <div
+          v-for="product in show_products"
+          :key="product.id"
+          class="table-item"
+        >
+          <div
+            class="row"
+            style="width: 100%; line-height: 100%; padding: 3px; height: 100%"
+          >
             <div
               class="col-2 w-100"
-              style="margin: auto; margin-left: 0px; text-align: left"
+              style="margin: auto;"
             >
               <!-- <span>
                 <img
@@ -57,7 +69,16 @@
               </span> -->
               {{ product.code }}
             </div>
-            <div class="col-4 w-100" style="margin: auto; text-align: center" @click="$router.push({name:'EditProduct',params:{id:product.id}})">
+            <div
+              class="col-4 w-100"
+              style="margin: auto; text-align: center"
+              @click="
+                $router.push({
+                  name: 'EditProduct',
+                  params: { id: product.id },
+                })
+              "
+            >
               {{ product.name }}
             </div>
             <div class="col-2 w-100" style="margin: auto; text-align: center">
@@ -73,7 +94,12 @@
               class="col-2 w-100"
               style="margin: auto; text-align: center; padding: 0px"
             >
-              <button class="btn-ghost-b" style="width: 100px">+ Qty</button>
+              <button
+                class="btn-ghost-b"
+                style="font-size: 20px; line-height: 29px; height: 35px"
+              >
+                + Qty
+              </button>
             </div>
           </div>
         </div>
@@ -107,6 +133,7 @@ export default {
       products_categories: [],
       products: [],
       show_products: [],
+      select_category:null
     };
   },
   methods: {
@@ -118,11 +145,10 @@ export default {
     },
     fetchProductCategories() {
       api_product.get("/category/").then((response) => {
-        console.log(response.data);
         this.products_categories = response.data;
       });
     },
-    select_category(category_id) {
+    select_category_f(category_id) {
       api_product.get("product/category/" + category_id).then((response) => {
         this.products = response.data;
         this.show_products = response.data;
@@ -163,5 +189,9 @@ export default {
 .row {
   width: 100%;
   margin: 0px;
+}
+.type-active {
+  opacity: 1 !important;  
+  color: #fff !important;
 }
 </style>

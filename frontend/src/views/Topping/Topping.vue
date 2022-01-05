@@ -16,26 +16,40 @@
       </div>
     </div>
 
-    <div style="margin-left: 0px">
-      <Tabs
-        :elements="[
-          { name: 'Drink', id: 2 },
-          { name: 'Food', id: 3 },
-          { name: 'Dressert', id: 1 },
-        ]"
-        @select_item="select_category"
-      />
+    <div class="mt-2" style="margin: auto; width: 90%; display: flex">
+      <button
+        class="btn-gray me-2"
+        style="width: 100px; height: 50px; opacity: 0.5"
+        @click="select_category(2)"
+        :class="{ 'type-active': select_type == 2 }"
+      >
+        Drink
+      </button>
+      <button
+        class="btn-gray me-2"
+        style="width: 100px; height: 50px; opacity: 0.5"
+        @click="select_category(3)"
+        :class="{ 'type-active': select_type == 3 }"
+      >
+        Food
+      </button>
+      <button
+        class="btn-gray"
+        style="width: 120px; height: 50px; opacity: 0.5"
+        @click="select_category(1)"
+        :class="{ 'type-active': select_type == 1 }"
+      >
+        Dressert
+      </button>
     </div>
 
-    <div class="table mt-1">
-      <div class="table-header" style="line-height: 40px; font-size: 30px">
+    <div class="table mt-2">
+      <div class="table-header" style="line-height: 100%; font-size: 24px">
         <div class="row">
           <div class="col-2 w-100" style="margin: auto">Code</div>
-          <div class="col-5 w-100" style="text-align: center">Name</div>
+          <div class="col-5 w-100" style="margin: auto">Name</div>
           <div class="col-2 w-100" style="margin: auto">Price</div>
-          <div class="col-2 w-100" style="margin: auto; margin-left: -10px">
-            status
-          </div>
+          <div class="col-2 w-100" style="margin: auto">status</div>
           <div class="col-1 w-100"></div>
         </div>
       </div>
@@ -46,16 +60,21 @@
           :key="product.id"
           class="table-item"
         >
-          <div class="row" style="width: 100%">
-            <div
-              class="col-2 w-100"
-              style="margin: auto; margin-left: 0px; text-align: left"
-            >
+          <div
+            class="row"
+            style="
+              width: 100%;
+              line-height: 100%;
+              font-size: 24px;
+              padding: 3px;
+            "
+          >
+            <div class="col-2 w-100" style="margin: auto; margin-left: 0px">
               {{ product.code }}
             </div>
             <div
               class="col-5 w-100"
-              style="margin: auto; text-align: center"
+              style="margin: auto"
               @click="
                 $router.push({
                   name: 'EditProduct',
@@ -67,18 +86,15 @@
             </div>
             <div
               class="col-2 w-100"
-              style="margin: auto; width: 175px; text-align: left; color: #fff"
+              style="margin: auto; width: 175px; color: #fff"
             >
-                {{ get_price(product.pricetopping_set) }}
+              {{ get_price(product.pricetopping_set) }}
             </div>
-            <div class="col-2 w-100" style="margin: auto; text-align: center">
+            <div class="col-2 w-100" style="margin: auto">
               <Switch />
             </div>
-            <div
-              class="col-1 w-100"
-              style="margin: auto; text-align: center; padding: 0px"
-            >
-              <img src="../../assets/icon/edit.png" alt="" />
+            <div class="col-1 w-100" style="margin: auto; padding: 0px">
+              <img src="../../assets/icon/edit.png" style="width: 45%" alt="" />
             </div>
           </div>
         </div>
@@ -90,7 +106,7 @@
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
-import Tabs from "../../components/materials/Tabs.vue";
+// import Tabs from "../../components/materials/Tabs.vue";
 import Table from "../../components/main_component/Table.vue";
 import { api_product } from "../../api/api_product";
 import Switch from "../../components/main_component/Switch.vue";
@@ -99,7 +115,7 @@ export default {
   components: {
     SearchBar,
     NavApp,
-    Tabs,
+    // Tabs,
     Table,
     Switch,
   },
@@ -112,6 +128,7 @@ export default {
       is_staff: false,
       products: [],
       show_products: [],
+      select_type: 0,
     };
   },
   methods: {
@@ -122,6 +139,7 @@ export default {
       });
     },
     select_category(type) {
+      this.select_type = type;
       api_product.get("topping-by-type/" + type).then((response) => {
         this.products = response.data;
         this.show_products = response.data;
@@ -139,6 +157,10 @@ export default {
         });
         this.show_products = temp;
       }
+    },
+    get_price(item) {
+      console.log(item);
+      return 0.0;
     },
   },
 };
@@ -161,5 +183,9 @@ export default {
 .row {
   width: 100%;
   margin: 0px;
+}
+.type-active {
+  opacity: 1 !important;  
+  color: #fff !important;
 }
 </style>
