@@ -154,7 +154,7 @@
 
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
-import NavApp from "../../components/main_component/NavAppHam.vue";
+import NavApp from "../../components/main_component/NavApp.vue";
 // import Table from "../../components/main_component/Table.vue";
 import { api_product } from "../../api/api_product";
 

@@ -41,7 +41,7 @@
     </div>
 
     <div class="table mt-3">
-      <div class="table-header" style="font-size: 24px">
+      <div class="table-header" style="line-height: 40px; font-size: 24px">
         <div class="row">
           <div class="col-5 w-100" style="line-height: 100%">Name</div>
           <div class="col-2 w-100" style="line-height: 100%">
@@ -53,7 +53,7 @@
           >
             Qty
           </div>
-          <div class="col-2 w-100" style="line-height: 100%">Status</div>
+          <div class="col-2 w-100">Status</div>
           <div class="col-1 w-100"></div>
           <div class="col-1 w-100"></div>
         </div>
@@ -79,13 +79,7 @@
             </div>
             <div
               class="col-1 w-100"
-              style="
-                margin: auto;
-                margin-left: 0px;
-                text-align: right;
-                line-height: 100%;
-                height: 100%;
-              "
+              style="margin: auto; margin-left: 0px; text-align: right"
             >
               <span>
                 <img
@@ -136,20 +130,11 @@
             </div>
             <div
               class="col-1 w-100"
-              style="
-                padding: 0px;
-                text-align: right;
-                margin: auto;
-                line-height: 100%;
-                height: 100%;
-              "
+              style="padding: 0px; text-align: right; margin: auto"
             >
               {{ count_product(channel.id) }}
             </div>
-            <div
-              class="col-2 w-100"
-              style="margin: auto; line-height: 100%; height: 100%"
-            >
+            <div class="col-2 w-100" style="margin: auto">
               {{ channel.status }}
             </div>
             <div
@@ -261,9 +246,8 @@ export default {
 }
 .img-user-status {
   border-radius: 3px;
-  width: 30px;
 }
-pre {
+pre{
   margin-bottom: 0px;
 }
 img {

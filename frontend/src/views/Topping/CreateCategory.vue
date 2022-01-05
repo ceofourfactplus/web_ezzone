@@ -207,7 +207,8 @@ export default {
 .btn-gray {
   background-color: #303344;
   height: 58px;
-  font-size: 24px;
+  width: 90px;
+  font-size: 18px;
   font-weight: bolder;
   border: 0px;
   border-radius: 10px 10px 0px 0px;

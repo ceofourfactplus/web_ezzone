@@ -76,8 +76,6 @@ class Topping(models.Model):
         (DRINK, 'ของหวาน'),
         (DRESSERT, 'ขนม'),
     )
-    old_product = models.ForeignKey(
-        "self", on_delete=models.PROTECT, null=True, blank=True, default=None)
     img = models.ImageField(
         _("Image"), upload_to=upload_to_topping, default=None, null=True)
     code = models.CharField(max_length=6)

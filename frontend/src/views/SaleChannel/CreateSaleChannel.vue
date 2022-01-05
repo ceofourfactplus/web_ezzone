@@ -29,12 +29,7 @@
       <div class="col-8 w-100">
         <div style="display: flex" class="mb-2">
           <label class="col-3" for="name">Name </label>
-          <input
-            v-model="sale_channel_set.sale_channel"
-            class="input"
-            type="text"
-            id="name"
-          />
+          <input v-model="sale_channel_set.sale_channel" class="input" type="text" id="name" />
         </div>
         <div style="display: flex">
           <label class="col-3" for="gp">GP% </label>
@@ -150,22 +145,13 @@
       <!-- header -->
       <div class="table-header" style="line-height: 40px; font-size: 24px">
         <div class="row">
-          <div
-            class="col-5 w-100"
-            style="margin-left: 10px; text-align: left; line-height: 100%"
-          >
+          <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
             Product Name
           </div>
-          <div
-            class="col-3 w-100"
-            style="margin-left: 10px; text-align: left; line-height: 100%"
-          >
+          <div class="col-3 w-100" style="margin-left: 10px; text-align: left">
             Sale Price
           </div>
-          <div
-            class="col-4 w-100"
-            style="margin: auto; margin-left: -10px; line-height: 100%"
-          >
+          <div class="col-4 w-100" style="margin: auto; margin-left: -10px">
             Net Price
           </div>
         </div>
@@ -385,7 +371,7 @@ export default {
   data() {
     return {
       show_img: null,
-      img: null,
+      img:null,
       sale_channel_set: {
         sale_channel: "",
         gp: 0,

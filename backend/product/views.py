@@ -266,7 +266,7 @@ class SaleChannelDetail(APIView):
 
     def get(self, request, pk):
         sale_channel = self.get_object(pk)
-        serializer = SaleChannelSerializer(sale_channel)
+        serializer = SaleChannelSerializer(sale_channel, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk):

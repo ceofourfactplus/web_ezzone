@@ -60,7 +60,9 @@ import SelectSaleChannel from "../views/POS/SelectSaleChannel.vue"
 import KeyOrder from "../views/POS/KeyOrder.vue"
 import KeyProductDetail from "../views/POS/KeyProductDetail.vue"
 
+// database settings
 import DataBaseSettings from "../views/DataBaseSettings/DataBaseSettings.vue"
+
 const routes = [
   // database settings
   {

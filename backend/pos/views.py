@@ -92,7 +92,6 @@ class OrderItemToppingList(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
-
 class OrderItemToppingDetail(APIView):
     def get_object(self, pk):
         try:

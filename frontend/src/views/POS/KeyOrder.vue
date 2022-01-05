@@ -167,7 +167,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scpoed>
 .frame-pos {
   width: 90%;
   margin: auto;

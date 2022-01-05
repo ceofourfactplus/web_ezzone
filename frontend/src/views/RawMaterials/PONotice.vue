@@ -12,7 +12,7 @@
           class="btn-dropdown" 
           @click="dropdown_status = !dropdown_status"
         >
-          Item<span class="icon-dropdown"></span>
+          Item<span class="icon-dropdown"></span> 
         </button>
       </div>
       <div class="col-2" style="width: 100%">
