@@ -62,6 +62,7 @@
           overflow-x: auto;
           margin: auto;
           width: 99.5%;
+          overflow-y: hidden;
         "
         class="mt-2"
       >
@@ -69,7 +70,7 @@
           v-for="category in categories"
           :key="category.id"
           class="btn-gray category me-1"
-          style="min-width: 165px; white-space: nowrap"
+          style="min-width: 165px; white-space: nowrap; padding-bottom: 0px"
           :class="{
             active: select_category == category.id,
             'text-active': select_category == category.id,
@@ -82,15 +83,28 @@
 
       <!-- select product -->
       <div class="frame-1">
-        <div class="row w-100" style="margin:0px">
+        <div class="row w-100" style="margin: 0px">
           <div
             v-for="product in products"
             :key="product.id"
-            @click="$router.push({name:'KeyProductDetail',params:{product_id:product.id,sale_channel_id:$route.params.sale_channel_id}})"
+            @click="
+              $router.push({
+                name: 'KeyProductDetail',
+                params: {
+                  product_id: product.id,
+                  sale_channel_id: $route.params.sale_channel_id,
+                },
+              })
+            "
             class="col-3 w-100 card-product"
           >
-            <img v-if="product.img != null" class="img" :src="product.img" alt="" />
-            <div v-else class="img" style="background-color:#c4c4c4" ></div>
+            <img
+              v-if="product.img != null"
+              class="img"
+              :src="product.img"
+              alt=""
+            />
+            <div v-else class="img" style="background-color: #c4c4c4"></div>
             <p>{{ product.name }}</p>
           </div>
         </div>
@@ -109,7 +123,7 @@ export default {
       header: "",
       select_type_product: 0,
       select_category: 0,
-      select_product:{},
+      select_product: {},
       categories: [],
       products: [],
     };
@@ -158,8 +172,8 @@ export default {
   width: 90%;
   margin: auto;
 }
-p{
-  color:#abbbc2;
+p {
+  color: #abbbc2;
   font-size: 19px;
 }
 

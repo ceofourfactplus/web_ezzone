@@ -24,7 +24,16 @@
         ><button
           class="btn-ghost-r"
           style="width: 125px; height: 50px"
-          @click="$router.push({ name: 'CreateSaleChannel' })"
+          v-if="delete_status"
+          @click="delete_list_f()"
+        >
+          <img src="../../assets/icon/bin.png" width="20" alt="" />&#160;Delete
+        </button>
+        <button
+          v-else
+          class="btn-ghost-r"
+          style="width: 125px; height: 50px"
+          @click="delete_status = true"
         >
           <img src="../../assets/icon/bin.png" width="20" alt="" />&#160;Delete
         </button>
@@ -34,8 +43,10 @@
     <div class="table mt-3">
       <div class="table-header" style="line-height: 40px; font-size: 24px">
         <div class="row">
-          <div class="col-4 w-100" style="">Name</div>
-          <div class="col-3 w-100" style="">Create&#160;at</div>
+          <div class="col-5 w-100" style="line-height: 100%">Name</div>
+          <div class="col-2 w-100" style="line-height: 100%">
+            Create&#160;at
+          </div>
           <div
             class="col-1 w-100"
             style="padding: 0px; text-align: right; margin: auto"
@@ -49,32 +60,73 @@
       </div>
       <div style="overflow-x: auto; height: 650px">
         <div
-          v-for="channel in sale_channels"
+          v-for="channel in show_channel"
           :key="channel.id"
           class="table-item"
         >
-          <div class="row" style="width: 100%">
+          <div class="row" style="width: 100%; line-height: 100%">
+            <div class="col-1" v-if="delete_status">
+              <div
+                class="checkbox-orange"
+                v-if="channel.sale_channel != 'EZZone'"
+              >
+                <input
+                  type="checkbox"
+                  :value="channel.id"
+                  v-model="delete_list"
+                />
+              </div>
+            </div>
             <div
               class="col-1 w-100"
               style="margin: auto; margin-left: 0px; text-align: right"
             >
               <span>
                 <img
-                  v-if="channel.img != null"
-                  :src="channel.img"
+                  :src="get_img(channel.id)"
                   class="img-user-status me-1"
-                /><img
+                />
+                <!-- <img
                   v-else
                   src="../../assets/icon/blank-user.png"
                   class="img-user-status me-1"
-                />
+                /> -->
               </span>
             </div>
-            <div class="col-3 w-100" style="margin: auto; text-align: left">
+            <div
+              class="col-4 w-100"
+              v-if="!delete_status"
+              style="
+                margin: auto;
+                text-align: left;
+                line-height: 100%;
+                height: 100%;
+              "
+            >
               {{ channel.sale_channel }}
             </div>
-            <div class="col-3 w-100" style="margin: auto; text-align: left">
-              <pre>{{ get_date(channel.create_at) }}</pre>
+            <div
+              class="col-3 w-100"
+              v-else
+              style="
+                margin: auto;
+                text-align: left;
+                line-height: 100%;
+                height: 100%;
+              "
+            >
+              {{ channel.sale_channel }}
+            </div>
+            <div
+              class="col-2 w-100"
+              style="
+                margin: auto;
+                text-align: center;
+                line-height: 100%;
+                height: 100%;
+              "
+            >
+              {{ get_date(channel.create_at) }}
             </div>
             <div
               class="col-1 w-100"
@@ -87,23 +139,28 @@
             </div>
             <div
               class="col-1 w-100"
-              style="margin: auto; text-align: left; padding: 0px"
+              style="
+                margin: auto;
+                text-align: left;
+                padding: 0px;
+                line-height: 100%;
+                height: 100%;
+              "
+              @click="
+                $router.push({
+                  name: 'EditSaleChannel',
+                  params: { id: channel.id },
+                })
+              "
             >
-              <img
-                src="../../assets/icon/edit-orange.png"
-                style="width: 55%"
-                alt=""
-              />
+              <img src="../../assets/icon/edit-orange.png" alt="" />
             </div>
             <div
               class="col-1 w-100"
-              style="margin: auto; text-align: left; padding: 0px"
+              style="margin: auto; text-align: left; padding: 0px; height: 100%"
+              @click="duplicate(channel.id)"
             >
-              <img
-                src="../../assets/icon/duplicate.png"
-                style="width: 70%"
-                alt=""
-              />
+              <img src="../../assets/icon/duplicate.png" alt="" />
             </div>
           </div>
         </div>
@@ -124,20 +181,61 @@ export default {
   data() {
     return {
       sale_channels: [],
+      show_channel:[],
+      delete_list: [],
+      delete_status: false,
     };
   },
   methods: {
     get_sale_channel() {
       api_product.get("sale-channel/").then((response) => {
         this.sale_channels = response.data;
+        this.show_channel = response.data
       });
     },
     count_product(id) {
       return id;
     },
     get_date(date) {
-      return date.slice(0, 10);
+      return new Date(date).toLocaleString("th-TH", {
+        dateStyle: "short",
+      });
     },
+    delete_list_f() {
+      if (this.delete_list.length != 0) {
+        api_product
+          .put("delete-sale-channel-by-list/", {
+            list: this.delete_list,
+          })
+          .then((response) => {
+            this.sale_channels = response.data;
+          });
+      }
+      this.delete_status = false;
+    },
+    get_img(id){
+      api_product.get('sale-channel-update-img/'+id+'/').then(response=>{
+        return response.data.img
+      })
+    },
+    search(val) {
+      var temp = [];
+      if (val == "") {
+        this.show_channel = this.sale_channels
+      } else {
+        this.sale_channels.forEach((element) => {
+          if (element.sale_channel.indexOf(val) + 1 != 0) {
+            temp.push(element);
+          }
+        });
+        this.show_channel = temp;
+      }
+    },
+    duplicate(id){
+      this.$store.state.sale_channel.duplicate = true
+      this.$store.state.sale_channel.sale_channel_id = id
+      this.$router.push({name:"CreateSaleChannel"})
+    }
   },
 };
 </script>
@@ -151,5 +249,8 @@ export default {
 }
 pre{
   margin-bottom: 0px;
+}
+img {
+  height: 30px;
 }
 </style>

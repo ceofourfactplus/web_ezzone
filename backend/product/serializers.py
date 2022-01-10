@@ -5,22 +5,92 @@ from raw_material.serializers import UnitSerializer
 from user.serializers import UserSerializer
 from pprint import pprint
 
+class UpdateImageSaleS(serializers.ModelSerializer):
+    class Meta:
+        model = SaleChannel
+        fields = ['img']
 
+class ToppingS(serializers.ModelSerializer):
+  
+    # all id
+    unit_id = serializers.IntegerField()
+    old_product_id = serializers.IntegerField(allow_null=True, required=False)
+    create_by_id = serializers.IntegerField()
+    update_by_id = serializers.IntegerField(allow_null=True, required=False)
+    # pricetopping_set = PriceToppingSerializer(read_only=True, many=True)
+    # # all set
+    # unit_set = UnitSerializer(read_only=True, source='unit')
+    # old_product_set = serializers.IntegerField(allow_null=True, required=False)
+    # create_by_set = UserSerializer(read_only=True, source='create_by')
+    # update_by_set = UserSerializer(read_only=True, source='update_by')
+
+    class Meta:
+        model = Topping
+        fields = [
+            'id', 'img', 'code', 'name', 'is_active', 'status',
+            'remain', 'minimum', 'maximum', 'type_topping', 'warehouse', 'create_at',
+            # all set
+            # 'unit_set', 'create_by_set',
+            # 'update_by_set', 'old_product_set', 'pricetopping_set',
+
+            # all id
+            'old_product_id',
+            'unit_id', 'create_by_id',
+            'update_by_id',
+        ]
+
+class ProductS(serializers.ModelSerializer):
+    category_id = serializers.IntegerField()
+    unit_id = serializers.IntegerField()
+    old_product_id = serializers.IntegerField(allow_null=True, required=False)
+    create_by_id = serializers.IntegerField()
+    update_by_id = serializers.IntegerField(allow_null=True, required=False)
+    topping_category_id = serializers.IntegerField(
+        allow_null=True, required=False)
+    # all set
+    # category_set = ProductCategorySerializer(read_only=True, source='category')
+    # unit_set = UnitSerializer(read_only=True, source='unit')
+    # priceproduct_set = PriceProductSerializer(many=True, read_only=True)
+    # # old_product_set = serializers.IntegerField()
+    # topping_category_set = ToppingCategorySerializer(read_only=True,source="topping_category")
+    # create_by_set = UserSerializer(read_only=True, source='create_by')
+    # update_by_set = UserSerializer(read_only=True, source='update_by')
+
+    class Meta:
+        model = Product
+        fields = [
+            'id', 'img', 'code', 'name',
+            'is_active', 'flavour_level', 'status',
+            'remain', 'flavour', 'minimum', 'maximum',
+            'topping_category_id', 'warehouse', 'create_at',
+            'update_at','type_product',
+
+            # # all set
+            # 'priceproduct_set',
+            # 'unit_set', 'category_set', 'create_by_set',
+            # 'update_by_set', 'topping_category_set',
+
+            # all id
+            'old_product_id',
+            'unit_id', 'category_id', 'create_by_id',
+            'update_by_id',
+        ]
 class PriceToppingSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
+    topping_set = ToppingS(read_only=True,source="topping")
 
     class Meta:
         model = PriceTopping
-        fields = ["id", "price", "topping", "sale_channel", "status"]
+        fields = ["id", "price", "topping", "sale_channel", "status",'topping_set']
         read_only_fields = ('sale_channel',)
 
 
 class PriceProductSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-
+    product_set = ProductS(read_only=True,source="product")
     class Meta:
         model = PriceProduct
-        fields = ["id", "price", "product", "sale_channel", "status"]
+        fields = ["id", "price", "product", "sale_channel", "status",'product_set']
         read_only_fields = ('sale_channel',)
 
 class ToppingSerializer(serializers.ModelSerializer):
@@ -75,7 +145,7 @@ class SaleChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = SaleChannel
         fields = ['id', 'sale_channel', 'gp',
-                  'status', 'create_by', 'update_by', 'img',
+                  'status', 'create_by', 'update_by',
                   'create_at', 'update_at', 'price_topping', 'price_product']
 
     def create(self, validated_data):
@@ -192,7 +262,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'is_active', 'flavour_level', 'status',
             'remain', 'flavour', 'minimum', 'maximum',
             'topping_category_id', 'warehouse', 'create_at',
-            'update_at', 'priceproduct_set',
+            'update_at', 'priceproduct_set','type_product',
 
             # all set
             'unit_set', 'category_set', 'create_by_set',

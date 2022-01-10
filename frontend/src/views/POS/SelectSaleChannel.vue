@@ -3,9 +3,19 @@
     <nav-app>Sale Channel</nav-app>
     <div class="center">
       <div class="row">
-        <div v-for="channel in sale_channel" :key="channel.id" @click="$router.push({name:'KeyOrder',params:{sale_channel_id:channel.id}})" class="col-6 mb-3">
-          <img :src="channel.img" alt="">
-          {{channel.sale_channel}}
+        <div
+          v-for="channel in sale_channel"
+          :key="channel.id"
+          @click="
+            $router.push({
+              name: 'KeyOrder',
+              params: { sale_channel_id: channel.id },
+            })
+          "
+          class="col-6 mb-3 w-100"
+        >
+          <img :src="channel.img" alt="" />
+          <p>{{ channel.sale_channel }}</p>
         </div>
       </div>
     </div>
@@ -13,40 +23,49 @@
 </template>
 
 <script>
-import { api_product } from '../../api/api_product';
+import { api_product } from "../../api/api_product";
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
   components: { NavApp },
-  mounted(){
-    api_product.get('sale-channel/').then((response)=>{
-      this.sale_channel = response.data
-    })
+  mounted() {
+    api_product.get("sale-channel/").then((response) => {
+      this.sale_channel = response.data;
+      this.sale_channel.forEach((element) => {
+        api_product
+          .get("sale-channel-update-img/" + element.id + "/")
+          .then((response) => {
+            element["img"] = response.data.img;
+          });
+      });
+    });
   },
-  data(){
-    return{
-      sale_channel:[]
-    }
-  }
+  data() {
+    return {
+      sale_channel: [],
+      image_new: "",
+    };
+  },
 };
 </script>
 
 <style scoped>
-.center{
+.center {
   margin: auto;
   width: 75%;
   margin-top: 40px;
 }
-.col-6{
-  margin:auto;
+.col-6 {
+  margin: auto;
 }
-img{
+p {
+  white-space: nowrap;
+  font-size: 30px;
+  color: #fff;
+  font-weight: 700;
+}
+img {
   width: 120px;
   height: 120px;
   border-radius: 10px;
-}
-div{
-  font-size: 30px;
-  color:#fff;
-  font-weight: 700;
 }
 </style>

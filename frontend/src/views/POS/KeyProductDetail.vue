@@ -3,7 +3,7 @@
     <nav-app>{{ product.name }}</nav-app>
     <div class="frame">
       <div class="row mt-2 w-100" style="margin-left: 0px">
-        <div class="col-4 w-100" style="margin: auto">
+        <div class="col-4 mt-3 w-100" style="margin: auto">
           <div class="container-img">
             <img
               v-if="product.img != null"
@@ -21,7 +21,7 @@
             <!-- {{select_price(product.priceproduct_set)}}<sup>฿</sup> -->
           </div>
         </div>
-        <div class="col-8 w-100" style="margin: auto; height: 90%">
+        <div class="col-8 mt-3 w-100">
           <div class="w-100" style="margin: auto; display: flex">
             <div class="total-price me-2">1990</div>
             <div class="baht me-4">฿</div>
@@ -33,20 +33,64 @@
               />
             </button>
           </div>
+          <div class="w-100 mt-30" style="display: flex; overflow-y: scroll">
+            <div class="me-3" v-for="i in 10" :key="i">
+              <button
+                v-if="amount == i"
+                class="btn square"
+                style="color: #fff !important"
+              >
+                {{ i }}
+              </button>
+              <div v-else class="square" @click="amount = i">
+                {{ i }}
+              </div>
+            </div>
+          </div>
           <div
             class="w-100"
-            style="margin: auto; display: flex; overflow-y: scroll"
+            style="margin: auto; display: flex; margin-top: 30px"
           >
-            <button
-              v-for="i in 10"
-              :key="i"
-              class="btn me-3"
-              style="min-width: 70px; height: 70px"
-            >
-              {{ i }}
-            </button>
+            <div class="me-3">
+              <button
+                v-if="size == 'M'"
+                class="btn square"
+                style="color: #fff !important"
+              >
+                M
+              </button>
+              <div v-else class="square" @click="size = 'M'">M</div>
+            </div>
+            <div class="me-3">
+              <button
+                v-if="size == 'L'"
+                class="btn square"
+                style="color: #fff !important"
+              >
+                L
+              </button>
+              <div v-else class="square" @click="size = 'L'">L</div>
+            </div>
+            <div>
+              <img
+                src="../../assets/icon/Note.png"
+                alt=""
+                style="width: 60px"
+              />
+            </div>
           </div>
         </div>
+      </div>
+      <div class="row w-100" style="width: 90%; margin: auto">
+        <div class="col-9 w-100 bg-warning" style="height: 200px">
+          <div class="row">
+            <!-- <div v-for="topping in " class="col-3 m-1 w-100">
+              <img :src="topping.img" alt="" />
+              <p>{{ topping.name }}</p>
+            </div> -->
+          </div>
+        </div>
+        <div class="col-3 w-100 bg-danger" style="height: 200px"></div>
       </div>
     </div>
   </div>
@@ -68,6 +112,8 @@ export default {
   data() {
     return {
       product: {},
+      amount: 1,
+      size: "M",
     };
   },
 };
@@ -83,6 +129,7 @@ export default {
 .img {
   height: 200px;
   width: 200px;
+  border-radius: 10px;
 }
 .code {
   position: absolute;
@@ -138,8 +185,24 @@ sup {
   color: #889898;
   margin-right: 35px;
 }
+.btn {
+  background-color: #bd523f;
+}
 .btn-ghost-g {
   width: 167px;
   height: 81px;
+}
+.nu {
+  background-color: #303344;
+}
+.square {
+  min-width: 70px;
+  height: 70px;
+  font-size: 48px;
+  line-height: 55px;
+  color: #ffffff80;
+}
+.mt-30 {
+  margin-top: 30px;
 }
 </style>

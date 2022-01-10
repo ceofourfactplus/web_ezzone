@@ -7,10 +7,6 @@ from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMater
 from django.db.models import F
 from rest_framework.parsers import FormParser, MultiPartParser
 
-
-
-
-
 class ReceiptRawMaterial(APIView):
     def get_object(self, pk):
         try:
@@ -19,8 +15,8 @@ class ReceiptRawMaterial(APIView):
             raise 404
         
     def get(self, request):
-        ReceiptRawMaterial = ReceiptRawMaterial.objects.all()
-        serializer = ReceiptRawMaterialSerializer(ReceiptRawMaterial, many=True)
+        receipt_raw_material = ReceiptRawMaterial.objects.all()
+        serializer = ReceiptRawMaterialSerializer(receipt_raw_material, many=True)
         return Response(serializer.data)
     
     def post(self, request):
@@ -41,8 +37,8 @@ class ReceiptRawMaterialDetail(APIView):
             raise 404
         
     def get(self, request):
-        ReceiptRawMaterialDetail = ReceiptRawMaterialDetail.objects.all()
-        serializer = ReceiptRawMaterialDetailSerializer(ReceiptRawMaterialDetail, many=True)
+        recept_raw_material = ReceiptRawMaterialDetail.objects.all()
+        serializer = ReceiptRawMaterialDetailSerializer(recept_raw_material, many=True)
         return Response(serializer.data)
     
     def post(self, request):

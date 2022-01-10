@@ -63,6 +63,7 @@
             margin: 10px 0px 0px 0px;
             background-color: #303344;
             border-radius: 10px;
+            line-height:100%;
           "
         >
           <div
@@ -78,7 +79,7 @@
             </div>
           </div>
           <div class="col-5" style="margin: auto">{{ item.code }}</div>
-          <div class="col-5" style="margin: auto">
+          <div class="col-5" style="margin: auto;white-space:nowrap">
             {{ item.name }}
           </div>
         </div>

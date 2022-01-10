@@ -401,11 +401,11 @@ const routes = [
     component: CreateSaleChannel,
   },
   {
-    path: "/sale-channel/edit",
+    path: "/sale-channel/edit/:id",
     name: "EditSaleChannel",
+    props:true,
     component: EditSaleChannel,
   },
-
 ];
 
 const router = createRouter({

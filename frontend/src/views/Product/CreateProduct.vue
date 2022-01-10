@@ -161,11 +161,11 @@ export default {
     this.get_unit();
     this.get_user();
     this.get_category();
-    this.get_topping_categories()
+    this.get_topping_categories();
   },
   data() {
     return {
-      topping_categories:[],
+      topping_categories: [],
       show_img: null,
       all_user: [],
       categories: [],
