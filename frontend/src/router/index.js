@@ -14,7 +14,6 @@ import CreateRM from "../views/RawMaterials/CreateRM.vue";
 import EditRM from "../views/RawMaterials/EditRM.vue";
 import PickupList from "../views/RawMaterials/PickupList.vue";
 import RMUnit from "../views/RawMaterials/UnitRM.vue";
-import PickupRawMaterial from "../views/RawMaterials/PickupRawMaterial.vue";
 import RawMaterialCategory from "../views/RawMaterials/RMCategory.vue";
 
 // supplier
@@ -63,7 +62,74 @@ import KeyProductDetail from "../views/POS/KeyProductDetail.vue"
 // database settings
 import DataBaseSettings from "../views/DataBaseSettings/DataBaseSettings.vue"
 
+// promotion
+import Point from "../views/Promotion/Point.vue"
+import NewPoint from "../views/Promotion/NewPoint.vue"
+import NewVoucher from "../views/Promotion/NewVoucher.vue"
+import NewPackage from "../views/Promotion/NewPackage.vue"
+import NewReward from "../views/Promotion/NewReward.vue"
+import PointDetail from "../views/Promotion/PointDetail.vue"
+import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
+
 const routes = [
+  // promotion
+  {
+    path: "/promotion/voucher-detail/:id",
+    name: "VoucherDetail",
+    component: VoucherDetail,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/point-detail/:id",
+    name: "PointDetail",
+    component: PointDetail,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/point",
+    name: "Point",
+    component: Point,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/new-promotion",
+    name: "NewPoint",
+    component: NewPoint,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/new-voucher",
+    name: "NewVoucher",
+    component: NewVoucher,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/new-package",
+    name: "NewPackage",
+    component: NewPackage,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/new-reward",
+    name: "NewReward",
+    component: NewReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  
   // database settings
   {
     path: "/dbs/dbs",
@@ -278,11 +344,6 @@ const routes = [
     meta: {
       requiresLogin: false,
     },
-  },
-  {
-    path: "/rm//pick-up",
-    name: "PickupRawMaterial",
-    component: PickupRawMaterial,
   },
   {
     path: "/rm/raw-materials",

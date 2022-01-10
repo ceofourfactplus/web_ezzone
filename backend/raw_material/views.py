@@ -64,6 +64,14 @@ class RawMaterialListAPIView(APIView):
 
     def get(self, request):
         RawMaterials = RawMaterial.objects.all()
+        for item in RawMaterials:
+            if item.remain <= item.minimum and item.remain > 0:
+                item.status = 2
+            elif item.remain <= 0:
+                item.status = 3
+            else:
+                item.status = 1
+            item.save()
         serializer = RawMaterialSerializer(RawMaterials, many=True)
         return Response(serializer.data)
     
@@ -84,6 +92,21 @@ class RawMaterialListAPIView(APIView):
     
     def post(self, request):
         print(request.data, 'data')
+        try:
+            Unit.objects.get(unit=request.data['unit_s_name'])
+        except:
+            unit = Unit.objects.create(unit=request.data['unit_s_name'])
+            request.data['unit_s_id'] = unit.id
+        try:
+            Unit.objects.get(unit=request.data['unit_m_name'])
+        except:
+            unit = Unit.objects.create(unit=request.data['unit_m_name'])
+            request.data['unit_m_id'] = unit.id
+        try:
+            Unit.objects.get(unit=request.data['unit_l_name'])
+        except:
+            unit = Unit.objects.create(unit=request.data['unit_l_name'])
+            request.data['unit_l_id'] = unit.id
         serializer = RawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -103,10 +126,55 @@ class PriceRawMaterialAPIView(APIView):
         serializer = PriceRawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
+        print(serializer.data, 'serializer')
+        val = 0
+        price = 0
+        if int(request.data['last_price']) != 0:
+            rm = RawMaterial.objects.get(id=request.data['raw_material_id'])
+            prm = PriceRawMaterial.objects.get(raw_material_id=request.data['raw_material_id'], unit_id=request.data['unit_id'])
+            if rm.unit_s_id == request.data['unit_id']:
+                price = int(request.data['last_price']) / rm.remain
+                print(price, 'price')
+                rm.avg_s = price
+                prm.avg_price = price
+                rm.save()
+                prm.save()
+            elif rm.unit_m_id == request.data['unit_id']:
+                val = rm.remain / rm.s_to_m
+                price = int(request.data['last_price']) / int(val)
+                rm.avg_m = price
+                prm.avg_price = price
+                rm.save()
+                prm.save()
+            elif rm.unit_l_id == request.data['unit_id']:
+                val = (rm.remain / rm.m_to_l) / rm.s_to_m
+                price = int(request.data['last_price']) / int(val)
+                rm.avg_l = price
+                prm.avg_price = price
+                rm.save()
+                prm.save()
+        # return Response(serializer.errors, status=400)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        price_rm = PriceRawMaterial.objects.get(id=request.data['id'])
+        serializer = PriceRawMaterialSerializer(price_rm, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
-
+class PickupPriceRM(APIView):
+    def get_object(self, pk):
+        try:
+            return PickUpRawMaterial.objects.filter(raw_material_id=pk)
+        except PickUpRawMaterial.DoesNotExist:
+            raise 404
+    def post(self, request):
+        print(request.data, 'data')
+        price_rm = self.get_object(request.data['raw_material_id'])
+        return Response(price_rm)
+    
 class PickupAPIView(APIView):
     def get(self, request):
         pickup = PickUpRawMaterial.objects.all()
@@ -116,15 +184,19 @@ class PickupAPIView(APIView):
     
 class RMAPIView(APIView):
     def get_object(self, pk):
-        return PriceRawMaterial.objects.filter(raw_material_id=pk)[0]
+        return PriceRawMaterial.objects.filter(raw_material_id=pk)
     
     def get(self, request, pk):
         raw_material = self.get_object(pk)
-        serializer = PriceRawMaterialSerializer(raw_material)
-        return Response(serializer.data)
+        data = []
+        for i in raw_material:
+            serializer = PriceRawMaterialSerializer(i)
+            data.append(serializer.data)
+        print(data, 'data')
+        return Response(data)
     
     def put(self, request):
-        print(request.data['id'])
+        print(request.data)
         raw_material = RawMaterial.objects.get(id=request.data['id'])
         serializer = RawMaterialSerializer(raw_material, data=request.data)
         if serializer.is_valid():
@@ -282,29 +354,82 @@ class POList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+    def put(self, request):
+        po = PO.objects.get(id=request.data['id'])
+        serializer = POSerializer(po, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+        
 
 
 class PONotice(APIView):
     def get(self, request):
-        RawMaterials = RawMaterial.objects.filter(minimum__gt = F('remain'))
-        print(RawMaterials)
+        id_list = []
+        rm_list = []
+        RawMaterials = RawMaterial.objects.filter(minimum__gte = F('remain'))
         for item in RawMaterials:
             if item.remain <= item.minimum and item.remain > 0:
+                id_list.append(item.id)
                 item.status = 2
             elif item.remain <= 0:
+                id_list.append(item.id)
                 item.status = 3
             item.save()
-        rm_list = []
-        for item in RawMaterials:
-            print(item.id, item.unit_l_id)
-            price_rm = PriceRawMaterial.objects.filter(raw_material_id = item.id, unit_id=item.unit_l_id)
-            print(price_rm, 'price_rm')
-            rm_list.append(price_rm[0])
+        print(id_list, 'rm list')
+        for i in id_list:
+            rm_list.append(PriceRawMaterial.objects.filter(raw_material_id=i)[0])
         serializer = PriceRawMaterialSerializer(rm_list, many=True)
+        # for item in RawMaterials:
+        #     print(item.id, item.unit_l_id)
+        #     price_rm = PriceRawMaterial.objects.filter(raw_material_id = item.id, unit_id=item.unit_l_id)
+        #     print(price_rm, 'price_rm')
+        #     rm_list.append(price_rm[0])
+        # serializer = PriceRawMaterialSerializer(rm_list, many=True)
         return Response(serializer.data)
 
     def post(self,request):
         return Response('ok')
+    
+class CalcPOAvg(APIView):
+    def get(self, request):
+        po_items = {}
+        avg = {}
+        sum_val = 0
+        po = PO.objects.all()
+        for i in po:
+            if po_items.get(i.raw_material_id):
+                po_items[i.raw_material_id].append(i)
+            else:
+                po_items[i.raw_material_id] = [i]
+        print(po_items)
+        for prop in po_items:
+            for item in po_items[prop]:
+                sum_val += item.last_price
+            avg[prop] = sum_val / len(po_items[prop])
+            sum_val = 0
+        print(avg, 'avg')
+        for prop in avg:
+            po_obj = PO.objects.filter(raw_material_id=prop)[0]
+            rm = RawMaterial.objects.get(id=prop)
+            rm.avg_s = avg[prop]
+            l_remain = rm.remain / rm.m_to_l
+            prm_l = PriceRawMaterial.objects.get(raw_material_id=prop, unit_id=rm.unit_l_id)
+            prm_l.avg_price = int(prm_l.last_price) / int(l_remain)
+            rm.avg_l = float(prm_l.avg_price)
+            prm_l.save()
+            m_remain = rm.remain / rm.s_to_m
+            prm_m = PriceRawMaterial.objects.get(raw_material_id=prop, unit_id=rm.unit_m_id)
+            prm_m.avg_price = int(prm_m.last_price) / int(m_remain)
+            rm.avg_m = float(prm_m.avg_price)
+            rm.save()
+            prm_m.save()
+            prm = PriceRawMaterial.objects.get(raw_material_id=prop, unit_id=po_obj.unit_id)
+            prm.avg_price = avg[prop]
+            prm.save()
+        return Response('calc po avg')
 
 class PORawqueryItem(APIView):
     def get(self,request,query):

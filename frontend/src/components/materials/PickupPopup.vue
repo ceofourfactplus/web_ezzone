@@ -2,10 +2,9 @@
   <div>
     <div class="show-pickup-popup">
       <!-- Nav -->
-      <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6 txt-for-add" style="width: 100%">Pickup</div>
-        <div class="col-3">
+      <div class="row" style="margin-top: 10px;">
+        <div class="col-11 w-100 txt-for-add" style="width: 100%">{{item.name}}</div>
+        <div class="col-1 w-100">
           <img
             @click="$emit('show_status')"
             src="../../assets/icon/Union.png"
@@ -21,58 +20,42 @@
       </div>
       <div class="content-wrapper">
         <div class="row">
-          <div class="col-4">
+          <div class="col-5 w-100">
             <!-- Select Image -->
-            <div class="row">
-              <div class="col-12" style="padding: 0px">
-                <label id="select_img" for="file">
-                  <img :src="show_img" class="image" v-if="show_img != null" />
-                  <div class="edit-block">Edit</div>
-                </label>
-                <input
-                  type="file"
-                  @change="onFileChange"
-                  style="display: none; width: "
-                  id="file"
-                  class="raw-image"
-                />
-              </div>
-            </div>
+            <label id="select_img">
+              <img :src="show_img" class="image" />
+            </label>
           </div>
-          <div class="col-8 right-wrapper">
-            <!-- Name -->
-            <div class="row" style="text-align: left">
-              <div class="col-12">
-                <p>Name&nbsp;&nbsp;: {{ item.name }}</p>
-              </div>
-            </div>
+          <div class="col-7 w-100 right-wrapper">
             <!-- Qty -->
-            <div class="row" style="margin-top: 20px; text-align: left">
+            <div class="row" style="margin-top: 20px;">
               <div class="col-12">
-                <p>
-                  Qty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ item.remain }}&nbsp;&nbsp;&nbsp;&nbsp; {{ item.unit_set.unit }}
+                <p class="font-pickup-popup">
+                  <span style="font-size: 28px;">Qty</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ item.remain }}&nbsp;&nbsp;&nbsp;&nbsp; {{ item.unit_set.unit }}
                 </p>
               </div>
             </div>
             <!-- Pickup Amount -->
-            <div class="row" style="margin-top: 20px; text-align: left">
+            <div class="row" style="margin-top: 20px;">
               <div class="col-12">
-                <p>
-                  Pickup&nbsp;:
+                <p class="font-pickup-popup">
+                  <span style="font-size: 28px;">Pickup</span>&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input
                     class="pickup-input"
                     type="text"
+                    :disabled="item.remain == 0"
                     v-model="pickup_amount"
                     @click="pickup_amount = null"
                   />
                 </p>
               </div>
             </div>
+            <p v-if="parseInt(pickup_amount) > item.remain" style="color: #ff6d6d; font-size: 20px; margin: -5px 0px 0px 60px;">Not Enough Stuff</p>
           </div>
         </div>
       </div>
       <div>
-        <button :disabled="item.remain <= 0" class="btn-confirm" @click="confirm">
+        <button :disabled="parseInt(this.pickup_amount) > item.remain" class="btn-confirm" @click="confirm">
           <span class="icon-save"></span>Confirm
         </button>
       </div>
@@ -127,6 +110,11 @@ export default {
 </script>
 
 <style scoped>
+.font-pickup-popup {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
+}
 .card {
     width: 542px;
     height: 319px
@@ -162,18 +150,18 @@ span.icon-save {
   height: 210px;
   font-size: 30px;
   color: white;
-  margin: 25px 20px 0px 40px;
+  margin: 20px 20px 0px -10px;
 }
 .content-wrapper {
   width: 575px;
-  height: 260px;
+  height: 220px;
   margin: 15px 20px 0px 20px;
   background: #303344;
   border-radius: 30px;
 }
 .show-pickup-popup {
   width: 616.86px;
-  height: 406px;
+  height: 380px;
   top: 20%;
   left: 12%;
   position: absolute;
@@ -182,20 +170,20 @@ span.icon-save {
   border-radius: 20px;
 }
 .image {
-  width: 220px;
-  height: 220px;
+  width: 160px;
+  height: 160px;
   border-radius: 25px;
 }
 #select_img {
-  width: 220px;
-  height: 220px;
+  width: 160px;
+  height: 160px;
   border-radius: 25px;
-  margin: 20px 0px 0px 25px;
+  margin: 20px 0px 0px -10px;
   background-color: #717171;
 }
 .txt-for-add {
   font-weight: bold;
-  font-size: 48px;
+  font-size: 36px;
   line-height: 56px;
   text-align: center;
   width: 100%;
@@ -205,8 +193,8 @@ span.icon-save {
   position: absolute;
   width: 74px;
   height: 28.23px;
-  left: 45px;
-  top: 270px;
+  left: 55px;
+  top: 280px;
   background-color: #c4c4c4;
   border-radius: 5px;
   background-image: url("../../assets/icon/el_camera.png");

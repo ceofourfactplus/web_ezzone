@@ -47,7 +47,6 @@
           <div
             class="row"
             style="
-              font-size: 28px;
               color: white;
               text-align: left;
               margin-top: 10px;
@@ -63,7 +62,7 @@
         <!-- Table Item loop -->
         <div
           class="row table-item"
-          style="margin-left: 0px"
+          style="margin-left: 0px; line-height: 20px;"
           v-for="recept_detail in po.recept_detail"
           :key="recept_detail"
         >
@@ -88,7 +87,7 @@
           <div class="col-2 w-100 line-item">{{ calc(recept_detail) }}</div>
         </div>
         <!-- Discount -->
-        <div class="row table-item" style="margin-left: 0px">
+        <div class="row table-item" style="margin-left: 0px; line-height: 20px;">
           <div class="col-12 w-100" style="margin-top: 10px">
             Discount&nbsp;<span style="width: 200px">{{
               po.recept_detail[0].discount
@@ -97,7 +96,7 @@
           </div>
         </div>
         <!-- Total Price -->
-        <div class="row table-item" style="margin-left: 0px">
+        <div class="row table-item" style="margin-left: 0px; line-height: 20px;">
           <div class="col-12 w-100" style="margin-top: 10px">
             Total Price&nbsp;<span style="width: 200px">{{
               calc_total_price(po)
@@ -220,7 +219,7 @@ export default {
 }
 .head-page {
   width: 672px;
-  margin-left: 47px;
+  margin-left: 15px;
   font-size: 28px;
   color: white;
 }

@@ -16,19 +16,19 @@
           class="row"
           style="padding-right: 0px"
         >
-          <div class="col-6" style="margin-left: 90px; font-size: 28px">
+          <div class="col-6 w-100">
             {{ head1 }}
           </div>
-          <div class="col-1" style="margin-left: 60px; font-size: 28px">
+          <div class="col-2 w-100">
             {{ head2 }}
           </div>
-          <div class="col-2" style="margin-left: 23px; font-size: 28px">
+          <div class="col-2 w-100">
             {{ head3 }}
           </div>
-          <div class="col-1" style="margin-left: 10px; font-size: 28px">
+          <div class="col-1 w-100">
             {{ head4 }}
           </div>
-          <div class="col-1" style="margin-right: -40px; font-size: 28px">
+          <div class="col-1 w-100" style="margin-right: 20px;">
             {{ head5 }}
           </div>
         </div>
@@ -39,19 +39,19 @@
           class="row"
           style="padding-right: 0px"
         >
-          <div class="col-4" style="margin-left: 90px; font-size: 28px">
+          <div class="col-4 w-100" style="margin-left: ; text-align: right; margin-left: 50px;">
             {{ head1 }}
           </div>
-          <div class="col-1" style="margin-left: 180px; font-size: 28px">
+          <div class="col-1 w-100" style="margin-left: 100px;">
             {{ head2 }}
           </div>
-          <div class="col-2" style="margin-left: 10px; font-size: 28px">
+          <div class="col-2 w-100" style="margin-left: 50px;">
             {{ head3 }}
           </div>
-          <div class="col-4 w-100" style="font-size: 28px">
+          <div class="col-4 w-100" style="margin-left: 25px;">
             {{ head4 }}
           </div>
-          <div class="col-1" style="margin-right: 10px; font-size: 28px">
+          <div class="col-1 w-100" style="margin-right: 30px;">
             {{ head5 }}
           </div>
         </div>
@@ -208,23 +208,26 @@
               {{ item.name }}
             </div>
             <div
-              class="col-2"
-              style="margin-left: -18px;"
+              class="col-2 w-100"
               @click="showRmDetial(item)"
+              style="margin-left: 7px;"
             >
               {{ item.remain }}
             </div>
             <div
-              class="col-2"
-              style="margin-left: -45px;"
+              class="col-2 w-100"
               @click="showRmDetial(item)"
+              style="margin-left: 15px;"
             >
-              <p>{{ item.unit_set.unit }}</p>
+              {{ item.unit_set.unit }}
             </div>
+            <!-- <div class="col-2 w-100" style="margin-left: 15px;">
+              100
+            </div> -->
             <div
-              class="col-1"
-              style="margin-left: -54px;"
+              class="col-1 w-100"
               @click="showRmDetial(item)"
+              style="margin-right: 70px;"
             >
               <img
                 :src="
@@ -236,9 +239,9 @@
               />
             </div>
             <div
-              class="col-1"
-              style="margin-right: 10px; margin-left: -10px;"
+              class="col-1 w-100"
               @click="show_pickup(item)"
+              style="margin-right: 20px;"
             >
               <img style="width: 32px; height: 30px; position: relative; bottom: 3px;" src="../../assets/icon/pickup.png" alt="img" />
             </div>

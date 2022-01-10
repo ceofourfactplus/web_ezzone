@@ -1,7 +1,6 @@
-
 <template>
   <div>
-    <nav-app @back="back">Unit</nav-app>
+    <nav-app :rm_menu="true">Unit</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
@@ -134,7 +133,7 @@
 
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
-import NavApp from "../../components/main_component/NavAppHam.vue";
+import NavApp from "../../components/main_component/NavApp.vue";
 // import Table from "../../components/main_component/Table.vue";
 import { api_raw_material } from "../../api/api_raw_material";
 
@@ -276,7 +275,7 @@ h2 {
   margin: 0px 40px 0px 0px;
 }
 .wrap-search {
-  min-width: 550px;
+  min-width: 505px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

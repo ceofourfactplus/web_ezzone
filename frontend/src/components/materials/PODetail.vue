@@ -65,7 +65,7 @@
         <div class="table-item w-100">
           <div class="row" style="position: relative; bottom: 10px;">
             <div class="col-4 w-100" style="text-align: left; margin-left: 20px;">{{ po_item.supplier_set.company_name }}</div>
-            <div class="col-2 w-100">100</div>
+            <div class="col-2 w-100">{{ po_item.last_price }}</div>
             <div class="col-4 w-100">{{ po_item.supplier_set.phone }}</div>
             <div class="col-2 w-100"><img style="width: 30px; height: 30px; margin: 0px 20px 0px -10px;" src="../../assets/icon/map-icon.png"></div>
           </div>
@@ -131,7 +131,7 @@ export default {
   width: 619px;
   height: 640px;
   top: 20%;
-  left: 12%;
+  left: 7%;
   position: absolute;
   background-color: #252836;
   border: 2px solid #ea7c69;

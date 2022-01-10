@@ -40,17 +40,6 @@
       </button>
       <button class="tab-item" v-if="elements.length > 5">></button>
     </div>
-    <div class="tab">
-      <button
-        v-for="(item, idx) in elements"
-        :key="idx"
-        @click="select_item(item)"
-        class="tab-item"
-      >
-        {{ item.name }}
-      </button>
-      <button class="tab-item" v-if="elements.length > 5">></button>
-    </div>
 
   </div>
 </template>
@@ -84,7 +73,6 @@ export default {
 .tab-selected {
   color: white;
 }
-
 .tab {
   overflow: hidden;
   width: 90%;
@@ -101,14 +89,14 @@ export default {
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 5px;
+  padding: 10px;
   padding-top: 6px;
   transition: 0.3s;
   font-size: 26.5px;
   font-style: normal;
   border-radius: 15px 15px 0px 0px;
   margin-top: 0px;
-  margin: 3px;
+  margin: 5px;
   margin-bottom: 1em;
   height: 46px;
   width: fit-content;

@@ -4,8 +4,8 @@
     <nav-app :rm_menu="true">PO&#160;Notice</nav-app>
     <!-- Second Nav -->
     <div class="row" style="width: 680px; margin-left: 20px">
-      <div class="col-8" style="width: 100%">
-        <SearchBar style="width: 450px" @search="serchByTyping" />
+      <div class="col-7" style="width: 100%">
+        <SearchBar style="width: 390px" @search="serchByTyping" />
       </div>
       <div class="col-2" style="width: 100%">
         <button
@@ -176,6 +176,7 @@ export default {
 }
 .btn-ghost {
   width: 100px;
+  height: 50px;
   border: 1px solid #65b0f6;
   color: #65b0f6;
   margin-left: 28px;
@@ -185,7 +186,7 @@ export default {
 }
 .btn-dropdown {
   width: 110px;
-  height: 45px;
+  height: 50px;
   color: #889898;
   background: #303344;
   font-weight: bold;

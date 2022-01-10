@@ -22,6 +22,7 @@ export default {
   watch: {
     input: function (val) {
       this.input = val;
+      console.log(val, "val")
       this.$emit("switch", val);
     },
   },
