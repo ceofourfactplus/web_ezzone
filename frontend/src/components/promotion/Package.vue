@@ -38,6 +38,7 @@
 
 <script>
 import Switch from "../../components/main_component/Switch.vue";
+import { api_promotion } from "../../api/api_promotion";
 
 export default {
   name: "Voucher",
@@ -49,13 +50,23 @@ export default {
         input: '',
     };
   },
-  methods: {},
+  methods: {
+    fetchPackage() {
+      api_promotion.get('package/').then((response) => {
+        console.log(response.data, 'package')
+        this.packages = response.data
+      })
+    }
+  },
   watch: {
     input: function (val) {
       this.input = val;
       console.log(val, "val")
     },
   },
+  mounted() {
+    this.fetchPackage()
+  }
 };
 </script>
 

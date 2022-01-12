@@ -148,3 +148,30 @@ class PackageItemAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+class ItemToppingToppingAPI(APIView):
+    def get_object(self, pk):
+        try:
+            return ItemTopping.objects.get(id=pk)
+        except ItemTopping.DoesNotExist:
+            raise 404
+        
+    def get(self, request):
+        item_topping = ItemTopping.objects.all()
+        serializer = ItemToppingSerializer(item_topping, many=True)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        item_topping = ItemTopping.objects.get(id=request.data['id'])
+        serializer = ItemToppingSerializer(item_topping, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    def post(self, request):
+        serializer = ItemToppingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)

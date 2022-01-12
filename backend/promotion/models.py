@@ -108,16 +108,16 @@ class PromotionPackage(models.Model):
 
 class PackageItem(models.Model):
   product = models.ForeignKey(Product,on_delete=models.PROTECT)
-  amount = models.IntegerField()
+  amount = models.IntegerField(default=1)
   total_price = models.DecimalField(max_digits=4,decimal_places=2)
   description = models.TextField(null=True,blank=True)
   package = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
 
 class ItemTopping(models.Model):
   topping = models.ForeignKey(Product,on_delete=models.PROTECT)
-  item = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
+  item = models.ForeignKey(PackageItem,on_delete=models.CASCADE)
   amount = models.IntegerField()
-  total_price = models.DecimalField(max_digits=3,decimal_places=2)
+  total_price = models.DecimalField(max_digits=4,decimal_places=2)
   description = models.TextField(null=True,blank=True)
 
 

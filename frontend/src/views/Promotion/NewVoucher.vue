@@ -110,7 +110,7 @@ export default {
       is_percent: null,
       description: null,
       amount: null,
-      status: null,
+      status: true,
       show_img: null,
     };
   },

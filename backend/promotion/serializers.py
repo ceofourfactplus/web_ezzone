@@ -103,7 +103,7 @@ class PackageItemSerializer(serializers.ModelSerializer):
     ]
     
 class ItemToppingSerializer(serializers.ModelSerializer):
-  product_id = serializers.IntegerField()
+  topping_id = serializers.IntegerField()
   item_id = serializers.IntegerField()
   class Meta:
     model = ItemTopping
