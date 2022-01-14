@@ -74,7 +74,7 @@
           class="col-4 w-100"
           style="margin: 10px 0px 0px -10px"
         >
-          <label class="switch">
+          <label class="switch" style="margin-top: 30px;">
               <input type="checkbox" v-model="item.status" @input="change_status(item)" />
               <span class="slider round"></span>
           </label>
@@ -187,7 +187,7 @@
   </div>
     <!-- Voucher -->
     <div class="table" style="margin-top: 10px" v-else-if="tab == 'Voucher'">
-      <div class="table-header">
+      <div class="table-header" style="width: 670px; margin-left: -10px;">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -200,7 +200,7 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item" v-for="voucher in vouchers" :key="voucher.id">
+      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="voucher in vouchers" :key="voucher.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-4 w-100" style="margin-left: -30px;">{{ voucher.voucher }}</div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
@@ -224,7 +224,7 @@
     </div>
     <!-- Package -->
     <div class="table" style="margin-top: 10px" v-else-if="tab == 'Package'">
-      <div class="table-header">
+      <div class="table-header" style="width: 670px; margin-left: -10px;">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -236,7 +236,7 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item" v-for="item in packages" :key="item.id">
+      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="item in packages" :key="item.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ item.promotion }}</div>
           <div class="col-2 w-100">{{ item.normal_price }}</div>
@@ -259,7 +259,7 @@
     </div>
     <!-- Reward -->
     <div class="table" style="margin-top: 10px" v-else>
-      <div class="table-header">
+      <div class="table-header" style="width: 670px; margin-left: -10px;">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -271,7 +271,7 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item" v-for="reward in rewards" :key="reward.id">
+      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="reward in rewards" :key="reward.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ reward.reward }}</div>
           <div class="col-2 w-100">{{ reward.point }}</div>
@@ -454,6 +454,7 @@ export default {
   color: #FF7CA3;
   width: 180px;
   height: 56px;
+  border-radius: 10px;
 }
 .btn-ghost-correct {
   background: transparent;
@@ -461,6 +462,7 @@ export default {
   color: #50D1AA;
   width: 180px;
   height: 56px;
+  border-radius: 10px;
 }
 .delete-card {
   width: 440px;

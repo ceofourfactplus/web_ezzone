@@ -63,6 +63,7 @@
             margin: 10px 0px 0px 0px;
             background-color: #303344;
             border-radius: 10px;
+            line-height:100%;
           "
         >
           <div
@@ -199,7 +200,7 @@ export default {
   border-radius: 10px;
   text-align: center;
   background: transparent;
-  line-height: 31px;
+  line-height: 100%;
   width: 192px;
   height: 45px;
 }
@@ -212,7 +213,7 @@ export default {
   border-radius: 10px;
   text-align: center;
   background: transparent;
-  line-height: 31px;
+  line-height: 100%;
   width: 192px;
   height: 45px;
 }

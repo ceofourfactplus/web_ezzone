@@ -1,10 +1,11 @@
 <template>
   <div>
     <nav-app>User Status</nav-app>
-    <search-bar @search="search" />
-    <div class="table mt-4">
+    <div style="width: 90%; margin: auto"><search-bar @search="search" /></div>
+
+    <div class="table mt-3">
       <div class="table-header">
-        <div class="row" style="width: 100%">
+        <div class="row h-100" style="width: 100%">
           <div
             class="col-4"
             style="margin: auto; padding-bottom: 9px; padding-top: 3px"
@@ -59,7 +60,7 @@
                 <span>{{ user.nick_name }}</span>
               </div>
             </div>
-            <div class="col-4" style="margin-left: 10px; width: 100%">
+            <div class="col-4" style="margin-left: 10px; width: 100%;line-height:35px;">
               {{ role(user) }}
             </div>
             <div
@@ -74,11 +75,12 @@
             </div>
             <div
               class="col-2"
-              style="margin: auto; margin-left: 30px; width: 100%"
+              style="margin: auto; margin-left: 30px; width: 80%"
             >
               <img
                 src="../../assets/icon/edit-user.png"
                 alt=""
+                style="height:27px;"
                 @click="ToEditUser(user)"
               />
             </div>
@@ -157,7 +159,7 @@
         </div>
         <div class="col-12 mt-3 w-100 m-auto">
           <button
-            v-if="select_user.is_working == 1"
+            v-if="select_user.is_working == 1 && select_user.is_active == true"
             class="mt-4 btn-g"
             style="width: 80%; height: 70px"
           >
@@ -287,7 +289,7 @@ export default {
     },
     change_status(status) {
       api_user
-        .put("change-status/" + this.select_user.id+'/'+status)
+        .put("change-status/" + this.select_user.id + "/" + status)
         .then(() => {
           api_user.get("read-all/").then((response) => {
             this.all_user = response.data;
@@ -296,10 +298,25 @@ export default {
     },
     ToEditUser(user) {
       this.$router.push({ name: "EditUser", params: { id: user.id } });
-    },    
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.row div {
+  line-height: 100%;
+}
+.row {
+  padding: 3px;
+  margin: 0px;
+}
+.img-user-status {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+}
+.img-select{
+  object-fit: cover;
+}
 </style>

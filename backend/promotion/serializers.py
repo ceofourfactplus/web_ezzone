@@ -2,7 +2,8 @@ from django.db.models import fields
 from rest_framework import serializers
 from user.serializers import UserSerializer
 from product.serializers import ProductSerializer, ProductCategorySerializer, PriceProductSerializer, ToppingCategorySerializer
-from .models import PointPromotion, Voucher, PromotionPackage, PackageItem, ItemTopping, Rewards, ConditionRewards
+from customer.serializers import CustomerSerializer, AddressCustomerSerializer
+from .models import PointPromotion, Voucher, PromotionPackage, PackageItem, ItemTopping, Rewards, ConditionRewards, Redemption, CustomerPoint, ExchangeHistory
 
 class PointListSerializer(serializers.ModelSerializer):
   class Meta:
@@ -160,4 +161,77 @@ class ConditionRewardsSerializer(serializers.ModelSerializer):
       'point_promotion_set',
       'reward_set',
       'point',
+    ]
+    
+class RedemptionSerializer(serializers.ModelSerializer):
+  customer_id = serializers.IntegerField()
+  reward_id = serializers.IntegerField()
+  deal_user_id = serializers.IntegerField()
+  deliver_user_id = serializers.IntegerField()
+  point_promotion_id = serializers.IntegerField()
+  point_promotion_set = PointSerializer(read_only=True, source='point_promotion')
+  reward_set = RewardsSerializer(read_only=True, source='reward')
+  deal_user_set = UserSerializer(read_only=True, source="user")
+  deliver_user_set = UserSerializer(read_only=True, source="user")
+  customer_set = CustomerSerializer(read_only=True, source="user")
+  
+  class Meta:
+    model = Redemption
+    fields = [
+      'id',
+      'customer_id',
+      'reward_id',
+      'deal_user_id',
+      'deliver_user_id',
+      'point_promotion_id',
+      'status_given',
+      'point',
+      'due_date',
+      'description',
+      'create_at',
+      'img',
+      'point_promotion_set',
+      'reward_set',
+    ]
+    
+class CustomerPointSerializer(serializers.ModelSerializer):
+  customer_id = serializers.IntegerField()
+  point_promotion_id = serializers.IntegerField()
+  customer_set = CustomerSerializer(read_only=True, source="customer")
+  point_promotion_set = PointSerializer(read_only=True, source='point_promotion')
+  
+  class Meta:
+    model = CustomerPoint
+    fields = [
+      'id',
+      'point',
+      'description',
+      'customer_id',
+      'point_promotion_id',
+      'customer_set',
+      'point_promotion_set',
+    ]
+    
+class ExchangeHistorySerializer(serializers.ModelSerializer):
+  customer_id = serializers.IntegerField()
+  reward_id = serializers.IntegerField()
+  create_by_id = serializers.IntegerField()
+  update_by_id = serializers.IntegerField()
+  create_by_set = UserSerializer(read_only=True, source="user")
+  customer_set = CustomerSerializer(read_only=True, source="customer")
+  reward_set = RewardsSerializer(read_only=True, source='reward')
+  
+  class Meta:
+    model = ExchangeHistory
+    fields = [
+      'id',
+      'point',
+      'qty',
+      'customer_id',
+      'reward_id',
+      'customer_set',
+      'reward_set',
+      'create_at',
+      'create_by_id',
+      'update_by_id',
     ]

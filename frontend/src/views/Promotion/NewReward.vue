@@ -101,6 +101,19 @@
               class="raw-image"
             />
           </div>
+          <div class="col-12">
+            <div class="checkbox-orange">
+              <input
+                type="checkbox"
+                style="display: inline-block; top: 5px"
+                v-model="is_pre_order"
+                class="ms-2"
+              />
+              <label
+                class="ms-3"
+              > Pre-order </label>
+            </div>
+          </div>
         </div>
       </div>
       <textarea
@@ -222,6 +235,7 @@ export default {
       cost: null,
       img: null,
       show_img: null,
+      is_pre_order: false,
       temp_date: null,
       point_promotion_set: {},
       point_promotion_id: null,
@@ -243,6 +257,7 @@ export default {
       data.append("cost", this.cost);
       data.append("description", this.description);
       data.append("status", this.status);
+      data.append("is_pre_order", this.is_pre_order);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
 

@@ -17,7 +17,7 @@
     </div>
 
     <div class="table mt-3">
-      <div class="table-header" style="line-height: 40px; font-size: 24px">
+      <div class="table-header" style="line-height:100%; font-size: 24px">
         <div class="row">
           <div class="col-3 w-100" style="margin: auto">Nick&#160;N.</div>
           <div class="col-3 w-100" style="margin-left: 10px; text-align: left">

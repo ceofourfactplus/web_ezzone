@@ -16,16 +16,24 @@
       </div>
     </div>
 
-     <div class="mt-2" style="margin: auto; width: 90%; display: flex;overflow:auto">
+    <div
+      class="mt-2"
+      style="margin: auto; width: 90%; display: flex; overflow: auto"
+    >
       <button
         v-for="category in products_categories"
         :key="category.id"
         class="btn-gray me-2"
-        style="min-width: 100px; height: 50px; opacity: 0.5;white-space:nowrap;"
+        style="
+          min-width: 100px;
+          height: 50px;
+          opacity: 0.5;
+          white-space: nowrap;
+        "
         @click="select_category_f(category.id)"
         :class="{ 'type-active': select_category == category.id }"
       >
-        {{category.category}}
+        {{ category.category }}
       </button>
     </div>
 
@@ -34,9 +42,7 @@
         <div class="row">
           <div class="col-2 w-100" style="margin: auto">Code</div>
           <div class="col-4 w-100" style="text-align: center">Name</div>
-          <div class="col-2 w-100" style="margin: auto;">
-            Qty
-          </div>
+          <div class="col-2 w-100" style="margin: auto">Qty</div>
           <div class="col-2 w-100" style="margin: auto">Price</div>
           <div class="col-2 w-100"></div>
         </div>
@@ -52,10 +58,7 @@
             class="row"
             style="width: 100%; line-height: 100%; padding: 3px; height: 100%"
           >
-            <div
-              class="col-2 w-100"
-              style="margin: auto;"
-            >
+            <div class="col-2 w-100" style="margin: auto">
               <!-- <span>
                 <img
                   v-if="product.img != null"
@@ -88,7 +91,7 @@
               class="col-2 w-100"
               style="margin: auto; width: 175px; text-align: left"
             >
-              <!-- {{get_price(product.id)}} -->
+              {{ get_price(product.priceproduct_set) }}
             </div>
             <div
               class="col-2 w-100"
@@ -133,7 +136,7 @@ export default {
       products_categories: [],
       products: [],
       show_products: [],
-      select_category:null
+      select_category: null,
     };
   },
   methods: {
@@ -154,7 +157,11 @@ export default {
         this.show_products = response.data;
       });
     },
-    get_price() {},
+    get_price(price_list) {
+      return price_list.filter((item) => {
+        return item.sale_channel == this.$store.state.ezzone_id;
+      })[0].price;
+    },
     search_by_typing(val) {
       var temp = [];
       if (val == "") {
@@ -191,7 +198,7 @@ export default {
   margin: 0px;
 }
 .type-active {
-  opacity: 1 !important;  
+  opacity: 1 !important;
   color: #fff !important;
 }
 </style>

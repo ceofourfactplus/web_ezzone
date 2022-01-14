@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import PointPromotion, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint
-from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer
+from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer
 
 
 class PointPromotionAPI(APIView):
@@ -345,3 +345,48 @@ class ConditionRewardGET(APIView):
     def put(self, request, pk):
         ConditionRewards.objects.get(id=pk).delete()
         return Response('deleted')
+    
+class CustomerPointAPI(APIView):
+    def get_object(self, pk):
+        try:
+            return CustomerPoint.objects.get(customer_id=pk)
+        except CustomerPoint.DoesNotExist:
+            raise 404
+        
+    def get(self, request):
+        cus_point = CustomerPoint.objects.all()
+        serializer = CustomerPointSerializer(cus_point, many=True)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        cus_point = CustomerPoint.objects.get(id=request.data['id'])
+        serializer = CustomerPointSerializer(cus_point, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    def post(self, request):
+        serializer = CustomerPointSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+    
+class CustomerPointGET(APIView):
+    def get_object(self, pk):
+        try:
+            return CustomerPoint.objects.filter(customer_id=pk)
+        except CustomerPoint.DoesNotExist:
+            raise 404
+        
+    def get(self, request, pk):
+        cus_points = self.get_object(pk)
+        print(cus_points)
+        data = []
+        if len(cus_points) != 0:
+            for i in cus_points:
+                serializer = CustomerPointSerializer(i)
+                data.append(serializer.data)
+        return Response(data)   

@@ -102,6 +102,19 @@
               class="raw-image"
             />
           </div>
+          <div class="col-12">
+            <div class="checkbox-orange">
+              <input
+                type="checkbox"
+                style="display: inline-block; top: 5px"
+                v-model="reward_item.is_pre_order"
+                class="ms-2"
+              />
+              <label
+                class="ms-3"
+              > Pre-order </label>
+            </div>
+          </div>
         </div>
       </div>
       <textarea

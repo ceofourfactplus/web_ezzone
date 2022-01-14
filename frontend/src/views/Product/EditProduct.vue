@@ -56,15 +56,16 @@
               </select>
             </div>
             <div class="col-12 h-20">
-              <label for=""
-                >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<button
-                  class="btn-y"
-                  style="width: 100px; display: inilne; height: 50px"
-                  :class="{ 'btn-g': remain > minimum }"
-                >
-                  {{ status_label }}
-                </button></label
+              <label for="">Type Product&nbsp;:&nbsp;</label>
+              <select
+                id="type_topping"
+                style="width: 160px; margin-left: 0px"
+                v-model="product['type_product']"
               >
+                <option value="1">DRESSERT</option>
+                <option value="2">DRINK</option>
+                <option value="3">FOOD</option>
+              </select>
             </div>
             <div class="col-12 h-20">
               <label for="">Active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
@@ -219,41 +220,31 @@ export default {
         .then((response) => {
           this.product = response.data;
           this.show_img = response.data.img
+          this.product['price'] = this.product.priceproduct_set.filter(item=>{
+          return item.sale_channel == this.$store.state.ezzone_id
+          })[0].price
         });
     },
     onFileChange(e) {
-      this.product.img = e.target.files[0];
+      this.product['img'] = e.target.files[0];
       this.change_img = true
-      if (this.product.img) {
+      if (this.product['img']) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.product.img);
+        reader.readAsDataURL(this.product['img']);
       }
     },
     create_product() {
-      const data = new FormData();
-      data.append("code", this.product.code);
-      if (this.change_img) {
-        data.append("img", this.product.img, this.product.img.name);
-      }
-      data.append("category_id", this.product.category_id);
-      data.append("unit_id", this.product.unit_id);
-      data.append("status", this.product.status);
-      data.append("is_active", this.product.is_active);
-      data.append("remain", this.product.remain);
-      data.append("minimum", this.product.minimum);
-      data.append("maximum", this.product.maximum);
-      data.append("flavour", this.product.flavour);
-      data.append("flavour_level", this.product.flavour_level);
-      data.append("name", this.product.name);
-      data.append("warehouse", this.product.warehouse);
-      data.append("topping_category_id", this.product.topping_category_id);
-      data.append("create_by_id", 1);
       api_product
-        .put("product/" + this.$route.params.id + "/", data)
+        .put("update-product/" + this.$route.params.id + "/", this.product)
         .then(() => {
           this.$router.push({ name: "Product" });
         });
+      if (this.change_img) {
+          const data = new FormData();
+          data.append("img", this.product['img'], this.product['img'].name);
+          api_product.put('update-img-product/'+this.$route.params.id+"/",data)
+        }
     },
     switch_flavour_level(val) {
       this.product.flavour_level = val;
@@ -366,6 +357,7 @@ label {
   width: 260px;
   height: 260px;
   border-radius: 25px;
+  object-fit: cover;
 }
 .switch {
   display: inline-block;

@@ -81,7 +81,7 @@ class Voucher(models.Model):
 
 class Redemption(models.Model):
   customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
-  rewards = models.ForeignKey(Rewards,on_delete=models.PROTECT)
+  reward = models.ForeignKey(Rewards,on_delete=models.PROTECT)
   deal_user =  models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT, related_name="redemption_deal_user")
   deliver_user = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT, related_name="redemption_deliver_user")
   point_promotion = models.ForeignKey(PointPromotion,on_delete=models.PROTECT)
@@ -125,7 +125,19 @@ class ItemTopping(models.Model):
 
 
 class CustomerPoint(models.Model):
-    customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
-    point_promotion = models.ForeignKey(PointPromotion,on_delete=models.PROTECT)
-    point = models.IntegerField()
-    description = models.TextField(null=True,blank=True)
+  customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
+  point_promotion = models.ForeignKey(PointPromotion,on_delete=models.PROTECT)
+  point = models.IntegerField()
+  description = models.TextField(null=True,blank=True)
+
+class ExchangeHistory(models.Model):
+  customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
+  reward = models.ForeignKey(Rewards,on_delete=models.PROTECT)
+  point = models.IntegerField()
+  qty = models.IntegerField()
+  create_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="exchange_history_create_by")
+  update_by = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="exchange_history_update_by",null=True)
+  create_at = models.DateTimeField(auto_now_add=True)
+  update_at = models.DateTimeField(auto_now_add=True,null=True)

@@ -1,21 +1,13 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product">Edit&#160;Product</nav-app>
+    <nav-app save="true" @save="create_product">Edit&#160;Topping</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
           <div class="col-5 w-100">
             <div class="row">
-              <div class="col-12 mb-4">
-                <label for="">Code :</label
-                ><input
-                  type="text"
-                  v-model="product.code"
-                  style="width: 150px"
-                />
-              </div>
               <div class="col-12" style="padding: 0px">
-                <label id="select_img" for="file" style="margin-top: 0px">
+                <label id="select_img" for="fileimg" style="margin-top: 0px">
                   <img :src="show_img" class="image" v-if="show_img != null" />
                   <div class="edit-block">Edit</div>
                 </label>
@@ -23,60 +15,43 @@
                   type="file"
                   @change="onFileChange"
                   style="display: none"
-                  id="file"
+                  id="fileimg"
                   class="raw-image"
                 />
               </div>
             </div>
           </div>
           <div class="col-7 w-100">
-            <div class="col-12 h-20">
-              <input
+            <div class="col-12 h-25">
+              <label for="">Code&nbsp;&nbsp;&nbsp;:</label
+              ><input
                 type="text"
-                style="width: 350px; margin: auto"
-                placeholder="Product Name"
-                v-model="product.name"
+                style="width: 67%"
+                v-model="topping['code']"
               />
             </div>
-            <div class="col-12 h-20">
-              <label for="">Category&nbsp;:</label
-              ><select
-                v-model="product.category_id"
-                style="width: 210px"
-                name="category"
-                id="category"
-              >
-                <option
-                  v-for="category in categories"
-                  :key="category.id"
-                  :value="category.id"
-                >
-                  {{ category.category }}
-                </option>
-              </select>
+            <div class="col-12 h-25">
+              <label for="">Name&nbsp;&nbsp;:</label
+              ><input
+                type="text"
+                style="width: 66%"
+                v-model="topping['name']"
+              />
             </div>
-            <div class="col-12 h-20">
+            <div class="col-12 h-25">
               <label for=""
-                >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<button
+                >Status&nbsp;&nbsp;:&nbsp;<button
                   class="btn-y"
-                  style="width: 100px; display: inilne; height: 50px"
-                  :class="{ 'btn-g': remain > minimum }"
+                  style="white-space:nowrap"
+                  :class="{ 'btn-g': topping['remain'] > topping['minimum'] }"
                 >
-                  {{ status_label }}
+                status label
                 </button></label
               >
             </div>
-            <div class="col-12 h-20">
-              <label for="">Active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
+            <div class="col-12 h-25">
+              <label for="">Active&nbsp;&nbsp;:</label>
               <div class="switch"><Switch @switch="switch_active" /></div>
-            </div>
-            <div class="col-12 h-20">
-              <label for="">Price&nbsp;&nbsp;:</label
-              ><input
-                type="number"
-                style="width: 69%"
-                v-model="product.price"
-              />
             </div>
           </div>
         </div>
@@ -85,14 +60,18 @@
         <div class="row">
           <div class="col-6 label-input">
             <label for="">Qty&nbsp;&nbsp;:</label
-            ><input type="number" style="width: 74%" v-model="product.remain" />
+            ><input
+              type="number"
+              style="width: 74%"
+              v-model="topping['remain']"
+            />
           </div>
           <div class="col-6 label-input">
             <label for="">Min&nbsp;Qty&nbsp;:</label
             ><input
               type="number"
               style="width: 55%"
-              v-model="product.minimum"
+              v-model="topping['minimum']"
             />
           </div>
           <div class="col-6 label-input m-15">
@@ -101,7 +80,7 @@
               name="unit"
               id="unit"
               style="width: 225px"
-              v-model="product.unit_id"
+              v-model="topping['unit_id']"
             >
               <option v-for="unit in all_unit" :key="unit.id" :value="unit.id">
                 {{ unit.unit }}
@@ -113,45 +92,37 @@
             ><input
               type="number"
               style="width: 53%"
-              v-model="product.maximum"
+              v-model="topping['maximum']"
             />
           </div>
         </div>
       </div>
       <div class="frame f-2">
         <div class="row">
-          <div class="col-6 label-input">
-            <label for="flavour">Flavour:</label
-            ><select id="flavour" v-model="product.flavour">
-              <option value="2">Sweet</option>
-              <option value="1">Spicy</option>
-            </select>
+          <div class="col-5 label-input">
+            <label for="flavour">Price&nbsp;:</label
+            ><input type="number" v-model="topping['price']" style="width: 160px" />
           </div>
-          <div class="col-6 label-input">
-            <label for="stock">Stock:</label
-            ><select
-              id="stock"
-              style="width: 210px"
-              v-model="product.warehouse"
-            >
-              <option value="0">No Stock</option>
-              <option value="1">Product</option>
-              <option value="2" disabled>Material</option>
-            </select>
-          </div>
-          <div class="col-5 label-input m-15">
-            <label for="">Flavour Level&nbsp;&nbsp;:</label
-            ><Switch @switch="switch_flavour_level" />
-          </div>
-          <div class="col-7 label-input m-15">
-            <label for="type_topping">Type Topping:</label
+          <div class="col-7 label-input">
+            <label for="stock">Stock :</label
             ><select
               id="type_topping"
-              style="width: 165px"
-              v-model="product.type_topping"
+              style="width: 260px"
+              v-model="topping['warehouse']"
             >
-              <option value="0">not use</option>
-              <option value="1">ROTI</option>
+              <option value="0">not pickup</option>
+              <option value="1">product</option>
+              <option value="2">material</option>
+            </select>
+          </div>
+          <div class="col-12 label-input m-15">
+            <label for="type_topping">Topping Type : </label>
+            <select
+              id="type_topping"
+              style="width: 445px"
+              v-model="topping['type_topping']"
+            >
+              <option value="1">DRESSERT</option>
               <option value="2">DRINK</option>
               <option value="3">FOOD</option>
             </select>
@@ -175,7 +146,13 @@ export default {
     this.get_unit();
     this.get_user();
     this.get_category();
-    this.get_product();
+    api_product.get("get-topping/" + this.$route.params.id).then((response) => {
+      this.topping = response.data;
+      this.topping['price'] = this.topping.pricetopping_set.filter(item=>{
+        return item.sale_channel == this.$store.state.ezzone_id
+      })[0].price
+      this.show_img = response.data.img
+    });
   },
   data() {
     return {
@@ -183,24 +160,9 @@ export default {
       all_user: [],
       categories: [],
       all_unit: [],
-      product: {},
-      // code: "",
-      // img: null,
-      // category_id: null,
-      // status: 1,
-      // active: true,
-      // unit_id: null,
-      // remain: 0,
-      // minimum: 0,
-      // maximum: 0,
-      // price: 0,
-      // flavour: 0,
-      // flavour_level: false,
-      // price: 0,
-      // show_img: null,
-      // name: "",
-      // warehouse: 0,
-      // type_topping: 0,
+      topping: {},
+      img:null,
+      change_img:false,
     };
   },
   methods: {
@@ -219,56 +181,32 @@ export default {
         this.all_unit = response.data;
       });
     },
-    get_product() {
-      api_product
-        .get("product/" + this.$route.params.id + "/")
-        .then((response) => {
-          this.product = response.data;
-        });
-    },
     onFileChange(e) {
-      this.product.img = e.target.files[0];
-      if (this.product.img) {
+      this.topping['img'] = e.target.files[0];
+      this.change_img = true
+      if (this.topping['img']) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.product.img);
+        reader.readAsDataURL(this.topping['img']);
       }
     },
     create_product() {
-      const data = new FormData();
-      data.append("code", this.product.code);
-      if (this.show_img != null) {
-        data.append("img", this.product.img, this.product.img.name);
-      }
-      data.append("category_id", this.product.category_id);
-      data.append("unit_id", this.product.unit_id);
-      data.append("status", this.product.status);
-      data.append("is_active", this.product.is_active);
-      data.append("remain", this.product.remain);
-      data.append("minimum", this.product.minimum);
-      data.append("maximum", this.product.maximum);
-      data.append("flavour", this.product.flavour);
-      data.append("flavour_level", this.product.flavour_level);
-      data.append("name", this.product.name);
-      data.append("warehouse", this.product.warehouse);
-      data.append("type_topping", this.product.type_topping);
-      data.append("create_by_id", 1);
-      api_product.put("product/" + this.$route.params.id+'/', data).then(() => {
-        this.$router.push({ name: "Product" });
+      api_product.put("topping/"+this.$route.params.id, this.topping).then((response) => {
+        
+        if (this.change_img) {
+          const data = new FormData();
+          data.append("img", this.topping['img'], this.topping['img'].name);
+          api_product.put('get-topping/'+response.data.id,data)
+        }
+
+        this.$router.push({ name: "Topping" });
       });
     },
     switch_flavour_level(val) {
-      this.product.flavour_level = val;
+      this.flavour_level = val;
     },
     switch_active(val) {
-      this.product.active = val;
-    },
-  },
-  watch: {
-    'product.maximum':function (newData) {
-        if (newData <= this.product.minimum) {
-          this.product.maximum = this.product.minimum + 1;
-        }
+      this.active = val;
     },
   },
 };
@@ -286,7 +224,7 @@ export default {
 }
 .f-1 {
   width: 680px;
-  height: 375px;
+  height: 300px;
 }
 .f-2 {
   width: 680px;
@@ -325,7 +263,7 @@ label {
   height: 25%;
   text-align: left;
 }
-.h-20 {
+.h-25 {
   height: 20%;
   text-align: left;
 }
@@ -343,7 +281,7 @@ label {
   width: 74px;
   height: 28.23px;
   left: 60px;
-  top: 420px;
+  top: 350px;
 
   background-color: #c4c4c4;
   border-radius: 5px;
@@ -368,6 +306,7 @@ label {
   width: 260px;
   height: 260px;
   border-radius: 25px;
+  object-fit: cover;
 }
 .switch {
   display: inline-block;

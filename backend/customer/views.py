@@ -2,26 +2,37 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from customer.serializers import CustomerSerializer
-from customer.models import Customer
+from customer.models import Customer,AddressCustomer
 import datetime
 from rest_framework.parsers import FormParser, MultiPartParser
 
 # Create your views here.
 
+class GetCustomerByPhoneNumbe(APIView):
+    def get(self,request,phone_number):
+        customer = Customer.objects.filter(phone_number__contains=phone_number)
+        serializer = CustomerSerializer(customer,many=True)
+        return Response(serializer.data,status=200)
 
 class CustomerList (APIView):
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
 
     def get(self, request):
         customer = Customer.objects.all()
         serializer = CustomerSerializer(
-            customer, context={"request": request}, many=True)
+            customer, context={'request':request},many=True)
         return Response(serializer.data, status=200)
 
     def post(self, request):
         serializer = CustomerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data['id'])
+            AddressCustomer.objects.create(
+                address = request.data['address'],
+                customer_id = serializer.data['id'],
+                status_address = 1,
+            )
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
