@@ -253,8 +253,6 @@ class ProductSerializer(serializers.ModelSerializer):
     priceproduct_set = PriceProductSerializer(many=True, read_only=True)
     topping_category_set = ToppingCategorySerializer(
         read_only=True, source="topping_category")
-    create_by_set = UserSerializer(read_only=True, source='create_by')
-    update_by_set = UserSerializer(read_only=True, source='update_by')
     img = serializers.ImageField(read_only=True)
 
     class Meta:
@@ -267,10 +265,14 @@ class ProductSerializer(serializers.ModelSerializer):
             'update_at', 'priceproduct_set', 'type_product',
 
             # all set
-            'unit_set', 'category_set', 'create_by_set',
-            'update_by_set', 'topping_category_set',
+            'unit_set', 'category_set',  'topping_category_set',
 
             # all id
             'unit_id', 'category_id', 'create_by_id',
             'update_by_id',
         ]
+
+class ProductReportSerialiser(serializers.ModelSerializer):
+    class Meta:
+        model =  Product
+        fields = ['id','name']

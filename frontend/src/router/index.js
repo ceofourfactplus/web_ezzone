@@ -68,6 +68,18 @@ import OrderDetail from "../views/OrderManage/OrderDetail.vue";
 import FoodOrder from "../views/OrderManage/FoodOrder.vue";
 import DrinkOrder from "../views/OrderManage/DrinkOrder.vue";
 
+// promotion
+import Point from "../views/Promotion/Point.vue"
+import NewPoint from "../views/Promotion/NewPoint.vue"
+import NewVoucher from "../views/Promotion/NewVoucher.vue"
+import NewPackage from "../views/Promotion/NewPackage.vue"
+import NewReward from "../views/Promotion/NewReward.vue"
+import PointDetail from "../views/Promotion/PointDetail.vue"
+import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
+
+// Report
+import MainReport from '../views/Report/MainReport.vue'
+
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
 const routes = [
@@ -80,6 +92,12 @@ const routes = [
     path: "/chart",
     name: "Chart1",
     component: Chart1,
+  },
+  // Report
+  {
+    path: "/report",
+    name: "MainReport",
+    component: MainReport
   },
   // Order manage
 
@@ -99,17 +117,6 @@ const routes = [
     component: DrinkOrder,
   },
 
-// promotion
-import Point from "../views/Promotion/Point.vue"
-import NewPoint from "../views/Promotion/NewPoint.vue"
-import NewVoucher from "../views/Promotion/NewVoucher.vue"
-import NewPackage from "../views/Promotion/NewPackage.vue"
-import NewReward from "../views/Promotion/NewReward.vue"
-import PointDetail from "../views/Promotion/PointDetail.vue"
-import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
-
-const routes = [
-  // promotion
   {
     path: "/promotion/voucher-detail/:id",
     name: "VoucherDetail",

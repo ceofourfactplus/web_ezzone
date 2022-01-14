@@ -1,50 +1,42 @@
 <template>
   <div>
     <div class="title">
-      Manager
+      Dashboard
       <router-link :to="{ name: 'Login' }">
         <img src="../assets/icon/exit.png" class="hamburger" alt=""
       /></router-link>
     </div>
 
-    <div v-for="category in dash_board_list" :key="category">
-      <div v-if="has_permission(category.permissions)">
-        <h2>{{ category.title }}</h2>
-        <div style="margin-left: 50px; margin-right: 50px">
+    <div v-for="category in select_list" :key="category">
+      <h2>{{ category.title }}</h2>
+      <div style="margin-left: 50px; margin-right: 50px">
+        <div class="row" style="background-color: #303344; border-radius: 10px">
           <div
-            class="row"
-            style="background-color: #303344; border-radius: 10px"
+            v-for="(dsh, idx) in category.btn"
+            :key="idx"
+            class="col-2 w-100"
+            style="padding-left: 0px; padding-right: 0px"
           >
-            <div
-              v-for="(dsh, idx) in category.btn"
-              :key="idx"
-              class="col-2 w-100"
-              style="padding-left: 0px; padding-right: 0px"
-            >
-              <div
-                v-if="has_permission(dsh.permissions)"
-                style="padding-top: 10px; height: 120px"
-              >
-                <router-link :to="{ name: dsh.link }">
-                  <img class="image" :src="dsh.img" />
-                  <p class="content">
-                    {{ dsh.txt }}
-                  </p>
-                </router-link>
-              </div>
+            <div style="padding-top: 10px; height: 120px">
+              <router-link :to="{ name: dsh.link }">
+                <img class="image" :src="dsh.img" />
+                <p class="content">
+                  {{ dsh.txt }}
+                </p>
+              </router-link>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row" style="margin-left: 40px; margin-right: 40px">
+    <div class="row" style="margin-left: 40px; margin-right: 40px" v-if="$store.state.auth.userInfo.is_staff">
       <div
         v-for="(category, index) in setting_else"
         :key="category"
         class="col-6 w-100"
         :class="{ 'pe-1': index == 0, 'ps-1': index == 1 }"
       >
-        <div v-if="has_permission(category.permissions)">
+        <div>
           <h2 class="else">{{ category.title }}</h2>
           <div
             class="row"
@@ -57,10 +49,7 @@
               class="col-4 w-100"
               style="padding-left: 0px; padding-right: 0px"
             >
-              <div
-                v-if="has_permission(dsh.permissions)"
-                style="padding-top: 10px; height: 120px"
-              >
+              <div style="padding-top: 10px; height: 120px">
                 <router-link :to="{ name: dsh.link }">
                   <img class="image" :src="dsh.img" />
                   <p class="content">
@@ -78,12 +67,30 @@
 
 <script>
 export default {
+  mounted() {
+    this.dash_board_list.forEach((element) => {
+      if (this.has_permission(element.permissions)) {
+        var btn_t = [];
+        element.btn.forEach((item) => {
+          if (this.has_permission(item.permissions)) {
+            btn_t.push(item);
+          }
+        });
+        this.select_list.push({ title: element.title, btn: btn_t });
+      }
+    });
+  },
   data() {
     return {
       dash_board_list: [
         // order
         {
-          permissions: ["is_staff", "is_receptionist"],
+          permissions: [
+            "is_staff",
+            "is_receptionist",
+            "is_chef",
+            "is_bartender",
+          ],
           title: "Order",
           btn: [
             {
@@ -99,18 +106,18 @@ export default {
               link: "OrderDetail",
             },
             {
-              permissions: ["is_staff", "is_receptionist"],
+              permissions: ["is_staff", "is_receptionist", "is_bartender"],
               img: require("../../src/assets/icon/drink.png"),
               txt: "Drink Order",
               link: "DrinkOrder",
             },
             {
-              permissions: ["is_staff", "is_receptionist"],
+              permissions: ["is_staff", "is_receptionist", "is_chef"],
               img: require("../../src/assets/icon/food.png"),
               txt: "Food Order",
               link: "FoodOrder",
             },
-          ], 
+          ],
         },
         // promotion
         {
@@ -252,6 +259,7 @@ export default {
           ],
         },
       ],
+      select_list: [],
     };
   },
   methods: {
@@ -321,7 +329,7 @@ body {
   margin-right: 3px;
 }
 .else {
-  text-align: center;
+  text-align: left;
   margin-left: 0px;
 }
 </style>
