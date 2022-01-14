@@ -76,6 +76,9 @@ import NewPackage from "../views/Promotion/NewPackage.vue"
 import NewReward from "../views/Promotion/NewReward.vue"
 import PointDetail from "../views/Promotion/PointDetail.vue"
 import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
+import Redemption from "../views/Promotion/Redemption.vue"
+import History from "../views/Promotion/History.vue"
+import AllReward from "../views/Promotion/AllReward.vue"
 
 // Report
 import MainReport from '../views/Report/MainReport.vue'
@@ -169,6 +172,30 @@ const routes = [
     path: "/promotion/new-reward",
     name: "NewReward",
     component: NewReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption",
+    name: "Redemption",
+    component: Redemption,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/history",
+    name: "History",
+    component: History,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/allreward",
+    name: "AllReward",
+    component: AllReward,
     meta: {
       requiresLogin: false,
     },
