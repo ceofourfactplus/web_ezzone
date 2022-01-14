@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :save="true" @save="edit">Voucher Detail</nav-app>
+    <nav-app :url_name="'Point'" :save="true" @save="edit">Voucher Detail</nav-app>
     <div class="card-content">
       <!-- Status & Code -->
       <div class="row">
@@ -13,9 +13,10 @@
       </div>
       <!-- Image -->
       <div class="row">
-        <div class="col-12 w-100" style="padding: 0px; margin-top: 20px;">
+        <div class="col-12 w-100" style="padding: 0px; margin-top: 40px;">
           <label id="select_img" for="file" style="margin-top: 0px">
-            <img :src="require(`../../../../backend${voucher_item.img}`)" class="image" />
+            <img :src="show_img" class="image" v-if="show_img != null" />
+            <img :src="require(`../../../../backend${voucher_item.img}`)" class="image" v-else />
           </label>
           <input
             type="file"
@@ -32,7 +33,7 @@
                 <div class="col-12 w-100 txt-promotion">Name</div>
                 <div class="col-12 w-100 txt-promotion">Start Date</div>
                 <div class="col-12 w-100 txt-promotion">End Date</div>
-                <div class="col-12 w-100 txt-promotion">Amount</div>
+                <div class="col-12 w-100 txt-promotion">Qty</div>
                 <div class="col-12 w-100 txt-promotion">Discount</div>
             </div>
             <!-- Middle -->
@@ -48,7 +49,7 @@
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-right-side" v-model="voucher_item.voucher"></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ format_date_show(voucher_item.start_date) }}<input type="date" class="input-date" @change="format_date($event, 'start')" ></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ format_date_show(voucher_item.end_date) }}<input type="date" class="input-date" @change="format_date($event, 'end')" ></div>
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-right-side" v-model="voucher_item.amount"></div>
+                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-right-side" v-model="voucher_item.qty"></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-right-side" v-model="voucher_item.discount"></div>
             </div>
         </div>
@@ -102,6 +103,7 @@ export default {
       new_img: false,
       voucher_item: {},
       img: null,
+      show_img: null,
     };
   },
   methods: {
@@ -126,7 +128,7 @@ export default {
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
       if (this.new_img) {
-        data.append("img", this.voucher_item.img, this.voucher_item.img.name);
+        data.append("img", this.img, this.img.name);
       }
 
       api_promotion.put('voucher/', data).then((response) => {

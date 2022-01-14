@@ -6,7 +6,7 @@
           <img
             src="../../assets/icon/btn-back.png"
             class="back inline ms-4"
-            @click="$router.go(-1)"
+            @click="$router.push({ name: url_name})"
           />
         </div>
         <div class="col-9 w-100">
@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  props: ["save", "rm_menu"],
+  props: ["save", "rm_menu", "url_name"],
   data() {
     return {
       page: "",
@@ -111,7 +111,6 @@ export default {
   margin: auto;
   margin-left: 25px;
   margin-top: 25px;
-  position: fixed;
 }
 .nav {
   height: 90px;

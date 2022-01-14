@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'Point'" :save="true" @save="save">New Package</nav-app>
+    <nav-app :url_name="'Point'" :save="true" @save="edit">Package Detail</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
@@ -12,16 +12,16 @@
                 type="text"
                 class="input-top"
                 placeholder="Promotion"
-                v-model="promotion"
+                v-model="package_item.promotion"
               />
             </div>
           </div>
           <!-- Start Date -->
           <div class="row" style="margin-top: 20px">
             <div class="col-12 w-100 txt">
-              Start Date&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{
-                temp_start
-              }}&nbsp;&nbsp;<input
+              Start Date&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+              {{ format_date_show(package_item.start_date) }}&nbsp;&nbsp;
+              <input
                 type="date"
                 class="input-date"
                 @change="format_date($event)"
@@ -35,7 +35,7 @@
                 type="text"
                 class="input-promotion"
                 style="width: 204px"
-                v-model="amount_day"
+                v-model="package_item.amount_day"
               />
             </div>
           </div>
@@ -51,7 +51,7 @@
                   margin-left: 24px;
                 "
                 placeholder="Description"
-                v-model="description"
+                v-model="package_item.description"
               ></textarea>
             </div>
           </div>
@@ -63,12 +63,13 @@
             style="color: white; margin: 15px 10px 0px 0px"
           >
             Status&nbsp;:&nbsp;
-            <Switch @switch="switch_active" style="top: 9px" />
+            <Switch :value="package_item.status" @switch="switch_active" style="top: 9px" />
           </div>
           <div class="col-12 w-100" style="margin-top: 30px">
             <!-- Image -->
             <label id="select_img" for="file" style="margin-top: 0px">
               <img :src="show_img" class="image" v-if="show_img != null" />
+              <img :src="require(`../../../../backend${package_item.img}`)" class="image" v-else />
             </label>
             <input
               type="file"
@@ -143,7 +144,7 @@
         </div>
       </div>
       <!-- Menu -->
-      <div class="table-item" v-for="item in package_items" :key="item">
+      <div class="table-item" v-for="item in item_of_package" :key="item">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-1 w-100">
             <div class="checkbox-orange">
@@ -156,11 +157,11 @@
             </div>
           </div>
           <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
-            {{ item.product.name }}
+            {{ item.product_set.name }}
           </div>
-          <div class="col-3 w-100">{{ item.topping.name }}</div>
-          <div class="col-1 w-100">{{ item.qty }}</div>
-          <div class="col-2 w-100">{{ item.price }}</div>
+          <div class="col-3 w-100">{{ item.product_set.name }}</div>
+          <div class="col-1 w-100">{{ item.amount }}</div>
+          <div class="col-2 w-100">{{ item.total_price }}</div>
         </div>
       </div>
       <!-- Add Menu -->
@@ -256,7 +257,7 @@
         >
           <div class="col-6 w-100"></div>
           <div class="col-4 w-100" style="text-align: right">Total</div>
-          <div class="col-2 w-100">{{ normal_price }}</div>
+          <!-- <div class="col-2 w-100">{{ item_of_package.reduce((x,y) => parseInt( x.total_price) + parseInt(y.total_price)) }}</div> -->
         </div>
       </div>
       <!-- Discount Total Price -->
@@ -274,7 +275,7 @@
               type="text"
               class="input-promotion w-100"
               style="height: 90%"
-              v-model="discount_price"
+              v-model="package_item.discount_price"
             />
           </div>
         </div>
@@ -296,27 +297,28 @@
 <script>
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
-import { api_product } from "../../api/api_product";
 import { api_promotion } from "../../api/api_promotion";
+import { api_product } from "../../api/api_product";
 
 export default {
-  name: "NewPackage",
+  name: "PackageDetail",
   components: {
     NavApp,
     Switch,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
-    this.fetchProducts();
   },
   data() {
     return {
+      new_img: false,
       search_topping: false,
       search_product: false,
       is_staff: false,
       alert: false,
       add_menu: false,
       select_all: false,
+      item_toppings: [],
       package_items: [],
       selected_items: [],
       temp_start: null,
@@ -342,12 +344,32 @@ export default {
       total_amount: 1,
       description: null,
       show_img: null,
+      package_item: {},
+      item_of_package: {},
       products: [],
       products_for_topping: [],
       temp_products: [],
     };
   },
   methods: {
+    fetchPackage() {
+      api_promotion.get(`package/${this.$route.params.id}`).then((response) => {
+        console.log(response.data, 'package');
+        this.package_item = response.data;
+      });
+    },
+    fetchPackageItem() {
+        api_promotion.get(`package-item/${this.$route.params.id}`).then((response) => {
+            console.log(response.data, 'item');
+            this.item_of_package = response.data;
+        });
+    },
+    fetchItemTopping() {
+        api_promotion.get(`package-item-topping/${this.$route.params.id}`).then((response) => {
+            console.log(response.data, 'item topping');
+            this.item_toppings = response.data;
+        });
+    },
     fetchProducts() {
       api_product.get("product/").then((response) => {
         console.log(response.data, "response");
@@ -355,40 +377,49 @@ export default {
         this.temp_products = response.data;
       });
     },
-    save() {
+    edit() {
       const data = new FormData();
-      data.append("promotion", this.promotion);
-      data.append("start_date", this.start_date);
-      data.append("img", this.img, this.img.name);
-      data.append("amount_day", this.amount_day);
-      data.append("discount_price", this.discount_price);
-      data.append("normal_price", this.normal_price);
-      data.append("description", this.description);
-      data.append("total_amount", this.total_amount);
-      data.append("status", this.status);
+      data.append("id", this.$route.params.id);
+      data.append("promotion", this.package_item.promotion);
+      data.append("start_date", this.package_item.start_date);
+      data.append("amount_day", this.package_item.amount_day);
+      data.append("discount_price", this.package_item.discount_price);
+      data.append("normal_price", this.package_item.normal_price);
+      data.append("description", this.package_item.description);
+      data.append("total_amount", this.package_item.total_amount);
+      data.append("status", this.package_item.status);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
+      if (this.new_img) {
+        data.append("img", this.img, this.img.name);
+      }
 
-      api_promotion.post("package/", data).then((response) => {
+      api_promotion.put("package/", data).then((response) => {
         console.log(response.data, "response");
-        this.package_items.forEach(element => {
+        this.item_of_package.forEach((element) => {
           const package_item = {
+            id: element.id,
             product_id: element.product.id,
             qty: element.qty,
-            total_price: parseInt(element.price) + parseInt(element.topping.priceproduct_set[0].price),
+            total_price:
+              parseInt(element.price) +
+              parseInt(element.topping.priceproduct_set[0].price),
             description: element.description,
             package_id: response.data.id,
           };
-          api_promotion.post("package-item/", package_item).then((res) => {
+          api_promotion.put("package-item/", package_item).then((res) => {
             console.log(res.data, "res");
+            var idx = this.item_of_package.indexOf(element)
+            var topping = this.item_toppings[idx]
             const item_topping = {
+              id: topping.id,
               topping_id: element.topping.id,
               item_id: res.data.id,
               total_price: parseInt(element.topping.priceproduct_set[0].price),
-              qty: 10,
+              amount: 10,
             };
             api_promotion
-              .post("package-item-topping/", item_topping)
+              .put("package-item-topping/", item_topping)
               .then((it_res) => {
                 console.log(it_res.data, "it_res");
                 this.alert = true;
@@ -432,6 +463,7 @@ export default {
     onFileChange(e) {
       console.log(e, "e");
       this.img = e.target.files[0];
+      this.new_img = true
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
@@ -439,8 +471,12 @@ export default {
       }
       console.log(this.img, "img");
     },
+    format_date_show(date) {
+      var temp_date = date.split("-");
+      return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
+    },
     format_date(e) {
-      this.start_date = e.target.value;
+      this.package_item.start_date = e.target.value;
       var temp_date = e.target.value.split("-");
       this.temp_start = `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
     },
@@ -455,13 +491,41 @@ export default {
         price: this.total_price,
         description: this.description,
       };
-      this.package_items.push(data);
-      this.add_menu = false;
-      this.product_item = {};
-      this.topping_item = {};
-      this.qty = null;
-      this.total_price = null;
-      this.description = null
+      const package_item = {
+          product_id: this.product_item.id,
+          qty: this.qty,
+          total_price: parseInt(this.product_item.priceproduct_set[0].price) + parseInt(this.topping_item.priceproduct_set[0].price),
+          description: this.description,
+          package_id: this.$route.params.id,
+      };
+      api_promotion.post("package-item/", package_item).then((res) => {
+            console.log(res.data, "res");
+            const item_topping = {
+              topping_id: this.topping_item.id,
+              item_id: res.data.id,
+              total_price: parseInt(this.topping_item.priceproduct_set[0].price),
+              amount: 10,
+            };
+            api_promotion
+              .post("package-item-topping/", item_topping)
+              .then((it_res) => {
+                console.log(it_res.data, "it_res");
+                this.alert = true;
+                setTimeout(() => {
+                  this.alert = false;
+                  this.$router.push({ name: "Point" });
+                }, 2000);
+                this.item_of_package.push(data);
+                this.add_menu = false;
+                this.product_item = {};
+                this.topping_item = {};
+                this.qty = null;
+                this.total_price = null;
+                this.description = null;
+              });
+          });
+          
+      
     },
     select_item(item) {
       if (this.selected_items.includes(item)) {
@@ -474,7 +538,7 @@ export default {
     select_all_items() {
       this.select_all = !this.select_all;
       if (this.select_all) {
-        this.package_items.forEach((el) => {
+        this.item_of_package.forEach((el) => {
           this.select_item(el);
         });
       } else {
@@ -484,9 +548,10 @@ export default {
     delete_pip() {
       console.log(this.selected_items.length, "len");
       for (let index = 0; index < this.selected_items.length; index++) {
-        print(index, "idx");
-        var idx = this.package_items.indexOf(this.selected_items[index]);
-        this.package_items.splice(idx, 1);
+        api_promotion.put(`package-item/${this.selected_items[index].id}`).then(() => {
+          var idx = this.item_of_package.indexOf(this.selected_items[index]);
+          this.item_of_package.splice(idx, 1);
+        })
       }
     },
     cancel_to_create() {
@@ -496,6 +561,12 @@ export default {
       this.qty = null;
       this.total_price = 0;
     },
+  },
+  beforeMount() {
+      this.fetchPackage()
+      this.fetchPackageItem()
+      this.fetchItemTopping()
+      this.fetchProducts()
   },
 };
 </script>

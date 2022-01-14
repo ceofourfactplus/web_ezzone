@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :save="true" @save="save">New Point</nav-app>
+    <nav-app :url_name="'Point'" :save="true" @save="save">New Point</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left -->
@@ -207,7 +207,8 @@ export default {
 }
 
 #txt-right-side {
-  margin-left: -20px;
+  height: 45px;
+  margin: 12px 0px 0px -20px;
   font-size: 24px;
   font-weight: normal;
 }

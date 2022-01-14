@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'Point'" :save="true" @save="save">New Reward</nav-app>
+    <nav-app :url_name="'Point'" :save="true" @save="edit">Reward Detail</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
@@ -8,7 +8,7 @@
           <!-- Input -->
           <div class="row">
             <div class="col-12 w-100">
-              <input type="text" class="input-top" placeholder="Reward Name" v-model="reward" />
+              <input type="text" class="input-top" placeholder="Reward Name" v-model="reward_item.reward" />
             </div>
           </div>
           <!-- Value -->
@@ -22,7 +22,7 @@
                     type="text"
                     class="input-promotion"
                     style="width: 298px"
-                    v-model="value"
+                    v-model="reward_item.value"
                   />
                 </div>
               </div>
@@ -39,7 +39,7 @@
                     type="text"
                     class="input-promotion"
                     style="width: 298px"
-                    v-model="cost"
+                    v-model="reward_item.cost"
                   />
                 </div>
               </div>
@@ -56,7 +56,7 @@
                     type="text"
                     class="input-promotion"
                     style="width: 298px"
-                    v-model="qty"
+                    v-model="reward_item.qty"
                   />
                 </div>
               </div>
@@ -73,7 +73,7 @@
                     type="text"
                     class="input-promotion"
                     style="width: 298px"
-                    v-model="point"
+                    v-model="reward_item.point"
                   />
                 </div>
               </div>
@@ -86,12 +86,13 @@
             class="col-12 w-100"
             style="color: white; margin: 15px 10px 0px 0px"
           >
-            Status&nbsp;:&nbsp; <Switch style="top: 9px" @switch="switch_active"/>
+            Status&nbsp;:&nbsp; <Switch style="top: 9px" :value="reward_item.status" @switch="switch_active"/>
           </div>
           <div class="col-12 w-100" style="margin-top: 30px">
             <!-- Image -->
             <label id="select_img" for="file" style="margin-top: 0px">
               <img :src="show_img" class="image" v-if="show_img != null" />
+              <img :src="require(`../../../../backend${reward_item.img}`)" class="image" v-else />
             </label>
             <input
               type="file"
@@ -114,7 +115,7 @@
         cols="30"
         rows="10"
         placeholder="Description"
-        v-model="description"
+        v-model="reward_item.description"
       ></textarea>
     </div>
     <div class="table" style="margin-top: 10px;">
@@ -133,10 +134,10 @@
       <div class="table-item" v-for="item in point_promotions_of_reward" :key="item.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
-            {{ item.promotion }}
+            {{ item.point_promotion_set.promotion }}
           </div>
-          <div class="col-3 w-100">{{ item.price_per_point }}</div>
-          <div class="col-3 w-100">{{ format_date(item.end_reward_redemption) }}</div>
+          <div class="col-3 w-100">{{ item.point_promotion_set.price_per_point }}</div>
+          <div class="col-3 w-100">{{ format_date(item.point_promotion_set.end_reward_redemption) }}</div>
           <div class="col-1 w-100">
             <img
               src="../../assets/icon/bin.png"
@@ -200,28 +201,21 @@ import { api_promotion } from "../../api/api_promotion";
 
 
 export default {
-  name: "NewReward",
+  name: "RewardDetail",
   components: {
     NavApp,
     Switch,
   },
   mounted() {
-    this.is_staff = this.$store.state.auth.userInfo["is_staff"];
   },
   data() {
     return {
-      is_staff: false,
+      new_img: false,
       alert: false,
       add_item: false,
-      reward: null,
-      value: null,
-      description: null,
-      point: null,
-      qty: null,
-      status: false,
-      cost: null,
       img: null,
       show_img: null,
+      reward_item: {},
       temp_date: null,
       point_promotion_set: {},
       point_promotion_id: null,
@@ -230,31 +224,37 @@ export default {
     };
   },
   mounted () {
-    this.fetchPointPromotion()
+    // this.fetchPointPromotion()
+    // this.fetchConditionRewards()
+    // this.fetchRewards()
   },
   methods: {
-    save() {
+    edit() {
      const data = new FormData();
-      data.append("reward", this.reward);
-      data.append("value", this.value);
-      data.append("img", this.img, this.img.name);
-      data.append("qty", this.qty);
-      data.append("point", this.point);
-      data.append("cost", this.cost);
-      data.append("description", this.description);
-      data.append("status", this.status);
+      data.append("id", this.reward_item.id);
+      data.append("reward", this.reward_item.reward);
+      data.append("value", this.reward_item.value);
+      data.append("qty", this.reward_item.qty);
+      data.append("point", this.reward_item.point);
+      data.append("cost", this.reward_item.cost);
+      data.append("description", this.reward_item.description);
+      data.append("status", this.reward_item.status);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
+      if(this.new_img) {
+          data.append("img", this.img, this.img.name);
+      }
 
-      api_promotion.post('reward/', data).then((response) => {
+      api_promotion.put('reward/', data).then((response) => {
         console.log(response.data)
         this.point_promotions_of_reward.forEach(el => {
           const condition_reward = {
-            point_promotion_id: el.id,
-            reward_id: response.data.id,
+            id: el.id,
+            point_promotion_id: el.point_promotion_id,
+            reward_id: el.reward_id,
             point: el.point,
           }
-          api_promotion.post('condition-reward/', condition_reward).then(() => {
+          api_promotion.put('condition-reward/', condition_reward).then(() => {
             this.alert = true;
             setTimeout(() => {
               this.alert = false;
@@ -264,15 +264,27 @@ export default {
         });
       })
     },
+    fetchRewards() {
+      api_promotion.get(`reward/${this.$route.params.id}`).then((response) => {
+        console.log(response.data, 'rw')
+        this.reward_item = response.data
+      })
+    },
+    fetchConditionRewards() {
+        api_promotion.get(`condition-reward/${this.$route.params.id}`).then((response) => {
+            console.log(response.data, 'crw')
+            this.point_promotions_of_reward = response.data
+        })
+    },
     fetchPointPromotion() {
       api_promotion.get("point/").then((response) => {
-        console.log(response.data, "res");
         this.point_promotions = response.data;
       });
     },
     onFileChange(e) {
       console.log(e, "e");
       this.img = e.target.files[0];
+      this.new_img = true
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
@@ -281,24 +293,38 @@ export default {
       console.log(this.img, "img");
     },
     switch_active(val) {
-      this.status = val
+      this.reward_item.status = val
     },
     select_point_promotion() {
-      this.point_promotions_id = this.point_promotion_set.id
+      var pp_id = this.point_promotion_set.id
       if (!this.point_promotions_of_reward.includes(this.point_promotion_set)) {
-        this.point_promotions_of_reward.push(this.point_promotion_set)
-        this.add_item = false
+          const condition_reward = {
+            point_promotion_id: pp_id,
+            reward_id: this.$route.params.id,
+            point: this.point_promotion_set.point,
+          }
+          api_promotion.post('condition-reward/', condition_reward).then(() => {
+              this.point_promotions_of_reward.push(this.point_promotion_set)
+          })
       }
+      this.add_item = false
     },
     delete_pro_of_reward(item) {
-      var idx = this.point_promotions_of_reward.indexOf(item)
-      this.point_promotions_of_reward.splice(idx, 1);
+        api_promotion.put(`condition-reward/${item.id}`).then(() => {
+            var idx = this.point_promotions_of_reward.indexOf(item)
+            this.point_promotions_of_reward.splice(idx, 1);
+        })
     },
     format_date(date) {
       var temp_date = date.split("-");
       return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
     },
   },
+  beforeMount() {
+    this.fetchRewards()
+    this.fetchConditionRewards()
+    this.fetchPointPromotion()
+  }
 };
 </script>
 

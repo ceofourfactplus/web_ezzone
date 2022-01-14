@@ -41,8 +41,11 @@ class Rewards (models.Model):
   img = models.ImageField(_("Image"), upload_to=upload_to_rewards, null=True, blank=True)
   value = models.DecimalField(max_digits=4,decimal_places=2)
   description = models.TextField(null=True,blank=True)
-  amount = models.IntegerField()
+  qty = models.IntegerField()
+  point = models.IntegerField()
   cost = models.DecimalField(max_digits=4,decimal_places=2)
+  status = models.BooleanField(default=True)
+  is_pre_order = models.BooleanField(default=False)
   create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="rewards_create_by")
   update_by = models.ForeignKey(
@@ -53,7 +56,7 @@ class Rewards (models.Model):
 
 class ConditionRewards(models.Model):
   point_promotion = models.ForeignKey(PointPromotion,on_delete=models.CASCADE)
-  rewards  = models.ForeignKey(Rewards,on_delete=models.CASCADE)
+  reward  = models.ForeignKey(Rewards,on_delete=models.CASCADE)
   point = models.IntegerField()
 
 
@@ -66,7 +69,7 @@ class Voucher(models.Model):
   end_date = models.DateField()
   is_percent = models.BooleanField(default=False)
   description = models.TextField(null=True,blank=True)
-  amount = models.IntegerField(default=1)
+  qty = models.IntegerField(default=1)
   status = models.BooleanField(default=True)
   create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="voucher_create_by")
@@ -108,7 +111,7 @@ class PromotionPackage(models.Model):
 
 class PackageItem(models.Model):
   product = models.ForeignKey(Product,on_delete=models.PROTECT)
-  amount = models.IntegerField(default=1)
+  qty = models.IntegerField(default=1)
   total_price = models.DecimalField(max_digits=4,decimal_places=2)
   description = models.TextField(null=True,blank=True)
   package = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
@@ -116,7 +119,7 @@ class PackageItem(models.Model):
 class ItemTopping(models.Model):
   topping = models.ForeignKey(Product,on_delete=models.PROTECT)
   item = models.ForeignKey(PackageItem,on_delete=models.CASCADE)
-  amount = models.IntegerField()
+  qty = models.IntegerField()
   total_price = models.DecimalField(max_digits=4,decimal_places=2)
   description = models.TextField(null=True,blank=True)
 

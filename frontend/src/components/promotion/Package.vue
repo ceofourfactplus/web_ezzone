@@ -13,19 +13,20 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item">
+      <div class="table-item" v-for="item in packages" :key="item.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">Set 1 ชุดหมู่ดาว</div>
-          <div class="col-2 w-100">72</div>
-          <div class="col-2 w-100">69</div>
+          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ item.promotion }}</div>
+          <div class="col-2 w-100">{{ item.normal_price }}</div>
+          <div class="col-2 w-100">{{ item.discount_price }}</div>
           <div class="col-2 w-100">
             <label class="switch">
-              <input type="checkbox" v-model="input" />
+              <input type="checkbox" v-model="item.status" @input="change_status(item, 'package')" />
               <span class="slider round"></span>
             </label>
           </div>
           <div class="col-1 w-100">
             <img
+              @click="$router.push({ name: 'PackageDetail', params: { id: item.id }})"
               src="../../assets/icon/edit.png"
               style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
             />
@@ -41,21 +42,22 @@ import Switch from "../../components/main_component/Switch.vue";
 import { api_promotion } from "../../api/api_promotion";
 
 export default {
-  name: "Voucher",
+  name: "Package",
+  props: ["items"],
   components: {
     Switch,
   },
   data() {
     return {
         input: '',
+        packages: this.items,
     };
   },
   methods: {
-    fetchPackage() {
-      api_promotion.get('package/').then((response) => {
-        console.log(response.data, 'package')
-        this.packages = response.data
-      })
+    change_status(item) {
+      item.status = !item.status
+      const data = {status: item.status}
+      api_promotion.put(`package/${item.id}`, data).then(() => {})
     }
   },
   watch: {
@@ -64,9 +66,6 @@ export default {
       console.log(val, "val")
     },
   },
-  mounted() {
-    this.fetchPackage()
-  }
 };
 </script>
 

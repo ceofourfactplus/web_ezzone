@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :save="true" @save="edit">Point Detail</nav-app>
+    <nav-app :url_name="'Point'" :save="true" @save="edit">Point Detail</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left -->
@@ -18,7 +18,7 @@
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->
-        <div class="col-1 w-100" style="margin-top: -4px">
+        <div class="col-1 w-100" style="margin-top: -4px; margin-left:-40px;">
           <div
             class="col-12 w-100 colon"
             style="font-size: 36px; font-weight: bold"
@@ -32,15 +32,15 @@
           <div class="col-12 w-100 colon">:</div>
         </div>
         <!-- Right -->
-        <div class="col-5 w-100">
+        <div class="col-5 w-100" style="margin-left:-40px;">
           <div
             class="col-12 w-100 txt-promotion"
             style="font-size: 36px; font-weight: bold; margin-left: -20px"
           >
             <input
               type="text"
-              style="width: 200px"
-              class="input-right-side"
+              style="width: 200px;"
+              class="input-promotion"
               placeholder="Name"
               v-model="point_item.promotion"
             />
@@ -72,7 +72,8 @@
           <div class="col-12 w-100 txt-promotion" id="txt-right-side">
             <input
               type="text"
-              class="input-right-side"
+              class="input-promotion"
+              style="width: 82px;"
               v-model="point_item.price_per_point"
             />
           </div>
@@ -159,17 +160,17 @@ export default {
     },
     format_date(e, name) {
       if (name == "start") {
-        this.start_promotion_date = e.target.value
+        this.point_item.start_promotion_date = e.target.value
         var temp_date = e.target.value.split("-");
         this.temp_start = `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
       }
       if (name == "end") {
-        this.end_promotion_date = e.target.value
+        this.point_item.end_promotion_date = e.target.value
         var temp_date = e.target.value.split("-");
         this.temp_end = `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
       }
       if (name == "endredeem") {
-        this.end_reward_redemption = e.target.value
+        this.point_item.end_reward_redemption = e.target.value
         var temp_date = e.target.value.split("-");
         this.temp_end_redeem = `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
       }

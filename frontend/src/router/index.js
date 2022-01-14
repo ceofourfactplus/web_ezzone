@@ -70,9 +70,27 @@ import NewPackage from "../views/Promotion/NewPackage.vue"
 import NewReward from "../views/Promotion/NewReward.vue"
 import PointDetail from "../views/Promotion/PointDetail.vue"
 import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
+import PackageDetail from "../views/Promotion/PackageDetail.vue"
+import RewardDetail from "../views/Promotion/RewardDetail.vue"
 
 const routes = [
   // promotion
+  {
+    path: "/promotion/reward-detail/:id",
+    name: "RewardDetail",
+    component: RewardDetail,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/package-detail/:id",
+    name: "PackageDetail",
+    component: PackageDetail,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/promotion/voucher-detail/:id",
     name: "VoucherDetail",

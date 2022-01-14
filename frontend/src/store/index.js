@@ -5,6 +5,7 @@ import stock from "./modules/stock";
 import product from "./modules/product";
 import sale_channel from "./modules/sale_channel";
 import raw_material from "./modules/raw_material";
+import promotion from "./modules/promotion";
 
 
 export default createStore({
@@ -23,6 +24,7 @@ export default createStore({
     stock,
     product,
     raw_material,
-    sale_channel
+    sale_channel,
+    promotion,
   },
 });

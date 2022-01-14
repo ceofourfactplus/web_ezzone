@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import PointPromotion, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint
-from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer
+from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer
 
 
 class PointPromotionAPI(APIView):
@@ -41,6 +41,19 @@ class Point(APIView):
         
     def get(self, request, pk):
         point = self.get_object(pk)
+        serializer = PointSerializer(point)
+        return Response(serializer.data)
+    
+    def put(self, request, pk):
+        point = self.get_object(pk)
+        point.status = request.data['status']
+        point.save()
+        serializer = PointSerializer(point)
+        return Response(serializer.data)
+    
+    def delete(self, request, pk):
+        point = self.get_object(pk)
+        point.delete()
         serializer = PointSerializer(point)
         return Response(serializer.data)
         
@@ -83,6 +96,14 @@ class VoucherGET(APIView):
         serializer = VoucherSerializer(voucher)
         return Response(serializer.data)
     
+    def put(self, request, pk):
+        voucher = self.get_object(pk)
+        voucher.status = request.data['status']
+        voucher.save()
+        serializer = VoucherSerializer(voucher)
+        return Response(serializer.data)
+        
+    
 class PackageAPI(APIView):
     def get_object(self, pk):
         try:
@@ -122,6 +143,13 @@ class PackageGET(APIView):
         serializer = PromotionPackageSerializer(package)
         return Response(serializer.data)
     
+    def put(self, request, pk):
+        package = self.get_object(pk)
+        package.status = request.data['status']
+        package.save()
+        serializer = PromotionPackageSerializer(package)
+        return Response(serializer.data)
+    
 class PackageItemAPI(APIView):
     def get_object(self, pk):
         try:
@@ -149,6 +177,31 @@ class PackageItemAPI(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
     
+class PackageItemGET(APIView):
+    def get_object(self, pk):
+        try:
+            return PackageItem.objects.filter(package_id=pk)
+        except PackageItem.DoesNotExist:
+            raise 404
+        
+    def get(self, request, pk):
+        packages = self.get_object(pk)
+        print(packages, 'packages')
+        data = []
+        if len(packages) != 0:
+            for i in packages:
+                serializer = PackageItemSerializer(i)
+                data.append(serializer.data)
+        # serializer = PackageItemSerializer(packages[0])
+        return Response(data)    
+    
+    def put(self, request, pk):
+        toppings = ItemTopping.objects.filter(item_id=pk)
+        for i in toppings:
+            i.delete()
+        package = PackageItem.objects.get(id=pk).delete()
+        return Response('deleted')
+    
 class ItemToppingToppingAPI(APIView):
     def get_object(self, pk):
         try:
@@ -175,3 +228,120 @@ class ItemToppingToppingAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+class ItemToppingGET(APIView):
+    def get_object(self, pk):
+        data = []
+        try:
+            packages = PackageItem.objects.filter(package_id=pk)
+            for i in packages:
+                item = ItemTopping.objects.get(item_id=i.id)
+                data.append(item)
+            return data
+        except ItemTopping.DoesNotExist:
+            raise 404
+        
+    def get(self, request, pk):
+        item_topping = self.get_object(pk)
+        data = []
+        if len(item_topping) != 0:
+            for i in item_topping:
+                serializer = ItemToppingSerializer(i)
+                data.append(serializer.data)
+        return Response(data)   
+    
+class RewardAPI(APIView):
+    def get_object(self, pk):
+        try:
+            return Rewards.objects.get(id=pk)
+        except Rewards.DoesNotExist:
+            raise 404
+        
+    def get(self, request):
+        reward = Rewards.objects.all()
+        serializer = RewardsSerializer(reward, many=True)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        reward = Rewards.objects.get(id=request.data['id'])
+        serializer = RewardsSerializer(reward, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    def post(self, request):
+        serializer = RewardsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+class RewardGET(APIView):
+    def get_object(self, pk):
+        data = []
+        try:
+            return Rewards.objects.get(id=pk)
+        except Rewards.DoesNotExist:
+            raise 404
+        
+    def get(self, request, pk):
+        reward = self.get_object(pk)
+        serializer = RewardsSerializer(reward)
+        return Response(serializer.data)   
+    
+    def put(self, request, pk):
+        reward = self.get_object(pk)
+        reward.status = request.data['status']
+        reward.save()
+        serializer = RewardsSerializer(reward)
+        return Response(serializer.data)
+    
+class ConditionRewardAPI(APIView):
+    def get_object(self, pk):
+        try:
+            return ConditionRewards.objects.get(id=pk)
+        except ConditionRewards.DoesNotExist:
+            raise 404
+        
+    def get(self, request):
+        reward = ConditionRewards.objects.all()
+        serializer = ConditionRewardsSerializer(reward, many=True)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        reward = ConditionRewards.objects.get(id=request.data['id'])
+        serializer = ConditionRewardsSerializer(reward, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    def post(self, request):
+        serializer = ConditionRewardsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+
+class ConditionRewardGET(APIView):
+    def get_object(self, pk):
+        try:
+            return ConditionRewards.objects.filter(reward_id=pk)
+        except ConditionRewards.DoesNotExist:
+            raise 404
+        
+    def get(self, request, pk):
+        rewards = self.get_object(pk)
+        print(rewards)
+        data = []
+        if len(rewards) != 0:
+            for i in rewards:
+                serializer = ConditionRewardsSerializer(i)
+                data.append(serializer.data)
+        return Response(data)   
+    
+    def put(self, request, pk):
+        ConditionRewards.objects.get(id=pk).delete()
+        return Response('deleted')

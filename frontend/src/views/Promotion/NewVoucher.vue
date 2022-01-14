@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :save="true" @save="save">New Voucher</nav-app>
+    <nav-app :url_name="'Point'" :save="true" @save="save">New Voucher</nav-app>
     <div class="card-content">
       <!-- Status & Code -->
       <div class="row">
@@ -13,7 +13,7 @@
       </div>
       <!-- Image -->
       <div class="row">
-        <div class="col-12 w-100" style="padding: 0px; margin-top: 20px;">
+        <div class="col-12 w-100" style="padding: 0px; margin-top: 40px;">
           <label id="select_img" for="file" style="margin-top: 0px">
             <img :src="show_img" class="image" v-if="show_img != null" />
           </label>
@@ -32,7 +32,7 @@
                 <div class="col-12 w-100 txt-promotion">Name</div>
                 <div class="col-12 w-100 txt-promotion">Start Date</div>
                 <div class="col-12 w-100 txt-promotion">End Date</div>
-                <div class="col-12 w-100 txt-promotion">Amount</div>
+                <div class="col-12 w-100 txt-promotion">Qty</div>
                 <div class="col-12 w-100 txt-promotion">Discount</div>
             </div>
             <!-- Middle -->
@@ -48,7 +48,7 @@
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-promotion" style="width: 220px;" v-model="voucher"></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ temp_start }}<input type="date" class="input-date" @change="format_date($event, 'start')" ></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ temp_end }}<input type="date" class="input-date" @change="format_date($event, 'end')" ></div>
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-promotion" style="width: 220px;" v-model="amount"></div>
+                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-promotion" style="width: 220px;" v-model="qty"></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-promotion" style="width: 220px;" v-model="discount"></div>
             </div>
         </div>
@@ -109,13 +109,17 @@ export default {
       temp_end: null,
       is_percent: null,
       description: null,
-      amount: null,
+      qty: null,
       status: true,
       show_img: null,
     };
   },
   methods: {
     save() {
+      if (this.discount.endsWith('%')) {
+        this.is_percent = true
+        this.discount = parseInt(this.discount.replace('%', ''))
+      }
       const data = new FormData();
       data.append("voucher", this.voucher);
       data.append("code", this.code);
@@ -123,8 +127,8 @@ export default {
       data.append("discount", this.discount);
       data.append("start_date", this.start_date);
       data.append("end_date", this.end_date);
-      data.append("description", this.description);
-      data.append("amount", this.amount);
+      data.append("qty", this.qty);
+      data.append("is_percent", this.is_percent);
       data.append("status", this.status);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
