@@ -24,5 +24,6 @@ urlpatterns = [
     path('order-item/<int:id>/', views.OrderItemDetail.as_view()),
     path('order-item-topping/', views.OrderItemToppingList.as_view()),
     path('order-item-topping/<int:id>/', views.OrderItemToppingDetail.as_view()),
+    path('report/', views.Report.as_view()),
 ]
  

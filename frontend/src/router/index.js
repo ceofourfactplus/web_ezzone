@@ -68,6 +68,21 @@ import OrderDetail from "../views/OrderManage/OrderDetail.vue";
 import FoodOrder from "../views/OrderManage/FoodOrder.vue";
 import DrinkOrder from "../views/OrderManage/DrinkOrder.vue";
 
+// promotion
+import Point from "../views/Promotion/Point.vue"
+import NewPoint from "../views/Promotion/NewPoint.vue"
+import NewVoucher from "../views/Promotion/NewVoucher.vue"
+import NewPackage from "../views/Promotion/NewPackage.vue"
+import NewReward from "../views/Promotion/NewReward.vue"
+import PointDetail from "../views/Promotion/PointDetail.vue"
+import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
+import Redemption from "../views/Promotion/Redemption.vue"
+import History from "../views/Promotion/History.vue"
+import AllReward from "../views/Promotion/AllReward.vue"
+
+// Report
+import MainReport from '../views/Report/MainReport.vue'
+
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
 
@@ -93,6 +108,12 @@ const routes = [
     path: "/chart",
     name: "Chart1",
     component: Chart1,
+  },
+  // Report
+  {
+    path: "/report",
+    name: "MainReport",
+    component: MainReport
   },
   // Order manage
 
@@ -189,6 +210,30 @@ const routes = [
     path: "/promotion/new-reward",
     name: "NewReward",
     component: NewReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption",
+    name: "Redemption",
+    component: Redemption,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/history",
+    name: "History",
+    component: History,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/allreward",
+    name: "AllReward",
+    component: AllReward,
     meta: {
       requiresLogin: false,
     },

@@ -143,43 +143,34 @@
         margin-bottom: 20px;
         border-radius: 10px;
         height: 455px;
-        width: 672px;
-      "
-    >
-      <!-- header Reward -->
-      <div class="col-12 w-100" id="ColHeaderReward">
-        <div
-          class="row"
-          style="
-            font-size: 30px;
-            height: 45px;
-            padding-top: 5px;
-            color: #ffffff;
-          "
-        >
-          <div class="col-3 w-100" style="margin-left: 21px; text-align: left">
-            Reward
-          </div>
-          <div class="col-6 w-100"></div>
-          <div class="col-3 w-100" style="padding-right: 0px">
-            <a href="url">See All</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 w-100" id="ColItemReward">
-        <div
-          class="row"
-          style="position: relative; margin-top: 15px; height: 110"
-        >
-          <div class="BlockItem" id="BlockItem"></div>
-          <div></div>
-          <div class="BlockItem" id="BlockItem"></div>
-          <div></div>
-          <div class="BlockItem" id="BlockItem"></div>
-          <div></div>
-          <div class="BlockItem" id="BlockItem"></div>
-          <div></div>
-          <div class="BlockItem" id="BlockItem"></div>
+        width: 672px;">
+        <!-- header Reward -->
+            <div class="col-12 w-100" id="ColHeaderReward">
+                <div class="row" 
+                style="font-size:30px;
+                height:45px;
+                padding-top:5px;
+                color: #FFFFFF;">
+                    <div class="col-3 w-100" style="margin-left:21px;text-align:left;">Reward</div>
+                    <div class="col-6 w-100"></div>
+                    <div class="col-3 w-100" style="padding-right:0px;"><a href="http://localhost:8080/?#/promotion/redemption/allreward">See All</a></div>
+                </div>
+            </div>
+            <div class="col-12 w-100" id="ColItemReward">
+                <div class="row" style="position:relative;margin-top:15px;height:110;">
+                    
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    
+                </div>
+            </div>            
         </div>
       </div>
     </div>
