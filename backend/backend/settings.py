@@ -93,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'ezzone_database',
         'USER': 'root',
-        'PASSWORD': 'siri160349',
+        'PASSWORD': 'few112542',
         'HOST': 'localhost',
         'PORT': '3306',
     }

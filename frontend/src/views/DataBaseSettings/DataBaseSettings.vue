@@ -2,136 +2,242 @@
   <div>
     <!-- Head -->
     <nav-app>Database Settings</nav-app>
-    <!-- Content -->
-    <div class="content">
-      <!-- Change Setting -->
-      <div class="row" style="margin-top: 20px">
-        <div class="col-5 w-100 dbs-font" style="margin-top: 20px">
-          Change Setting
+    <div>
+      <!-- Content -->
+      <div class="content">
+        <!-- Change Setting -->
+        <div class="row" style="margin-top: 30px;">
+          <div class="col-5 w-100 dbs-font" style="margin-top: 20px;">
+            Change Setting
+          </div>
+          <div class="col-6 w-100 dbs-font" style="margin-top: 20px;padding: 0px;">
+            <input
+              type="text"
+              style="
+                left: 0px;
+                width: 254px;
+                height: 50px;
+                background: #717171;
+                display: inline;
+              "
+            />
+            <p style="display: inline; margin-left: 6px;">บาท</p>
+          </div>
+          <div class="col-1 w-100" style="margin-top: 20px">
+            <div class="img-wrap">
+              <img
+                src="../../assets/icon/save.png"
+                style="width: 30px; height: 30px; margin-top: 9px"
+                @click="save"
+              />
+            </div>
+          </div>
         </div>
-        <div class="col-6 w-100 dbs-font" style="margin-top: 20px">
-          <input
-            type="text"
-            style="
-              width: 224px;
-              height: 50px;
-              background: #717171;
-              display: inline;
-            "
-          />
-          <p style="display: inline; margin-left: 6px">บาท</p>
+        <!-- Change Setting -->
+        <div class="row" style="margin-top: 30px;">
+          <div class="col-5 w-100 dbs-font" style="margin-top: 20px;left:20px;padding-right: 58px;">
+            Pretty Cash
+          </div>
+          <div class="col-6 w-100 dbs-font" style="margin-top: 20px;padding: 0px;">
+            <input
+              type="text"
+              style="
+                left: 0px;
+                width: 254px;
+                height: 50px;
+                background: #717171;
+                display: inline;
+              "
+            />
+            <p style="display: inline; margin-left: 6px;">บาท</p>
+          </div>
+          <div class="col-1 w-100" style="margin-top: 20px">
+            <div class="img-wrap">
+              <img
+                src="../../assets/icon/save.png"
+                style="width: 30px; height: 30px; margin-top: 9px"
+                @click="save"
+              />
+            </div>
+          </div>
         </div>
-        <div class="col-1 w-100" style="margin-top: 20px">
-          <div class="img-wrap">
+        <!-- Unit Setting -->
+        <div class="row" style="margin-top: 45px">
+          <div class="col-4 w-100 dbs-font">Unit Setting</div>
+          <div class="col-1 w-100">
             <img
-              src="../../assets/icon/save.png"
-              style="width: 30px; height: 30px; margin-top: 9px"
-              @click="save"
+              src="../../assets/icon/edit-orange.png"
+              style="width: 25px; height: 30px; margin-top: 5px"
+              @click="$router.push({ name: 'RMUnit' })"
             />
           </div>
         </div>
+        <!-- Unit Items -->
+        <!-- <div class="row">
+          <div class="col-3 w-100 dbs-font" style="font-weight: normal">
+            x Unit
+          </div>
+        </div> -->
       </div>
-      <!-- Unit Setting -->
-      <div class="row" style="margin-top: 45px">
-        <div class="col-4 w-100 dbs-font">Unit Setting</div>
-        <div class="col-1 w-100">
-          <img
-            src="../../assets/icon/edit-orange.png"
-            style="width: 25px; height: 30px; margin-top: 5px"
-            @click="$router.push({ name: 'RMUnit' })"
-          />
-        </div>
-      </div>
-      <!-- Unit Items -->
-      <div class="row">
-        <div class="col-3 w-100 dbs-font" style="font-weight: normal">
-          x Unit
-        </div>
-      </div>
-      <!-- Sale Channel Setting -->
-      <div class="row" style="margin-top: 45px">
-        <div class="col-6 w-100 dbs-font" style="margin-left: -5px">
-          Sale Channel Setting
-        </div>
-        <div class="col-1 w-100">
-          <img
-            src="../../assets/icon/edit-orange.png"
-            style="width: 25px; height: 30px; margin-top: 5px"
-            @click="$router.push({ name: 'SaleChannel' })"
-          />
-        </div>
-      </div>
-      <!-- Sale Channel -->
-      <div class="row" style="width: 540px; margin-left: 39px">
-        <div class="col-6 w-100" style="margin-top: 10px">
-          <img
-            src="../../assets/icon/lineman-35x35.png"
-            style="display: inline"
-          />
-          <p
-            style="
-              display: inline;
-              font-size: 20px;
-              color: white;
-              margin-left: 10px;
-            "
-          >
-            Line Man
-          </p>
-          <div class="sc-status">ACTIVE</div>
-        </div>
-        <div class="col-6 w-100" style="margin-top: 10px">
-          <img
-            src="../../assets/icon/robin-35x35.png"
-            style="display: inline"
-          />
-          <p
-            style="
-              display: inline;
-              font-size: 20px;
-              color: white;
-              margin-left: 10px;
-            "
-          >
-            Line Man
-          </p>
-          <div class="sc-status">ACTIVE</div>
-        </div>
-      </div>
-      <div class="row" style="width: 540px; margin: 20px 0px 0px 39px">
-        <div class="col-6 w-100" style="margin-top: 10px">
-          <img
-            src="../../assets/icon/foodpanda-35x35.png"
-            style="display: inline"
-          />
-          <p
-            style="
-              display: inline;
-              font-size: 20px;
-              color: white;
-              margin-left: 10px;
-            "
-          >
-            Line Man
-          </p>
-          <div class="sc-status">ACTIVE</div>
-        </div>
-        <div class="col-6 w-100" style="margin-top: 10px">
-          <img src="../../assets/icon/grab-35x35.png" style="display: inline" />
-          <p
-            style="
-              display: inline;
-              font-size: 20px;
-              color: white;
-              margin-left: 10px;
-            "
-          >
-            Line Man
-          </p>
-          <div class="sc-status">ACTIVE</div>
-        </div>
-      </div>
+
     </div>
+
+    <!-- Sale Channel setting -->
+    <div class="BlockChannel">
+      <!-- Sale Channel Setting -->
+      <div class="row" id="Setting" style="margin-bottom:5px;">
+        <div class="col-6 w-100 dbs-font">Sale Channel Setting</div>
+        <div class="col-1 w-100">
+          <img src="../../assets/icon/edit-orange.png"
+          style="width: 25px; height: 30px; margin-top: -10px"
+          @click="$router.push({ name: 'SaleChannel' })"
+          />
+        </div>
+      </div>
+      <!-- Sale Channel 1 -->
+      <div class="row">
+        <div class="col-1 w-100"></div>
+        <div class="col-5 w-100" id="SaleBlock">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/grab-35x35.png" style="display: inline"/>
+            </div>
+            <div class="col-5 w-100" style="padding:0px;text-align:left;">
+              <p id="TextSaleChannel">Grab</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:42px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-5 w-100" id="SaleBlock" style="left:17px;">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/lineman-35x35.png" style="display: inline"/>
+            </div>
+            <div class="col-5 w-100" style="padding:0px;text-align:left;">
+              <p id="TextSaleChannel">Line Man</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:42px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <!-- Sale Channel 2 -->
+      <div class="row">
+        <div class="col-1 w-100"></div>
+        <div class="col-5 w-100" id="SaleBlock">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/foodpanda-35x35.png" style="display: inline"/>
+            </div>
+            <div class="col-5 w-100" style="padding:0px;text-align:left;">
+              <p id="TextSaleChannel">foodpanda</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:42px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+          
+        </div>
+        <div class="col-5 w-100" id="SaleBlock" style="left:17px;">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/robin-35x35.png" style="display: inline"/>
+            </div>
+            <div class="col-5 w-100" style="padding:0px;text-align:left;">
+              <p id="TextSaleChannel">Robinhood</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:42px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Payment Channel setting -->
+    <div class="BlockChannel">
+      <!-- Payment Channel Setting -->
+      <div class="row" id="Setting" style="margin-bottom:10px;" >
+        <div class="col-7 w-100 dbs-font">Payment Channel Setting</div>
+        <div class="col-1 w-100">
+          <img src="../../assets/icon/edit-orange.png"
+          style="width: 25px; height: 30px; margin-top: -9px"
+          @click="$router.push({ name: 'SaleChannel' })"
+          />
+        </div>
+      </div>
+      <!-- Payment Channel 1 -->
+      <div class="row">
+        <div class="col-1 w-100"></div>
+        <div class="col-5 w-100" id="PaymentBlock">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/Cash.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding-left:0px;text-align:left;">
+              <p id="TextPaymentChannel">Cash</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/COD.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding:0px;text-align:left;">
+              <p id="TextPaymentChannel">COD</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Payment Channel 2 -->
+      <div class="row">
+        <div class="col-1 w-100"></div>
+        <div class="col-5 w-100" id="PaymentBlock">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/Credit.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding:0px;text-align:left;">
+              <p id="TextPaymentChannel">Credit</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div> 
+        </div>
+        
+        <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/Transfer.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding:0px;text-align:left;">
+              <p id="TextPaymentChannel">Transfer</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+    </div>
+  
     <!-- card pop up -->
     <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">
@@ -188,7 +294,7 @@ export default {
   margin-left: 10px;
 }
 .dbs-font {
-  font-size: 24px;
+  font-size: 28px;
   color: white;
   font-weight: bold;
 }
@@ -202,11 +308,70 @@ export default {
   margin-right: 12px;
 }
 .content {
-  width: 616px;
-  height: 414px;
-  margin-left: 77px;
-  margin-top: 58px;
+  width: 635px;
+  height: 290px;
+  margin-left: 42px;
+  margin-right: 42px;
+  margin-top: 20px;
   background: #303344;
   border-radius: 20px;
 }
+.BlockChannel {
+  width: 635px;
+  height: 240px;
+  margin-left: 42px;
+  margin-right: 42px;
+  margin-top: 12px;
+  background: #303344;
+  border-radius: 20px;
+}
+
+#Setting {
+  line-height:80px;
+  text-align: left;
+  padding-left:40px;
+  height: 80px;
+
+}
+
+#SaleBlock {
+  padding-left: 5px;
+  margin-top:10px;
+  margin-bottom:20px;
+  position: relative;
+  left: 10px;
+
+}
+
+#PaymentBlock {
+  padding-left: 5px;
+  margin-top:0px;
+  margin-bottom:20px;
+  position: relative;
+  left: 20px;
+
+}
+
+#TextSaleChannel {
+  display: inline;
+  font-size: 24px;
+  color: white;
+  
+}
+
+#TextPaymentChannel {
+  display: inline;
+  font-size: 24px;
+  line-height: 50px;
+  color: white;
+  
+}
+
+.IconPayment {
+  display: inline;
+  height: 50px;
+  width:50px;
+
+}
+
 </style>
