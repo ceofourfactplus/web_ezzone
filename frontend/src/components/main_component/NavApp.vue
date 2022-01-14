@@ -6,13 +6,13 @@
           <img
             src="../../assets/icon/btn-back.png"
             class="back inline ms-4"
-            @click="$router.go(-1)"
+            @click="$emit('back')"
           />
         </div>
         <div class="col-9 w-100">
           <h1 id="login" class="header-text"><slot></slot></h1>
         </div>
-        <div class="col-2" v-if="save">
+        <div class="col-1" v-if="save">
           <img
             @click="$emit('save')"
             src="../../assets/icon/save.png"
@@ -21,11 +21,41 @@
             alt=""
           />
         </div>
-        <div class="col-2" v-else-if="rm_menu">
+        <div class="col-1" v-else-if="rm_menu">
           <img
             src="../../assets/icon/Menu-icon.png"
-            class="hamburger"
+            style="top: 2.5%; right: 25px; position: absolute; height: 34px"
             @click="open_slide"
+          />
+        </div>
+        <div
+          class="col-1 w-100"
+          style="padding: 0px; margin-top: 20px; margin-right: 20px"
+          v-else-if="cart"
+        >
+          <img
+            v-if="amount == 0"
+            src="../../assets/icon/cart-o.png"
+            @click="$router.push({ name: 'OrderReceipt' })"
+            style="width: 35px"
+          />
+          <div v-else style="display: flex; text-align: right">
+            <div class="noti me-1">
+              {{ amount }}
+            </div>
+            <img
+              src="../../assets/icon/cart-g.png"
+              @click="$router.push({ name: 'OrderReceipt' })"
+              style="width: 35px; display: inline"
+            />
+          </div>
+        </div>
+        <div class="col-1" v-else-if="trash">
+          <img
+            src="../../assets/icon/bin.png"
+            style="top: 2.5%; right: 25px; position: absolute; height: 34px"
+            @click="$emit('trash')"
+            alt=""
           />
         </div>
       </div>
@@ -36,13 +66,18 @@
         >&times;</a
       >
       <div
-        style="margin-top: 30px; color: #889898; margin-left: 0px;"
+        style="margin-top: 30px; color: #889898; margin-left: 0px"
         v-for="item in $store.state.raw_material.side_nav"
         :key="item"
       >
         <img :src="item.img" :style="item.img_style" style="margin-top: -10px; display: inline" />
         <div
-          style="display: inline; text-align: left; font-size: 30px; margin-left: -20px;"
+          style="
+            display: inline;
+            text-align: left;
+            font-size: 30px;
+            margin-left: -20px;
+          "
           :style="item.style"
           @click="select_page(item)"
           :class="{
@@ -58,14 +93,14 @@
 
 <script>
 export default {
-  props: ["save", "rm_menu"],
+  props: ["save", "rm_menu", "cart", "amount", "trash"],
   data() {
     return {
       page: "",
     };
   },
   mounted() {
-    this.$store.state.raw_material.page = this.$route.name
+    this.$store.state.raw_material.page = this.$route.name;
   },
   methods: {
     select_page(item) {
@@ -170,5 +205,15 @@ export default {
   .sidenav a {
     font-size: 18px;
   }
+}
+.noti {
+  background-color: #9ef0d7;
+  color: #000;
+  margin: auto -3px;
+  height: 35px;
+  width: 35px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 22px;
 }
 </style>

@@ -62,6 +62,7 @@
         >
           <div
             class="row"
+            
             style="
               width: 100%;
               line-height: 100%;
@@ -77,7 +78,7 @@
               style="margin: auto"
               @click="
                 $router.push({
-                  name: 'EditProduct',
+                  name: 'EditTopping',
                   params: { id: product.id },
                 })
               "

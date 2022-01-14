@@ -49,18 +49,55 @@ import EditCategoryTopping from "../views/Topping/EditCategory.vue";
 import DashBoard from "../views/DashBoard.vue";
 
 // sale channel
-import SaleChannel from "../views/SaleChannel/SaleChannel.vue"
-import EditSaleChannel from "../views/SaleChannel/EditSaleChannel.vue"
-import CreateSaleChannel from "../views/SaleChannel/CreateSaleChannel.vue"
-
+import SaleChannel from "../views/SaleChannel/SaleChannel.vue";
+import EditSaleChannel from "../views/SaleChannel/EditSaleChannel.vue";
+import CreateSaleChannel from "../views/SaleChannel/CreateSaleChannel.vue";
 
 // pos
-import SelectSaleChannel from "../views/POS/SelectSaleChannel.vue"
-import KeyOrder from "../views/POS/KeyOrder.vue"
-import KeyProductDetail from "../views/POS/KeyProductDetail.vue"
+import SelectSaleChannel from "../views/POS/SelectSaleChannel.vue";
+import KeyOrder from "../views/POS/KeyOrder.vue";
+import KeyProductDetail from "../views/POS/KeyProductDetail.vue";
+import KeyToppingDetail from "../views/POS/KeyToppingDetail.vue";
+import OrderReceipt from "../views/POS/OrderReceipt.vue";
 
 // database settings
-import DataBaseSettings from "../views/DataBaseSettings/DataBaseSettings.vue"
+import DataBaseSettings from "../views/DataBaseSettings/DataBaseSettings.vue";
+
+// Order Manage
+import OrderDetail from "../views/OrderManage/OrderDetail.vue";
+import FoodOrder from "../views/OrderManage/FoodOrder.vue";
+import DrinkOrder from "../views/OrderManage/DrinkOrder.vue";
+
+import Chart1 from "../views/TestChart/Chart1.vue";
+import FaceLogin from "../views/FaceDetector/LoginFace.vue";
+const routes = [
+  {
+    path: "/face-login/",
+    name: "FaceLogin",
+    component: FaceLogin,
+  },
+  {
+    path: "/chart",
+    name: "Chart1",
+    component: Chart1,
+  },
+  // Order manage
+
+  {
+    path: "/order-manage/order-detail",
+    name: "OrderDetail",
+    component: OrderDetail,
+  },
+  {
+    path: "/order-manage/food-order",
+    name: "FoodOrder",
+    component: FoodOrder,
+  },
+  {
+    path: "/order-manage/drink-order",
+    name: "DrinkOrder",
+    component: DrinkOrder,
+  },
 
 // promotion
 import Point from "../views/Promotion/Point.vue"
@@ -169,24 +206,32 @@ const routes = [
 
   // pos
   {
-    path:'/pos/select-sale-channel',
-    name:"SelectSaleChannel",
-    component: SelectSaleChannel
+    path: "/pos/select-sale-channel",
+    name: "SelectSaleChannel",
+    component: SelectSaleChannel,
   },
   {
-    path:'/pos/:sale_channel_id/key-order',
-    name:"KeyOrder",
+    path: "/pos/key-order",
+    name: "KeyOrder",
     component: KeyOrder,
-    props:true
   },
   {
-    path:'/pos/:sale_channel_id/key-order/:product_id/key-product-detail',
-    name:"KeyProductDetail",
+    path: "/pos/key-order/:product_id/key-product-detail",
+    name: "KeyProductDetail",
     component: KeyProductDetail,
-    props:true
+    props: true,
   },
-
-
+  {
+    path: "/pos/key-order/:topping_id/key-topping-detail",
+    name: "KeyToppingDetail",
+    component: KeyToppingDetail,
+    props: true,
+  },
+  {
+    path: "/pos/order-receipt",
+    name: "OrderReceipt",
+    component: OrderReceipt,
+  },
 
   // product
   {
@@ -207,7 +252,7 @@ const routes = [
   },
   {
     path: "/product/edit-product/:id",
-    props:true,
+    props: true,
     name: "EditProduct",
     component: EditProduct,
     meta: {
@@ -242,7 +287,7 @@ const routes = [
   },
   {
     path: "/topping/category/edit/:id",
-    props:true,
+    props: true,
     name: "EditCategoryTopping",
     component: EditCategoryTopping,
     meta: {
@@ -259,7 +304,7 @@ const routes = [
   },
   {
     path: "/topping/edit/:id",
-    props:true,
+    props: true,
     name: "EditTopping",
     component: EditTopping,
     meta: {
@@ -346,7 +391,7 @@ const routes = [
     meta: {
       requiresLogin: false,
     },
-  },  
+  },
   {
     path: "/rm/edit/:id",
     name: "EditRM",
@@ -420,7 +465,7 @@ const routes = [
   {
     path: "/sale-channel",
     name: "SaleChannel",
-    component:  SaleChannel,
+    component: SaleChannel,
   },
   {
     path: "/sale-channel/create",
@@ -430,7 +475,7 @@ const routes = [
   {
     path: "/sale-channel/edit/:id",
     name: "EditSaleChannel",
-    props:true,
+    props: true,
     component: EditSaleChannel,
   },
 ];

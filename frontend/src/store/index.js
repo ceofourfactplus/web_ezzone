@@ -5,7 +5,7 @@ import stock from "./modules/stock";
 import product from "./modules/product";
 import sale_channel from "./modules/sale_channel";
 import raw_material from "./modules/raw_material";
-
+import pos from "./modules/pos"
 
 export default createStore({
   state: {
@@ -21,6 +21,7 @@ export default createStore({
   modules: {
     auth,
     stock,
+    pos,
     product,
     raw_material,
     sale_channel

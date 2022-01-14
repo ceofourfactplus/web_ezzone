@@ -14,7 +14,7 @@ export default {
 <style>
 
 #app {
-  font-family: "Sarabun", sans-serif;
+  font-family: "Sarabun", sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

@@ -1,20 +1,15 @@
 <template>
   <div>
-    <nav-app>Sale Channel</nav-app>
+    <nav-app @back="$router.push({name:'OrderDetail'})">Sale Channel</nav-app>
     <div class="center">
       <div class="row">
         <div
           v-for="channel in sale_channel"
           :key="channel.id"
-          @click="
-            $router.push({
-              name: 'KeyOrder',
-              params: { sale_channel_id: channel.id },
-            })
-          "
           class="col-6 mb-3 w-100"
         >
-          <img :src="channel.img" alt="" />
+          <img :src="channel.img" alt=""
+          @click="select_channel(channel)" />
           <p>{{ channel.sale_channel }}</p>
         </div>
       </div>
@@ -45,6 +40,15 @@ export default {
       image_new: "",
     };
   },
+  methods: {
+    select_channel(channel) {
+      this.$store.state.pos.order.sale_channel_id = channel.id
+      this.$store.state.pos.order.sale_channel_set = channel
+      this.$router.push({
+        name: "KeyOrder",
+      });
+    },
+  },
 };
 </script>
 
@@ -67,5 +71,6 @@ img {
   width: 120px;
   height: 120px;
   border-radius: 10px;
+  object-fit: cover;
 }
 </style>

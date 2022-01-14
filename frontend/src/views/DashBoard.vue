@@ -9,18 +9,57 @@
 
     <div v-for="category in dash_board_list" :key="category">
       <div v-if="has_permission(category.permissions)">
-        <h1>{{ category.title }}</h1>
+        <h2>{{ category.title }}</h2>
         <div style="margin-left: 50px; margin-right: 50px">
-          <div class="row">
+          <div
+            class="row"
+            style="background-color: #303344; border-radius: 10px"
+          >
             <div
               v-for="(dsh, idx) in category.btn"
               :key="idx"
-              class="col-3 w-100"
-              style="padding-left: 0px; padding-right: 0px;"
+              class="col-2 w-100"
+              style="padding-left: 0px; padding-right: 0px"
             >
               <div
                 v-if="has_permission(dsh.permissions)"
-                style="padding: 0px; height: 180px"
+                style="padding-top: 10px; height: 120px"
+              >
+                <router-link :to="{ name: dsh.link }">
+                  <img class="image" :src="dsh.img" />
+                  <p class="content">
+                    {{ dsh.txt }}
+                  </p>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-left: 40px; margin-right: 40px">
+      <div
+        v-for="(category, index) in setting_else"
+        :key="category"
+        class="col-6 w-100"
+        :class="{ 'pe-1': index == 0, 'ps-1': index == 1 }"
+      >
+        <div v-if="has_permission(category.permissions)">
+          <h2 class="else">{{ category.title }}</h2>
+          <div
+            class="row"
+            :class="{ 'me-1-i': index == 0, 'ms-1-i': index == 1 }"
+            style="background-color: #303344; border-radius: 10px"
+          >
+            <div
+              v-for="(dsh, idx) in category.btn"
+              :key="idx"
+              class="col-4 w-100"
+              style="padding-left: 0px; padding-right: 0px"
+            >
+              <div
+                v-if="has_permission(dsh.permissions)"
+                style="padding-top: 10px; height: 120px"
               >
                 <router-link :to="{ name: dsh.link }">
                   <img class="image" :src="dsh.img" />
@@ -42,24 +81,7 @@ export default {
   data() {
     return {
       dash_board_list: [
-        {
-          permissions: ["is_staff", "is_barista", "is_chef"],
-          title: "Display",
-          btn: [
-            {
-              permissions: ["is_staff", "is_barista", "is_chef"],
-              img: require("../../src/assets/icon/drink.png"),
-              txt: "Drink Order",
-              link: "DashBoard",
-            },
-            {
-              permissions: ["is_staff", "is_barista", "is_chef"],
-              img: require("../../src/assets/icon/order-box.png"),
-              txt: "Food Order",
-              link: "DashBoard",
-            },
-          ],
-        },
+        // order
         {
           permissions: ["is_staff", "is_receptionist"],
           title: "Order",
@@ -68,16 +90,29 @@ export default {
               permissions: ["is_staff", "is_receptionist"],
               img: require("../../src/assets/icon/order-box.png"),
               txt: "Orders",
-              link: "DashBoard",
+              link: "SelectSaleChannel",
             },
             {
               permissions: ["is_staff", "is_receptionist"],
               img: require("../../src/assets/icon/order-detail.png"),
-              txt: "Order Status",
-              link: "DashBoard",
+              txt: "Order Detail",
+              link: "OrderDetail",
             },
-          ],
+            {
+              permissions: ["is_staff", "is_receptionist"],
+              img: require("../../src/assets/icon/drink.png"),
+              txt: "Drink Order",
+              link: "DrinkOrder",
+            },
+            {
+              permissions: ["is_staff", "is_receptionist"],
+              img: require("../../src/assets/icon/food.png"),
+              txt: "Food Order",
+              link: "FoodOrder",
+            },
+          ], 
         },
+        // promotion
         {
           permissions: ["is_staff"],
           title: "Promotion",
@@ -90,15 +125,34 @@ export default {
             },
             {
               permissions: ["is_staff"],
+              img: require("../../src/assets/icon/voucher.png"),
+              txt: "Voucher",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
               img: require("../../src/assets/icon/package.png"),
               txt: "Package",
               link: "DashBoard",
             },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/reward.png"),
+              txt: "Reward",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/redemtion.png"),
+              txt: "Redemption",
+              link: "DashBoard",
+            },
           ],
         },
+        // stock
         {
           permissions: ["is_staff", "is_purchesing", "is_barista", "is_chef"],
-          title: "Raw Material",
+          title: "Stock",
           btn: [
             {
               permissions: [
@@ -114,80 +168,34 @@ export default {
             },
             {
               permissions: ["is_staff"],
-              img: require("../../src/assets/icon/NewRM.png"),
-              txt: "New RM",
-              link: "DashBoard",
-            },
-            {
-              permissions: ["is_staff", "is_purchesing"],
               img: require("../../src/assets/icon/PO.png"),
-              txt: "PO",
-              link: "PO",
-            },
-            {
-              permissions: ["is_staff", "is_purchesing"],
-              img: require("../../src/assets/icon/add_RM.png"),
-              txt: "Add RM",
+              txt: "PO Notice",
               link: "DashBoard",
             },
             {
-              permissions: [
-                "is_staff",
-                "is_purchesing",
-                "is_barista",
-                "is_chef",
-                "is_receptionist",
-              ],
-              img: require("../../src/assets/icon/pick_up.png"),
-              txt: "RMUnit",
-              link: "RMUnit"
-            },
-            {
-              permissions: ["is_staff"],
-              img: require("../../src/assets/icon/category_rm.png"),
-              txt: "Categories",
-              link: "RawMaterialCategory",
-            },
-          ],
-        },
-        {
-          permissions: ["is_staff", "is_barista", "is_chef", "is_receptionist"],
-          title: "Products",
-          btn: [
-            {
-              permissions: ["is_staff"],
+              permissions: ["is_staff", "is_purchesing"],
               img: require("../../src/assets/icon/product.png"),
               txt: "Products",
               link: "Product",
             },
-            {
-              permissions: [
-                "is_staff",
-                "is_barista",
-                "is_chef",
-                "is_receptionist",
-              ],
-              img: require("../../src/assets/icon/add_product.png"),
-              txt: "Add Qty",
-              link: "DashBoard",
-            },
-            {
-              permissions: ["is_staff"],
-              img: require("../../src/assets/icon/category_product.png"),
-              txt: "Categories",
-              link: "DashBoard",
-            },
           ],
         },
+        // people
         {
           permissions: ["is_staff"],
-          title: "Contacts",
+          title: "People",
           btn: [
             {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/customer.png"),
-              txt: "Customers",
+              txt: "Customer",
               link: "Customer",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/user-status.png"),
+              txt: "User Status",
+              link: "UserStatus",
             },
             {
               permissions: ["is_staff"],
@@ -197,12 +205,15 @@ export default {
             },
             {
               permissions: ["is_staff"],
-              img: require("../../src/assets/icon/user-status.png"),
-              txt: "User Status",
+              img: require("../../src/assets/icon/consigner.png"),
+              txt: "Consigner",
               link: "UserStatus",
             },
           ],
         },
+      ],
+      setting_else: [
+        // report
         {
           permissions: ["is_staff"],
           title: "Report",
@@ -212,6 +223,31 @@ export default {
               img: require("../../src/assets/icon/report.png"),
               txt: "Report",
               link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/wallet.png"),
+              txt: "Wallet",
+              link: "DashBoard",
+            },
+          ],
+        },
+        // setting
+        {
+          permissions: ["is_staff"],
+          title: "Setting",
+          btn: [
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/app.png"),
+              txt: "App",
+              link: "DashBoard",
+            },
+            {
+              permissions: ["is_staff"],
+              img: require("../../src/assets/icon/database.png"),
+              txt: "DataBase",
+              link: "DataBaseSettings",
             },
           ],
         },
@@ -232,10 +268,12 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-size: 40px;
+h2 {
+  color: #fff;
+  font-weight: 700;
   text-align: left;
-  margin-left: 20px;
+  margin-top: 5px;
+  margin-left: 40px;
   margin-bottom: 10px;
 }
 body {
@@ -258,8 +296,8 @@ body {
 .content {
   /* height: 36px; */
   color: white;
-  font-size: 28px;
-  width: 160px;
+  font-size: 16px;
+  width: 100px;
   position: absolute;
 }
 .block {
@@ -268,12 +306,22 @@ body {
   position: absolute;
 }
 .image {
-  width: 130px;
-  height: 130px;
+  width: 75px;
+  height: 75px;
 }
 .hamburger {
   top: 30px;
   right: 20px;
   position: absolute;
+}
+.ms-1-i {
+  margin-left: 3px;
+}
+.me-1-i {
+  margin-right: 3px;
+}
+.else {
+  text-align: center;
+  margin-left: 0px;
 }
 </style>

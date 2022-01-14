@@ -223,6 +223,7 @@ h1 {
   left: 45px;
   position: fixed;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .card {
@@ -517,4 +518,91 @@ h1 {
 }
 .btn-gray-active{
   color: #ffffff;
+}
+
+
+/* The container */
+.container-radio {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 35px;
+}
+
+/* Hide the browser's default radio button */
+.container-radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 7px;
+  left: 0;
+  height: 21px;
+  width: 21px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+/* When the radio button is checked, add a blue background */
+.container-radio input:checked ~ .checkmark {
+  
+  border: 2px solid #fff;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container-radio input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container-radio .checkmark:after {
+ 	top: 3px;
+	left: 3px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #fff;
+}
+
+.dark {
+  background-color: #000000aa;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  display: block;
+}
+
+.main-pop-up {
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-color: #303344;
+  width: 632px;
+  border: 1.2px solid #ea7c69;
+  border-radius: 10px;
+  display: flex;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 30px;
 }

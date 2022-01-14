@@ -5,4 +5,4 @@ const api_product = axios.create({
     timeout: 1000,
 })
 
-export{ api_product }
+export{ api_product } 

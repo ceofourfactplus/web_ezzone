@@ -1,30 +1,35 @@
 <template>
   <div>
-    <nav-app>Drink</nav-app>
+    <nav-app
+      @back="$router.push({ name: 'SelectSaleChannel' })"
+      :cart="true"
+      :amount="$store.state.pos.order.orderitem_set.length"
+      >{{ header }}</nav-app
+    >
     <div class="frame-pos">
       <!-- select type product -->
       <div class="row w-100">
         <div class="col-2 w-100">
-          <button v-if="select_type_product == 1" class="btn-gray active">
+          <button v-if="select_type_product == 2" class="btn-gray active">
             <img src="../../assets/icon/drink-active.png" />
           </button>
-          <button v-else @click="select_type_product = 1" class="btn-gray">
+          <button v-else @click="select_type_product = 2" class="btn-gray">
             <img src="../../assets/icon/drink-gray.png" />
           </button>
         </div>
         <div class="col-2 w-100">
-          <button v-if="select_type_product == 2" class="btn-gray active">
+          <button v-if="select_type_product == 3" class="btn-gray active">
             <img src="../../assets/icon/fork-active.png" />
           </button>
-          <button v-else class="btn-gray" @click="select_type_product = 2">
+          <button v-else class="btn-gray" @click="select_type_product = 3">
             <img src="../../assets/icon/fork.png" />
           </button>
         </div>
         <div class="col-2 w-100">
-          <button v-if="select_type_product == 3" class="btn-gray active">
+          <button v-if="select_type_product == 1" class="btn-gray active">
             <img src="../../assets/icon/dressert-active.png" />
           </button>
-          <button v-else class="btn-gray" @click="select_type_product = 3">
+          <button v-else class="btn-gray" @click="select_type_product = 1">
             <img src="../../assets/icon/dressert.png" />
           </button>
         </div>
@@ -87,24 +92,59 @@
           <div
             v-for="product in products"
             :key="product.id"
-            @click="
-              $router.push({
-                name: 'KeyProductDetail',
-                params: {
-                  product_id: product.id,
-                  sale_channel_id: $route.params.sale_channel_id,
-                },
-              })
-            "
-            class="col-3 w-100 card-product"
+            class="w-100 card-product"
+            :class="{
+              'col-3': product.type_product != 3,
+              'col-6': product.type_product == 3,
+            }"
           >
             <img
-              v-if="product.img != null"
-              class="img"
+              v-if="!('type_topping' in product)"
+              :class="{
+                'img-s': product.type_product != 3,
+                'img-l': product.type_product == 3,
+              }"
               :src="product.img"
               alt=""
+              @click="
+                $router.push({
+                  name: 'KeyProductDetail',
+                  params: {
+                    product_id: product.id,
+                  },
+                })
+              "
             />
-            <div v-else class="img" style="background-color: #c4c4c4"></div>
+            <img
+              v-else-if="is_topping(product)"
+              class="img-s"
+              :src="product.img"
+              alt=""
+              @click="
+                $router.push({
+                  name: 'KeyToppingDetail',
+                  params: {
+                    topping_id: product.id,
+                  },
+                })
+              "
+            />
+            <div
+              v-else
+              @click="
+                $router.push({
+                  name: 'KeyProductDetail',
+                  params: {
+                    product_id: product.id,
+                  },
+                })
+              "
+              :class="{
+                'img-s': product.type_product != 3,
+                'img-l': product.type_product == 3,
+              }"
+              style="background-color: #c4c4c4"
+            ></div>
             <p>{{ product.name }}</p>
           </div>
         </div>
@@ -132,42 +172,93 @@ export default {
     api_product.get("category/").then((response) => {
       this.categories = response.data;
     });
+    this.select_type_product = 3;
+    setTimeout(() => {
+      this.select_category = this.categories[0].id;
+    }, 300);
   },
   watch: {
     select_type_product(newType) {
       if (newType == 6) {
-        // api_product.get()
-        this.products = [];
+        this.header = "Topping";
+        this.categories = [
+          {
+            id: 1,
+            category: "Dressert",
+          },
+          {
+            id: 2,
+            category: "Drink",
+          },
+          {
+            id: 3,
+            category: "Food",
+          },
+        ];
       } else if (newType == 5) {
+        this.header = "Consignment";
         this.products = [];
       } else if (newType == 4) {
+        this.header = "Promotion";
         this.products = [];
       } else {
         api_product.get("category-by-type/" + newType).then((response) => {
           this.categories = response.data;
         });
       }
+      if (newType == 1) {
+        this.header = "Dessert";
+      }
+      if (newType == 2) {
+        this.header = "Drink";
+      }
+      if (newType == 3) {
+        this.header = "Food";
+      }
     },
     select_category(newCategory) {
       if (this.select_type_product == 6) {
-        // api_product.get()
-        this.products = [];
+        api_product
+          .get(
+            "get-topping-by-sale-channel/" +
+              this.$store.state.pos.order.sale_channel_id +
+              "/" +
+              newCategory
+          )
+          .then((response) => {
+            this.products = response.data;
+          });
       } else if (this.select_type_product == 5) {
         this.products = [];
       } else if (this.select_type_product == 4) {
         this.products = [];
       } else {
-        api_product.get("product/category/" + newCategory).then((response) => {
-          this.products = response.data;
-        });
+        api_product
+          .get(
+            "get-product-by-sale-channel/" +
+              this.$store.state.pos.order.sale_channel_id +
+              "/" +
+              newCategory
+          )
+          .then((response) => {
+            this.products = response.data;
+          });
       }
     },
+
   },
-  methods: {},
+  methods: {
+    is_topping(product){
+      console.log('type_topping' in product)
+      if ('type_topping' in product){
+        return true
+      }return false
+    }
+  },
 };
 </script>
 
-<style scpoed>
+<style scoped>
 .frame-pos {
   width: 90%;
   margin: auto;
@@ -175,6 +266,7 @@ export default {
 p {
   color: #abbbc2;
   font-size: 19px;
+  margin-bottom: 0px;
 }
 
 .frame-1 {
@@ -192,14 +284,19 @@ button {
   opacity: 0.5;
   display: inline;
 }
-img {
-  height: 40px;
-}
-.img {
+.img-s {
   height: 150px;
   width: 150px;
   border-radius: 10px;
-  margin-top: 15px;
+  margin-top: 10px;
+  object-fit: cover;
+}
+.img-l {
+  height: 150px;
+  width: 300px;
+  border-radius: 10px;
+  margin-top: 10px;
+  object-fit: cover;
 }
 .active {
   opacity: 1;
@@ -216,5 +313,8 @@ img {
   height: 50px !important;
   font-size: 36px !important;
   font-weight: 400 !important;
+}
+img {
+  height: 48px;
 }
 </style>

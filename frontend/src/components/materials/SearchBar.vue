@@ -46,7 +46,7 @@ export default {
   margin-left: 3px;
   border-radius: 10px;
   width: 100%;
-  height: 50px;
+  height: 45px;
   background-image: url("../../assets/icon/search.png");
   background-position: 2% 50%;
   /* Extra Styling */
