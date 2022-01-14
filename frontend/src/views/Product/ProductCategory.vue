@@ -16,7 +16,7 @@
     <div class="table" style="margin-top: 10px">
       <div class="table-header">
         <!-- Is Staff -->
-        <div v-if="is_staff" class="row w-100">
+        <div class="row w-100">
           <div class="col-6 w-100" style="margin: auto">Name</div>
           <div class="col-2 w-100" style="margin: auto">Type</div>
           <div class="col-3 w-100" style="margin: auto">Product</div>
@@ -31,34 +31,34 @@
           border-radius: 10px;
         "
       >
-        <div v-if="is_staff">
-          <div
-            class="row table-item"
-            v-for="(item, idx) in products_categories"
-            :key="idx"
-            style="
-              padding-right: 0px;
-              margin: 10px 0px 0px 0px;
-              background-color: #303344;
-              border-radius: 10px;
-            "
-          >
-            <div class="col-6" style="text-align: left; width: 100%">
-              {{ item.category }}
-            </div>
-            <div class="col-2" style="margin-left: -5px">
-              {{ get_type_category(item.type_category) }}
-            </div>
-            <div class="col-2" style="margin-left: 40px">
-              {{ get_product(item.id) }}
-            </div>
-            <div class="col-1" style="position: absolute; right: 50px">
-              <img
-                @click="edit(item)"
-                src="../../assets/icon/edit.png"
-                alt="img"
-              />
-            </div>
+        <div
+          class="row table-item"
+          v-for="(item, idx) in products_categories"
+          :key="idx"
+          style="
+            padding-right: 0px;
+            margin: 10px 0px 0px 0px;
+            background-color: #303344;
+            border-radius: 10px;
+            line-height: 100%;
+          "
+        >
+          <div class="col-6" style="text-align: left; width: 100%">
+            {{ item.category }}
+          </div>
+          <div class="col-2" style="margin-left: -5px">
+            {{ get_type_category(item.type_category) }}
+          </div>
+          <div class="col-2" style="margin-left: 40px">
+            {{ get_product(item.id) }}
+          </div>
+          <div class="col-1" style="position: absolute; right: 50px">
+            <img
+              style="width: 20px"
+              @click="edit(item)"
+              src="../../assets/icon/edit.png"
+              alt="img"
+            />
           </div>
         </div>
       </div>
@@ -84,19 +84,22 @@
         </div>
 
         <div class="mb-1">
-          <label for="category" style="color: white">Type Category : &nbsp;</label>
+          <label for="category" style="color: white"
+            >Type Category : &nbsp;</label
+          >
           <select
             v-model="type_c"
             type="text"
-            name="category" style="margin-top:10px;width:180px"
+            name="category"
+            style="margin-top: 10px; width: 180px"
             class="for-category"
           >
-          <option value="1">DRESSERT</option>
-          <option value="2">DRINK</option>
-          <option value="3">FOOD</option>
+            <option value="1">DRESSERT</option>
+            <option value="2">DRINK</option>
+            <option value="3">FOOD</option>
           </select>
         </div>
-        <button style="margin-top:30px" class="btn-save" @click="save">
+        <button style="margin-top: 30px" class="btn-save" @click="save">
           <span class="icon-save"></span>Save
         </button>
       </div>
@@ -104,7 +107,6 @@
 
     <!-- popup edit category -->
     <div class="blur" v-if="edit_category_status">
-    
       <div class="category-popup">
         <img
           @click="edit_category_status = false"
@@ -123,20 +125,23 @@
         </div>
 
         <div class="mb-1">
-          <label for="category" style="color: white">Type Category : &nbsp;</label>
+          <label for="category" style="color: white"
+            >Type Category : &nbsp;</label
+          >
           <select
             v-model="edit_category.type_category"
             type="text"
-            name="category" style="margin-top:10px;width:180px"
+            name="category"
+            style="margin-top: 10px; width: 180px"
             class="for-category"
           >
-          <option value="1">DRESSERT</option>
-          <option value="2">DRINK</option>
-          <option value="3">FOOD</option>
+            <option value="1">DRESSERT</option>
+            <option value="2">DRINK</option>
+            <option value="3">FOOD</option>
           </select>
         </div>
 
-        <button class="btn-save" style="margin-top:30px" @click="edit_submit">
+        <button class="btn-save" style="margin-top: 30px" @click="edit_submit">
           <span class="icon-save"></span>Save
         </button>
       </div>
@@ -195,12 +200,12 @@ export default {
         type_category: this.type_c,
         create_by: 1,
       };
-      api_product.post("category/", data).then((response) => {
+      api_product.post("category/", data).then(() => {
         setTimeout(() => {
-          this.alert = false;
-          this.add_category_status = false;
-          this.products_categories.push(response.data);
-        }, 2000);
+          "unit_set", (this.alert = false);
+          this.edit_category_status = false;
+        }, 1000);
+        this.fetchProductCategories();
       });
       this.category = "";
     },
@@ -211,13 +216,12 @@ export default {
         type_category: this.edit_category.type_category,
         create_by: 1,
       };
-      api_product.put("category/"+this.edit_category.id, data).then((response) => {
+      api_product.put("category/" + this.edit_category.id, data).then(() => {
         setTimeout(() => {
-            'unit_set', 
-          this.alert = false;
+          "unit_set", (this.alert = false);
           this.edit_category_status = false;
-          this.products_categories.push(response.data);
-        }, 2000);
+        }, 1000);
+        this.fetchProductCategories();
       });
       this.category = "";
     },
@@ -246,11 +250,13 @@ export default {
       }
     },
     get_product(category_id) {
+      var amount = 0;
       api_product
         .get("category/get-amount-product/" + category_id)
         .then((reponse) => {
-          return reponse.data.amount;
+          amount = reponse.data.amount;
         });
+      return amount;
     },
     edit(item) {
       this.edit_category = item;

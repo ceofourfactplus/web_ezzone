@@ -1,8 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product"
-      >New&#160;Topping&#160;</nav-app
-    >
+    <nav-app save="true" @save="create_product">New&#160;Topping&#160;</nav-app>
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -83,15 +81,11 @@
         <div class="row">
           <div class="col-5 label-input">
             <label for="flavour">Price&nbsp;:</label
-            ><input type="text" style="width:160px">
+            ><input type="text" style="width: 160px" />
           </div>
           <div class="col-7 label-input">
             <label for="stock">Stock :</label
-            ><select
-              id="type_topping"
-              style="width: 260px"
-              v-model="warehouse"
-            >
+            ><select id="type_topping" style="width: 260px" v-model="warehouse">
               <option value="0">not pickup</option>
               <option value="1">product</option>
               <option value="2">material</option>
@@ -177,9 +171,6 @@ export default {
     create_product() {
       const data = new FormData();
       data.append("code", this.code);
-      if (this.img != null) {
-        data.append("img", this.img, this.img.name);
-      }
       data.append("category_id", this.category_id);
       data.append("unit_id", this.unit_id);
       data.append("status", this.status);
@@ -193,7 +184,10 @@ export default {
       data.append("type_topping", this.type_topping);
       data.append("create_by_id", 1);
       data.append("old_product_id", 1);
-      api_product.post("topping/", data).then(() => {
+      api_product.post("topping/", data).then((response) => {
+        const data = new FormData();
+        data.append("img", this.img, this.img.name);
+        api_product.put("get-topping/" + response.data.id, data);
         this.$router.push({ name: "Topping" });
       });
     },
@@ -314,6 +308,7 @@ label {
 .image {
   width: 260px;
   height: 260px;
+  object-fit: cover;
   border-radius: 25px;
 }
 .switch {

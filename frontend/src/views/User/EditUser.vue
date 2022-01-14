@@ -170,30 +170,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Owner -->
-        <div class="row" style="height: 35px">
-          <div class="checkbox-orange">
-            <div class="row">
-              <div class="col-4">
-                <input
-                  type="checkbox"
-                  class="me-3 mt-2"
-                  v-model="user.is_owner"
-                  id="Owner"
-                />
-              </div>
-              <div class="col-8">
-                <label
-                  class="ms-2"
-                  style="color: #fff; font-weight: 700"
-                  for="Owner"
-                  >Owner</label
-                >
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="col-4" style="width: 100%; margin-left: 0px">
@@ -468,10 +444,8 @@ export default {
         !this.user.is_staff &&
         !this.user.is_purchesing
       ) {
-        console.log("woo");
         this.user.is_working = 0;
       }
-      console.log("new");
     },
     edit_user() {
       const user_data = new FormData();
@@ -545,7 +519,7 @@ label img {
 
 .gender {
   position: fixed;
-  top: 250px;
+  top: 210px;
   right: 20px;
   color: #ffffff;
 }

@@ -4,6 +4,8 @@ from product import views
 urlpatterns = [
     path('category/', views.ChangeList.as_view()),
     path('category/<int:pk>', views.ProductCategoryDetail.as_view()),
+    path('topping/<int:pk>', views.ToppingDetail.as_view()),
+    path('get-topping/<int:pk>', views.GetToppingDetail.as_view()),
     path('topping/', views.ToppingList.as_view()),
     path('topping-by-type/<int:type>', views.ToppingByType.as_view()),
     path('product-by-type/<int:type>', views.ProductByType.as_view()),
@@ -26,9 +28,13 @@ urlpatterns = [
     path('product/category/<int:category_id>', views.ProductByCategory.as_view()),
     path('product-pos/<int:pk>/', views.ProductPos.as_view()),
     path('product/<int:pk>/', views.ProductDetail.as_view()),
+    path('update-product/<int:pk>/', views.UpdateProduct.as_view()),
+    path('update-img-product/<int:pk>/', views.UpdateImageProduct.as_view()),
     path('product/status/<int:pk>/', views.ProductStatus.as_view()),
     path('many-price-product/', views.PriceProductMany.as_view()),
     path('check-category-topping/<str:category_name>', views.CheckCategoryTopping.as_view()),
     path('sale-channel-update-img/<int:pk>/',views.UpdateImageSaleChannel.as_view()),
-    path('delete-sale-channel-by-list/',views.DeleteSaleChannel.as_view())
+    path('delete-sale-channel-by-list/',views.DeleteSaleChannel.as_view()),
+    path('get-product-by-sale-channel/<int:channel_id>/<int:category>',views.GetProductByChannelAndCategory.as_view()),
+    path('get-topping-by-sale-channel/<int:channel_id>/<int:category>',views.GetToppingByChannelAndCategory.as_view()),
 ]
