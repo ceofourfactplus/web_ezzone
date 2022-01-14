@@ -108,10 +108,10 @@ input::placeholder ,textarea::placeholder{
   font-weight: bolder;
   color: #252836;
   border-radius: 10px;
-  border: 2px solid #FFB572
-
+  border: 2px solid #FFB572;
+  width: 120px;
+  height: 50px;
 }
-
 .btn-g {
   background-color: #50D1AA;
   font-size: 24px;
@@ -365,6 +365,32 @@ h1 {
   top: 0px;
   left: 0px;
   display: flex;
+}
+
+.description-card {
+  width: 672px;
+  height: 170px;
+  background: #303344;
+  border-radius: 20px;
+  margin: 20px 0px 0px 25px;
+}
+
+.input-promotion {
+  height: 50px;
+  line-height: 50px;
+  background: #717171;
+  border-radius: 12px;
+  color: white;
+}
+
+.input-date {
+  width: 30px;
+  height: 30px;
+  background: white;
+  background-image: url("../../assets/icon/calendar.png");
+  background-size: 20px 20px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
 }
 
 .table-header {

@@ -276,7 +276,7 @@ h2 {
   margin: 0px 38px 0px 0px;
 }
 .wrap-search {
-  min-width: 560px;
+  min-width: 505px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

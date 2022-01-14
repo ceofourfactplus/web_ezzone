@@ -70,7 +70,7 @@
         v-for="item in $store.state.raw_material.side_nav"
         :key="item"
       >
-        <img :src="item.img" style="margin-top: -10px; display: inline" />
+        <img :src="item.img" :style="item.img_style" style="margin-top: -10px; display: inline" />
         <div
           style="
             display: inline;
@@ -136,6 +136,8 @@ export default {
   margin-top: 20px;
 }
 .hamburger {
+  width: 40px;
+  height: 80px;
   top: 2px;
   right: 25px;
   position: absolute;

@@ -10,8 +10,8 @@ export default {
         side_nav: [
             {img: require('../../assets/icon/RM-mini.png'), name: 'Raw Materials', url_name: 'RawMaterials', style: "margin-left: -20px;",},
             {img: require('../../assets/icon/po-notice-30x40.png'), name: 'PO Notice', url_name: 'PONotice', style: "margin-left: -20px;",},
-            {img: require('../../assets/icon/po-30x40.png'), name: 'Purchase Order', url_name: 'PO', style: "margin-left: -35px;",},
-            {img: require('../../assets/icon/pickup-rm-30x40.png'), name: 'Pickup RM', url_name: 'PickupList', style: "margin-left: -35px;",},
+            {img: require('../../assets/icon/po-30x40.png'), name: 'Purchase Order', url_name: 'PO', style: "margin-left: -35px;", img_style: "width: 55px; height: 60px;",},
+            {img: require('../../assets/icon/pickup-rm-30x40.png'), name: 'Pickup RM', url_name: 'PickupList', style: "margin-left: -35px;", img_style: "width: 55px; height: 60px;",},
             {img: require('../../assets/icon/category-30x40.png'), name: 'Category', url_name: 'RawMaterialCategory', style: "margin-left: -20px;",},
         ],
         all_receipt: [],

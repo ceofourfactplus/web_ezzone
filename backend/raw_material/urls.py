@@ -5,6 +5,7 @@ urlpatterns = [
     path('raw-material/', views.RawMaterialListAPIView().as_view()),
     path('raw-material/<int:pk>', views.RMAPIView().as_view()),
     path('price-raw-material/', views.PriceRawMaterialAPIView().as_view()),
+    path('pickup-raw-material/', views.PickupPriceRM().as_view()),
     path('rm-po/notice', views.PONotice.as_view()),
     path('rm-update/', views.RMAPIView().as_view()),
     path('pickup/', views.PickupAPIView.as_view()),
@@ -22,5 +23,6 @@ urlpatterns = [
     path('supplier/<int:pk>', views.SupplierDetailAPIView.as_view()),
     path('po/cal-add',views.CalPO.as_view()),
     path('po/',views.POList.as_view()),
-    # path('po/query-item/<str:query>',views.)
+    path('po/update/',views.POList.as_view()),
+    path('po/calc/',views.CalcPOAvg.as_view()),
 ]

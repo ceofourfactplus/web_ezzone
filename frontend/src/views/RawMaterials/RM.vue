@@ -94,9 +94,10 @@ export default {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     console.log(this.$route.name, 'query page')
     this.fetchRMCategories();
+  },
+  beforeMount () {
     this.fetchRawMaterials();
   },
-
   data() {
     return {
       category: "",
@@ -433,7 +434,7 @@ input[type="checkbox"] {
 }
 
 .wrap-search {
-  min-width: 520px;
+  min-width: 470px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;
