@@ -156,13 +156,22 @@
                     <div class="col-3 w-100" style="padding-right:0px;"><a href="http://localhost:8080/?#/promotion/redemption/allreward">See All</a></div>
                 </div>
             </div>
-            <div id="ColItemReward">
-                <div class="column" v-for="reward in rewards" :key="reward.id">
-                  <img :src="require(`../../../../${reward.img}`)" style="width: 100%; height: 100%;">
+            <div class="col-12 w-100" id="ColItemReward">
+                <div class="row" style="position:relative;margin-top:15px;height:110;">
+                    
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    <div></div>
+                    <div class="BlockItem" id="BlockItem"></div>
+                    
                 </div>
             </div>            
       </div>
-  </div>
 </template>
 
 <script>
@@ -186,13 +195,11 @@ export default {
       selector_customer: [],
       customer: {},
       customer_point: [],
-      rewards: [],
     };
   },
   methods: {
     select_customer(cus) {
       console.log(cus, "cus");
-      this.$store.state.promotion.customer = cus
       this.selector_status = false;
       this.input_customer = this.phone_number_layout(cus.phone_number);
       this.customer = cus;
@@ -218,12 +225,6 @@ export default {
         return "";
       }
     },
-    fetchRewards() {
-      api_promotion.get("reward/").then((response) => {
-        console.log(response.data, "rewards");
-        this.rewards = response.data;
-      });
-    },
   },
   watch: {
     input_customer(newTel) {
@@ -240,23 +241,10 @@ export default {
       }
     },
   },
-  beforeMount() {
-    this.fetchRewards()
-  }
 };
 </script>
 
 <style scoped>
-.column {
-  float: left;
-  width: 100px;
-  padding: 10px;
-  height: 100px; 
-  margin: 12px;
-  background: #717171;
-  border-radius: 10px;
-}
-
 .selector {
   margin-top: 10px;
   background-color: #303344;
@@ -325,13 +313,10 @@ export default {
   height: 45px;
   margin-top: 10px;
 }
+
 #ColItemReward {
   height: 110px;
-  margin: 15px 0px 0px 25px;
-  content: "";
-  display: table;
-  clear: both;
-  width: 632px;
+  margin-top: 15px;
 }
 
 #BlockItem {

@@ -8,7 +8,7 @@
       </div>
       <div style="padding-left: 0px">
         <button
-          v-if="$store.state.promotion.tab == 'Point'"
+          v-if="tab == 'Point'"
           class="btn-ghost"
           @click="$router.push({ name: 'NewPoint' })"
         >
@@ -16,7 +16,7 @@
         </button>
         <button
           style="width: 128px"
-          v-if="$store.state.promotion.tab == 'Voucher'"
+          v-if="tab == 'Voucher'"
           class="btn-ghost"
           @click="$router.push({ name: 'NewVoucher' })"
         >
@@ -24,7 +24,7 @@
         </button>
         <button
           style="width: 128px"
-          v-if="$store.state.promotion.tab == 'Package'"
+          v-if="tab == 'Package'"
           class="btn-ghost"
           @click="$router.push({ name: 'NewPackage' })"
         >
@@ -32,7 +32,7 @@
         </button>
         <button
           style="width: 128px"
-          v-if="$store.state.promotion.tab == 'Rewards'"
+          v-if="tab == 'Rewards'"
           class="btn-ghost"
           @click="$router.push({ name: 'NewReward' })"
         >

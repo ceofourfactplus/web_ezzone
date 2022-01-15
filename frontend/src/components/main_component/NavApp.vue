@@ -100,7 +100,7 @@
 
 <script>
 export default {
-  props: ["save", "rm_menu","reward_menu", "cart", "amount", "trash", "url_name"],
+  props: ["save", "rm_menu","reward_menu", "cart", "amount", "trash"],
   data() {
     return {
       page: "",
