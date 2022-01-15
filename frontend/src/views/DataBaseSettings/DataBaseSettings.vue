@@ -20,7 +20,6 @@
                 background: #717171;
                 display: inline;
               "
-              v-model="dbs_item.change"
             />
             <p style="display: inline; margin-left: 6px;">บาท</p>
           </div>
@@ -34,7 +33,7 @@
             </div>
           </div>
         </div>
-        <!-- Pretty Cash  -->
+        <!-- Change Setting -->
         <div class="row" style="margin-top: 30px;">
           <div class="col-5 w-100 dbs-font" style="margin-top: 20px;left:20px;padding-right: 58px;">
             Pretty Cash
@@ -49,7 +48,6 @@
                 background: #717171;
                 display: inline;
               "
-              v-model="dbs_item.pretty_cash"
             />
             <p style="display: inline; margin-left: 6px;">บาท</p>
           </div>
@@ -211,7 +209,7 @@
         <div class="col-5 w-100" id="PaymentBlock">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/credit.png" class="IconPayment"/>
+              <img src="../../assets/icon/Credit.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding:0px;text-align:left;">
               <p id="TextPaymentChannel">Credit</p>
@@ -258,7 +256,6 @@ import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
-import { api_promotion } from "../../api/api_promotion"
 
 export default {
   components: {
@@ -268,24 +265,15 @@ export default {
     Table,
     PickupPopup,
   },
-  mounted() {
-    api_promotion.get('dbs/').then(response => {
-      this.dbs_item = response.data
-    })
-  },
+  mounted() {},
 
   data() {
     return {
       alert: false,
-      dbs_item: {
-        change: null,
-        pretty_cash: null,
-      },
     };
   },
   methods: {
     save() {
-      api_promotion.post('dbs/', this.dbs_item).then()
       this.alert = true;
       setTimeout(() => {
         this.alert = false;
@@ -307,7 +295,7 @@ export default {
   margin-left: 10px;
 }
 .dbs-font {
-  font-size: 24px;
+  font-size: 28px;
   color: white;
   font-weight: bold;
 }

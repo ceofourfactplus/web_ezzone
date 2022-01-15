@@ -101,7 +101,7 @@
           </div>
           <div class="col-5 w-100" v-else></div>
           <div class="col-3 w-100" id="LinkHistory">
-            <p @click="$router.push({ name: 'History'})">History</p>
+            <a href="url">History</a>
           </div>
         </div>
         <!-- Name -->
@@ -201,9 +201,10 @@ export default {
     select_customer(cus) {
       console.log(cus, "cus");
       this.selector_status = false;
-      this.input_customer = this.phone_number_layout(cus.phone_number);
+      this.input_customer = cus.phone_number;
       this.customer = cus;
       this.format_date_show(cus.birth_date);
+      this.phone_number_layout(this.input_customer)
       api_promotion.get(`customer-point/${cus.id}`).then((response) => {
         this.customer_point = response.data;
       });
