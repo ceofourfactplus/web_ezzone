@@ -8,7 +8,7 @@
         >
           <div class="col-4 w-100">Name</div>
           <div class="col-1 w-100">Qty</div>
-          <div class="col-2 w-100">Start</div>
+          <div class="col-2 w-100">Discount</div>
           <div class="col-2 w-100">End</div>
           <div class="col-2 w-100">Status</div>
           <div class="col-1 w-100"></div>
@@ -17,12 +17,12 @@
       <div class="table-item" v-for="voucher in vouchers" :key="voucher.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-4 w-100" style="margin-left: -30px;">{{ voucher.voucher }}</div>
-          <div class="col-1 w-100">{{ voucher.amount }}</div>
-          <div class="col-2 w-100">{{ format_date(voucher.start_date) }}</div>
+          <div class="col-1 w-100">{{ voucher.qty }}</div>
+          <div class="col-2 w-100">{{ voucher.discount }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
             <label class="switch">
-              <input type="checkbox" v-model="voucher.status" />
+              <input type="checkbox" v-model="voucher.status" @input="change_status(voucher)" />
               <span class="slider round"></span>
             </label>
           </div>
@@ -46,35 +46,32 @@ import { api_promotion } from "../../api/api_promotion"
 
 export default {
   name: "Voucher",
+  props: ["items"],
   components: {
     Switch,
   },
   data() {
     return {
         input: '',
-        vouchers: [],
+        vouchers: this.items,
     };
   },
   methods: {
-    fetchVoucher() {
-      api_promotion.get('voucher/').then((response) => {
-        this.vouchers = response.data
-        console.log(response.data)
-      })
-    },
     format_date(date) {
       var temp_date = date.split("-");
       return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
     },
+    change_status(item) {
+      item.status = !item.status
+      const data = {status: item.status}
+      api_promotion.put(`voucher/${item.id}`, data).then(() => {})
+    }
   },
   watch: {
     input: function (val) {
       this.input = val;
       console.log(val, "val")
     },
-  },
-  beforeMount() {
-    this.fetchVoucher();
   },
 };
 </script>

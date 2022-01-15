@@ -242,11 +242,6 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 
 }
 
-.PointsItem {
-
-
-}
-
 .SeeDetail {
 
     color: #EA7C69;

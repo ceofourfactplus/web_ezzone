@@ -19,3 +19,4 @@ class CustomerSerializer(serializers.ModelSerializer):
                   'last_name', 'phone_number', 'gender',
                   'img', 'email', 'addresscustomer_set','birth_date',
                   'line_customer_id', 'invited_by', 'date_joined', 'last_joined']
+
