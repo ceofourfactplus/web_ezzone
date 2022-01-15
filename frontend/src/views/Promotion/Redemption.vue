@@ -118,7 +118,7 @@
           </div>
           <div class="col-1 w-100" id="DotName">:</div>
           <div class="col-8 w-100" id="DetailName">
-            {{ customer.nick_name }}
+            {{ $store.state.promotion.customer.nick_name }}
           </div>
         </div>
         <!-- Birthdate -->
@@ -156,13 +156,14 @@
                     <div class="col-3 w-100" style="padding-right:0px;"><a href="http://localhost:8080/?#/promotion/redemption/allreward">See All</a></div>
                 </div>
             </div>
-            <div id="ColItemReward">
+            
+            <div id="ColItemReward" v-for="i in rewards" :key="i.id">
                 <div class="column" v-for="reward in rewards" :key="reward.id">
-                  <img :src="require(`../../../../${reward.img}`)" style="width: 100%; height: 100%;">
+                  <img :src="require(`../../../../backend${reward.img}`)" style="width: 100%; height: 100%; border-radius: 10px;">
                 </div>
             </div>            
       </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -184,22 +185,27 @@ export default {
       temp_date: null,
       selector_status: false,
       selector_customer: [],
-      customer: {},
       customer_point: [],
       rewards: [],
     };
   },
   methods: {
+    fetchRewards() {
+      api_promotion.get("reward/").then((response) => {
+        console.log(response.data, "rewards");
+        this.rewards = response.data;
+        this.temp_rewards = response.data;
+      });
+    },
     select_customer(cus) {
       console.log(cus, "cus");
-      this.$store.state.promotion.customer = cus
       this.selector_status = false;
-      this.input_customer = cus.phone_number;
-      this.customer = cus;
+      this.input_customer = this.phone_number_layout(cus.phone_number)
+      this.$store.state.promotion.customer = cus;
       this.format_date_show(cus.birth_date);
-      this.phone_number_layout(this.input_customer)
       api_promotion.get(`customer-point/${cus.id}`).then((response) => {
         this.customer_point = response.data;
+        this.$store.state.promotion.customer_point = response.data
       });
     },
     format_date_show(date) {
@@ -218,12 +224,6 @@ export default {
       } else {
         return "";
       }
-    },
-    fetchRewards() {
-      api_promotion.get("reward/").then((response) => {
-        console.log(response.data, "rewards");
-        this.rewards = response.data;
-      });
     },
   },
   watch: {
@@ -251,13 +251,11 @@ export default {
 .column {
   float: left;
   width: 100px;
-  padding: 10px;
+  margin: 10px;
   height: 100px; 
-  margin: 12px;
-  background: #717171;
   border-radius: 10px;
+  background: #717171;
 }
-
 .selector {
   margin-top: 10px;
   background-color: #303344;
@@ -326,13 +324,14 @@ export default {
   height: 45px;
   margin-top: 10px;
 }
+
 #ColItemReward {
-  height: 110px;
-  margin: 15px 0px 0px 25px;
+  width: 632px;
+  margin-left: 37px;
+  margin-top: 15px;
   content: "";
   display: table;
   clear: both;
-  width: 632px;
 }
 
 #BlockItem {
