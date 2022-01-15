@@ -90,7 +90,7 @@
           </div>
           <div class="col-12 w-100" style="margin-top: 30px">
             <!-- Image -->
-            <label id="select_img" for="file" style="margin-top: 0px; margin-left: 18px;">
+            <label id="select_img" for="file" style="margin-top: 0px">
               <img :src="show_img" class="image" v-if="show_img != null" />
             </label>
             <input
@@ -130,7 +130,7 @@
         v-model="description"
       ></textarea>
     </div>
-    <div class="table" style="margin: 10px 0px 0px 27px; min-width: 670px;">
+    <div class="table" style="margin-top: 10px;">
       <div class="table-header">
         <div
           class="row"
