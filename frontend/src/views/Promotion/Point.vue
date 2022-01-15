@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'DashBoard'">{{ tab }}</nav-app>
+    <nav-app :url_name="'DashBoard'">{{ $store.state.promotion.tab }}</nav-app>
     <!-- Head -->
     <div class="row">
       <div class="col-11 wrap-search">
@@ -48,13 +48,13 @@
         @click="select_item(item)"
         class="tab-item"
       >
-        <p :class="{ 'tab-selected': item == tab }" style="font-size: 24px">
+        <p :class="{ 'tab-selected': item == $store.state.promotion.tab }" style="font-size: 24px">
           {{ item }}
         </p>
       </button>
     </div>
     <!-- Point Promotion -->
-    <div v-if="tab == 'Point'">
+    <div v-if="$store.state.promotion.tab == 'Point'">
     <!-- Card Content -->
     <div class="card-content" v-for="item in point_promotions" :key="item.id">
       <div class="row">
@@ -64,7 +64,7 @@
             font-size: 48px;
             color: #ea7c69;
             font-weight: bold;
-            margin-left: 15px;
+            margin-left: 25px;
             text-align: left;
           "
         >
@@ -74,7 +74,7 @@
           class="col-4 w-100"
           style="margin: 10px 0px 0px -10px"
         >
-          <label class="switch" style="margin-top: 30px;">
+          <label class="switch" style="margin: 21px 0px 0px 90px;">
               <input type="checkbox" v-model="item.status" @input="change_status(item)" />
               <span class="slider round"></span>
           </label>
@@ -109,7 +109,7 @@
             right: 23px;
           "
         >
-          Baht <br> /Point
+          <div class="col-12" style="margin-top: 15px; position: absolute; right: -1px;">Baht</div>  <div class="col-12" style="margin-top: 54px;">/Point</div>
         </div>
       </div>
       <div class="row" style="margin-top: 10px">
@@ -186,7 +186,7 @@
     </div>
   </div>
     <!-- Voucher -->
-    <div class="table" style="margin-top: 10px" v-else-if="tab == 'Voucher'">
+    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Voucher'">
       <div class="table-header" style="width: 670px; margin-left: -10px;">
         <div
           class="row"
@@ -202,9 +202,10 @@
       </div>
       <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="voucher in vouchers" :key="voucher.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-4 w-100" style="margin-left: -30px;">{{ voucher.voucher }}</div>
+          <div class="col-4 w-100" style="margin-left: 20px; text-align: left;">{{ voucher.voucher }}</div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
-          <div class="col-2 w-100">{{ voucher.discount }}</div>
+          <div class="col-2 w-100" v-if="voucher.is_percent">{{ discounting(voucher.discount) }}</div>
+          <div class="col-2 w-100" v-else>{{ voucher.discount }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
             <label class="switch">
@@ -223,7 +224,7 @@
       </div>
     </div>
     <!-- Package -->
-    <div class="table" style="margin-top: 10px" v-else-if="tab == 'Package'">
+    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Package'">
       <div class="table-header" style="width: 670px; margin-left: -10px;">
         <div
           class="row"
@@ -338,8 +339,12 @@ export default {
     };
   },
   methods: {
+    discounting(discount_price) {
+        var temp = discount_price.split('.')
+        return `${temp[0]}%`
+    },
     select_item(item) {
-      this.tab = item;
+      this.$store.state.promotion.tab = item;
     },
     search_by_typing(txt) {
       var temp = [];
@@ -505,7 +510,7 @@ export default {
 }
 .tab {
   overflow: hidden;
-  width: 90%;
+  width: 100%;
   height: 46px;
   margin-right: 1%;
   margin-left: 22px;
@@ -527,7 +532,7 @@ export default {
   margin-top: 0px;
   margin-bottom: 1em;
   height: 59px;
-  width: 150px;
+  width: 160px;
   block-size: fit-content;
   text-decoration: none;
   line-height: 31px;

@@ -74,6 +74,8 @@ import NewPoint from "../views/Promotion/NewPoint.vue"
 import NewVoucher from "../views/Promotion/NewVoucher.vue"
 import NewPackage from "../views/Promotion/NewPackage.vue"
 import NewReward from "../views/Promotion/NewReward.vue"
+import PackageDetail from "../views/Promotion/PackageDetail.vue"
+import RewardDetail from "../views/Promotion/RewardDetail.vue"
 import PointDetail from "../views/Promotion/PointDetail.vue"
 import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
 import Redemption from "../views/Promotion/Redemption.vue"
@@ -85,18 +87,6 @@ import MainReport from '../views/Report/MainReport.vue'
 
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
-
-// promotion
-import Point from "../views/Promotion/Point.vue"
-import NewPoint from "../views/Promotion/NewPoint.vue"
-import NewVoucher from "../views/Promotion/NewVoucher.vue"
-import NewPackage from "../views/Promotion/NewPackage.vue"
-import NewReward from "../views/Promotion/NewReward.vue"
-import PointDetail from "../views/Promotion/PointDetail.vue"
-import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
-import PackageDetail from "../views/Promotion/PackageDetail.vue"
-import RewardDetail from "../views/Promotion/RewardDetail.vue"
-import Redemption from "../views/Promotion/Redemption.vue"
 
 const routes = [
   {

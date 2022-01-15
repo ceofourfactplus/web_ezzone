@@ -1,8 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import PointPromotion, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint
-from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer
+import json
+import ast
+from .models import PointPromotion, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint, ExchangeHistory
+from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer, ExchangeHistorySerializer
 
 
 class PointPromotionAPI(APIView):
@@ -373,7 +375,6 @@ class CustomerPointAPI(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
     
-    
 class CustomerPointGET(APIView):
     def get_object(self, pk):
         try:
@@ -390,3 +391,64 @@ class CustomerPointGET(APIView):
                 serializer = CustomerPointSerializer(i)
                 data.append(serializer.data)
         return Response(data)   
+    
+class ExchangeHistoryAPI(APIView):
+    def get_object(self, pk):
+        try:
+            return ExchangeHistory.objects.get(customer_id=pk)
+        except ExchangeHistory.DoesNotExist:
+            raise 404
+        
+    def get(self, request):
+        exchange_history = ExchangeHistory.objects.all()
+        serializer = ExchangeHistorySerializer(exchange_history, many=True)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        exchange_history = ExchangeHistory.objects.get(id=request.data['id'])
+        serializer = ExchangeHistorySerializer(exchange_history, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    def post(self, request):
+        serializer = ExchangeHistorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+    
+class ExchangeHistoryGET(APIView):
+    def get_object(self, pk):
+        try:
+            return ExchangeHistory.objects.filter(customer_id=pk)
+        except ExchangeHistory.DoesNotExist:
+            raise 404
+        
+    def get(self, request, pk):
+        exchange_histories = self.get_object(pk)
+        print(exchange_histories)
+        data = []
+        if len(exchange_histories) != 0:
+            for i in exchange_histories:
+                serializer = ExchangeHistorySerializer(i)
+                data.append(serializer.data)
+        return Response(data)   
+    
+    
+class DBS(APIView):
+    def get(self, request):
+        with open("dbs.txt", "r") as data:
+            dictionary = ast.literal_eval(data.read())
+        print(dictionary['change'], 'read')
+        return Response(dictionary)   
+    
+    def post(self, request):
+        my_file = open("dbs.txt", "w")
+        data = repr(request.data)
+        my_file.write(data)
+        my_file.close()
+        print(request.data, 'data')
+        return Response('good')
