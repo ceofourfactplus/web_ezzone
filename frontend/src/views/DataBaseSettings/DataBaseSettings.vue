@@ -20,6 +20,7 @@
                 background: #717171;
                 display: inline;
               "
+              v-model="dbs_item.change"
             />
             <p style="display: inline; margin-left: 6px;">บาท</p>
           </div>
@@ -33,7 +34,7 @@
             </div>
           </div>
         </div>
-        <!-- Change Setting -->
+        <!-- Pretty Cash  -->
         <div class="row" style="margin-top: 30px;">
           <div class="col-5 w-100 dbs-font" style="margin-top: 20px;left:20px;padding-right: 58px;">
             Pretty Cash
@@ -48,6 +49,7 @@
                 background: #717171;
                 display: inline;
               "
+              v-model="dbs_item.pretty_cash"
             />
             <p style="display: inline; margin-left: 6px;">บาท</p>
           </div>
@@ -177,7 +179,7 @@
         <div class="col-5 w-100" id="PaymentBlock">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/cash.png" class="IconPayment"/>
+              <img src="../../assets/icon/Cash.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding-left:0px;text-align:left;">
               <p id="TextPaymentChannel">Cash</p>
@@ -191,7 +193,7 @@
         <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/cod.png" class="IconPayment"/>
+              <img src="../../assets/icon/COD.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding:0px;text-align:left;">
               <p id="TextPaymentChannel">COD</p>
@@ -223,7 +225,7 @@
         <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/transfer.png" class="IconPayment"/>
+              <img src="../../assets/icon/Transfer.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding:0px;text-align:left;">
               <p id="TextPaymentChannel">Transfer</p>
@@ -255,6 +257,7 @@ import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
+import { api_promotion } from "../../api/api_promotion"
 
 export default {
   components: {
@@ -264,15 +267,24 @@ export default {
     Table,
     PickupPopup,
   },
-  mounted() {},
+  mounted() {
+    api_promotion.get('dbs/').then(response => {
+      this.dbs_item = response.data
+    })
+  },
 
   data() {
     return {
       alert: false,
+      dbs_item: {
+        change: null,
+        pretty_cash: null,
+      },
     };
   },
   methods: {
     save() {
+      api_promotion.post('dbs/', this.dbs_item).then()
       this.alert = true;
       setTimeout(() => {
         this.alert = false;

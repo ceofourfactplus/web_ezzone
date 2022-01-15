@@ -11,7 +11,7 @@
               <input
                 type="text"
                 class="input-top"
-                placeholder="Promotion"
+                placeholder="Package"
                 v-model="promotion"
               />
             </div>
@@ -19,11 +19,12 @@
           <!-- Start Date -->
           <div class="row" style="margin-top: 20px">
             <div class="col-12 w-100 txt">
-              Start Date&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{
-                temp_start
-              }}&nbsp;&nbsp;<input
+              <p style="display: inline; margin-left: 27px;" v-if="temp_start != null">Start Date&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{temp_start}}</p>&nbsp;&nbsp;
+              <p style="display: inline; margin-left: -135px;" v-else>Start Date&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{temp_start}}</p>&nbsp;&nbsp;
+              <input
                 type="date"
                 class="input-date"
+                style="display: inline;"
                 @change="format_date($event)"
               />
             </div>
@@ -115,13 +116,13 @@
         <button class="btn-ghost" @click="add_menu = true">+ New</button>
       </div>
       <div class="col-3 w-100">
-        <button class="btn-save" @click="delete_pip()">
+        <button style="margin-right: 17px;" class="btn-save" @click="delete_pip()">
           <span class="icon-save"></span>Delete
         </button>
       </div>
     </div>
     <!-- Table -->
-    <div class="table" style="margin-top: 10px">
+    <div class="table" style="margin: 10px 0px 0px 27px; min-width: 675px;">
       <div class="table-header">
         <div
           class="row"
@@ -214,6 +215,7 @@
               @click="
                 product_item = { ...product };
                 search_product = false;
+                total_price += parseInt(product_item.priceproduct_set[0].price);
               "
               class="product-menu"
               v-for="product in products"
@@ -238,6 +240,7 @@
                 topping_id = product.id;
                 topping_item = { ...product };
                 search_topping = false;
+                total_price += parseInt(topping_item.priceproduct_set[0].price);
               "
               class="product-menu"
               v-for="product in products_for_topping"
@@ -328,7 +331,7 @@ export default {
       // Package Item
       product_item: {},
       qty: null,
-      total_price: null,
+      total_price: 0,
       package: null,
       // Promotion Package
       id: null,
@@ -572,7 +575,7 @@ span.icon-save {
   border-radius: 12px;
   color: white;
   float: left;
-  margin: 10px 0px 0px 20px;
+  margin: 10px 0px 0px 32px;
 }
 .input-code {
   width: 167px;

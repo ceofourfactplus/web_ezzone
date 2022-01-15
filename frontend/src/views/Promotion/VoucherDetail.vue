@@ -50,7 +50,8 @@
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ format_date_show(voucher_item.start_date) }}<input type="date" class="input-date" @change="format_date($event, 'start')" ></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ format_date_show(voucher_item.end_date) }}<input type="date" class="input-date" @change="format_date($event, 'end')" ></div>
                 <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-right-side" v-model="voucher_item.qty"></div>
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-right-side" v-model="voucher_item.discount"></div>
+                <div class="col-12 w-100 txt-promotion" id="txt-right-side" v-if="voucher_item.is_percent"><input type="text" class="input-right-side" :value="discounting(voucher_item.discount)" @input="set_discount($event)"></div>
+                <div class="col-12 w-100 txt-promotion" id="txt-right-side" v-else><input type="text" class="input-right-side" v-model="voucher_item.discount"></div>
             </div>
         </div>
     </div>
@@ -114,17 +115,21 @@ export default {
         })
     },
     edit() {
+      if (this.voucher_item.discount.endsWith('%')) {
+        this.voucher_item.is_percent = true
+        this.voucher_item.discount = parseInt(this.voucher_item.discount.replace('%', ''))
+      }
       const data = new FormData();
       data.append("id", this.voucher_item.id);
       data.append("voucher", this.voucher_item.voucher);
       data.append("code", this.voucher_item.code);
-    //   data.append("img", this.voucher_item.img, this.voucher_item.img.name); 
       data.append("discount", this.voucher_item.discount);
       data.append("start_date", this.voucher_item.start_date);
       data.append("end_date", this.voucher_item.end_date);
       data.append("description", this.voucher_item.description);
       data.append("amount", this.voucher_item.amount);
       data.append("status", this.voucher_item.status);
+      data.append("is_percent", this.voucher_item.is_percent);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
       if (this.new_img) {
@@ -170,6 +175,18 @@ export default {
     switch_active(val) {
       this.voucher_item.status = val
     },
+    discounting(discount_price) {
+      if(this.voucher_item.is_percent) {
+        if(discount_price.includes('%')){
+          return discount_price
+        }
+        var temp = discount_price.split('.')
+        return `${temp[0]}%`
+      }
+    },
+    set_discount(e) {
+      this.voucher_item.discount = e.target.value
+    },
   },
   beforeMount() {
       this.fetchVoucher();
@@ -209,7 +226,7 @@ export default {
 .colon {
   font-size: 30px;
   text-align: center;
-  margin: 20px 0px 0px -40px;
+  margin: 22px 0px 0px -40px;
   color: white;
 }
 .input-right-side {
