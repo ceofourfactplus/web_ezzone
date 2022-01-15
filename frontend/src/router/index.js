@@ -79,6 +79,7 @@ import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
 import Redemption from "../views/Promotion/Redemption.vue"
 import History from "../views/Promotion/History.vue"
 import AllReward from "../views/Promotion/AllReward.vue"
+import PreOrderReward from "../views/Promotion/PreOrderReward.vue"
 
 // Report
 import MainReport from '../views/Report/MainReport.vue'
@@ -196,6 +197,14 @@ const routes = [
     path: "/promotion/redemption/allreward",
     name: "AllReward",
     component: AllReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/preorderreward",
+    name: "PreOrderReward",
+    component: PreOrderReward,
     meta: {
       requiresLogin: false,
     },

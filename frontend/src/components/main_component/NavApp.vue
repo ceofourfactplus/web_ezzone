@@ -28,6 +28,13 @@
             @click="open_slide"
           />
         </div>
+        <div class="col-1" v-else-if="reward_menu">
+          <img
+            src="../../assets/icon/Menu-icon.png"
+            style="top: 0px; right: 25px; position: absolute; height: 100px"
+            @click="open_slide"
+          />
+        </div>
         <div
           class="col-1 w-100"
           style="padding: 0px; margin-top: 20px; margin-right: 20px"
@@ -93,7 +100,7 @@
 
 <script>
 export default {
-  props: ["save", "rm_menu", "cart", "amount", "trash"],
+  props: ["save", "rm_menu","reward_menu", "cart", "amount", "trash"],
   data() {
     return {
       page: "",
