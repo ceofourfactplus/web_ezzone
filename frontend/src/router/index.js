@@ -86,6 +86,7 @@ import PackageDetail from "../views/Promotion/PackageDetail.vue"
 import RewardDetail from "../views/Promotion/RewardDetail.vue"
 import Redemption from "../views/Promotion/Redemption.vue"
 import AllReward from "../views/Promotion/AllReward.vue"
+import DetailReward from "../views/Promotion/DetailReward.vue"
 import PreOrderReward from "../views/Promotion/PreOrderReward.vue"
 import History from "../views/Promotion/History.vue"
 
@@ -225,6 +226,14 @@ const routes = [
     path: "/promotion/redemption/allreward",
     name: "AllReward",
     component: AllReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/detailreward",
+    name: "DetailReward",
+    component: DetailReward,
     meta: {
       requiresLogin: false,
     },

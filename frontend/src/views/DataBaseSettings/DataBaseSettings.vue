@@ -294,7 +294,7 @@ export default {
   margin-left: 10px;
 }
 .dbs-font {
-  font-size: 28px;
+  font-size: 24px;
   color: white;
   font-weight: bold;
 }
