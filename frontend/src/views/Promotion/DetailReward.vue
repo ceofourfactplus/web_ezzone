@@ -32,7 +32,7 @@
                 </select>
                 </div>
                 <div class="col-6 w-100" style="padding:0px;">
-                    <div class="StatusItem"><b>Redeem</b></div>
+                    <div class="RedeemItem"><b>Redeem</b></div>
                 </div>
             </div>
             <div class="row BlockImg">
@@ -56,7 +56,52 @@
         
         
         </div>
+        <!-- Popup -->
+        <div class="AreaPopup">
+            <div class="HeadPopup" style="left:20px">
+                <b>Redeem</b>
+                <img src="../../assets/img/btn-close.png" alt="" style="right:-176px;position:relative;">
+            </div>
+            <div class="table-item AreaRedeemPopup">
+                <div class="row">
+                    <div class="col-6 StatusBlock"><b>Confirm Redeem</b></div>
+                    <div class="col-6 RedeemNamePhone" style="margin-bottom:5px;">ป้าวราภรณ์แสงโสภา</div>
+                </div>
+                <div class="row" style="height:250px;padding-top:10px;">
+                    <div class="col-6 RedeemImg" style="background-color: #717171;"></div>
+                    <div class="col-6 RedeemImg">
+                        <div class="RedeemNamePhone" style="margin:0px;margin-bottom:15px;">095-161-7171</div>
+                        <div class="RedeemNameReward" style="margin:0px;margin-bottom:15px"><b>Specail Set1</b></div>
+                        <div class="row RedeemPoint" style="margin:0px;margin-bottom:15px;">
+                            <div class="col-6 w-100 DetailPoint" style="background-color:#303344;"><b>200</b></div>
+                            <div class="col-6 w-100 DetailPoint"><b>Point</b></div>
+                            
+                        </div>
+                        <div class="RedeemNamePhone" style="margin:0px;">
+                            <select
+                            name="category"
+                            id="category"
+                            v-model="category_id"
+                            style="background:#717171;height:50px;width:233px;"
+                            >
+                            <!-- <option
+                                v-for="category in categories"
+                                :key="category.id"
+                                :value="category.id"
+                            >
+                                {{ category.name }}
+                            </option> -->
+                            </select>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="row"></div>
+            </div>
 
+
+
+        </div>
 
     </div>
 
@@ -100,7 +145,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
     top: 30px;
 }
 
-.StatusItem {
+.RedeemItem {
     color: #EA7C69;
     font-size: 30px;
     height: 50px;
@@ -162,15 +207,121 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 
 .BlockDescription {
 
-    background-color: rgb(168, 190, 190);
     width: 100%;
     height: 305px;
     border-radius: 20px;
     position: relative;
-    font-size: 30px;
+    font-size: 24px;
     text-align: left;
     padding:0px;
 
+}
+
+.AreaPopup {
+    color: #fff;
+    position:absolute;
+    border-radius: 20px;
+    width: 590px;
+    height: 586px;
+    background-color: rgb(54, 66, 66);
+    top: 140px;
+    left: 65px;
+}
+
+.HeadPopup {
+    color: #fff;
+    width: 590px;
+    position: relative;
+    font-size: 37px;
+    text-align: center;
+    padding:0px;
+    margin:0px;
+}
+
+.AreaRedeemPopup {
+    margin-left:20px;
+    margin-right:20px;
+    margin-bottom:20px;
+    width: 550px;
+    height: 85%;
+    padding: 20px;
+
+}
+
+.RedeemNamePhone {
+    width: 243px;
+    height: 50px;
+    background-color: #717171;
+    position: relative;
+    font-size: 23px;
+    padding:0px;
+    padding-left:10px;
+    margin-left:12px;
+    border-radius: 10px;
+    line-height: 45px;
+    text-align:left;
+}
+
+.RedeemImg {
+    width: 243px;
+    height: 100%;
+    position: relative;
+    font-size: 23px;
+    text-align: center;
+    padding:0px;
+    margin-left:12px;
+    border-radius: 25px;
+
+}
+
+.StatusBlock {
+    color: #50D1AA;
+    width: 243px;
+    height: 50px;
+    border-radius: 20px;
+    border: 3px solid #50D1AA;
+    width: 243px;
+    height: 50px;
+    position: relative;
+    font-size: 23px;
+    text-align: center;
+    padding:0px;
+    margin-left:12px;
+}
+
+.RedeemNameReward {
+    width: 243px;
+    height: 50px;
+    position: relative;
+    font-size: 23px;
+    text-align: center;
+    padding:0px;
+    margin-left:12px;
+    border-radius: 10px;
+    line-height: 45px;
+    padding-left:10px;
+    text-align:left;
+}
+
+.RedeemPoint {
+    width: 243px;
+    height: 50px;
+    background-color: #EA7C69;
+    position: relative;
+    font-size: 23px;
+    text-align: center;
+    padding:2px;
+    margin-left:12px;
+    border-radius: 10px;
+    line-height: 45px;
+}
+
+.DetailPoint {
+
+    height: 100%;
+    padding:0px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 </style>
