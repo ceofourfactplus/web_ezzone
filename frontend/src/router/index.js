@@ -76,29 +76,19 @@ import NewPackage from "../views/Promotion/NewPackage.vue"
 import NewReward from "../views/Promotion/NewReward.vue"
 import PointDetail from "../views/Promotion/PointDetail.vue"
 import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
+import PackageDetail from "../views/Promotion/PackageDetail.vue"
 import Redemption from "../views/Promotion/Redemption.vue"
 import History from "../views/Promotion/History.vue"
 import AllReward from "../views/Promotion/AllReward.vue"
-import DetailReward from "../views/Promotion/DetailReward.vue"
 import PreOrderReward from "../views/Promotion/PreOrderReward.vue"
+import RewardDetail from "../views/Promotion/RewardDetail.vue"
+
 
 // Report
 import MainReport from '../views/Report/MainReport.vue'
 
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
-
-// promotion
-import Point from "../views/Promotion/Point.vue"
-import NewPoint from "../views/Promotion/NewPoint.vue"
-import NewVoucher from "../views/Promotion/NewVoucher.vue"
-import NewPackage from "../views/Promotion/NewPackage.vue"
-import NewReward from "../views/Promotion/NewReward.vue"
-import PointDetail from "../views/Promotion/PointDetail.vue"
-import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
-import PackageDetail from "../views/Promotion/PackageDetail.vue"
-import RewardDetail from "../views/Promotion/RewardDetail.vue"
-import Redemption from "../views/Promotion/Redemption.vue"
 
 const routes = [
   {
@@ -236,14 +226,6 @@ const routes = [
     path: "/promotion/redemption/allreward",
     name: "AllReward",
     component: AllReward,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
-    path: "/promotion/redemption/detailreward",
-    name: "DetailReward",
-    component: DetailReward,
     meta: {
       requiresLogin: false,
     },

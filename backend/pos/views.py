@@ -1,5 +1,5 @@
 from django.db.models import Sum, F, Count
-from backend.product.models import SaleChannel
+from product.models import SaleChannel
 from pos.models import Order, OrderItem, OrderItemTopping, Payment
 from pos.serializers import OrderSerializer, PaymentSerializer, OrderItemSerializer, OrderItemToppingSerializer
 from rest_framework.views import APIView
@@ -431,7 +431,7 @@ class Report (APIView):
             payment_status=4).aggregate(Sum('total_balance'))['total_balance__sum']
         report['total_customer'] = order.filter(customer_id__isnull=False).values('customer_id').distinct().count()
         all_channel_id =[channel.id for channel in SaleChannel.objects.all()]
-        for channel_id in all_channel_id:
+        # for channel_id in all_channel_id:
             
         report['sale_channel_detail'] = order.fitler
         # find top food

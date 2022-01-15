@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'DashBoard'">{{ tab }}</nav-app>
+    <nav-app :url_name="'DashBoard'">{{ $store.state.promotion.tab }}</nav-app>
     <!-- Head -->
     <div class="row">
       <div class="col-11 wrap-search">
@@ -48,13 +48,13 @@
         @click="select_item(item)"
         class="tab-item"
       >
-        <p :class="{ 'tab-selected': item == tab }" style="font-size: 24px">
+        <p :class="{ 'tab-selected': item == $store.state.promotion.tab }" style="font-size: 24px">
           {{ item }}
         </p>
       </button>
     </div>
     <!-- Point Promotion -->
-    <div v-if="tab == 'Point'">
+    <div v-if="$store.state.promotion.tab == 'Point'">
     <!-- Card Content -->
     <div class="card-content" v-for="item in point_promotions" :key="item.id">
       <div class="row">
@@ -186,7 +186,7 @@
     </div>
   </div>
     <!-- Voucher -->
-    <div class="table" style="margin-top: 10px" v-else-if="tab == 'Voucher'">
+    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Voucher'">
       <div class="table-header" style="width: 670px; margin-left: -10px;">
         <div
           class="row"
@@ -223,7 +223,7 @@
       </div>
     </div>
     <!-- Package -->
-    <div class="table" style="margin-top: 10px" v-else-if="tab == 'Package'">
+    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Package'">
       <div class="table-header" style="width: 670px; margin-left: -10px;">
         <div
           class="row"
@@ -334,30 +334,29 @@ export default {
       temp_packages: [],
       rewards: [],
       temp_rewards: [],
-      tab: "Point",
     };
   },
   methods: {
     select_item(item) {
-      this.tab = item;
+      this.$store.state.promotion.tab = item;
     },
     search_by_typing(txt) {
       var temp = [];
       if (txt == "") {
-        if (this.tab == "Point") {
+        if (this.$store.state.promotion.tab == "Point") {
           this.point_promotions = this.temp_point_promotions;
         }
-        if (this.tab == "Voucher") {
+        if (this.$store.state.promotion.tab == "Voucher") {
           this.vouchers = this.temp_vouchers;
         }
-        if (this.tab == "Package") {
+        if (this.$store.state.promotion.tab == "Package") {
           this.packages = this.temp_packages;
         }
-        if (this.tab == "Rewards") {
+        if (this.$store.state.promotion.tab == "Rewards") {
           this.rewards = this.temp_rewards;
         }
       } else {
-        if (this.tab == "Point") {
+        if (this.$store.state.promotion.tab == "Point") {
           this.temp_point_promotions.forEach((element) => {
             if (element.promotion.indexOf(txt) + 1 != 0) {
               temp.push(element);
@@ -365,7 +364,7 @@ export default {
           });
           this.point_promotions = temp;
         }
-        if (this.tab == "Voucher") {
+        if (this.$store.state.promotion.tab == "Voucher") {
           this.temp_vouchers.forEach((element) => {
             if (element.voucher.indexOf(txt) + 1 != 0) {
               temp.push(element);
@@ -373,7 +372,7 @@ export default {
           });
           this.vouchers = temp;
         }
-        if (this.tab == "Package") {
+        if (this.$store.state.promotion.tab == "Package") {
           this.temp_packages.forEach((element) => {
             if (element.promotion.indexOf(txt) + 1 != 0) {
               temp.push(element);
@@ -381,7 +380,7 @@ export default {
           });
           this.packages = temp;
         }
-        if (this.tab == "Rewards") {
+        if (this.$store.state.promotion.tab == "Rewards") {
           this.temp_rewards.forEach((element) => {
             if (element.reward.indexOf(txt) + 1 != 0) {
               temp.push(element);
