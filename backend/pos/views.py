@@ -1,5 +1,4 @@
 from django.db.models import Sum, F, Count
-from backend.product.models import SaleChannel
 from pos.models import Order, OrderItem, OrderItemTopping, Payment
 from pos.serializers import OrderSerializer, PaymentSerializer, OrderItemSerializer, OrderItemToppingSerializer
 from rest_framework.views import APIView
@@ -7,10 +6,16 @@ from customer.models import Customer, AddressCustomer
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from pprint import pprint
-from product.models import Product
-from product.serializers import ProductReportSerialiser
+from product.models import Product, SaleChannel
+from product.serializers import ProductReportSerialiser, ChannelReportSerializer
 import datetime
 
+class cancel_order(APIView):
+    def put(self,request,pk):
+        order = Order.objects.get(pk=pk)
+        order.status_order = 4
+        order.save()
+        return Response('ok')
 
 def check_is_finish(order_id):
     try:
@@ -242,26 +247,33 @@ class OrderList(APIView):
 
     def post(self, request):
         # check customer
+        pprint(request.data)
         if request.data['customer_set'] == {}:
             request.data['customer_id'] = None
             request.data['address_id'] = None
-        elif not request.data['customer_id'] == None:
-            if Customer.objects.filter(nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).exists():
-                request.data['customer_id'] = Customer.objects.get(
-                    nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).id
-                if not request.data['address_set']['address'] == None:
-                    if AddressCustomer.objects.filter(customer_id=request.data['customer_id'], address=request.data['address_set']['address']).exists():
-                        request.data['address_id'] = AddressCustomer.objects.get(
-                            customer_id=request.data['customer_id'], address=request.data['address_set']['address']).id
+
+        # check is has customer in data
+        if Customer.objects.filter(nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).exists():
+            request.data['customer_id'] = Customer.objects.get(
+                nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).id
+            if not request.data['address_set'] == {}:
+                if AddressCustomer.objects.filter(customer_id=request.data['customer_id'], address=request.data['address_set']['address']).exists():
+                    request.data['address_id'] = AddressCustomer.objects.get(
+                        customer_id=request.data['customer_id'], address=request.data['address_set']['address']).id
                 else:
                     request.data['address_id'] = AddressCustomer.objects.create(
                         address=request.data['customer_set']['address_customer'], customer_id=request.data['customer_id'], status_address=3).id
             else:
-                request.data['customer_id'] = Customer.objects.create(
-                    phone_number=request.data['customer_set']['phone_number'], nick_name=request.data['customer_set']['nick_name']).id
-                if not request.data['address_set']['address'] == None:
-                    request.data['address_id'] = AddressCustomer.objects.create(
-                        address=request.data['address_set']['address'], customer_id=request.data['customer_id'], status_address=3).id
+                request.data['address_id'] = None
+        else:
+            request.data['customer_id'] = Customer.objects.create(
+                phone_number=request.data['customer_set']['phone_number'], nick_name=request.data['customer_set']['nick_name']).id
+            if not request.data['address_set'] == {}:
+                request.data['address_id'] = AddressCustomer.objects.create(
+                    address=request.data['address_set']['address'], customer_id=request.data['customer_id'], status_address=3).id
+            else:
+                request.data['address_id'] = None
+
         request.data['status_food'] = None
         request.data['status_drink'] = None
 
@@ -421,6 +433,8 @@ class AllOrder(APIView):
 
 
 class Report (APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
     def get(self, request):
         order = Order.objects.all()
         report = order.aggregate(Sum('total_balance'), Sum('discount'))
@@ -429,33 +443,301 @@ class Report (APIView):
             payment_status=3).aggregate(Sum('total_balance'))['total_balance__sum']
         report['total_transfer'] = order.filter(
             payment_status=4).aggregate(Sum('total_balance'))['total_balance__sum']
-        report['total_customer'] = order.filter(customer_id__isnull=False).values('customer_id').distinct().count()
-        all_channel_id =[channel.id for channel in SaleChannel.objects.all()]
+        report['total_customer'] = order.filter(
+            customer_id__isnull=False).values('customer_id').distinct().count()
+        all_channel_id = [channel.id for channel in SaleChannel.objects.all()]
+        total_price = []
         for channel_id in all_channel_id:
-            
-        report['sale_channel_detail'] = order.fitler
+            total_balance = order.filter(sale_channel_id=channel_id).aggregate(
+                Sum('total_balance'))['total_balance__sum']
+            total_price.append({
+                'total_price': total_balance,
+                'sale_channel_set': ChannelReportSerializer(SaleChannel.objects.get(id=channel_id), context={'request': request}).data,
+            })
+        report['sale_channel_total_price'] = total_price
         # find top food
-        filter_food = [product.id for product in Product.objects.filter(type_product=3)]
-        all_food = OrderItem.objects.filter(product_id__in=filter_food,)
-        top_food = all_food.annotate(frequency=Count('product_id')).order_by('frequency').values('product_id').distinct()[:5]
+        filter_food = [
+            product.id for product in Product.objects.filter(type_product=3)]
+        all_food = OrderItem.objects.filter(product_id__in=filter_food)
+        top_food = all_food.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
         list_food = [t['product_id'] for t in top_food]
         top_product_data = Product.objects.filter(id__in=list_food)
-        report['top_product'] = ProductReportSerialiser(top_product_data,many=True).data
-        
+        report['top_food'] = ProductReportSerialiser(
+            top_product_data, many=True).data
+
         # find top drink
-        filter_drink = [product.id for product in Product.objects.filter(type_product=2)]
+        filter_drink = [
+            product.id for product in Product.objects.filter(type_product=2)]
         all_drink = OrderItem.objects.filter(product_id__in=filter_drink,)
-        top_drink = all_drink.annotate(frequency=Count('product_id')).order_by('frequency').values('product_id').distinct()[:5]
+        top_drink = all_drink.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
         list_drink = [t['product_id'] for t in top_drink]
         top_drink_data = Product.objects.filter(id__in=list_drink)
-        report['top_drink'] = ProductReportSerialiser(top_drink_data,many=True).data
-        
+        report['top_drink'] = ProductReportSerialiser(
+            top_drink_data, many=True).data
+
         # find top dressert
-        filter_dressert = [product.id for product in Product.objects.filter(type_product=1)]
-        all_dressert = OrderItem.objects.filter(product_id__in=filter_dressert,)
-        top_dressert = all_dressert.annotate(frequency=Count('product_id')).order_by('frequency').values('product_id').distinct()[:5]
+        filter_dressert = [
+            product.id for product in Product.objects.filter(type_product=1)]
+        all_dressert = OrderItem.objects.filter(
+            product_id__in=filter_dressert,)
+        top_dressert = all_dressert.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
         list_dressert = [t['product_id'] for t in top_dressert]
         top_dressert_data = Product.objects.filter(id__in=list_dressert)
-        report['top_dressert'] = ProductReportSerialiser(top_dressert_data,many=True).data
+        report['top_dressert'] = ProductReportSerialiser(
+            top_dressert_data, many=True).data
+
+        return Response(report, status=200)
+
+
+class ReportDaily (APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get(self, request):
+        order = Order.objects.filter(
+            create_at__gte=datetime.datetime.now().date())
+        order_id_list = [item.id for item in order]
+        report = order.aggregate(Sum('total_balance'), Sum('discount'))
+        report['total_order'] = order.count()
+        report['total_cash'] = order.filter(
+            payment_status=3).aggregate(Sum('total_balance'))['total_balance__sum']
+        report['total_transfer'] = order.filter(
+            payment_status=4).aggregate(Sum('total_balance'))['total_balance__sum']
+        report['total_customer'] = order.filter(
+            customer_id__isnull=False).values('customer_id').distinct().count()
+        all_channel_id = [channel.id for channel in SaleChannel.objects.all()]
+        total_price = []
+        for channel_id in all_channel_id:
+            total_balance = order.filter(sale_channel_id=channel_id).aggregate(
+                Sum('total_balance'))['total_balance__sum']
+            total_price.append({
+                'total_price': total_balance,
+                'sale_channel_set': ChannelReportSerializer(SaleChannel.objects.get(id=channel_id), context={'request': request}).data,
+            })
+        report['sale_channel_total_price'] = total_price
+        # find top food
+        filter_food = [
+            product.id for product in Product.objects.filter(type_product=3)]
+        all_food = OrderItem.objects.filter(
+            product_id__in=filter_food, order_id__in=order_id_list)
+        top_food = all_food.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_food = [t['product_id'] for t in top_food]
+        top_product_data = Product.objects.filter(id__in=list_food)
+        report['top_food'] = ProductReportSerialiser(
+            top_product_data, many=True).data
+
+        # find top drink
+        filter_drink = [
+            product.id for product in Product.objects.filter(type_product=2)]
+        all_drink = OrderItem.objects.filter(
+            product_id__in=filter_drink, order_id__in=order_id_list)
+        top_drink = all_drink.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_drink = [t['product_id'] for t in top_drink]
+        top_drink_data = Product.objects.filter(id__in=list_drink)
+        report['top_drink'] = ProductReportSerialiser(
+            top_drink_data, many=True).data
+
+        # find top dressert
+        filter_dressert = [
+            product.id for product in Product.objects.filter(type_product=1)]
+        all_dressert = OrderItem.objects.filter(
+            product_id__in=filter_dressert, order_id__in=order_id_list)
+        top_dressert = all_dressert.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_dressert = [t['product_id'] for t in top_dressert]
+        top_dressert_data = Product.objects.filter(id__in=list_dressert)
+        report['top_dressert'] = ProductReportSerialiser(
+            top_dressert_data, many=True).data
+
+        return Response(report, status=200)
+
+
+class ReportFilterByDate (APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get(self, request, year, month, date):
+        order = Order.objects.filter(
+            create_at__gte=datetime.datetime(year, month, date))
+        order_id_list = [item.id for item in order]
+        report = order.aggregate(Sum('total_balance'), Sum('discount'))
+        report['total_order'] = order.count()
+        report['total_cash'] = order.filter(
+            payment_status=3).aggregate(Sum('total_balance'))['total_balance__sum']
+        report['total_transfer'] = order.filter(
+            payment_status=4).aggregate(Sum('total_balance'))['total_balance__sum']
+        report['total_customer'] = order.filter(
+            customer_id__isnull=False).values('customer_id').distinct().count()
+        all_channel_id = [channel.id for channel in SaleChannel.objects.all()]
+        total_price = []
+        for channel_id in all_channel_id:
+            total_balance = order.filter(sale_channel_id=channel_id).aggregate(
+                Sum('total_balance'))['total_balance__sum']
+            total_price.append({
+                'total_price': total_balance,
+                'sale_channel_set': ChannelReportSerializer(SaleChannel.objects.get(id=channel_id), context={'request': request}).data,
+            })
+        report['sale_channel_total_price'] = total_price
+        # find top food
+        filter_food = [
+            product.id for product in Product.objects.filter(type_product=3)]
+        all_food = OrderItem.objects.filter(
+            product_id__in=filter_food, order_id__in=order_id_list)
+        top_food = all_food.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_food = [t['product_id'] for t in top_food]
+        top_product_data = Product.objects.filter(id__in=list_food)
+        report['top_food'] = ProductReportSerialiser(
+            top_product_data, many=True).data
+
+        # find top drink
+        filter_drink = [
+            product.id for product in Product.objects.filter(type_product=2)]
+        all_drink = OrderItem.objects.filter(
+            product_id__in=filter_drink, order_id__in=order_id_list)
+        top_drink = all_drink.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_drink = [t['product_id'] for t in top_drink]
+        top_drink_data = Product.objects.filter(id__in=list_drink)
+        report['top_drink'] = ProductReportSerialiser(
+            top_drink_data, many=True).data
+
+        # find top dressert
+        filter_dressert = [
+            product.id for product in Product.objects.filter(type_product=1)]
+        all_dressert = OrderItem.objects.filter(
+            product_id__in=filter_dressert, order_id__in=order_id_list)
+        top_dressert = all_dressert.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_dressert = [t['product_id'] for t in top_dressert]
+        top_dressert_data = Product.objects.filter(id__in=list_dressert)
+        report['top_dressert'] = ProductReportSerialiser(
+            top_dressert_data, many=True).data
+
+        return Response(report, status=200)
+
+
+class ReportMonth (APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get(self, request):
+        now = datetime.datetime.now()
+        print(datetime.datetime(now.year, now.month, 1))
+        order = Order.objects.filter(
+            create_at__gte=datetime.datetime(now.year, now.month, 1))
+        order_id_list = [item.id for item in order]
+        report = order.aggregate(Sum('total_balance'), Sum('discount'))
+        report['total_order'] = order.count()
+        report['total_cash'] = order.filter(
+            payment_status=3).aggregate(Sum('total_balance'))['total_balance__sum']
+        report['total_transfer'] = order.filter(
+            payment_status=4).aggregate(Sum('total_balance'))['total_balance__sum']
+        report['total_customer'] = order.filter(
+            customer_id__isnull=False).values('customer_id').distinct().count()
+        all_channel_id = [channel.id for channel in SaleChannel.objects.all()]
+        total_price = []
+        for channel_id in all_channel_id:
+            total_balance = order.filter(sale_channel_id=channel_id).aggregate(
+                Sum('total_balance'))['total_balance__sum']
+            total_price.append({
+                'total_price': total_balance,
+                'sale_channel_set': ChannelReportSerializer(SaleChannel.objects.get(id=channel_id), context={'request': request}).data,
+            })
+        report['sale_channel_total_price'] = total_price
+        # find top food
+        filter_food = [
+            product.id for product in Product.objects.filter(type_product=3)]
+        all_food = OrderItem.objects.filter(
+            product_id__in=filter_food, order_id__in=order_id_list)
+        top_food = all_food.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_food = [t['product_id'] for t in top_food]
+        top_product_data = Product.objects.filter(id__in=list_food)
+        report['top_food'] = ProductReportSerialiser(
+            top_product_data, many=True).data
+
+        # find top drink
+        filter_drink = [
+            product.id for product in Product.objects.filter(type_product=2)]
+        all_drink = OrderItem.objects.filter(
+            product_id__in=filter_drink, order_id__in=order_id_list)
+        top_drink = all_drink.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_drink = [t['product_id'] for t in top_drink]
+        top_drink_data = Product.objects.filter(id__in=list_drink)
+        report['top_drink'] = ProductReportSerialiser(
+            top_drink_data, many=True).data
+
+        # find top dressert
+        filter_dressert = [
+            product.id for product in Product.objects.filter(type_product=1)]
+        all_dressert = OrderItem.objects.filter(
+            product_id__in=filter_dressert, order_id__in=order_id_list)
+        top_dressert = all_dressert.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:3]
+        list_dressert = [t['product_id'] for t in top_dressert]
+        top_dressert_data = Product.objects.filter(id__in=list_dressert)
+        report['top_dressert'] = ProductReportSerialiser(
+            top_dressert_data, many=True).data
+
+        return Response(report, status=200)
+
+
+class ReportAllProduct (APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get(self, request):
+        now = datetime.datetime.now()
+        # order = Order.objects.filter(
+        #     create_at__gte=datetime.datetime(now.year,now.month,1))
+        order = Order.objects.all()
+        order_id_list = [item.id for item in order]
+        report = {}
+
+        # find top 10 food and total_price_drink
+
+        filter_food = [
+            product.id for product in Product.objects.filter(type_product=3)]
+        all_food = OrderItem.objects.filter(
+            product_id__in=filter_food, order_id__in=order_id_list)
+        top_food = all_food.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:10]
+        list_food = [t['product_id'] for t in top_food]
+        top_product_data = Product.objects.filter(id__in=list_food)
+        report['top_food'] = ProductReportSerialiser(
+            top_product_data, context={'request': request}, many=True).data
+        report['total_price_food'] = all_food.aggregate(
+            Sum('total_price'))['total_price__sum']
+
+        # find top 10 drink and total_sale_drink
+        filter_drink = [
+            product.id for product in Product.objects.filter(type_product=2)]
+        all_drink = OrderItem.objects.filter(
+            product_id__in=filter_drink, order_id__in=order_id_list)
+        top_drink = all_drink.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:10]
+        list_drink = [t['product_id'] for t in top_drink]
+        top_drink_data = Product.objects.filter(id__in=list_drink)
+        report['top_drink'] = ProductReportSerialiser(
+            top_drink_data, context={'request': request}, many=True).data
+        report['total_price_drink'] = all_drink.aggregate(Sum('total_price'))[
+            'total_price__sum']
+
+        # find top dressert
+        filter_dressert = [
+            product.id for product in Product.objects.filter(type_product=1)]
+        all_dressert = OrderItem.objects.filter(
+            product_id__in=filter_dressert, order_id__in=order_id_list)
+        top_dressert = all_dressert.annotate(frequency=Count('product_id')).order_by(
+            'frequency').values('product_id').distinct()[:10]
+        list_dressert = [t['product_id'] for t in top_dressert]
+        top_dressert_data = Product.objects.filter(id__in=list_dressert)
+        report['top_dressert'] = ProductReportSerialiser(
+            top_dressert_data, context={'request': request}, many=True).data
+        report['total_price_dressert'] = all_dressert.aggregate(Sum('total_price'))[
+            'total_price__sum']
 
         return Response(report, status=200)

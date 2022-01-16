@@ -52,7 +52,7 @@
           Register
         </button>
         <div class="col-12 mt-3">
-          <router-link to="/forgot-password"
+          <router-link :to="{name:'ForgotPassword'}"
           style="color:#fff;font-size:18px;text-decoration: underline;"
             >Forget password</router-link
           >

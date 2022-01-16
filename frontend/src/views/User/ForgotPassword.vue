@@ -51,7 +51,7 @@
           </div>
           <div class="col-12 mt-3">
             <router-link
-              to="/login"
+              :to="{name:'Login'}"
               style="color: #fff; font-size: 24px; text-decoration: underline"
               >login</router-link
             >

@@ -82,6 +82,9 @@ import AllReward from "../views/Promotion/AllReward.vue"
 
 // Report
 import MainReport from '../views/Report/MainReport.vue'
+import SelectReport from '../views/Report/SelectReport.vue'
+import ProductReportDetail from '../views/Report/ProductReportDetail.vue'
+import ProductReport from '../views/Report/ProductReport.vue'
 
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
@@ -98,9 +101,26 @@ const routes = [
   },
   // Report
   {
-    path: "/report",
+    path: "/report/:type",
+    props:true,
     name: "MainReport",
     component: MainReport
+  },
+  {
+    path: "/select-report",
+    name: "SelectReport",
+    component: SelectReport
+  },
+  {
+    path: "/product-report",
+    name: "ProductReport",
+    component: ProductReport
+  },
+  {
+    path:'/report/product/:type',
+    props:true,
+    name:'ProductReportDetail',
+    component:ProductReportDetail
   },
   // Order manage
 

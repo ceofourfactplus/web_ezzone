@@ -125,7 +125,7 @@
         </div>
         <div
           class="frame"
-          style="height: 355px;margin-top:15px;padding 10px 0px;padding-top:10px;padding-left:0px"
+          style="height: 355px;margin-top:15px;padding 10px 0px 0px 0px;overflow-y:auto;"
         >
           <div
             v-for="(item, index) in orderitem_list"
@@ -137,7 +137,7 @@
               v-if="is_topping(item)"
               class="col-6 w-100"
               style="text-align: left; overflow-x: auto"
-              @click="$store.dispatch('pos/edit_product', index)"
+              @click="$store.dispatch('pos/edit_topping', index)"
             >
               {{ item.code }}
             </div>
@@ -288,7 +288,6 @@ export default {
       }
       return false;
     },
-    customer_name() {},
     payment(payment) {
       this.selected_payment = payment;
       this.select_payment = false;
@@ -340,11 +339,11 @@ export default {
     cal_code(p) {
       var description = "";
       description = p.product_set.name;
-      if (p.flavour_level == 4) {
+      if (p.flavour_level == 3) {
         description += "(S+)";
-      } else if (p.flavour_level == 2) {
-        description += "(S-)";
       } else if (p.flavour_level == 1) {
+        description += "(S-)";
+      } else if (p.flavour_level == 0) {
         description += "(Sx)";
       }
       if (p.size == "L") {
@@ -400,6 +399,9 @@ export default {
     }),
   },
   watch: {
+    customer_name(new_name){
+      this.cus_name = new_name    
+    },
     note(newData) {
       this.$store.commit("pos/note_input", newData);
     },
@@ -411,6 +413,9 @@ export default {
             this.selector_customer = response.data;
           });
       }
+    },
+    cus_name(new_name) {
+      this.$store.state.pos.order.customer_set.nick_name = new_name
     },
   },
 };
