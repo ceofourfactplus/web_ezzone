@@ -1,7 +1,7 @@
 <template>
   <div class="" style="top: 0px">
     <!-- back to login path -->
-    <nav-app>Registration</nav-app>
+    <nav-app  :url_name="'Login'">Registration</nav-app>
     <!-- input img -->
 
     <!-- form -->

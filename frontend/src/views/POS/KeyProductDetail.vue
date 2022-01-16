@@ -444,7 +444,7 @@ export default {
       }
     },
     back() {
-      if (this.$store.state.pos.select_product_index != null) {
+      if (this.is_edit_product) {
         this.$router.push({ name: "OrderReceipt" });
       } else {
         this.$router.push({ name: "KeyOrder" });

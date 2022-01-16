@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>User Data</nav-app>
+    <nav-app  :url_name="'DashBoard'">User Data</nav-app>
     <!-- alert -->
     <div class="row" v-if="false">
       <div class="col-12">

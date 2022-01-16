@@ -178,9 +178,8 @@ import { mapGetters } from "vuex";
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
   components: { NavApp },
-  beforeCreate() {
+  mounted() {
     if (this.is_edit_topping) {
-      console.log("ok");
       this.topping = this.edit_topping;
     } else {
       api_product
@@ -260,8 +259,8 @@ export default {
         }
         this.topping.description = this.topping.description + " " + select_d;
       }
-      if (this.$store.state.pos.select_product_index != null) {
-        this.$store.dispatch("pos/confirm_product", this.topping);
+      if (this.is_edit_topping) {
+        this.$store.dispatch("pos/confirm_topping", this.topping);
         this.$router.push({ name: "OrderReceipt" });
       } else {
         this.$store.dispatch("pos/add_product", this.topping);
@@ -271,7 +270,7 @@ export default {
       }
     },
     back() {
-      if (this.$store.state.pos.select_product_index != null) {
+      if (this.is_edit_topping) {
         this.$router.push({ name: "OrderReceipt" });
       } else {
         this.$router.push({ name: "KeyOrder" });

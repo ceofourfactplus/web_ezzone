@@ -12,7 +12,10 @@ export default {
       sale_channel_id: null,
       sale_channel_set: {},
       customer_id: 1,
-      customer_set: {},
+      customer_set: {
+        nick_name: "",
+        addresscusstomer_set:'',
+      },
       description: "",
       status_order: 0,
       payment_status: 1,
@@ -28,8 +31,12 @@ export default {
       cash: null,
       change: null,
     },
+    category: 1,
+    type_product: 1,
     select_product_index: null,
-    is_edit: false,
+    select_topping_index: null,
+    is_edit_product: false,
+    is_edit_toppig: false,
   },
   mutations: {
     note_input(state, input) {
@@ -79,12 +86,25 @@ export default {
     },
     select_product(state, index) {
       state.select_product_index = index;
+      state.is_edit_product = true;
+    },
+    select_topping(state, index) {
+      state.select_topping_index = index;
+      state.is_edit_topping = true;
     },
     confirm_product(state, product) {
-      state.order.orderitem_set[state.order.select_product_index] = JSON.parse(
+      state.order.orderitem_set[state.select_product_index] = JSON.parse(
         JSON.stringify(product)
       );
-      state.order.select_product_index = null;
+      state.select_product_index = null;
+      state.is_edit_product = false;
+    },
+    confirm_topping(state, product) {
+      state.order.orderitem_set[state.select_product_index] = JSON.parse(
+        JSON.stringify(product)
+      );
+      state.select_topping_index = null;
+      state.is_edit_topping = false;
     },
     table(state, table) {
       state.order.table = table;
@@ -101,7 +121,7 @@ export default {
       if (state.order.customer_set == null) {
         state.order.customer_set = {};
         state.order.customer_set.phone_number = phone;
-      }else{
+      } else {
         state.order.customer_set.phone_number = phone;
       }
     },
@@ -122,7 +142,9 @@ export default {
         sale_channel_id: null,
         sale_channel_set: {},
         customer_id: 1,
-        customer_set: {},
+        customer_set: {
+          nick_name: "",
+        },
         description: "",
         status_order: 0,
         payment_status: 1,
@@ -175,8 +197,21 @@ export default {
         },
       });
     },
+    edit_topping(context, index) {
+      context.commit("select_topping", index);
+      router.push({
+        name: "KeyToppingDetail",
+        params: {
+          topping_id: context.state.order.orderitem_set[index].topping,
+        },
+      });
+    },
     confirm_product(context, product) {
       context.commit("confirm_product", product);
+      context.commit("cal_total_price");
+    },
+    confirm_topping(context, product) {
+      context.commit("confirm_topping", product);
       context.commit("cal_total_price");
     },
     clear_order(context) {
@@ -196,8 +231,8 @@ export default {
             router.push({
               name: "OrderDetail",
             });
-            context.state.is_edit = false
-            context.commit('clear_order')
+            context.state.is_edit = false;
+            context.commit("clear_order");
           });
       } else {
         api_pos.post("order/", context.getters.get_data).then((response) => {
@@ -277,18 +312,16 @@ export default {
       }
     },
     edit_product: (state) => {
-      console.log(state.order.orderitem_set[state.order.select_product_index]);
-      return state.order.orderitem_set[state.order.select_product_index];
+      return state.order.orderitem_set[state.select_product_index];
     },
     is_edit_product: (state) => {
-      return state.order.select_product_index != null;
+      return state.is_edit_product;
     },
     edit_topping: (state) => {
-      console.log(state.order.orderitem_set[state.order.select_product_index]);
-      return {};
+      return state.order.orderitem_set[state.select_topping_index];
     },
     is_edit_topping: (state) => {
-      return false;
+      return state.is_edit_topping;
     },
     table: (state) => {
       return state.order.table;
@@ -320,6 +353,7 @@ export default {
       return state.order.customer_set;
     },
     get_data: (state) => {
+      state.order.sale_channel_set = {}
       return state.order;
     },
   },

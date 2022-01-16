@@ -1,16 +1,16 @@
 <template>
   <div class="page">
-    <video
+    <!-- <video
       id="video"
       width="720"
       height="560"
       autoplay
       muted
       @play="detect()"
-    ></video>
+    ></video> -->
   </div>
 </template>
-// <script>
+<script>
 // import * as faceapi from "face-api.js";
 // const MODEL_URL = "/models";
 // Promise.all([
@@ -79,7 +79,7 @@
 //     },
 //   },
 // };
-// </script>
+</script>
 <style>
 .photo {
   max-width: 200px;
