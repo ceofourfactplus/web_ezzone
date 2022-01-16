@@ -1,22 +1,41 @@
 <template>
   <div>
-    <nav-app>{{ tab }}</nav-app>
+    <nav-app :url_name="'DashBoard'">{{ $store.state.promotion.tab }}</nav-app>
     <!-- Head -->
     <div class="row">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
       <div style="padding-left: 0px">
-        <button v-if="tab == 'Point'" class="btn-ghost" @click="$router.push({ name: 'NewPoint'})">
+        <button
+          v-if="$store.state.promotion.tab == 'Point'"
+          class="btn-ghost"
+          @click="$router.push({ name: 'NewPoint' })"
+        >
           + Point
         </button>
-        <button style="width: 128px;" v-if="tab == 'Voucher'" class="btn-ghost" @click="$router.push({ name: 'NewVoucher'})">
+        <button
+          style="width: 128px"
+          v-if="$store.state.promotion.tab == 'Voucher'"
+          class="btn-ghost"
+          @click="$router.push({ name: 'NewVoucher' })"
+        >
           + Voucher
         </button>
-        <button style="width: 128px;" v-if="tab == 'Package'" class="btn-ghost" @click="$router.push({ name: 'NewPackage'})">
+        <button
+          style="width: 128px"
+          v-if="$store.state.promotion.tab == 'Package'"
+          class="btn-ghost"
+          @click="$router.push({ name: 'NewPackage' })"
+        >
           + Package
         </button>
-        <button style="width: 128px;" v-if="tab == 'Rewards'" class="btn-ghost" @click="$router.push({ name: 'NewReward'})">
+        <button
+          style="width: 128px"
+          v-if="$store.state.promotion.tab == 'Rewards'"
+          class="btn-ghost"
+          @click="$router.push({ name: 'NewReward' })"
+        >
           + Reward
         </button>
       </div>
@@ -29,14 +48,251 @@
         @click="select_item(item)"
         class="tab-item"
       >
-      <p :class="{'tab-selected': item == tab}" style="font-size: 24px;">{{ item }}</p>
-        
+        <p :class="{ 'tab-selected': item == $store.state.promotion.tab }" style="font-size: 24px">
+          {{ item }}
+        </p>
       </button>
     </div>
-    <PointComponent v-if="tab == 'Point'" />
-    <Voucher v-if="tab == 'Voucher'" style="margin-top: 10px;" />
-    <Package v-if="tab == 'Package'" style="margin-top: 10px;" />
-    <Rewards v-if="tab == 'Rewards'" style="margin-top: 10px;" />
+    <!-- Point Promotion -->
+    <div v-if="$store.state.promotion.tab == 'Point'">
+    <!-- Card Content -->
+    <div class="card-content" v-for="item in point_promotions" :key="item.id">
+      <div class="row">
+        <div
+          class="col-8 w-100"
+          style="
+            font-size: 48px;
+            color: #ea7c69;
+            font-weight: bold;
+            margin-left: 15px;
+            text-align: left;
+          "
+        >
+          {{ item.promotion }}&nbsp;&nbsp;&nbsp;
+        </div>
+        <div
+          class="col-4 w-100"
+          style="margin: 10px 0px 0px -10px"
+        >
+          <label class="switch" style="margin-top: 30px;">
+              <input type="checkbox" v-model="item.status" @input="change_status(item)" />
+              <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      <div class="row" style="line-height: 110px;">
+        <div class="col-2 w-100" style="margin-left: 15px;" @click="delete_confirm(item)">
+          <img src="../../assets/icon/gold-bin.png" style="width: 64px; height: 64px;">
+        </div>
+        <div class="col-1 w-100">
+          <img src="../../assets/icon/edit.png" style="width: 53px; height: 64px;" @click="$router.push({ name: 'PointDetail', params: { id: item.id } })">
+        </div>
+        <div class="col-4 w-100"></div>
+        <div
+          class="col-3 w-100"
+          style="
+            font-size: 100px;
+            font-weight: bold;
+            color: white;
+          "
+        >
+          {{ item.price_per_point }}
+        </div>
+        <div
+          class="col-2 w-100"
+          style="
+            font-size: 30px;
+            font-weight: bold;
+            color: #FFB572;
+            line-height: 56px;
+            position: relative;
+            right: 23px;
+          "
+        >
+          Baht <br> /Point
+        </div>
+      </div>
+      <div class="row" style="margin-top: 10px">
+        <div class="col-4 w-100">
+          <div class="col-12 w-100" style="font-size: 24px; color: white">
+            Start Date
+          </div>
+          <div
+            class="col-12 w-100"
+            style="font-size: 28px; color: white; margin-top: 15px"
+          >
+            {{ format_date(item.start_promotion_date) }}
+          </div>
+        </div>
+        <div class="col-4 w-100">
+          <div class="col-12 w-100" style="font-size: 24px; color: white">
+            End Date
+          </div>
+          <div
+            class="col-12 w-100"
+            style="font-size: 28px; color: white; margin-top: 15px"
+          >
+            {{ format_date(item.end_promotion_date) }}
+          </div>
+        </div>
+        <div class="col-4 w-100">
+          <div class="col-12 w-100" style="font-size: 24px; color: white">
+            End Redeem
+          </div>
+          <div
+            class="col-12 w-100"
+            style="font-size: 28px; color: white; margin-top: 15px"
+          >
+            {{ format_date(item.end_reward_redemption) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Card -->
+    <div class="blur" v-if="delete_status">
+      <div class="delete-card" v-if="delete_status">
+        <div class="row" style="font-size: 36px; color: white; margin-top: 30px;">
+          <div class="col-12 w-100">
+            <img src="../../assets/icon/bin.png"> Are you sure
+          </div>
+          <div class="col-12 w-100">
+            you want to delete ?
+          </div>
+        </div>
+        <div class="row" style="margin: 20px 0px 0px -19px;">
+          <div class="col-1 w-100"></div>
+          <div class="col-5 w-100">
+            <button class="btn-ghost-cancel" @click="delete_status = false">
+              <img src="../../assets/icon/incorrect.png">
+            </button>
+          </div>
+          <div class="col-5 w-100" @click="delete_point_pro()">
+            <button class="btn-ghost-correct">
+              <img src="../../assets/icon/correct.png">
+            </button>
+          </div>
+          <div class="col-1 w-100"></div>
+        </div>
+      </div>
+      <div class="delete-card" v-if="correct_status">
+        <img src="../../assets/icon/correct.png" style="width: 150px; height: 150px; margin-top: 35px;">
+        <div class="row">
+          <div class="col-12 w-100" style="color: white; font-size: 36px; font-weight: bold;">
+            Delete successfully
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Voucher -->
+    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Voucher'">
+      <div class="table-header" style="width: 670px; margin-left: -10px;">
+        <div
+          class="row"
+          style="font-size: 24px; font-weight: bold; color: white"
+        >
+          <div class="col-4 w-100">Name</div>
+          <div class="col-1 w-100">Qty</div>
+          <div class="col-2 w-100">Discount</div>
+          <div class="col-2 w-100">End</div>
+          <div class="col-2 w-100">Status</div>
+          <div class="col-1 w-100"></div>
+        </div>
+      </div>
+      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="voucher in vouchers" :key="voucher.id">
+        <div class="row" style="font-size: 20px; color: white; line-height: 1">
+          <div class="col-4 w-100" style="margin-left: -30px;">{{ voucher.voucher }}</div>
+          <div class="col-1 w-100">{{ voucher.qty }}</div>
+          <div class="col-2 w-100">{{ voucher.discount }}</div>
+          <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
+          <div class="col-2 w-100">
+            <label class="switch">
+              <input type="checkbox" v-model="voucher.status" @input="change_status(voucher, 'voucher')" />
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="col-1 w-100">
+            <img
+              src="../../assets/icon/edit.png"
+              style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
+              @click="$router.push({ name: 'VoucherDetail', params: { id: voucher.id }})"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Package -->
+    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Package'">
+      <div class="table-header" style="width: 670px; margin-left: -10px;">
+        <div
+          class="row"
+          style="font-size: 24px; font-weight: bold; color: white"
+        >
+          <div class="col-5 w-100">Name</div>
+          <div class="col-2 w-100">Norm.P.</div>
+          <div class="col-2 w-100">Disc.P.</div>
+          <div class="col-2 w-100">Status</div>
+          <div class="col-1 w-100"></div>
+        </div>
+      </div>
+      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="item in packages" :key="item.id">
+        <div class="row" style="font-size: 20px; color: white; line-height: 1">
+          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ item.promotion }}</div>
+          <div class="col-2 w-100">{{ item.normal_price }}</div>
+          <div class="col-2 w-100">{{ item.discount_price }}</div>
+          <div class="col-2 w-100">
+            <label class="switch">
+              <input type="checkbox" v-model="item.status" @input="change_status(item, 'package')" />
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="col-1 w-100">
+            <img
+              @click="$router.push({ name: 'PackageDetail', params: { id: item.id }})"
+              src="../../assets/icon/edit.png"
+              style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Reward -->
+    <div class="table" style="margin-top: 10px" v-else>
+      <div class="table-header" style="width: 670px; margin-left: -10px;">
+        <div
+          class="row"
+          style="font-size: 24px; font-weight: bold; color: white"
+        >
+          <div class="col-5 w-100">Name</div>
+          <div class="col-2 w-100">Point</div>
+          <div class="col-2 w-100">Qty</div>
+          <div class="col-2 w-100">Status</div>
+          <div class="col-1 w-100"></div>
+        </div>
+      </div>
+      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="reward in rewards" :key="reward.id">
+        <div class="row" style="font-size: 20px; color: white; line-height: 1">
+          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ reward.reward }}</div>
+          <div class="col-2 w-100">{{ reward.point }}</div>
+          <div class="col-2 w-100">{{ reward.qty }}</div>
+          <div class="col-2 w-100">
+            <label class="switch">
+              <input type="checkbox" v-model="reward.status" @input="change_status(reward, 'reward')" />
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="col-1 w-100">
+            <img
+              @click="$router.push({ name: 'RewardDetail', params: { id: reward.id }})"
+              src="../../assets/icon/edit.png"
+              style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Card Popup -->
     <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">
@@ -51,11 +307,7 @@
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
-import PointComponent from "../../components/promotion/Point.vue";
-import Voucher from "../../components/promotion/Voucher.vue";
-import Package from "../../components/promotion/Package.vue";
-import Rewards from "../../components/promotion/Rewards.vue";
-// import {api_promotion} from "../../api/api_promotion"
+import { api_promotion } from "../../api/api_promotion";
 
 export default {
   name: "Point",
@@ -63,32 +315,173 @@ export default {
     SearchBar,
     NavApp,
     Switch,
-    PointComponent,
-    Voucher,
-    Package,
-    Rewards,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
   },
   data() {
     return {
+      delete_status: false,
+      correct_status: false,
       is_staff: false,
       alert: false,
-      tab: 'Point',
+      point_item: {},
+      point_promotions: [],
+      temp_point_promotions: [],
+      vouchers: [],
+      temp_vouchers: [],
+      packages: [],
+      temp_packages: [],
+      rewards: [],
+      temp_rewards: [],
     };
   },
   methods: {
-      select_item(item) {
-          this.tab = item
-      },
+    select_item(item) {
+      this.$store.state.promotion.tab = item;
+    },
+    search_by_typing(txt) {
+      var temp = [];
+      if (txt == "") {
+        if (this.$store.state.promotion.tab == "Point") {
+          this.point_promotions = this.temp_point_promotions;
+        }
+        if (this.$store.state.promotion.tab == "Voucher") {
+          this.vouchers = this.temp_vouchers;
+        }
+        if (this.$store.state.promotion.tab == "Package") {
+          this.packages = this.temp_packages;
+        }
+        if (this.$store.state.promotion.tab == "Rewards") {
+          this.rewards = this.temp_rewards;
+        }
+      } else {
+        if (this.$store.state.promotion.tab == "Point") {
+          this.temp_point_promotions.forEach((element) => {
+            if (element.promotion.indexOf(txt) + 1 != 0) {
+              temp.push(element);
+            }
+          });
+          this.point_promotions = temp;
+        }
+        if (this.$store.state.promotion.tab == "Voucher") {
+          this.temp_vouchers.forEach((element) => {
+            if (element.voucher.indexOf(txt) + 1 != 0) {
+              temp.push(element);
+            }
+          });
+          this.vouchers = temp;
+        }
+        if (this.$store.state.promotion.tab == "Package") {
+          this.temp_packages.forEach((element) => {
+            if (element.promotion.indexOf(txt) + 1 != 0) {
+              temp.push(element);
+            }
+          });
+          this.packages = temp;
+        }
+        if (this.$store.state.promotion.tab == "Rewards") {
+          this.temp_rewards.forEach((element) => {
+            if (element.reward.indexOf(txt) + 1 != 0) {
+              temp.push(element);
+            }
+          });
+          this.rewards = temp;
+        }
+      }
+    },
+    fetchPackage() {
+      api_promotion.get("package/").then((response) => {
+        console.log(response.data, "package");
+        this.packages = response.data;
+        this.temp_packages = response.data;
+      });
+    },
+    fetchRewards() {
+      api_promotion.get("reward/").then((response) => {
+        console.log(response.data, "rewards");
+        this.rewards = response.data;
+        this.temp_rewards = response.data;
+      });
+    },
+    fetchVoucher() {
+      api_promotion.get("voucher/").then((response) => {
+        this.vouchers = response.data;
+        this.temp_vouchers = response.data;
+        console.log(response.data, "voucher");
+      });
+    },
+    fetchPointPromotion() {
+      api_promotion.get("point/").then((response) => {
+        console.log(response.data, "res");
+        this.point_promotions = response.data;
+        this.temp_point_promotions = response.data;
+      });
+    },
+    format_date(date) {
+      var temp_date = date.split("-");
+      return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
+    },
+    delete_confirm(item) {
+      console.log(item, "item")
+      this.point_item = item
+      this.delete_status = true
+    },
+    delete_point_pro() {
+      api_promotion.delete(`point/${this.point_item.id}`).then(() => {
+        this.correct_status = true
+        setTimeout(() => {
+          this.correct_status = false
+          this.delete_status = false
+        }, 1000)
+      })
+    },
+  },
+  beforeMount() {
+    this.fetchPointPromotion();
+    this.fetchVoucher();
+    this.fetchPackage();
+    this.fetchRewards();
   },
 };
 </script>
 
 <style scoped>
+.btn-ghost-cancel {
+  background: transparent;
+  border-color: #FF7CA3;
+  color: #FF7CA3;
+  width: 180px;
+  height: 56px;
+  border-radius: 10px;
+}
+.btn-ghost-correct {
+  background: transparent;
+  border-color: #50D1AA;
+  color: #50D1AA;
+  width: 180px;
+  height: 56px;
+  border-radius: 10px;
+}
+.delete-card {
+  width: 440px;
+  height: 280px;
+  background: #252836;
+  border: 2px solid #EA7C69;
+  border-radius: 15.5833px;
+  position: absolute;
+  top: 25%;
+  left: 20%;
+}
+.card-content {
+  width: 672px;
+  height: 304px;
+  background: #303344;
+  border-radius: 20px;
+  margin: 10px 0px 0px 25px;
+}
 .tab-selected {
-    color: white;
+  color: white;
 }
 .card {
   width: 542px;
@@ -97,8 +490,8 @@ export default {
   left: 90px;
 }
 .btn-ghost {
-  border-color: #50D1AA;
-  color: #50D1AA;
+  border-color: #50d1aa;
+  color: #50d1aa;
   width: 119px;
   height: 50px;
   margin: 0px 25px 0px 0px;
@@ -137,5 +530,67 @@ export default {
   block-size: fit-content;
   text-decoration: none;
   line-height: 31px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+  margin-top: -3px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 1px;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #c5ffed;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #c5ffed;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+  background-color: #50d1aa;
+}
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 </style>

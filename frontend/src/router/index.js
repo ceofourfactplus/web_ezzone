@@ -76,9 +76,14 @@ import NewPackage from "../views/Promotion/NewPackage.vue"
 import NewReward from "../views/Promotion/NewReward.vue"
 import PointDetail from "../views/Promotion/PointDetail.vue"
 import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
+import PackageDetail from "../views/Promotion/PackageDetail.vue"
 import Redemption from "../views/Promotion/Redemption.vue"
 import History from "../views/Promotion/History.vue"
 import AllReward from "../views/Promotion/AllReward.vue"
+import PreOrderReward from "../views/Promotion/PreOrderReward.vue"
+import RewardDetail from "../views/Promotion/RewardDetail.vue"
+import RewardName from "../views/Promotion/RewardName.vue"
+
 
 // Report
 import MainReport from '../views/Report/MainReport.vue'
@@ -88,6 +93,7 @@ import ProductReport from '../views/Report/ProductReport.vue'
 
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
+
 const routes = [
   {
     path: "/face-login/",
@@ -140,6 +146,39 @@ const routes = [
     component: DrinkOrder,
   },
 
+  // promotion
+  {
+    path: "/promotion/redemption",
+    name: "Redemption",
+    component: Redemption,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/detail-reward",
+    name: "DetailReward",
+    component: DetailReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/reward-detail/:id",
+    name: "RewardDetail",
+    component: RewardDetail,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/package-detail/:id",
+    name: "PackageDetail",
+    component: PackageDetail,
+    meta: {
+      requiresLogin: false,
+    },
+  },
   {
     path: "/promotion/voucher-detail/:id",
     name: "VoucherDetail",
@@ -216,6 +255,22 @@ const routes = [
     path: "/promotion/redemption/allreward",
     name: "AllReward",
     component: AllReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/preorderreward",
+    name: "PreOrderReward",
+    component: PreOrderReward,
+    meta: {
+      requiresLogin: false,
+    },
+  },
+  {
+    path: "/promotion/redemption/rewardname",
+    name: "RewardName",
+    component: RewardName,
     meta: {
       requiresLogin: false,
     },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :save="true" @save="save">New Package</nav-app>
+    <nav-app :url_name="'Point'" :save="true" @save="save">New Package</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
@@ -385,20 +385,21 @@ export default {
               topping_id: element.topping.id,
               item_id: res.data.id,
               total_price: parseInt(element.topping.priceproduct_set[0].price),
-              amount: 10,
+              qty: 10,
             };
             api_promotion
               .post("package-item-topping/", item_topping)
               .then((it_res) => {
                 console.log(it_res.data, "it_res");
+                this.alert = true;
+                setTimeout(() => {
+                  this.alert = false;
+                  this.$router.push({ name: "Point" });
+                }, 2000);
               });
           });
         });
-        // this.alert = true;
-        // setTimeout(() => {
-        //   this.alert = false;
-        //   this.$router.push({ name: "Point" });
-        // }, 2000);
+        
       });
     },
     searchByTyping(e, type) {

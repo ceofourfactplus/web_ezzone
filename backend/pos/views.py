@@ -1,4 +1,5 @@
 from django.db.models import Sum, F, Count
+from product.models import SaleChannel
 from pos.models import Order, OrderItem, OrderItemTopping, Payment
 from pos.serializers import OrderSerializer, PaymentSerializer, OrderItemSerializer, OrderItemToppingSerializer
 from rest_framework.views import APIView

@@ -12,6 +12,7 @@
           </div>
           <div class="col-6 w-100 dbs-font" style="margin-top: 20px;padding: 0px;">
             <input
+            v-model="dbs_item.change"
               type="text"
               style="
                 left: 0px;
@@ -40,6 +41,7 @@
           </div>
           <div class="col-6 w-100 dbs-font" style="margin-top: 20px;padding: 0px;">
             <input
+            v-model="dbs_item.pretty_cash"
               type="text"
               style="
                 left: 0px;
@@ -245,6 +247,7 @@
       </div>
       <div class="main-text">Saved successfully</div>
     </div>
+  
   </div>
 </template>
 
@@ -255,6 +258,8 @@ import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
+import { api_promotion } from "../../api/api_promotion"
+
 
 export default {
   components: {
@@ -264,15 +269,24 @@ export default {
     Table,
     PickupPopup,
   },
-  mounted() {},
+  mounted() {
+    api_promotion.get('dbs/').then(response => {
+      this.dbs_item = response.data
+    })
+  },
 
   data() {
     return {
       alert: false,
+      dbs_item: {
+        change: null,
+        pretty_cash: null,
+      },
     };
   },
   methods: {
     save() {
+      api_promotion.post('dbs/', this.dbs_item).then()
       this.alert = true;
       setTimeout(() => {
         this.alert = false;
@@ -294,7 +308,7 @@ export default {
   margin-left: 10px;
 }
 .dbs-font {
-  font-size: 28px;
+  font-size: 24px;
   color: white;
   font-weight: bold;
 }

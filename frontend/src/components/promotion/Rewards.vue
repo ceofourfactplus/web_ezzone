@@ -13,19 +13,20 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item">
+      <div class="table-item" v-for="reward in rewards" :key="reward.id">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">เมนูอาหาร</div>
-          <div class="col-2 w-100">20</div>
-          <div class="col-2 w-100">xxx</div>
+          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ reward.reward }}</div>
+          <div class="col-2 w-100">{{ reward.point }}</div>
+          <div class="col-2 w-100">{{ reward.qty }}</div>
           <div class="col-2 w-100">
             <label class="switch">
-              <input type="checkbox" v-model="input" />
+              <input type="checkbox" v-model="reward.status" @input="change_status(reward, 'reward')" />
               <span class="slider round"></span>
             </label>
           </div>
           <div class="col-1 w-100">
             <img
+              @click="$router.push({ name: 'RewardDetail', params: { id: reward.id }})"
               src="../../assets/icon/edit.png"
               style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
             />
@@ -38,18 +39,27 @@
 
 <script>
 import Switch from "../main_component/Switch.vue";
+import { api_promotion } from "../../api/api_promotion";
 
 export default {
-  name: "Voucher",
+  name: "Rewards",
+  props: ["items"],
   components: {
     Switch,
   },
   data() {
     return {
         input: '',
+        rewards: this.items,
     };
   },
-  methods: {},
+  methods: {
+    change_status(item) {
+      item.status = !item.status
+      const data = {status: item.status}
+      api_promotion.put(`reward/${item.id}`, data).then(() => {})
+    }
+  },
   watch: {
     input: function (val) {
       this.input = val;

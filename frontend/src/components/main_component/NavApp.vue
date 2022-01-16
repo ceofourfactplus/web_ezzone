@@ -6,7 +6,7 @@
           <img
             src="../../assets/icon/btn-back.png"
             class="back inline ms-4"
-            @click="$emit('back')"
+            @click="$router.push({ name: url_name})"
           />
         </div>
         <div class="col-9 w-100">
@@ -25,6 +25,13 @@
           <img
             src="../../assets/icon/Menu-icon.png"
             style="top: 2.5%; right: 25px; position: absolute; height: 34px"
+            @click="open_slide"
+          />
+        </div>
+        <div class="col-1" v-else-if="reward_menu">
+          <img
+            src="../../assets/icon/Menu-icon.png"
+            style="top: 0px; right: 25px; position: absolute; height: 100px"
             @click="open_slide"
           />
         </div>
@@ -93,7 +100,7 @@
 
 <script>
 export default {
-  props: ["save", "rm_menu", "cart", "amount", "trash"],
+  props: ["save", "rm_menu","reward_menu", "cart", "amount", "trash", "url_name"],
   data() {
     return {
       page: "",
@@ -146,7 +153,6 @@ export default {
   margin: auto;
   margin-left: 25px;
   margin-top: 25px;
-  position: fixed;
 }
 .nav {
   height: 90px;
