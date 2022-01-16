@@ -58,7 +58,7 @@
                     <div class="col-6 RedeemNamePhone" style="margin-bottom:5px;">ป้าวราภรณ์แสงโสภา</div>
                 </div>
                 <div class="row" style="height:250px;padding-top:10px;">
-                    <div class="col-6 RedeemImg" style="background-color: #717171;"></div>
+                    <div class="col-6 RedeemImg" style="background-color: #717171;"><img src="../../assets/img/BG.png" style="height:245px;width:243px;"></div>
                     <div class="col-6 RedeemImg">
                         <div class="RedeemNamePhone" style="margin:0px;margin-bottom:15px;">095-161-7171</div>
                         <div class="RedeemNameReward" style="margin:0px;margin-bottom:15px"><b>Specail Set1</b></div>
@@ -86,7 +86,10 @@
                         
                     </div>
                 </div>
-                <div class="row"></div>
+                <!-- Sign Here -->
+                <div class="AreaSign">Sign Here
+                    <img src="../../assets/icon/eraser.png" alt="" style="position:absolute;height:50px;padding:0px;right:5px;">
+                </div>
             </div>
 
 
@@ -107,7 +110,7 @@
 
 <script>
 export default {  
-  name: "DetailReward",
+  name: "RewardName",
   components : {
       NavApp,
       SearchBar
@@ -183,6 +186,10 @@ canvas#signature-pad {
 }
 .flex-row {
     display: flex;
+}
+
+img {
+    border-radius: 20px;
 }
 
 .BlockItem {
@@ -272,7 +279,7 @@ canvas#signature-pad {
     border-radius: 20px;
     width: 590px;
     height: 586px;
-    background-color: rgb(54, 66, 66);
+    background-color: #252836;
     top: 140px;
     left: 65px;
 }
@@ -342,8 +349,7 @@ canvas#signature-pad {
     width: 243px;
     height: 50px;
     position: relative;
-    font-size: 23px;
-    text-align: center;
+    font-size: 30px;
     padding:0px;
     margin-left:12px;
     border-radius: 10px;
@@ -357,7 +363,7 @@ canvas#signature-pad {
     height: 50px;
     background-color: #EA7C69;
     position: relative;
-    font-size: 23px;
+    font-size: 26px;
     text-align: center;
     padding:2px;
     margin-left:12px;
@@ -373,4 +379,18 @@ canvas#signature-pad {
     border-bottom-left-radius: 10px;
 }
 
+.AreaSign {
+
+    position: relative;
+    text-align: left;
+    background-color: #717171;
+    border-radius: 15px;
+    padding-left: 12px;
+    padding-top: 5px;
+    width: 510px;
+    height: 130px;
+    left: 12px;
+    top: 20px;
+    font-size: 28px;
+}
 </style>
