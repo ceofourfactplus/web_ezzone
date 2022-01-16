@@ -37,7 +37,7 @@
         <div class="m-3" v-if="error.status">
           <div class="text-error">
             <img src="../../assets/icon/btn-warning.png" alt="" />
-            {{ error.data }}
+            password or username is inactive
           </div>
         </div>
         <div class="m" v-else></div>

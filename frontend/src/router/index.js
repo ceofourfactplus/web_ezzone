@@ -156,14 +156,6 @@ const routes = [
     },
   },
   {
-    path: "/promotion/detail-reward",
-    name: "DetailReward",
-    component: DetailReward,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
     path: "/promotion/reward-detail/:id",
     name: "RewardDetail",
     component: RewardDetail,

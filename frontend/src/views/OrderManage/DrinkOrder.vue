@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="$router.push({ name: 'DashBoard' })">Drink Order</nav-app>
+    <nav-app :url_name="'DashBoard'">Drink Order</nav-app>
     <div class="row" style="width: 90%; margin: auto">
       <div
         class="col-12 w-100"
