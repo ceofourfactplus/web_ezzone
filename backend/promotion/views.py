@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 import ast
 from .models import PointPromotion, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint, ExchangeHistory
-from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer
+from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer, ExchangeHistorySerializer
 
 
 class PointPromotionAPI(APIView):

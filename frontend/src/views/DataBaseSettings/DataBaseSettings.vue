@@ -211,7 +211,7 @@
         <div class="col-5 w-100" id="PaymentBlock">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/credit.png" class="IconPayment"/>
+              <img src="../../assets/icon/Credit.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding:0px;text-align:left;">
               <p id="TextPaymentChannel">Credit</p>

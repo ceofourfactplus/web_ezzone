@@ -67,8 +67,8 @@
         </div>
       </div>
     </nav>
-    <!-- Side Nav -->
-    <div id="mySidenav" class="sidenav">
+    <!-- RM Side Nav -->
+    <div id="mySidenav" class="sidenav" v-if="rm_menu">
       <a href="javascript:void(0)" class="closebtn" @click="close_slide"
         >&times;</a
       >
@@ -95,6 +95,35 @@
         </div>
       </div>
     </div>
+
+    <!-- Reward Side Nav -->
+    <div id="mySidenav" class="sidenav" v-else-if="reward_menu">
+      <a href="javascript:void(0)" class="closebtn" @click="close_slide"
+        >&times;</a
+      >
+      <div
+        style="margin-top: 30px; color: #889898; margin-left: 0px"
+        v-for="item in $store.state.promotion.side_nav"
+        :key="item"
+      >
+        <div
+          style="
+            display: inline;
+            text-align: left;
+            font-size: 30px;
+            font-weight: bold;
+            margin-left: -20px;
+          "
+          :style="item.style"
+          @click="select_promotion_page(item)"
+          :class="{
+            'rm-link-clicked': item.url_name == $store.state.promotion.page,
+          }"
+        >
+          {{ item.name }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -110,6 +139,10 @@ export default {
     this.$store.state.raw_material.page = this.$route.name;
   },
   methods: {
+    select_promotion_page(item) {
+      this.$store.state.promotion.page = item.url_name;
+      this.$router.push({ name: item.url_name})
+    },
     select_page(item) {
       console.log(item.url_name, this.$route.name, "check");
       this.$router.push({ name: item.url_name, query: { page: item.name } });

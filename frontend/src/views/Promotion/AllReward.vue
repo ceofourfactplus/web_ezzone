@@ -69,7 +69,7 @@ export default {
     },
     see_detail(reward) {
         this.$store.state.promotion.reward_detail = reward
-        this.$router.push({ name: "DetailReward"})
+        this.$router.push({ name: "RewardName"})
     },
     serchByTyping(val) {
       var temp = [];

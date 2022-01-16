@@ -69,7 +69,7 @@ import FoodOrder from "../views/OrderManage/FoodOrder.vue";
 import DrinkOrder from "../views/OrderManage/DrinkOrder.vue";
 
 // promotion
-import Point from "../views/Promotion/Point.vue"
+import Promotion from "../views/Promotion/Promotion.vue"
 import NewPoint from "../views/Promotion/NewPoint.vue"
 import NewVoucher from "../views/Promotion/NewVoucher.vue"
 import NewPackage from "../views/Promotion/NewPackage.vue"
@@ -136,14 +136,6 @@ const routes = [
     },
   },
   {
-    path: "/promotion/detail-reward",
-    name: "DetailReward",
-    component: DetailReward,
-    meta: {
-      requiresLogin: false,
-    },
-  },
-  {
     path: "/promotion/reward-detail/:id",
     name: "RewardDetail",
     component: RewardDetail,
@@ -176,9 +168,9 @@ const routes = [
     },
   },
   {
-    path: "/promotion/point",
-    name: "Point",
-    component: Point,
+    path: "/promotion/promotion",
+    name: "Promotion",
+    component: Promotion,
     meta: {
       requiresLogin: false,
     },
