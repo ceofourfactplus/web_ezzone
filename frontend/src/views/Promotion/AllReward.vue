@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav-app :reward_menu="true">All Reward</nav-app>
+        <nav-app :url_name="'Redemption'" :reward_menu="true">All Reward</nav-app>
 
         <!-- Search Bar -->
         <div class="row" style="max-width:672px;margin:0px;">
@@ -34,14 +34,14 @@
             <div class="row" style="width: 97%; margin-left: 20px;">
                 <div class="col-3 BlockItem" v-for="reward in rewards" :key="reward.id">
                     <div class="PictureItem">
-                        <img src="../../assets/img/BG.png" alt="" style="height: 120px;width: 120px;">
+                        <img :src="require(`../../../../backend${reward.img}`)" alt="" style="height: 120px;width: 120px;">
                     </div>
                     <div class="FontItem">{{ reward.reward }}</div>
                     <div class="FontItem">{{ reward.point }} Points</div>
                     <div class="SeeDetail" @click="see_detail(reward)">See Details</div>
                 </div>
             </div>   
-    </div>
+        </div>
 </template>
 
 <script>
@@ -69,6 +69,7 @@ export default {
     },
     see_detail(reward) {
         this.$store.state.promotion.reward_detail = reward
+        this.$router.push({ name: "DetailReward"})
     },
     serchByTyping(val) {
       var temp = [];

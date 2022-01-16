@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav-app>Detail Reward</nav-app>
+        <nav-app :url_name="'AllReward'">{{ $store.state.promotion.reward_detail.reward }}</nav-app>
 
         <!-- AreaBlockItem -->
         <div class="table-item"
@@ -16,20 +16,8 @@
             <div class="row BlockItem">
                 
                 <div class="col-6 w-100">
-                <select
-                name="category"
-                id="category"
-                v-model="category_id"
-                style="background:#717171;height:50px;width:282px;"
-                >
-                <!-- <option
-                    v-for="category in categories"
-                    :key="category.id"
-                    :value="category.id"
-                >
-                    {{ category.name }}
-                </option> -->
-                </select>
+                    <input type="text" style="background:#717171; height:50px; width:282px; font-size: 28px;" readonly value="Pre-order" v-if="$store.state.promotion.reward_detail.is_per_order">
+                    <input type="text" style="background:#717171; height:50px; width:282px; font-size: 28px;" readonly value="รับสินค้าเลย" v-else>
                 </div>
                 <div class="col-6 w-100" style="padding:0px;">
                     <div class="RedeemItem"><b>Redeem</b></div>
@@ -38,29 +26,31 @@
             <div class="row BlockImg">
                 
                 <div class="col-6 w-100">
-                <img src="../../assets/img/BG.png" alt="" style="width:282px;height: 298px;">
+                <img :src="require(`../../../../backend${$store.state.promotion.reward_detail.img}`)" alt="" style="width:282px;height: 298px; border-radius: 20px;">
                 </div>
                 <div class="col-6 w-100 BlockRedeemPoint" style="padding:0px;">
                     <div class="RedeemPointItem">
-                        <dir style="height:60px;margin:0px;padding:0px;line-height:55px;"><b>Redeem Point</b></dir>
-                        <div class="table-item BlockPoint"><b>20</b></div>
-                        <dir style="height:60px;margin:0px;padding:0px;line-height:55px;font-size:28px;">Total Value 500B.</dir>
+                        <dir style="height:60px;margin:0px;padding:0px;line-height:55px;" @click="popup_status = true"><b>Redeem Point</b></dir>
+                        <div class="table-item BlockPoint"><b>{{ $store.state.promotion.reward_detail.point }}</b></div>
+                        <dir style="height:60px;margin:0px;padding:0px;line-height:55px;font-size:28px;">Value {{ $store.state.promotion.reward_detail.value }}B.</dir>
                     </div>
                 </div>
             </div>
             <div class="row AreaDescription">
                 <div  class="col-12 w-100" style="height:50px;"><b>Description :</b></div>
-                <div  class="col-12 w-100 BlockDescription" ></div>
+                <div  class="col-12 w-100 BlockDescription" >
+                    {{ $store.state.promotion.reward_detail.description }}
+                </div>
 
             </div>
         
         
         </div>
         <!-- Popup -->
-        <div class="AreaPopup">
+        <div class="AreaPopup" v-if="popup_status">
             <div class="HeadPopup" style="left:20px">
                 <b>Redeem</b>
-                <img src="../../assets/img/btn-close.png" alt="" style="right:-176px;position:relative;">
+                <img src="../../assets/img/btn-close.png" alt="" style="right:-176px;position:relative;" @click="popup_status = false">
             </div>
             <div class="table-item AreaRedeemPopup">
                 <div class="row">
@@ -102,7 +92,15 @@
 
 
         </div>
-
+        <p style="font-size: 50px; color: white;" @click="save()">Save</p>
+        <div class="flex-row">
+            <div class="wrapper">
+                <canvas id="signature-pad" width="400" height="200"></canvas>
+            </div>
+            <div class="clear-btn">
+                <button id="clear"><span>Clear</span></button>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -115,12 +113,44 @@ export default {
       SearchBar
       
   },
+  mounted() {
+      this.signature_pad()
+  },
   data() {
       return{
-        
+        popup_status: false,
+        reward_status: '',
       }
   },
   methods: {
+      signature_pad() {
+          var canvas = document.getElementById("signature-pad")
+          function resizeCanvas() {
+             var ratio = Math.max(window.devicePixelRatio || 1, 1)
+            canvas.width = canvas.offsetWidth * ratio
+            canvas.height = canvas.offsetHeight * ratio
+            canvas.getContext("2d").scale(ratio, ratio) 
+          }
+          window.onresize = resizeCanvas
+          resizeCanvas()
+          
+          var signaturePad = new SignaturePad(canvas, {
+              backgroundColor: 'rgb(250,250,250)'
+          })
+          document.getElementById("clear").addEventListener('click',function(){
+              signaturePad.clear()
+          })
+          console.log(canvas, 'canvas')
+      },
+      save() {
+        var canvas = document.getElementById("signature-pad")
+        canvas.toBlob(blob => {
+            const data = new FormData();
+            data.append("img", blob, 'filename.png')
+
+            console.log(data, "data")
+        })
+      },
       search(val) {
           console.log(val)
       }
@@ -134,6 +164,26 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 </script>
 
 <style scoped>
+#clear {
+    height: 100%;
+    background: green;
+    border: 1px solid transparent;
+    color: white;
+    font-weight: 600;
+}
+canvas#signature-pad {
+    background: white;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+.wrapper {
+    border: 1px solid black;
+    border-right: 0;
+}
+.flex-row {
+    display: flex;
+}
 
 .BlockItem {
     width: 672px;
@@ -206,7 +256,6 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 }
 
 .BlockDescription {
-
     width: 100%;
     height: 305px;
     border-radius: 20px;
@@ -214,7 +263,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
     font-size: 24px;
     text-align: left;
     padding:0px;
-
+    margin-left: 14px;
 }
 
 .AreaPopup {

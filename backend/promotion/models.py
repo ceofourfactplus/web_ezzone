@@ -19,6 +19,9 @@ def upload_to_redemption(instance,filename):
 def upload_to_package(instance,filename):
     return 'package/{filename}'.format(filename=filename)
 
+def upload_to_history(instance,filename):
+    return 'history/{filename}'.format(filename=filename)
+
 class PointPromotion(models.Model):
   promotion = models.CharField(max_length=100)
   start_promotion_date = models.DateField()
@@ -135,6 +138,7 @@ class ExchangeHistory(models.Model):
   reward = models.ForeignKey(Rewards,on_delete=models.PROTECT)
   point = models.IntegerField()
   qty = models.IntegerField()
+  signature = models.ImageField(_("Image"), upload_to=upload_to_history, null=True, blank=True)
   create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="exchange_history_create_by")
   update_by = models.ForeignKey(

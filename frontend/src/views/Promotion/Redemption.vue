@@ -25,10 +25,8 @@
         <input type="text" v-model="input_customer" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px;" />
         <ul class="selector" v-if="selector_status">
           <li v-for="cus in selector_customer" :key="cus.id">
-            <pre @click="select_customer(cus)"
-              >{{ phone_number_layout(cus.phone_number) }}          :{{
-                cus.first_name
-              }}</pre
+            <p style="font-size: 24px;" @click="select_customer(cus)"
+              >{{ phone_number_layout(cus.phone_number) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{cus.first_name}}</p
             >
           </li>
         </ul>
@@ -101,7 +99,7 @@
           </div>
           <div class="col-5 w-100" v-else></div>
           <div class="col-3 w-100" id="LinkHistory">
-            <a href="url">History</a>
+            <p @click="$router.push({ name: 'History'})">History</p>
           </div>
         </div>
         <!-- Name -->
@@ -157,7 +155,7 @@
                 </div>
             </div>
             
-            <div id="ColItemReward" v-for="i in rewards" :key="i.id">
+            <div id="ColItemReward">
                 <div class="column" v-for="reward in rewards" :key="reward.id">
                   <img :src="require(`../../../../backend${reward.img}`)" style="width: 100%; height: 100%; border-radius: 10px;">
                 </div>
@@ -171,6 +169,7 @@ import NavApp from "../../components/main_component/NavApp.vue";
 import InputTel from "../../components/main_component/InputTel.vue";
 import { api_customer } from "../../api/api_customer";
 import { api_promotion } from "../../api/api_promotion";
+;
 
 export default {
   name: "Redemption",
@@ -186,6 +185,8 @@ export default {
       selector_status: false,
       selector_customer: [],
       customer_point: [],
+      rewards: [],
+      temp_rewards: [],
     };
   },
   methods: {
@@ -240,6 +241,9 @@ export default {
       }
     },
   },
+  beforeMount() {
+    this.fetchRewards()
+  }
 };
 </script>
 

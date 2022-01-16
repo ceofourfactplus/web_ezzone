@@ -8,11 +8,8 @@
       </form>
       <ul class="selector" v-if="selector_customer.length != 0">
         <li v-for="cus in selector_customer" :key="cus.id">
-          <pre @click="select_cus(cus)"
-            >{{ phone_number_layout(cus.phone_number) }}          :{{
-              cus.first_name
-            }}</pre
-          >
+          <pre style="font-size: 24px;" @click="select_cus(cus)"
+            >{{ phone_number_layout(cus.phone_number) }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{cus.first_name}}</pre>
         </li>
       </ul>
     </div>
@@ -103,6 +100,6 @@ li {
 }
 pre {
   font-family: "Sarabun", sans-serif !important;
-  font-size: 20px;
+  font-size: 27px;
 }
 </style>

@@ -143,7 +143,7 @@ export default {
       })
     },
     onFileChange(e) {
-      console.log(e, "e");
+      console.log(e.target, "e");
       this.img = e.target.files[0];
       if (this.img) {
         const reader = new FileReader();
