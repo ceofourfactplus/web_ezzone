@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'Point'" :save="true" @save="save">New Reward</nav-app>
+    <nav-app :url_name="'Promotion'" :save="true" @save="save">New Reward</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->

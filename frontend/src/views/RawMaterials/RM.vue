@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- Head -->
-    <nav-app :rm_menu="true">Raw Material</nav-app>
-    <div class="row" v-if="is_staff">
+    <nav-app :rm_menu="true" :url_name="'DashBoard'">Raw Material</nav-app>
+    <div class="row mb-2" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="serchByTyping" style="width: 108%" />
       </div>
       <div style="padding-left: 0px">
-        <button class="btn-ghost" @click="$router.push({ name: 'CreateRM' })">
+        <button class="btn-ghost" style="height:45px;" @click="$router.push({ name: 'CreateRM' })">
           + New
         </button>
       </div>
@@ -16,7 +16,7 @@
     <!-- search bar -->
     <SearchBar
       v-else
-      style="width: 90%; margin-left: 30px"
+      style="width: 90%; margin: auto;"
       @search="serchByTyping"
     />
 

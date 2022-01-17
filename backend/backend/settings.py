@@ -91,9 +91,9 @@ import pymysql
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'ezzone_database',
+        'NAME': 'second_ezzone',
         'USER': 'root',
-        'PASSWORD': 'siri160349',
+        'PASSWORD': 'ceo210750',
         'HOST': 'localhost',
         'PORT': '3306',
     }

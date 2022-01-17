@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-app
-      @back="$router.push({ name: 'SelectSaleChannel' })"
+      :url_name="'SelectSaleChannel'"
       :cart="true"
       :amount="$store.state.pos.order.orderitem_set.length"
       >{{ header }}</nav-app
@@ -172,13 +172,12 @@ export default {
     api_product.get("category/").then((response) => {
       this.categories = response.data;
     });
-    this.select_type_product = 3;
-    setTimeout(() => {
-      this.select_category = this.categories[0].id;
-    }, 300);
+    this.select_type_product = this.$store.state.pos.type_product;
+    this.select_category = this.$store.state.pos.category;
   },
   watch: {
     select_type_product(newType) {
+      this.$store.state.pos.type_product = newType;
       if (newType == 6) {
         this.header = "Topping";
         this.categories = [
@@ -217,6 +216,7 @@ export default {
       }
     },
     select_category(newCategory) {
+      this.$store.state.pos.category = newCategory
       if (this.select_type_product == 6) {
         api_product
           .get(

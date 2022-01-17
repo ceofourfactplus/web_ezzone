@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="save()">New&#160;RM</nav-app>
+    <nav-app save="true" @save="save()" :url_name="'RawMaterials'">New&#160;RM</nav-app>
     <div class="container-f">
       <div class="frame">
         <div class="row h-100">

@@ -18,7 +18,21 @@
             style="padding-left: 0px; padding-right: 0px"
           >
             <div style="padding-top: 10px; height: 120px">
-              <router-link :to="{ name: dsh.link }">
+              <router-link
+                v-if="
+                  ['Point', 'Voucher', 'Package', 'Reward'].some((el) => {
+                    return el === dsh.txt;
+                  })
+                "
+                :to="{ name: 'Promotion' }"
+                @click="$store.state.promotion.tab = dsh.link"
+              >
+                <img class="image" :src="dsh.img" />
+                <p class="content">
+                  {{ dsh.txt }}
+                </p>
+              </router-link>
+              <router-link :to="{ name: dsh.link }" v-else>
                 <img class="image" :src="dsh.img" />
                 <p class="content">
                   {{ dsh.txt }}
@@ -29,7 +43,11 @@
         </div>
       </div>
     </div>
-    <div class="row" style="margin-left: 40px; margin-right: 40px" v-if="$store.state.auth.userInfo.is_staff">
+    <div
+      class="row"
+      style="margin-left: 40px; margin-right: 40px"
+      v-if="$store.state.auth.userInfo.is_staff"
+    >
       <div
         v-for="(category, index) in setting_else"
         :key="category"
@@ -106,13 +124,13 @@ export default {
               link: "OrderDetail",
             },
             {
-              permissions: ["is_staff", "is_receptionist", "is_bartender"],
+              permissions: ["is_staff", "is_bartender"],
               img: require("../../src/assets/icon/drink.png"),
               txt: "Drink Order",
               link: "DrinkOrder",
             },
             {
-              permissions: ["is_staff", "is_receptionist", "is_chef"],
+              permissions: ["is_staff", "is_chef"],
               img: require("../../src/assets/icon/food.png"),
               txt: "Food Order",
               link: "FoodOrder",
@@ -128,37 +146,43 @@ export default {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/promotion.png"),
               txt: "Point",
-              link: "DashBoard",
+              link: "Point",
             },
             {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/voucher.png"),
               txt: "Voucher",
-              link: "DashBoard",
+              link: "Voucher",
             },
             {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/package.png"),
               txt: "Package",
-              link: "DashBoard",
+              link: "Package",
             },
             {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/reward.png"),
               txt: "Reward",
-              link: "DashBoard",
+              link: "Reward",
             },
             {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/redemtion.png"),
               txt: "Redemption",
-              link: "DashBoard",
+              link: "Redemption",
             },
           ],
         },
         // stock
         {
-          permissions: ["is_staff", "is_purchesing", "is_barista", "is_chef"],
+          permissions: [
+            "is_staff",
+            "is_purchesing",
+            "is_barista",
+            "is_chef",
+            "is_receptionist",
+          ],
           title: "Stock",
           btn: [
             {
@@ -174,10 +198,11 @@ export default {
               link: "RawMaterials",
             },
             {
-              permissions: ["is_staff"],
+              permissions: ["is_staff",
+                "is_purchesing",],
               img: require("../../src/assets/icon/PO.png"),
               txt: "PO Notice",
-              link: "DashBoard",
+              link: "PONotice",
             },
             {
               permissions: ["is_staff", "is_purchesing"],
@@ -189,11 +214,11 @@ export default {
         },
         // people
         {
-          permissions: ["is_staff"],
+          permissions: ["is_staff",'is_receptionist','is_purchesing'],
           title: "People",
           btn: [
             {
-              permissions: ["is_staff"],
+              permissions: ["is_staff",'is_receptionist'],
               img: require("../../src/assets/icon/customer.png"),
               txt: "Customer",
               link: "Customer",
@@ -205,7 +230,7 @@ export default {
               link: "UserStatus",
             },
             {
-              permissions: ["is_staff"],
+              permissions: ["is_staff",'is_purchesing'],
               img: require("../../src/assets/icon/supplier.png"),
               txt: "Supplier",
               link: "Supplier",
@@ -214,7 +239,7 @@ export default {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/consigner.png"),
               txt: "Consigner",
-              link: "UserStatus",
+              link: "DashBoard",
             },
           ],
         },

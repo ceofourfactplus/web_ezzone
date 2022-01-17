@@ -27,7 +27,7 @@
           v-if="delete_status"
           @click="delete_list_f()"
         >
-          <img src="../../assets/icon/bin.png" width="20" alt="" />&#160;Delete
+          <img src="../../assets/icon/delete_icon.png" style="object-fit:cover;width:20px;height:30px;" />&#160;Delete
         </button>
         <button
           v-else
@@ -41,18 +41,11 @@
     </div>
 
     <div class="table mt-3">
-      <div class="table-header" style="line-height: 40px; font-size: 24px">
+      <div class="table-header">
         <div class="row">
-          <div class="col-5 w-100" style="line-height: 100%">Name</div>
-          <div class="col-2 w-100" style="line-height: 100%">
-            Create&#160;at
-          </div>
-          <div
-            class="col-1 w-100"
-            style="padding: 0px; text-align: right; margin: auto"
-          >
-            Qty
-          </div>
+          <div class="col-5 w-100">Name</div>
+          <div class="col-2 w-100">Create&#160;at</div>
+          <div class="col-1 w-100 ms-3">Qty</div>
           <div class="col-2 w-100">Status</div>
           <div class="col-1 w-100"></div>
           <div class="col-1 w-100"></div>
@@ -82,10 +75,7 @@
               style="margin: auto; margin-left: 0px; text-align: right"
             >
               <span>
-                <img
-                  :src="get_img(channel.id)"
-                  class="img-user-status me-1"
-                />
+                <img :src="get_img(channel.id)" class="img-user-status me-1" />
                 <!-- <img
                   v-else
                   src="../../assets/icon/blank-user.png"
@@ -181,7 +171,7 @@ export default {
   data() {
     return {
       sale_channels: [],
-      show_channel:[],
+      show_channel: [],
       delete_list: [],
       delete_status: false,
     };
@@ -190,7 +180,7 @@ export default {
     get_sale_channel() {
       api_product.get("sale-channel/").then((response) => {
         this.sale_channels = response.data;
-        this.show_channel = response.data
+        this.show_channel = response.data;
       });
     },
     count_product(id) {
@@ -213,15 +203,17 @@ export default {
       }
       this.delete_status = false;
     },
-    get_img(id){
-      api_product.get('sale-channel-update-img/'+id+'/').then(response=>{
-        return response.data.img
-      })
+    get_img(id) {
+      api_product
+        .get("sale-channel-update-img/" + id + "/")
+        .then((response) => {
+          return response.data.img;
+        });
     },
     search(val) {
       var temp = [];
       if (val == "") {
-        this.show_channel = this.sale_channels
+        this.show_channel = this.sale_channels;
       } else {
         this.sale_channels.forEach((element) => {
           if (element.sale_channel.indexOf(val) + 1 != 0) {
@@ -231,11 +223,11 @@ export default {
         this.show_channel = temp;
       }
     },
-    duplicate(id){
-      this.$store.state.sale_channel.duplicate = true
-      this.$store.state.sale_channel.sale_channel_id = id
-      this.$router.push({name:"CreateSaleChannel"})
-    }
+    duplicate(id) {
+      this.$store.state.sale_channel.duplicate = true;
+      this.$store.state.sale_channel.sale_channel_id = id;
+      this.$router.push({ name: "CreateSaleChannel" });
+    },
   },
 };
 </script>
@@ -247,7 +239,7 @@ export default {
 .img-user-status {
   border-radius: 3px;
 }
-pre{
+pre {
   margin-bottom: 0px;
 }
 img {

@@ -69,7 +69,7 @@ import FoodOrder from "../views/OrderManage/FoodOrder.vue";
 import DrinkOrder from "../views/OrderManage/DrinkOrder.vue";
 
 // promotion
-import Point from "../views/Promotion/Point.vue"
+import Promotion from "../views/Promotion/Promotion.vue"
 import NewPoint from "../views/Promotion/NewPoint.vue"
 import NewVoucher from "../views/Promotion/NewVoucher.vue"
 import NewPackage from "../views/Promotion/NewPackage.vue"
@@ -92,6 +92,9 @@ import NewConsignment from "../views/Consignment/NewConsignment.vue"
 
 // Report
 import MainReport from '../views/Report/MainReport.vue'
+import SelectReport from '../views/Report/SelectReport.vue'
+import ProductReportDetail from '../views/Report/ProductReportDetail.vue'
+import ProductReport from '../views/Report/ProductReport.vue'
 
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
@@ -109,9 +112,26 @@ const routes = [
   },
   // Report
   {
-    path: "/report",
+    path: "/report/:type",
+    props:true,
     name: "MainReport",
     component: MainReport
+  },
+  {
+    path: "/select-report",
+    name: "SelectReport",
+    component: SelectReport
+  },
+  {
+    path: "/product-report",
+    name: "ProductReport",
+    component: ProductReport
+  },
+  {
+    path:'/report/product/:type',
+    props:true,
+    name:'ProductReportDetail',
+    component:ProductReportDetail
   },
   // Order manage
 
@@ -173,9 +193,9 @@ const routes = [
     },
   },
   {
-    path: "/promotion/point",
-    name: "Point",
-    component: Point,
+    path: "/promotion/promotion",
+    name: "Promotion",
+    component: Promotion,
     meta: {
       requiresLogin: false,
     },

@@ -13,7 +13,12 @@
             justify-content: space-between;
           "
         >
-          <img @click="$emit('save',address_select)" src="../../assets/icon/save.png" style="height: 29.5px" alt="" />
+          <img
+            @click="$emit('save', address_select)"
+            src="../../assets/icon/save.png"
+            style="height: 29.5px"
+            alt=""
+          />
           Customer Address
           <img
             @click="$emit('hide')"
@@ -61,18 +66,19 @@
               <span>: </span>
               <span style="padding-left: 5px">{{ address.address }}</span>
             </div>
+            <div class="col-12 mt-2 mb-2 line w-100" style="margin: auto"></div>
           </div>
-          <div class="col-12 mt-2 mb-2 line w-100" style="margin: auto"></div>
         </div>
         <div class="col-4 h-40" style="padding: 0px">
           <label class="container-radio"
-            >Address {{customer.addresscustomer_set.length+1}}
+            >Address {{ customer.addresscustomer_set.length + 1 }}
             <input
               type="radio"
               checked="checked"
               :value="new_address"
               v-model="address_select"
               name="radio"
+              style="z-index: 1"
             />
             <span class="checkmark"></span>
           </label>
@@ -80,6 +86,7 @@
         <div class="col-8 w-100" style="padding: 0px">
           <textarea
             style="
+              z-index: 5;
               width: 100%;
               height: 135px;
               background: #717171;
@@ -95,7 +102,7 @@
 
 <script>
 export default {
-  props: ["show", "customer"],
+  props: ["customer",'show'],
   methods: {
     phone_number_layout(phone) {
       if (phone != undefined) {
@@ -115,11 +122,11 @@ export default {
       new_address: "",
     };
   },
-  watch:{
-    new_address(add){
-      this.address_select = add
-    }
-  }
+  watch: {
+    new_address(add) {
+      this.address_select = add;
+    },
+  },
 };
 </script>
 
@@ -151,12 +158,17 @@ export default {
   height: 40px;
   text-align: left;
 }
-.col-4,label{
-  color:#ea7c69;
+.col-4,
+label {
+  color: #ea7c69;
   font-weight: 700;
 }
 .line {
   height: 1.5px;
   background-color: #ea7c69;
+}
+input[type="radio"] {
+  width: 0px;
+  height: 0px;
 }
 </style>

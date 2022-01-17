@@ -141,7 +141,8 @@ export default {
     },
     get_code(p) {
       var description = "";
-      if (!("topping" in p)) {
+      console.log(p)
+      if (p.topping == null) {
         description = p.product_set.name;
         if (p.flavour_level == 4) {
           description += "(S+)";

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="$router.push({ name: 'DashBoard' })">Drink Order</nav-app>
+    <nav-app :url_name="'DashBoard'">Drink Order</nav-app>
     <div class="row" style="width: 90%; margin: auto">
       <div
         class="col-12 w-100"
@@ -167,13 +167,17 @@ export default {
   components: { NavApp },
   mounted() {
     this.get_order();
-    window.setInterval(() => {
-      this.get_order();
-    }, 5000);
+    this.loader
+  },
+  unmounted() {
+    clearInterval(this.loader)
   },
   data() {
     return {
       all_order: [],
+      loader: window.setInterval(() => {
+        this.get_order();
+      }, 5000),
     };
   },
   methods: {

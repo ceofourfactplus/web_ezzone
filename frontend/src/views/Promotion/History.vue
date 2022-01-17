@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav-app>History</nav-app>
+        <nav-app :url_name="'Redemption'">History</nav-app>
     <!-- SearchBlock -->
         <div class="BlockSearch">
             <SearchBar @search="search" /> 
@@ -20,8 +20,8 @@
             </div>
 
         </div>
-    <!-- Itme -->
-            <div class="row table-item" id="BlockItem" style="line-height:50px;">
+    <!-- Item -->
+            <div class="row table-item" id="BlockItem" style="line-height:50px;" v-for="eh in exchange_histories" :key="eh.id">
                 <div class="col-1" style="background-color:#717171;
                 border-radius: 10px;
                 width: 40px;
@@ -30,16 +30,18 @@
                 left:3px;
                 position:relative;
                 ">
-                <img src="../../assets/img/delivery.png" alt="" style=";height: 40px;width: 40px;left:-11px;top:-9px;position:relative;"></div>
-                <div class="col-4 w-100" style="text-align:left;">Item</div>
-                <div class="col-2 w-100">14</div>
-                <div class="col-3 w-100">12/12/2564</div>
-                <div class="col-2 w-100" style="padding:0px;"><img src="../../assets/icon/cooking-status.png" alt="" style="height:38px;width:100px;top:-4px;position:relative;"></div>
+                <img :src="require(`../../../../backend${eh.reward_set.img}`)" style=";height: 40px;width: 40px;left:-11px;top:-9px;position:relative; border-radius: 10px;"></div>
+                <div class="col-4 w-100" style="text-align:left;">{{ eh.reward_set.reward }}</div>
+                <div class="col-2 w-100">1</div>
+                <div class="col-3 w-100">{{ format_date_show(eh.create_at) }}</div>
+                <div class="col-2 w-100" style="padding:0px;" v-if="eh.reward_set.is_pre_order"><img src="../../assets/icon/cooking-status.png" alt="" style="height:38px;width:100px;top:-4px;position:relative;"></div>
+                <div class="col-2 w-100" style="padding:0px;" v-else><img src="../../assets/icon/received.png" alt="" style="height:38px;width:100px;top:-4px;position:relative;"></div>
             </div>
     </div>
 </template>
 
 <script>
+import {api_promotion} from "../../api/api_promotion"
 export default {  
   name: "History",
   components : {
@@ -49,15 +51,27 @@ export default {
   },
   data() {
       return{
-        
+          exchange_histories: [],
       }
   },
   methods: {
+      fetchExchangeHistories() {
+        api_promotion.get(`exchange-history/${this.$store.state.promotion.customer.id}`).then((response) => {
+            console.log(response.data)
+            this.exchange_histories = response.data
+        })
+      },
+      format_date_show(date) {
+        var temp_date = date.slice(0, 11).split("-");
+        return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
+    },
       search(val) {
           console.log(val)
       }
-  }
-
+  },
+    beforeMount() {
+        this.fetchExchangeHistories()
+    }
 };
 import NavApp from "../../components/main_component/NavApp.vue"
 import SearchBar from "../../components/materials/SearchBar.vue"

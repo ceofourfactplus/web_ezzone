@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>Redemption</nav-app>
+    <nav-app :url_name="'DashBoard'" :reward_menu="true">Redemption</nav-app>
     <!-- CustommerPhone Block -->
     <div
       class="row"
@@ -19,16 +19,16 @@
         class="col-4 w-100"
         style="font-size: 30px; padding: 0px; text-align: right; color: #ffffff"
       >
-        Custumer Phone
+        Customer Phone
       </div>
       <div class="input col-8">
+
         <input type="text" v-model="input_customer" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px;" />
+        <!-- <input type="text" @input="find_customer($event)" :value="phone_number_layout($store.state.promotion.customer.phone_number)" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px;" /> -->
         <ul class="selector" v-if="selector_status">
           <li v-for="cus in selector_customer" :key="cus.id">
-            <pre @click="select_customer(cus)"
-              >{{ phone_number_layout(cus.phone_number) }}          :{{
-                cus.first_name
-              }}</pre
+            <p style="font-size: 24px;" @click="select_customer(cus)"
+              >{{ phone_number_layout(cus.phone_number) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{cus.first_name}}</p
             >
           </li>
         </ul>
@@ -37,7 +37,7 @@
 
     <!-- Data Block -->
     <div
-      v-if="customer_point.length != 0"
+      v-if="$store.state.promotion.customer_point.length != 0"
       class="row"
       style="
         line-height: 65px;
@@ -85,7 +85,7 @@
           <div class="col-3 w-100" id="ColPoint">Point</div>
           <div class="col-1 w-100" id="DotPoint">:</div>
           <div
-            v-if="customer_point.length != 0"
+            v-if="$store.state.promotion.customer_point.length != 0"
             class="col-5 w-100"
             style="
               height: 64px;
@@ -96,12 +96,12 @@
               text-align: left;
             "
           >
-            {{ customer_point[0].point }}
+            {{ $store.state.promotion.customer_point[0].point }}
             <!-- {{ customer_point.reduce((x, y) => {x.point + y.point}) }} -->
           </div>
           <div class="col-5 w-100" v-else></div>
           <div class="col-3 w-100" id="LinkHistory">
-            <a href="url">History</a>
+            <p style="color: #65B0F6; text-decoration: underline;" @click="$router.push({ name: 'History'})">History</p>
           </div>
         </div>
         <!-- Name -->
@@ -127,13 +127,13 @@
           style="height: 53px; margin-top: 10px; line-height: 50px"
         >
           <div class="col-4 w-100" id="ColBirthdate">Birthdate :</div>
-          <div class="col-8 w-100" id="DetailName">{{ temp_date }}</div>
+          <div class="col-8 w-100" id="DetailName">{{ format_date_show($store.state.promotion.customer.birth_date) }}</div>
         </div>
       </div>
     </div>
     <!-- Reward -->
     <div
-      v-if="customer_point.length != 0"
+      v-if="$store.state.promotion.customer_point.length != 0"
       class="col-12"
       style="
         background-color: #303344;
@@ -153,11 +153,11 @@
                 color: #FFFFFF;">
                     <div class="col-3 w-100" style="margin-left:21px;text-align:left;">Reward</div>
                     <div class="col-6 w-100"></div>
-                    <div class="col-3 w-100" style="padding-right:0px;"><a href="http://localhost:8080/?#/promotion/redemption/allreward">See All</a></div>
+                    <div class="col-3 w-100" style="padding-right:0px;"><p style="color: #65B0F6; text-decoration: underline;" @click="$router.push({ name: 'AllReward'})">See All</p></div>
                 </div>
             </div>
             
-            <div id="ColItemReward" v-for="i in rewards" :key="i.id">
+            <div id="ColItemReward">
                 <div class="column" v-for="reward in rewards" :key="reward.id">
                   <img :src="require(`../../../../backend${reward.img}`)" style="width: 100%; height: 100%; border-radius: 10px;">
                 </div>
@@ -171,6 +171,7 @@ import NavApp from "../../components/main_component/NavApp.vue";
 import InputTel from "../../components/main_component/InputTel.vue";
 import { api_customer } from "../../api/api_customer";
 import { api_promotion } from "../../api/api_promotion";
+;
 
 export default {
   name: "Redemption",
@@ -186,6 +187,8 @@ export default {
       selector_status: false,
       selector_customer: [],
       customer_point: [],
+      rewards: [],
+      temp_rewards: [],
     };
   },
   methods: {
@@ -209,7 +212,7 @@ export default {
     },
     format_date_show(date) {
       var temp_date = date.split("-");
-      this.temp_date = `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
+      return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
     },
     phone_number_layout(phone) {
       if (phone != null) {
@@ -224,13 +227,11 @@ export default {
         return "";
       }
     },
-  },
-  watch: {
-    input_customer(newTel) {
-      if (newTel != "") {
+    find_customer(e) {
+      if (e.target.value != "") {
         this.selector_status = true;
         api_customer
-          .get("get-customer-by-phone-number/" + newTel)
+          .get("get-customer-by-phone-number/" + e.target.value)
           .then((response) => {
             this.selector_customer = response.data;
           });
@@ -240,6 +241,24 @@ export default {
       }
     },
   },
+  watch: {
+    input_customer(tel) {
+      if (tel != "") {
+        this.selector_status = true;
+        api_customer
+          .get("get-customer-by-phone-number/" + tel)
+          .then((response) => {
+            this.selector_customer = response.data;
+          });
+      } else {
+        this.selector_customer = [];
+        this.selector_status = false;
+      }
+    },
+  },
+  beforeMount() {
+    this.fetchRewards()
+  }
 };
 </script>
 

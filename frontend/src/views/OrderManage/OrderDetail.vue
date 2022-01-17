@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="$router.push({name:'DashBoard'})">Order Detail</nav-app>
+    <nav-app  :url_name="'DashBoard'">Order Detail</nav-app>
     <div class="row" style="width: 90%; margin: auto">
       <div class="col-9 w-100" style="padding: 0px">
         <search-bar></search-bar>
@@ -192,7 +192,7 @@ import moment from "moment";
 import OrderDetailItem from "../../components/order_manage/OrderDetailItem.vue";
 import ChangePayment from "../../components/payment/ChangePayment.vue";
 import CancelOrder from "../../components/order_manage/CancelOrder.vue";
-var song = new Audio(require("./song.mp3"));
+var song = new Audio(require("./short-alert.mp3"));
 export default {
   components: {
     NavApp,

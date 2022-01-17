@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'Point'" :save="true" @save="save">New Point</nav-app>
+    <nav-app :url_name="'Promotion'" :save="true" @save="save">New Point</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left -->
@@ -169,7 +169,7 @@ export default {
         this.alert = true;
         setTimeout(() => {
           this.alert = false;
-          this.$router.push({ name: "Point" });
+          this.$router.push({ name: "Promotion" });
         }, 2000);
       })
       

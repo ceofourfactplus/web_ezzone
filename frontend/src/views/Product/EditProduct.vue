@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product">Edit&#160;Product</nav-app>
+    <nav-app save="true" @save="create_product" :url_name="'Product'"
+      >Edit&#160;Product</nav-app
+    >
     <div class="container-f">
       <div class="frame f-1">
         <div class="row h-100">
@@ -190,7 +192,7 @@ export default {
       all_unit: [],
       product: {},
       topping_categories: [],
-      change_img:false,
+      change_img: false,
     };
   },
   methods: {
@@ -219,19 +221,21 @@ export default {
         .get("product/" + this.$route.params.id + "/")
         .then((response) => {
           this.product = response.data;
-          this.show_img = response.data.img
-          this.product['price'] = this.product.priceproduct_set.filter(item=>{
-          return item.sale_channel == this.$store.state.ezzone_id
-          })[0].price
+          this.show_img = response.data.img;
+          this.product["price"] = this.product.priceproduct_set.filter(
+            (item) => {
+              return item.sale_channel == this.$store.state.ezzone_id;
+            }
+          )[0].price;
         });
     },
     onFileChange(e) {
-      this.product['img'] = e.target.files[0];
-      this.change_img = true
-      if (this.product['img']) {
+      this.product["img"] = e.target.files[0];
+      this.change_img = true;
+      if (this.product["img"]) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.product['img']);
+        reader.readAsDataURL(this.product["img"]);
       }
     },
     create_product() {
@@ -241,10 +245,13 @@ export default {
           this.$router.push({ name: "Product" });
         });
       if (this.change_img) {
-          const data = new FormData();
-          data.append("img", this.product['img'], this.product['img'].name);
-          api_product.put('update-img-product/'+this.$route.params.id+"/",data)
-        }
+        const data = new FormData();
+        data.append("img", this.product["img"], this.product["img"].name);
+        api_product.put(
+          "update-img-product/" + this.$route.params.id + "/",
+          data
+        );
+      }
     },
     switch_flavour_level(val) {
       this.product.flavour_level = val;

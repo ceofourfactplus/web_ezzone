@@ -1,5 +1,4 @@
 import datetime
-from os import read
 from pos.models import Order, OrderItem, OrderItemTopping, Payment
 from rest_framework import serializers
 from customer.serializers import CustomerSerializer, AddressCustomerSerializer
@@ -183,8 +182,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 for p in i['orderitemtopping_set']:
                     OrderItemTopping.objects.create(**p, item_id=item.id)
 
-        to_be_update = [
-            c for c in validated_data['orderitem_set'] if c.get('id')]
+        to_be_update = [c for c in validated_data['orderitem_set'] if c.get('id')]
         for i in to_be_update:
             if 'orderitemtopping_set' in i:
               orderitemtopping_set = i.pop('orderitemtopping_set')

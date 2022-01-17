@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'Point'" :save="true" @save="save">New Voucher</nav-app>
+    <nav-app :url_name="'Promotion'" :save="true" @save="save">New Voucher</nav-app>
     <div class="card-content">
       <!-- Status & Code -->
       <div class="row">
@@ -143,7 +143,7 @@ export default {
       })
     },
     onFileChange(e) {
-      console.log(e, "e");
+      console.log(e.target, "e");
       this.img = e.target.files[0];
       if (this.img) {
         const reader = new FileReader();

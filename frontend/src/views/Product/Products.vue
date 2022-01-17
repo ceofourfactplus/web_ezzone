@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>Products</nav-app>
+    <nav-app :url_name="'DashBoard'" :product_menu="true">Products</nav-app>
     <div class="row" style="margin: auto; width: 94%" v-if="is_staff">
       <div class="col-10 w-100">
         <SearchBar @search="search_by_typing" />
@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div style="overflow-x: auto; height: 650px">
+      <div style="overflow-x: auto; height: 685px">
         <div
           v-for="product in show_products"
           :key="product.id"
@@ -152,15 +152,20 @@ export default {
       });
     },
     select_category_f(category_id) {
+      this.select_category = category_id;
       api_product.get("product/category/" + category_id).then((response) => {
         this.products = response.data;
         this.show_products = response.data;
       });
     },
     get_price(price_list) {
-      return price_list.filter((item) => {
-        return item.sale_channel == this.$store.state.ezzone_id;
-      })[0].price;
+      const price = price_list.filter((item) => {
+        return item.sale_channel === this.$store.state.ezzone_id;
+      })[0];
+      if (price != undefined) {
+        return price.price;
+      }
+      return "free";
     },
     search_by_typing(val) {
       var temp = [];

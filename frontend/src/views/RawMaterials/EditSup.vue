@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_sup()">Edit&#160;Supplier</nav-app>
+    <nav-app save="true" :url_name="'Supplier'" @save="create_sup()">Edit&#160;Supplier</nav-app>
     <div class="container">
       <div style="height: 250px">
         <label for="file">

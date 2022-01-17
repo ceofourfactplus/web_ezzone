@@ -37,7 +37,7 @@
         <div class="m-3" v-if="error.status">
           <div class="text-error">
             <img src="../../assets/icon/btn-warning.png" alt="" />
-            {{ error.data }}
+            password or username is inactive
           </div>
         </div>
         <div class="m" v-else></div>
@@ -52,7 +52,7 @@
           Register
         </button>
         <div class="col-12 mt-3">
-          <router-link to="/forgot-password"
+          <router-link :to="{name:'ForgotPassword'}"
           style="color:#fff;font-size:18px;text-decoration: underline;"
             >Forget password</router-link
           >
