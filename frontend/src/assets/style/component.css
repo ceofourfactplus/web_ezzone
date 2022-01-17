@@ -56,7 +56,9 @@
   grid-column: auto/span 12;
 }
 
-textarea,input,select {
+textarea,
+input,
+select {
   border-radius: 10px;
   width: 400px;
   height: 60px;
@@ -80,8 +82,8 @@ label {
   font-size: 30px;
 }
 
-
-input::placeholder ,textarea::placeholder{
+input::placeholder,
+textarea::placeholder {
   color: #e0eeee88;
   text-indent: 10px;
 }
@@ -100,25 +102,25 @@ input::placeholder ,textarea::placeholder{
   font-weight: bolder;
   color: #ea7c69;
   border-radius: 10px;
-  border: 2px solid #ea7c69
+  border: 2px solid #ea7c69;
 }
 .btn-y {
-  background-color: #FFB572;
+  background-color: #ffb572;
   font-size: 24px;
   font-weight: bolder;
   color: #252836;
   border-radius: 10px;
-  border: 2px solid #FFB572;
+  border: 2px solid #ffb572;
   width: 120px;
   height: 50px;
 }
 .btn-g {
-  background-color: #50D1AA;
+  background-color: #50d1aa;
   font-size: 24px;
   font-weight: bolder;
   color: #252836;
   border-radius: 10px;
-  border: 2px solid #50D1AA
+  border: 2px solid #50d1aa;
 }
 
 .btn-r {
@@ -127,7 +129,7 @@ input::placeholder ,textarea::placeholder{
   font-weight: bolder;
   color: #252836;
   border-radius: 10px;
-  border: 2px solid #ff7ca3
+  border: 2px solid #ff7ca3;
 }
 
 .btn-b {
@@ -136,7 +138,7 @@ input::placeholder ,textarea::placeholder{
   font-weight: bolder;
   color: #252836;
   border-radius: 10px;
-  border: 2px solid #65b0f6
+  border: 2px solid #65b0f6;
 }
 
 .btn-ghost-y {
@@ -145,17 +147,16 @@ input::placeholder ,textarea::placeholder{
   font-weight: bolder;
   color: #fff500;
   border-radius: 10px;
-  border: 2px solid #fff500
-
+  border: 2px solid #fff500;
 }
 
 .btn-ghost-g {
   background-color: #252836;
   font-size: 24px;
   font-weight: bolder;
-  color: #50D1AA;
+  color: #50d1aa;
   border-radius: 10px;
-  border: 2px solid #50D1AA
+  border: 2px solid #50d1aa;
 }
 
 .btn-ghost-r {
@@ -164,7 +165,7 @@ input::placeholder ,textarea::placeholder{
   font-weight: bolder;
   color: #ff7ca3;
   border-radius: 10px;
-  border: 2px solid #ff7ca3
+  border: 2px solid #ff7ca3;
 }
 
 .btn-ghost-b {
@@ -173,7 +174,7 @@ input::placeholder ,textarea::placeholder{
   font-weight: bolder;
   color: #65b0f6;
   border-radius: 10px;
-  border: 2px solid #65b0f6
+  border: 2px solid #65b0f6;
 }
 
 .m {
@@ -192,7 +193,6 @@ input::placeholder ,textarea::placeholder{
 
 .alert-y {
   border-color: #fff500;
-  
 }
 
 .alert-error {
@@ -305,6 +305,7 @@ h1 {
   border-radius: 3px;
   top: 50%;
   left: 50%;
+  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   cursor: pointer;
   transition: 0.3s all ease;
@@ -450,7 +451,7 @@ h1 {
 }
 
 .blur {
-  width: 720px;
+  width: 100%;
   height: 960px;
   top: 0px;
   left: 0px;
@@ -466,11 +467,13 @@ h1 {
 }
 
 .card-status {
-  left: 25%;
-  top: 25%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   width: 350px;
+  top: 50%;
+  left: 50%;
   height: 475px;
-  position: fixed;
+  position: relative;
   background: #303344;
   border: 2px solid #ea7c69;
   box-sizing: border-box;
@@ -491,10 +494,9 @@ h1 {
   top: 15%;
   left: 60%;
   transform: translate(-50%, -50%);
-  font-size: 30px ;
+  font-size: 30px;
   font-weight: 600;
 }
-
 
 .frame {
   margin-top: 16px;
@@ -506,7 +508,6 @@ h1 {
   padding-left: 20px;
 }
 
-
 .btn-gray {
   background-color: #303344;
   height: 58px;
@@ -516,10 +517,9 @@ h1 {
   border-radius: 10px 10px 0px 0px;
   color: #ffffff80;
 }
-.btn-gray-active{
+.btn-gray-active {
   color: #ffffff;
 }
-
 
 /* The container */
 .container-radio {
@@ -556,7 +556,6 @@ h1 {
 
 /* When the radio button is checked, add a blue background */
 .container-radio input:checked ~ .checkmark {
-  
   border: 2px solid #fff;
 }
 
@@ -574,12 +573,12 @@ h1 {
 
 /* Style the indicator (dot/circle) */
 .container-radio .checkmark:after {
- 	top: 3px;
-	left: 3px;
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: #fff;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
 }
 
 .dark {

@@ -63,7 +63,7 @@
       <div class="category-popup" v-if="add_category_status">
         <img
           @click="add_category_status = false"
-          style="position: absolute; right: 10px; top: 10px"
+          style="position: absolute; right: 10px; top: 10px;width:30px;"
           src="../../assets/icon/delete.png"
         />
         <h2>Create RM Unit</h2>
@@ -85,7 +85,7 @@
       <div class="category-popup" v-if="edit_unit">
         <img
           @click="edit_unit = false"
-          style="position: absolute; right: 10px; top: 10px"
+          style="position: absolute; right: 10px; top: 10px;width:30px;"
           src="../../assets/icon/delete.png"
         />
         <h2>Edit RM Unit</h2>

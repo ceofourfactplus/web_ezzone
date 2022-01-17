@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app  :url_name="'DashBoard'">User Data</nav-app>
+    <nav-app :url_name="'DashBoard'">User Data</nav-app>
     <!-- alert -->
     <div class="row" v-if="false">
       <div class="col-12">
@@ -514,7 +514,7 @@ export default {
 }
 
 label img {
-  top: 150px;
+  top: 100px;
 }
 
 .gender {
@@ -560,5 +560,8 @@ input[type="number"] {
   font-weight: 600;
   font-size: 36px;
   line-height: 10px;
+}
+.checkbox {
+  margin-left: 20px;
 }
 </style>
