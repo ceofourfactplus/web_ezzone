@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :rm_menu="true">Pickup&#160;List</nav-app>
+    <nav-app :rm_menu="true" :url_name="'DashBoard'">Pickup&#160;List</nav-app>
     <SearchBar
       @search="serchByTyping"
       style="width: 680px; margin-left: 17px;"

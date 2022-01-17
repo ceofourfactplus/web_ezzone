@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- nav bar -->
-    <nav-app>Confirm&#160;PO</nav-app>
+    <nav-app :url_name="'PO'">Confirm&#160;PO</nav-app>
     <img src="../../assets/icon/save.png" class="image-save" @click="save" />
     <div v-for="po in this.$store.state.raw_material.all_po_selected" :key="po">
       <!-- Head Page -->

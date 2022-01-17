@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="$router.push({name:'OrderDetail'})">Sale Channel</nav-app>
+    <nav-app :url_name="'OrderDetail'">Sale Channel</nav-app>
     <div class="center">
       <div class="row">
         <div

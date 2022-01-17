@@ -1,7 +1,7 @@
 <template>
-  <div class="" style="top: 0px">
+  <div style="top: 0px">
     <!-- back to login path -->
-    <nav-app
+    <nav-app :url_name="'Customer'"
       >Customer Registration
       <img
         src="../../assets/icon/save.png"
@@ -266,7 +266,7 @@ export default {
             this.alert = true;
             setTimeout(() => {
               this.alert = false;
-              this.$router.push({ name: "Login" });
+              this.$router.push({ name: "Customer" });
             }, 1500);
           })
 
@@ -287,9 +287,6 @@ export default {
         reader.onload = (e) => (this.show_img = e.target.result);
         reader.readAsDataURL(this.img);
       }
-    },
-    back() {
-      this.$router.push({ name: "Login" });
     },
     wait(ms) {
       var start = new Date().getTime();

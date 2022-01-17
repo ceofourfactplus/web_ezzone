@@ -6,7 +6,7 @@
           <img
             src="../../assets/icon/btn-back.png"
             class="back inline ms-4"
-            @click="$router.push({ name: url_name})"
+            @click="$router.push({ name: url_name })"
           />
         </div>
         <div class="col-9 w-100">
@@ -24,7 +24,7 @@
         <div class="col-1" v-else-if="rm_menu">
           <img
             src="../../assets/icon/Menu-icon.png"
-            style="top: 2.5%; right: 25px; position: absolute; height: 34px"
+            style="top: 0.7%; right: 25px; position: absolute; height: 80px"
             @click="open_slide"
           />
         </div>
@@ -32,6 +32,13 @@
           <img
             src="../../assets/icon/Menu-icon.png"
             style="top: 0px; right: 25px; position: absolute; height: 100px"
+            @click="open_slide"
+          />
+        </div>
+        <div class="col-1" v-else-if="product_menu">
+          <img
+            src="../../assets/icon/Menu-icon.png"
+            style="top: 10px; right: 25px; position: absolute; height: 80px"
             @click="open_slide"
           />
         </div>
@@ -77,7 +84,11 @@
         v-for="item in $store.state.raw_material.side_nav"
         :key="item"
       >
-        <img :src="item.img" :style="item.img_style" style="margin-top: -10px; display: inline" />
+        <img
+          :src="item.img"
+          :style="item.img_style"
+          style="margin-top: -10px; display: inline"
+        />
         <div
           style="
             display: inline;
@@ -124,12 +135,55 @@
         </div>
       </div>
     </div>
+
+    <!-- PRODUCT Side Nav -->
+    <div id="mySidenav" class="sidenav" v-else-if="product_menu">
+      <a href="javascript:void(0)" class="closebtn" @click="close_slide"
+        >&times;</a
+      >
+      <div
+        style="margin-top: 30px; color: #889898; margin-left: 0px"
+        v-for="item in $store.state.product.side_nav"
+        :key="item"
+      >
+        <img
+          :src="item.img"
+          :style="item.img_style"
+          style="margin-top: -10px; display: inline"
+        />
+        <div
+          style="
+            display: inline;
+            text-align: left;
+            font-size: 30px;
+            margin-left: -20px;
+            white-space: nowrap;
+          "
+          :style="item.style"
+          @click="select_product_page(item)"
+          :class="{
+            'rm-link-clicked': item.url_name == $store.state.product.active_page,
+          }"
+        >
+          {{ item.name }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["save", "rm_menu","reward_menu", "cart", "amount", "trash", "url_name"],
+  props: [
+    "save",
+    "rm_menu",
+    "reward_menu",
+    "cart",
+    "amount",
+    "trash",
+    "url_name",
+    "product_menu",
+  ],
   data() {
     return {
       page: "",
@@ -139,17 +193,18 @@ export default {
     this.$store.state.raw_material.page = this.$route.name;
   },
   methods: {
+    select_product_page(item) {
+      this.$store.state.product.active_page = item.url_name;
+      this.$router.push({ name: item.url_name });
+    },
     select_promotion_page(item) {
       this.$store.state.promotion.page = item.url_name;
-      this.$router.push({ name: item.url_name})
+      this.$router.push({ name: item.url_name });
     },
     select_page(item) {
-      console.log(item.url_name, this.$route.name, "check");
       this.$router.push({ name: item.url_name, query: { page: item.name } });
-      console.log(item.url_name, this.$route.name, "check2");
       this.page = item.url_name;
       this.$store.state.raw_material.page = item.url_name;
-      console.log(item.url_name == this.$store.state.raw_material.page, "page");
     },
     open_slide() {
       document.getElementById("mySidenav").style.width = "310px";

@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-app
-      @back="$router.push({ name: 'SelectSaleChannel' })"
+      :url_name="'SelectSaleChannel'"
       :cart="true"
       :amount="$store.state.pos.order.orderitem_set.length"
       >{{ header }}</nav-app

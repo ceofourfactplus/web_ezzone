@@ -192,7 +192,7 @@ import moment from "moment";
 import OrderDetailItem from "../../components/order_manage/OrderDetailItem.vue";
 import ChangePayment from "../../components/payment/ChangePayment.vue";
 import CancelOrder from "../../components/order_manage/CancelOrder.vue";
-var song = new Audio(require("./song.mp3"));
+var song = new Audio(require("./short-alert.mp3"));
 export default {
   components: {
     NavApp,

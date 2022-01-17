@@ -1,14 +1,14 @@
 <template>
   <div>
-    <nav-app>Customer&#160;Management</nav-app>
-    <div class="row">
-      <div class="col-8 ms-4 pe-2">
-        <search-bar @search="search" style="width: 470px" />
+    <nav-app :url_name="'DashBoard'">Customer</nav-app>
+    <div class="row" style="margin: auto; width: 91%">
+      <div class="col-9 w-100" style="padding: 0px">
+        <search-bar @search="search" />
       </div>
-      <div class="col-4">
+      <div class="col-3 w-100">
         <button
-          class="btn-ghost-b ms-2"
-          style="width: 170px; height: 45px"
+          class="btn-ghost-b"
+          style="width: 150px; height: 45px"
           @click="$router.push({ name: 'CreateCustomer' })"
         >
           +&#160;Customer
@@ -17,16 +17,16 @@
     </div>
 
     <div class="table mt-3">
-      <div class="table-header" style="line-height:100%; font-size: 24px">
+      <div class="table-header" style="line-height: 100%; font-size: 24px">
         <div class="row">
-          <div class="col-3 w-100" style="margin: auto">Nick&#160;N.</div>
+          <div class="col-3 w-100">Nick&#160;N.</div>
           <div class="col-3 w-100" style="margin-left: 10px; text-align: left">
             Birth&#160;Date
           </div>
-          <div class="col-2 w-100" style="margin: auto; margin-left: -10px">
+          <div class="col-2 w-100" style="margin-left: -10px">
             Phone&#160;No.
           </div>
-          <div class="col-3 w-100" style="margin: auto">Last&#160;Order</div>
+          <div class="col-3 w-100">Last&#160;Order</div>
         </div>
       </div>
       <div style="overflow-x: auto; height: 650px">
@@ -35,10 +35,9 @@
           :key="customer.id"
           class="table-item"
         >
-          <div class="row" style="width: 100%">
-            
+          <div class="row" style="width: 100%; padding: 0px">
             <div
-              class="col-3 w-100"
+              class="col-3 w-100 ps-4"
               style="margin: auto; margin-left: 0px; text-align: left"
               @click="SeeData(customer.id)"
             >
@@ -64,15 +63,17 @@
             >
               {{ PhoneNumber(customer.phone_number) }}
             </div>
-            <div
-              class="col-3 w-100"
-              style="margin: auto; text-align: left; padding: 0px"
-            >
+            <div class="col-3 w-100" style="padding: 0px">
               {{ BirthDate(customer.birth_date) }}
               <img
                 @click="select(customer)"
                 src="../../assets/icon/home.png"
-                style="float: right;"
+                style="
+                  float: right;
+                  padding-top: 6px;
+                  height: 28px;
+                  margin-top: 2px;
+                "
               />
             </div>
           </div>
@@ -113,7 +114,10 @@
               <img src="../../assets/icon/home.png" /> Address
             </div>
             <div class="col-12">
-              <textarea v-model="select_customer.address" placeholder="Address"></textarea>
+              <textarea
+                v-model="select_customer.address"
+                placeholder="Address"
+              ></textarea>
             </div>
             <div class="col-12">
               <button class="btn-ghost" @click="save_address()">
@@ -211,14 +215,16 @@ export default {
       this.$router.push({ name: "EditCustomer", params: { id: id } });
     },
     save_address() {
-      api_customer.put("save-address/" + this.select_customer.id, {
-        address: this.select_customer.address,
-      }).then(()=>{
-        api_customer.get('customer').then((response)=>{
-          this.all_customer = response.data
-          this.blur = false
+      api_customer
+        .put("save-address/" + this.select_customer.id, {
+          address: this.select_customer.address,
         })
-      });
+        .then(() => {
+          api_customer.get("customer").then((response) => {
+            this.all_customer = response.data;
+            this.blur = false;
+          });
+        });
     },
   },
 };
@@ -238,7 +244,7 @@ textarea {
   resize: none;
   text-indent: 0px;
 }
-.card-address {
+img .card-address {
   top: 20%;
   left: 23%;
   justify-self: center;

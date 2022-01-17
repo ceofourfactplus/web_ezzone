@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-app
-      @back="$router.push({ name: 'KeyOrder' })"
+      :url_name="'KeyOrder'"
       :trash="true"
       @trash="$store.dispatch('pos/clear_order')"
       >Order Receipt</nav-app

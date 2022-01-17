@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <nav-app :rm_menu="true">RM Category</nav-app>
+    <nav-app :rm_menu="true" :url_name="'DashBoard'">RM Category</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />

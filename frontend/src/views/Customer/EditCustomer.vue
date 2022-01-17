@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app style="margin-bottom: 0px" save=true @save="edit_customer">Customer&#160;Data</nav-app>
+    <nav-app :url_name="'Customer'" save=true @save="edit_customer">Customer&#160;Data</nav-app>
     <div class="container-fluid">
       <!-- detail  -->
       <div
@@ -23,7 +23,7 @@
                   v-else
                   :src="show_img"
                   width="160"
-                  style="border-radius: 50%;"
+                  style="border-radius: 50%;object-fit: cover;"
                   height="160"
                 />
               </label>
