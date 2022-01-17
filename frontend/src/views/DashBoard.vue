@@ -17,8 +17,10 @@
             class="col-2 w-100"
             style="padding-left: 0px; padding-right: 0px"
           >
-            <div style="padding-top: 10px; height: 120px">
+            <div style="padding-top: 10px; height: 120px; width: 100%">
               <router-link
+                style="height: 120px"
+                class="w-100"
                 v-if="
                   ['Point', 'Voucher', 'Package', 'Reward'].some((el) => {
                     return el === dsh.txt;
@@ -28,15 +30,20 @@
                 @click="$store.state.promotion.tab = dsh.link"
               >
                 <img class="image" :src="dsh.img" />
-                <p class="content">
+                <div class="content">
                   {{ dsh.txt }}
-                </p>
+                </div>
               </router-link>
-              <router-link :to="{ name: dsh.link }" v-else>
+              <router-link
+                style="height: 120px"
+                class="w-100"
+                :to="{ name: dsh.link }"
+                v-else
+              >
                 <img class="image" :src="dsh.img" />
-                <p class="content">
+                <div class="content">
                   {{ dsh.txt }}
-                </p>
+                </div>
               </router-link>
             </div>
           </div>
@@ -70,9 +77,9 @@
               <div style="padding-top: 10px; height: 120px">
                 <router-link :to="{ name: dsh.link }">
                   <img class="image" :src="dsh.img" />
-                  <p class="content">
+                  <div class="content">
                     {{ dsh.txt }}
-                  </p>
+                  </div>
                 </router-link>
               </div>
             </div>
@@ -198,8 +205,7 @@ export default {
               link: "RawMaterials",
             },
             {
-              permissions: ["is_staff",
-                "is_purchesing",],
+              permissions: ["is_staff", "is_purchesing"],
               img: require("../../src/assets/icon/PO.png"),
               txt: "PO Notice",
               link: "PONotice",
@@ -214,11 +220,11 @@ export default {
         },
         // people
         {
-          permissions: ["is_staff",'is_receptionist','is_purchesing'],
+          permissions: ["is_staff", "is_receptionist", "is_purchesing"],
           title: "People",
           btn: [
             {
-              permissions: ["is_staff",'is_receptionist'],
+              permissions: ["is_staff", "is_receptionist"],
               img: require("../../src/assets/icon/customer.png"),
               txt: "Customer",
               link: "Customer",
@@ -230,7 +236,7 @@ export default {
               link: "UserStatus",
             },
             {
-              permissions: ["is_staff",'is_purchesing'],
+              permissions: ["is_staff", "is_purchesing"],
               img: require("../../src/assets/icon/supplier.png"),
               txt: "Supplier",
               link: "Supplier",
@@ -330,7 +336,7 @@ body {
   /* height: 36px; */
   color: white;
   font-size: 16px;
-  width: 100px;
+  width: 120px;
   position: absolute;
 }
 .block {

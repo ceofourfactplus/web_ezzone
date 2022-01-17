@@ -1,4 +1,3 @@
-from django.contrib.auth import default_app_config
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from backend.settings import AUTH_USER_MODEL

@@ -261,7 +261,7 @@ export default {
         }
         user.append("gender", this.gender);
         axios
-          .post("http://127.0.0.1:8000/customer/customer", user)
+          .post("http://192.46.227.22:8000/customer/customer", user)
           .then(() => {
             this.alert = true;
             setTimeout(() => {

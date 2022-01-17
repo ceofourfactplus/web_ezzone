@@ -241,6 +241,7 @@ export default {
   margin: auto;
   margin-left: 25px;
   margin-top: 25px;
+  transform: rotate(90deg);
 }
 .nav {
   height: 90px;

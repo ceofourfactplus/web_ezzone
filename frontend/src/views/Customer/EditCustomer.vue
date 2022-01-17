@@ -256,7 +256,6 @@ export default {
   data() {
     return {
       customer: {},
-      blur: false,
       show_img: null,
       favorite_menu: [],
       new_img: false,

@@ -285,7 +285,7 @@ export default {
         user.append("img", this.img);
         user.append("gender", this.gender);
         axios
-          .post("http://127.0.0.1:8000/user/register/", user)
+          .post("http://192.168.1.118:8000/user/register/", user)
           .then(() => {
             this.alert = true;
             setTimeout(() => {

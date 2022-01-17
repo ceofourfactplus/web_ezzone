@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="back()">{{ product.product_set.name }}</nav-app>
+    <nav-app  :url_name="'KeyOrder'">{{ product.product_set.name }}</nav-app>
     <div class="frame">
       <div class="row mt-2 w-100" style="margin-left: 0px">
         <div class="col-4 mt-3 w-100" style="margin: auto">
