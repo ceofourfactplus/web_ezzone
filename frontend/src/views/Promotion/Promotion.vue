@@ -1,6 +1,7 @@
 <template>
   <div>
     <nav-app :url_name="'DashBoard'">{{ $store.state.promotion.tab }}</nav-app>
+    <router-view></router-view>
     <!-- Head -->
     <div class="row">
       <div class="col-11 wrap-search">
@@ -204,7 +205,8 @@
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-4 w-100" style="margin-left: -30px;">{{ voucher.voucher }}</div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
-          <div class="col-2 w-100">{{ voucher.discount }}</div>
+          <div class="col-2 w-100" v-if="voucher.is_percent">{{ format_percent(voucher.discount) }}</div>
+          <div class="col-2 w-100" v-else>{{ voucher.discount }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
             <label class="switch">
@@ -421,6 +423,10 @@ export default {
     format_date(date) {
       var temp_date = date.split("-");
       return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
+    },
+    format_percent(discount) {
+      var temp = discount.split(".");
+      return `${temp[0]}%`
     },
     delete_confirm(item) {
       console.log(item, "item")

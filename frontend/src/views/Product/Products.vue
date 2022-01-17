@@ -160,7 +160,7 @@ export default {
     get_price(price_list) {
       return price_list.filter((item) => {
         return item.sale_channel == this.$store.state.ezzone_id;
-      })[0].price;
+      });
     },
     search_by_typing(val) {
       var temp = [];

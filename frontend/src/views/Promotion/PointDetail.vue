@@ -153,7 +153,7 @@ export default {
         this.alert = true;
         setTimeout(() => {
           this.alert = false;
-          this.$router.push({ name: "Point" });
+          this.$router.push({ name: "Promotion" });
         }, 2000);
       })
       

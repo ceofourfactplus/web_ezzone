@@ -4,7 +4,7 @@
       Loading ...
     </div>
     <div v-else>
-      <nav-app save="true" @save="edit()">{{
+      <nav-app :url_name="'RawMaterials'" save="true" @save="edit()">{{
         rm_item.raw_material_set.name
       }}</nav-app>
       <div class="container-f">

@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export default {
   namespaced: true,
   state: {
@@ -10,7 +11,7 @@ export default {
       is_chef: true,
       is_purchesing: true,
       is_receptionist: false,
-      id: 1,
+      id: 2,
     },
     error: {
       status: false,

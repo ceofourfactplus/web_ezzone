@@ -171,7 +171,7 @@ export default {
       var data = {
         unit: this.category,
       };
-      api_raw_material.post("/unit/", data).then(() => {
+      api_raw_material.post("unit/", data).then(() => {
         setTimeout(() => {
           this.alert = false;
           this.add_category_status = false;

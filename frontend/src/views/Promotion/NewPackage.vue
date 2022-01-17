@@ -11,17 +11,22 @@
               <input
                 type="text"
                 class="input-top"
-                placeholder="Promotion"
+                placeholder="Package"
                 v-model="promotion"
               />
             </div>
           </div>
           <!-- Start Date -->
           <div class="row" style="margin-top: 20px">
-            <div class="col-12 w-100 txt">
-              Start Date&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{
-                temp_start
-              }}&nbsp;&nbsp;<input
+            <div class="col-12 w-100 txt">  
+              <div style="display: inline;" v-if="temp_start == null">
+                <span style="margin-left: -140px">Start Date</span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{temp_start}}&nbsp;&nbsp;
+              </div>
+              <div style="display: inline;" v-else>
+                <span style="margin-left: 23px">Start Date</span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{temp_start}}&nbsp;&nbsp;
+              </div>
+              <input
+                style="display: inline;"
                 type="date"
                 class="input-date"
                 @change="format_date($event)"
@@ -197,7 +202,8 @@
               type="text"
               class="input-add-package w-100"
               placeholder="Price"
-              v-model="total_price"
+              :value="new_menu_price"
+              readonly
             />
           </div>
           <div
@@ -214,6 +220,7 @@
               @click="
                 product_item = { ...product };
                 search_product = false;
+                new_menu_price = parseInt(product_item.priceproduct_set[0].price);
               "
               class="product-menu"
               v-for="product in products"
@@ -238,6 +245,7 @@
                 topping_id = product.id;
                 topping_item = { ...product };
                 search_topping = false;
+                new_menu_price += parseInt(topping_item.priceproduct_set[0].price);
               "
               class="product-menu"
               v-for="product in products_for_topping"
@@ -256,7 +264,9 @@
         >
           <div class="col-6 w-100"></div>
           <div class="col-4 w-100" style="text-align: right">Total</div>
-          <div class="col-2 w-100">{{ normal_price }}</div>
+          <div class="col-2 w-100" v-if="package_items.length == 1">{{ package_items[0].price }}</div>
+          <div class="col-2 w-100" v-else-if="package_items.length != 0">{{ package_items.reduce((x, y) => x.price + y.price) }}</div>
+          <div class="col-2 w-100" v-else>0</div>
         </div>
       </div>
       <!-- Discount Total Price -->
@@ -345,6 +355,7 @@ export default {
       products: [],
       products_for_topping: [],
       temp_products: [],
+      new_menu_price: null,
     };
   },
   methods: {
@@ -362,12 +373,18 @@ export default {
       data.append("img", this.img, this.img.name);
       data.append("amount_day", this.amount_day);
       data.append("discount_price", this.discount_price);
-      data.append("normal_price", this.normal_price);
       data.append("description", this.description);
-      data.append("total_amount", this.total_amount);
+      data.append("total_amount", this.package_items.length);
       data.append("status", this.status);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
+      if (this.package_items.length == 1) {
+        data.append("normal_price", this.package_items[0].price);
+      } else if(this.package_items.length > 0) {
+        data.append("normal_price", this.package_items.reduce((x, y) => x.price + y.price));
+      } else {
+        data.append("normal_price", 0);
+      }
 
       api_promotion.post("package/", data).then((response) => {
         console.log(response.data, "response");
@@ -394,7 +411,7 @@ export default {
                 this.alert = true;
                 setTimeout(() => {
                   this.alert = false;
-                  this.$router.push({ name: "Point" });
+                  this.$router.push({ name: "Promotion" });
                 }, 2000);
               });
           });
@@ -452,7 +469,7 @@ export default {
         product: this.product_item,
         topping: this.topping_item,
         qty: this.qty,
-        price: this.total_price,
+        price: this.new_menu_price,
         description: this.description,
       };
       this.package_items.push(data);
@@ -461,7 +478,7 @@ export default {
       this.topping_item = {};
       this.qty = null;
       this.total_price = null;
-      this.description = null
+      this.new_menu_price = null;
     },
     select_item(item) {
       if (this.selected_items.includes(item)) {

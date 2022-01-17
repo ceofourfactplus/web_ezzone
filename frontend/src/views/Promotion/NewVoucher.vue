@@ -107,7 +107,7 @@ export default {
       temp_start: null,
       end_date: null,
       temp_end: null,
-      is_percent: null,
+      is_percent: false,
       description: null,
       qty: null,
       status: true,

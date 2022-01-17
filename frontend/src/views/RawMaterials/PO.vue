@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- nav bar -->
-    <nav-app :rm_menu="true">Purchase&#160;Order</nav-app>
+    <nav-app :url_name="'RawMaterials'" :rm_menu="true">Purchase&#160;Order</nav-app>
     <div class="row" style="width: 90%; margin-left: 25px">
       <div class="col-8 wrap-search w-100">
         <SearchBar @search="search_raw" style="width: 98%" />

@@ -67,7 +67,7 @@ class Voucher(models.Model):
   voucher = models.CharField(max_length=100)
   code = models.CharField(max_length=100)
   img = models.ImageField(_("Image"), upload_to=upload_to_voucher, null=True, blank=True)
-  discount = models.DecimalField(max_digits=4,decimal_places=2)
+  discount = models.DecimalField(max_digits=6,decimal_places=2)
   start_date = models.DateField()
   end_date = models.DateField()
   is_percent = models.BooleanField(default=False)

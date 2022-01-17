@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Head -->
-    <nav-app :rm_menu="true">Raw Material</nav-app>
+    <nav-app :url_name="'DashBoard'" :rm_menu="true">Raw Material</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="serchByTyping" style="width: 108%" />

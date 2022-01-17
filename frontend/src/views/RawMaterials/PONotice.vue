@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <nav-app :rm_menu="true">PO&#160;Notice</nav-app>
+    <nav-app :url_name="'RawMaterials'" :rm_menu="true">PO&#160;Notice</nav-app>
     <!-- Second Nav -->
     <div class="row" style="width: 680px; margin-left: 20px">
       <div class="col-7" style="width: 100%">

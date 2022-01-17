@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav-app :url_name="'Promotion'" :save="true" @save="edit">Package Detail</nav-app>
+    <div style="color: white; font-size: 30px; margin-top: 20px;" v-if="loading"></div>
+    <div v-else>
+      <nav-app :url_name="'Promotion'" :save="true" @save="edit">Package Detail</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
@@ -256,8 +258,9 @@
           style="font-size: 24px; color: white; line-height: 14px"
         >
           <div class="col-6 w-100"></div>
-          <div class="col-4 w-100" style="text-align: right">Total</div>
-          <!-- <div class="col-2 w-100">{{ item_of_package.reduce((x,y) => parseInt( x.total_price) + parseInt(y.total_price)) }}</div> -->
+          <div class="col-2 w-100" v-if="item_of_package.length == 1">{{ item_of_package[0].total_price }}</div>
+          <div class="col-2 w-100" v-else-if="item_of_package.length > 1">{{ item_of_package.reduce((x, y) => x.total_price + y.total_price) }}</div>
+          <div class="col-2 w-100" v-else>0</div>
         </div>
       </div>
       <!-- Discount Total Price -->
@@ -291,6 +294,7 @@
       </div>
       <div class="main-text">Saved successfully</div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -318,6 +322,7 @@ export default {
       alert: false,
       add_menu: false,
       select_all: false,
+      loading: false,
       item_toppings: [],
       package_items: [],
       selected_items: [],
@@ -353,9 +358,11 @@ export default {
   },
   methods: {
     fetchPackage() {
+      this.loading = true
       api_promotion.get(`package/${this.$route.params.id}`).then((response) => {
         console.log(response.data, 'package');
         this.package_item = response.data;
+        this.loading = false
       });
     },
     fetchPackageItem() {
@@ -425,7 +432,7 @@ export default {
                 this.alert = true;
                 setTimeout(() => {
                   this.alert = false;
-                  this.$router.push({ name: "Point" });
+                  this.$router.push({ name: "Promotion" });
                 }, 2000);
               });
           });
@@ -521,7 +528,6 @@ export default {
                 this.topping_item = {};
                 this.qty = null;
                 this.total_price = null;
-                this.description = null;
               });
           });
           

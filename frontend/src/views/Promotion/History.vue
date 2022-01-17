@@ -62,7 +62,7 @@ export default {
         })
       },
       format_date_show(date) {
-        var temp_date = date.slice(0, 11).split("-");
+        var temp_date = date.slice(0, 10).split("-");
         return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
     },
       search(val) {
