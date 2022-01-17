@@ -167,13 +167,18 @@ export default {
   components: { NavApp },
   mounted() {
     this.get_order();
-    window.setInterval(() => {
-      this.get_order();
-    }, 5000);
+    this.loader
+  },
+  unmounted() {
+    clearInterval(this.loader)
   },
   data() {
     return {
       all_order: [],
+      loader: window.setInterval(() => {
+        this.get_order();
+      }, 5000),
+
     };
   },
   methods: {
@@ -181,17 +186,20 @@ export default {
       var wait = this.all_order.filter((item) => {
         return item.status_food == 0;
       });
-      console.log(wait.length)
-      if (wait.length!=0&&audio.paused) {
+      console.log(wait.length);
+      if (wait.length != 0 && audio.paused) {
         audio.play();
       }
     },
     get_order() {
-      api_pos.get("order/today/on-going/food").then((response) => {
-        this.all_order = response.data;
-      }).then(()=>{
-        this.find_waiting_order()
-      })
+      api_pos
+        .get("order/today/on-going/food")
+        .then((response) => {
+          this.all_order = response.data;
+        })
+        .then(() => {
+          this.find_waiting_order();
+        });
     },
     get_date(data) {
       var date = moment(data);

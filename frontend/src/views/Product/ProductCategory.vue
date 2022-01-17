@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>Product Category</nav-app>
+    <nav-app :url_name="'DashBoard'" :product_menu="true">Product Category</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
@@ -69,7 +69,7 @@
       <div class="category-popup">
         <img
           @click="add_category_status = false"
-          style="position: absolute; right: 10px; top: 10px"
+          style="position: absolute; right: 10px; top: 10px;height:30px;"
           src="../../assets/icon/delete.png"
         />
         <div class="h1 mt-2" style="color: #ea7c69">Create Categories</div>

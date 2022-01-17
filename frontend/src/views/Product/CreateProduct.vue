@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product"
+    <nav-app save="true" @save="create_product" :url_name="'Product'"
       >New&#160;Product&#160;Detail</nav-app
     >
     <div class="container-f">
@@ -360,6 +360,7 @@ label {
 .image {
   width: 260px;
   height: 260px;
+  object-fit: cover;
   border-radius: 25px;
 }
 .switch {

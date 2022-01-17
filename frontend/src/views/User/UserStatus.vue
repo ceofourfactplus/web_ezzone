@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app>User Status</nav-app>
+    <nav-app :url_name="'DashBoard'">User Status</nav-app>
     <div style="width: 90%; margin: auto"><search-bar @search="search" /></div>
 
     <div class="table mt-3">

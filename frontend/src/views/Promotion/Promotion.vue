@@ -1,13 +1,12 @@
 <template>
   <div>
     <nav-app :url_name="'DashBoard'">{{ $store.state.promotion.tab }}</nav-app>
-    <router-view></router-view>
     <!-- Head -->
     <div class="row">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px">
+      <div style="padding-left: 0px;">
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"
@@ -16,7 +15,6 @@
           + Point
         </button>
         <button
-          style="width: 128px"
           v-if="$store.state.promotion.tab == 'Voucher'"
           class="btn-ghost"
           @click="$router.push({ name: 'NewVoucher' })"
@@ -24,7 +22,6 @@
           + Voucher
         </button>
         <button
-          style="width: 128px"
           v-if="$store.state.promotion.tab == 'Package'"
           class="btn-ghost"
           @click="$router.push({ name: 'NewPackage' })"
@@ -32,7 +29,6 @@
           + Package
         </button>
         <button
-          style="width: 128px"
           v-if="$store.state.promotion.tab == 'Rewards'"
           class="btn-ghost"
           @click="$router.push({ name: 'NewReward' })"
@@ -42,153 +38,177 @@
       </div>
     </div>
     <!-- Tabs -->
-    <div class="tab">
-      <button
-        v-for="(item, idx) in ['Point', 'Voucher', 'Package', 'Rewards']"
-        :key="idx"
-        @click="select_item(item)"
-        class="tab-item"
-      >
-        <p :class="{ 'tab-selected': item == $store.state.promotion.tab }" style="font-size: 24px">
+    <div style="margin: auto; width: 95%; height: 50px" class="row mt-2">
+      <div class="col-12" style="padding: 0px">
+        <button
+          v-for="(item, idx) in ['Point', 'Voucher', 'Package', 'Rewards']"
+          :key="idx"
+          @click="select_item(item)"
+          style="width: 24%; height: 100%"
+          class="btn-gray me-1"
+          :class="{ 'tab-selected': item == $store.state.promotion.tab }"
+        >
           {{ item }}
-        </p>
-      </button>
+        </button>
+      </div>
     </div>
     <!-- Point Promotion -->
     <div v-if="$store.state.promotion.tab == 'Point'">
-    <!-- Card Content -->
-    <div class="card-content" v-for="item in point_promotions" :key="item.id">
-      <div class="row">
-        <div
-          class="col-8 w-100"
-          style="
-            font-size: 48px;
-            color: #ea7c69;
-            font-weight: bold;
-            margin-left: 15px;
-            text-align: left;
-          "
-        >
-          {{ item.promotion }}&nbsp;&nbsp;&nbsp;
-        </div>
-        <div
-          class="col-4 w-100"
-          style="margin: 10px 0px 0px -10px"
-        >
-          <label class="switch" style="margin-top: 30px;">
-              <input type="checkbox" v-model="item.status" @input="change_status(item)" />
-              <span class="slider round"></span>
-          </label>
-        </div>
-      </div>
-      <div class="row" style="line-height: 110px;">
-        <div class="col-2 w-100" style="margin-left: 15px;" @click="delete_confirm(item)">
-          <img src="../../assets/icon/gold-bin.png" style="width: 64px; height: 64px;">
-        </div>
-        <div class="col-1 w-100">
-          <img src="../../assets/icon/edit.png" style="width: 53px; height: 64px;" @click="$router.push({ name: 'PointDetail', params: { id: item.id } })">
-        </div>
-        <div class="col-4 w-100"></div>
-        <div
-          class="col-3 w-100"
-          style="
-            font-size: 100px;
-            font-weight: bold;
-            color: white;
-          "
-        >
-          {{ item.price_per_point }}
-        </div>
-        <div
-          class="col-2 w-100"
-          style="
-            font-size: 30px;
-            font-weight: bold;
-            color: #FFB572;
-            line-height: 56px;
-            position: relative;
-            right: 23px;
-          "
-        >
-          Baht <br> /Point
-        </div>
-      </div>
-      <div class="row" style="margin-top: 10px">
-        <div class="col-4 w-100">
-          <div class="col-12 w-100" style="font-size: 24px; color: white">
-            Start Date
-          </div>
-          <div
-            class="col-12 w-100"
-            style="font-size: 28px; color: white; margin-top: 15px"
-          >
-            {{ format_date(item.start_promotion_date) }}
-          </div>
-        </div>
-        <div class="col-4 w-100">
-          <div class="col-12 w-100" style="font-size: 24px; color: white">
-            End Date
-          </div>
-          <div
-            class="col-12 w-100"
-            style="font-size: 28px; color: white; margin-top: 15px"
-          >
-            {{ format_date(item.end_promotion_date) }}
-          </div>
-        </div>
-        <div class="col-4 w-100">
-          <div class="col-12 w-100" style="font-size: 24px; color: white">
-            End Redeem
-          </div>
-          <div
-            class="col-12 w-100"
-            style="font-size: 28px; color: white; margin-top: 15px"
-          >
-            {{ format_date(item.end_reward_redemption) }}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Delete Card -->
-    <div class="blur" v-if="delete_status">
-      <div class="delete-card" v-if="delete_status">
-        <div class="row" style="font-size: 36px; color: white; margin-top: 30px;">
-          <div class="col-12 w-100">
-            <img src="../../assets/icon/bin.png"> Are you sure
-          </div>
-          <div class="col-12 w-100">
-            you want to delete ?
-          </div>
-        </div>
-        <div class="row" style="margin: 20px 0px 0px -19px;">
-          <div class="col-1 w-100"></div>
-          <div class="col-5 w-100">
-            <button class="btn-ghost-cancel" @click="delete_status = false">
-              <img src="../../assets/icon/incorrect.png">
-            </button>
-          </div>
-          <div class="col-5 w-100" @click="delete_point_pro()">
-            <button class="btn-ghost-correct">
-              <img src="../../assets/icon/correct.png">
-            </button>
-          </div>
-          <div class="col-1 w-100"></div>
-        </div>
-      </div>
-      <div class="delete-card" v-if="correct_status">
-        <img src="../../assets/icon/correct.png" style="width: 150px; height: 150px; margin-top: 35px;">
+      <!-- Card Content -->
+      <div class="card-content" v-for="item in point_promotions" :key="item.id">
         <div class="row">
-          <div class="col-12 w-100" style="color: white; font-size: 36px; font-weight: bold;">
-            Delete successfully
+          <div
+            class="col-8 w-100"
+            style="
+              font-size: 48px;
+              color: #ea7c69;
+              font-weight: bold;
+              margin-left: 15px;
+              text-align: left;
+            "
+          >
+            {{ item.promotion }}&nbsp;&nbsp;&nbsp;
+          </div>
+          <div class="col-4 w-100" style="margin: 10px 0px 0px -10px">
+            <label class="switch" style="margin-top: 30px">
+              <input
+                type="checkbox"
+                v-model="item.status"
+                @input="change_status(item)"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        <div class="row" style="line-height: 110px">
+          <div
+            class="col-2 w-100"
+            style="margin-left: 15px"
+            @click="delete_confirm(item)"
+          >
+            <img
+              src="../../assets/icon/gold-bin.png"
+              style="width: 64px; height: 64px"
+            />
+          </div>
+          <div class="col-1 w-100">
+            <img
+              src="../../assets/icon/edit.png"
+              style="width: 53px; height: 64px"
+              @click="
+                $router.push({ name: 'PointDetail', params: { id: item.id } })
+              "
+            />
+          </div>
+          <div class="col-4 w-100"></div>
+          <div
+            class="col-3 w-100"
+            style="font-size: 100px; font-weight: bold; color: white"
+          >
+            {{ item.price_per_point }}
+          </div>
+          <div
+            class="col-2 w-100"
+            style="
+              font-size: 30px;
+              font-weight: bold;
+              color: #ffb572;
+              line-height: 56px;
+              position: relative;
+              right: 23px;
+            "
+          >
+            Baht <br />
+            /Point
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px">
+          <div class="col-4 w-100">
+            <div class="col-12 w-100" style="font-size: 24px; color: white">
+              Start Date
+            </div>
+            <div
+              class="col-12 w-100"
+              style="font-size: 28px; color: white; margin-top: 15px"
+            >
+              {{ format_date(item.start_promotion_date) }}
+            </div>
+          </div>
+          <div class="col-4 w-100">
+            <div class="col-12 w-100" style="font-size: 24px; color: white">
+              End Date
+            </div>
+            <div
+              class="col-12 w-100"
+              style="font-size: 28px; color: white; margin-top: 15px"
+            >
+              {{ format_date(item.end_promotion_date) }}
+            </div>
+          </div>
+          <div class="col-4 w-100">
+            <div class="col-12 w-100" style="font-size: 24px; color: white">
+              End Redeem
+            </div>
+            <div
+              class="col-12 w-100"
+              style="font-size: 28px; color: white; margin-top: 15px"
+            >
+              {{ format_date(item.end_reward_redemption) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Card -->
+      <div class="blur" v-if="delete_status">
+        <div class="delete-card" v-if="delete_status">
+          <div
+            class="row"
+            style="font-size: 36px; color: white; margin-top: 30px"
+          >
+            <div class="col-12 w-100">
+              <img src="../../assets/icon/bin.png" /> Are you sure
+            </div>
+            <div class="col-12 w-100">you want to delete ?</div>
+          </div>
+          <div class="row" style="margin: 20px 0px 0px -19px">
+            <div class="col-1 w-100"></div>
+            <div class="col-5 w-100">
+              <button class="btn-ghost-cancel" @click="delete_status = false">
+                <img src="../../assets/icon/incorrect.png" />
+              </button>
+            </div>
+            <div class="col-5 w-100" @click="delete_point_pro()">
+              <button class="btn-ghost-correct">
+                <img src="../../assets/icon/correct.png" />
+              </button>
+            </div>
+            <div class="col-1 w-100"></div>
+          </div>
+        </div>
+        <div class="delete-card" v-if="correct_status">
+          <img
+            src="../../assets/icon/correct.png"
+            style="width: 150px; height: 150px; margin-top: 35px"
+          />
+          <div class="row">
+            <div
+              class="col-12 w-100"
+              style="color: white; font-size: 36px; font-weight: bold"
+            >
+              Delete successfully
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
     <!-- Voucher -->
-    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Voucher'">
-      <div class="table-header" style="width: 670px; margin-left: -10px;">
+    <div
+      class="table"
+      style="margin-top: 10px"
+      v-else-if="$store.state.promotion.tab == 'Voucher'"
+    >
+      <div class="table-header" style="width: 670px; margin-left: -10px">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -201,16 +221,27 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="voucher in vouchers" :key="voucher.id">
+      <div
+        class="table-item"
+        style="width: 670px; margin-left: -10px"
+        v-for="voucher in vouchers"
+        :key="voucher.id"
+      >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-4 w-100" style="margin-left: -30px;">{{ voucher.voucher }}</div>
+          <div class="col-4 w-100" style="margin-left: -30px">
+            {{ voucher.voucher }}
+          </div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
           <div class="col-2 w-100" v-if="voucher.is_percent">{{ format_percent(voucher.discount) }}</div>
           <div class="col-2 w-100" v-else>{{ voucher.discount }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
             <label class="switch">
-              <input type="checkbox" v-model="voucher.status" @input="change_status(voucher, 'voucher')" />
+              <input
+                type="checkbox"
+                v-model="voucher.status"
+                @input="change_status(voucher, 'voucher')"
+              />
               <span class="slider round"></span>
             </label>
           </div>
@@ -218,15 +249,24 @@
             <img
               src="../../assets/icon/edit.png"
               style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
-              @click="$router.push({ name: 'VoucherDetail', params: { id: voucher.id }})"
+              @click="
+                $router.push({
+                  name: 'VoucherDetail',
+                  params: { id: voucher.id },
+                })
+              "
             />
           </div>
         </div>
       </div>
     </div>
     <!-- Package -->
-    <div class="table" style="margin-top: 10px" v-else-if="$store.state.promotion.tab == 'Package'">
-      <div class="table-header" style="width: 670px; margin-left: -10px;">
+    <div
+      class="table"
+      style="margin-top: 10px"
+      v-else-if="$store.state.promotion.tab == 'Package'"
+    >
+      <div class="table-header" style="width: 670px; margin-left: -10px">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -238,20 +278,33 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="item in packages" :key="item.id">
+      <div
+        class="table-item"
+        style="width: 670px; margin-left: -10px"
+        v-for="item in packages"
+        :key="item.id"
+      >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ item.promotion }}</div>
+          <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
+            {{ item.promotion }}
+          </div>
           <div class="col-2 w-100">{{ item.normal_price }}</div>
           <div class="col-2 w-100">{{ item.discount_price }}</div>
           <div class="col-2 w-100">
             <label class="switch">
-              <input type="checkbox" v-model="item.status" @input="change_status(item, 'package')" />
+              <input
+                type="checkbox"
+                v-model="item.status"
+                @input="change_status(item, 'package')"
+              />
               <span class="slider round"></span>
             </label>
           </div>
           <div class="col-1 w-100">
             <img
-              @click="$router.push({ name: 'PackageDetail', params: { id: item.id }})"
+              @click="
+                $router.push({ name: 'PackageDetail', params: { id: item.id } })
+              "
               src="../../assets/icon/edit.png"
               style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
             />
@@ -261,7 +314,7 @@
     </div>
     <!-- Reward -->
     <div class="table" style="margin-top: 10px" v-else>
-      <div class="table-header" style="width: 670px; margin-left: -10px;">
+      <div class="table-header" style="width: 670px; margin-left: -10px">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -273,20 +326,36 @@
           <div class="col-1 w-100"></div>
         </div>
       </div>
-      <div class="table-item" style="width: 670px; margin-left: -10px;" v-for="reward in rewards" :key="reward.id">
+      <div
+        class="table-item"
+        style="width: 670px; margin-left: -10px"
+        v-for="reward in rewards"
+        :key="reward.id"
+      >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-5 w-100" style="margin-left: 10px; text-align: left;">{{ reward.reward }}</div>
+          <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
+            {{ reward.reward }}
+          </div>
           <div class="col-2 w-100">{{ reward.point }}</div>
           <div class="col-2 w-100">{{ reward.qty }}</div>
           <div class="col-2 w-100">
             <label class="switch">
-              <input type="checkbox" v-model="reward.status" @input="change_status(reward, 'reward')" />
+              <input
+                type="checkbox"
+                v-model="reward.status"
+                @input="change_status(reward, 'reward')"
+              />
               <span class="slider round"></span>
             </label>
           </div>
           <div class="col-1 w-100">
             <img
-              @click="$router.push({ name: 'RewardDetail', params: { id: reward.id }})"
+              @click="
+                $router.push({
+                  name: 'RewardDetail',
+                  params: { id: reward.id },
+                })
+              "
               src="../../assets/icon/edit.png"
               style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
             />
@@ -429,21 +498,21 @@ export default {
       return `${temp[0]}%`
     },
     delete_confirm(item) {
-      console.log(item, "item")
-      this.point_item = item
-      this.delete_status = true
+      console.log(item, "item");
+      this.point_item = item;
+      this.delete_status = true;
     },
     delete_point_pro() {
       api_promotion.delete(`point/${this.point_item.id}`).then(() => {
-        this.correct_status = true
+        this.correct_status = true;
         setTimeout(() => {
-          this.correct_status = false
-          this.delete_status = false
-        }, 1000)
-      })
+          this.correct_status = false;
+          this.delete_status = false;
+        }, 1000);
+      });
     },
   },
-  beforeMount() {
+  mounted() {
     this.fetchPointPromotion();
     this.fetchVoucher();
     this.fetchPackage();
@@ -455,16 +524,16 @@ export default {
 <style scoped>
 .btn-ghost-cancel {
   background: transparent;
-  border-color: #FF7CA3;
-  color: #FF7CA3;
+  border-color: #ff7ca3;
+  color: #ff7ca3;
   width: 180px;
   height: 56px;
   border-radius: 10px;
 }
 .btn-ghost-correct {
   background: transparent;
-  border-color: #50D1AA;
-  color: #50D1AA;
+  border-color: #50d1aa;
+  color: #50d1aa;
   width: 180px;
   height: 56px;
   border-radius: 10px;
@@ -473,7 +542,7 @@ export default {
   width: 440px;
   height: 280px;
   background: #252836;
-  border: 2px solid #EA7C69;
+  border: 2px solid #ea7c69;
   border-radius: 15.5833px;
   position: absolute;
   top: 25%;
@@ -498,8 +567,8 @@ export default {
 .btn-ghost {
   border-color: #50d1aa;
   color: #50d1aa;
-  width: 119px;
-  height: 50px;
+  width: 133px;
+  height: 45px;
   margin: 0px 25px 0px 0px;
 }
 .wrap-search {
@@ -509,13 +578,9 @@ export default {
   margin-left: 35px;
 }
 .tab {
-  overflow: hidden;
-  width: 90%;
+  width: 100%;
   height: 46px;
-  margin-right: 1%;
-  margin-left: 22px;
-  margin-top: 10px;
-  text-align: left !important;
+  margin: auto;
 }
 
 .tab-item {

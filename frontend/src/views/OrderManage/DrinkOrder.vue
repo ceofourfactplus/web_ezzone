@@ -167,13 +167,17 @@ export default {
   components: { NavApp },
   mounted() {
     this.get_order();
-    window.setInterval(() => {
-      this.get_order();
-    }, 5000);
+    this.loader
+  },
+  unmounted() {
+    clearInterval(this.loader)
   },
   data() {
     return {
       all_order: [],
+      loader: window.setInterval(() => {
+        this.get_order();
+      }, 5000),
     };
   },
   methods: {

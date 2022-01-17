@@ -3,23 +3,23 @@
   <div>
     <nav-app :url_name="'RawMaterials'" :rm_menu="true">PO&#160;Notice</nav-app>
     <!-- Second Nav -->
-    <div class="row" style="width: 680px; margin-left: 20px">
-      <div class="col-7" style="width: 100%">
-        <SearchBar style="width: 390px" @search="serchByTyping" />
+    <div class="row" style="width: 90%; margin: auto">
+      <div class="col-8" style="width: 100%; padding-left: 0px">
+        <SearchBar style="width: 100%" @search="serchByTyping" />
       </div>
-      <div class="col-2" style="width: 100%">
+      <div class="col-2 w-100" style="padding: 0px">
         <button
-          class="btn-dropdown" 
+          class="btn-dropdown w-100"
           @click="dropdown_status = !dropdown_status"
         >
-          Item<span class="icon-dropdown"></span> 
+          Item<span class="icon-dropdown"></span>
         </button>
       </div>
-      <div class="col-2" style="width: 100%">
+      <div class="col-2 w-100">
         <button class="btn-ghost" @click="addPO()">+ PO</button>
       </div>
     </div>
-    
+
     <!-- Table for admin -->
     <Table
       v-if="is_staff"
@@ -47,8 +47,11 @@
     </div>
 
     <!-- PO Detail -->
-    <PODetail v-if="po_detail_status" :po_item="po_item" @show_status="po_detail_status = false" />
-    
+    <PODetail
+      v-if="po_detail_status"
+      :po_item="po_item"
+      @show_status="po_detail_status = false"
+    />
   </div>
 </template>
 
@@ -90,7 +93,7 @@ export default {
     },
     addPO() {
       this.selected_items.forEach((item) => {
-        console.log(item, 'unit id')
+        console.log(item, "unit id");
         var data = {
           raw_material_id: item.raw_material_id,
           supplier_id: item.supplier_id,
@@ -104,12 +107,12 @@ export default {
           console.log(response.data, "po");
         });
       });
-      this.$router.push({ name: 'PO'})
+      this.$router.push({ name: "PO" });
     },
     po_detail(item) {
-      console.log(item, "item")
-      this.po_detail_status = true
-      this.po_item = item
+      console.log(item, "item");
+      this.po_detail_status = true;
+      this.po_item = item;
     },
     serchByTyping(val) {
       var temp = [];
@@ -126,17 +129,17 @@ export default {
     },
     selected_item_vals(item) {
       if (!this.selected_items.includes(item)) {
-        this.selected_items.push(item)
+        this.selected_items.push(item);
       } else {
-        var idx = this.selected_items.indexOf(item)
-        this.selected_items.splice(idx, 1)
+        var idx = this.selected_items.indexOf(item);
+        this.selected_items.splice(idx, 1);
       }
-      console.log(this.selected_items, 'selected')
+      console.log(this.selected_items, "selected");
     },
     select_search(btn) {
-      this.search_item = btn
-      this.dropdown_status = false
-    }
+      this.search_item = btn;
+      this.dropdown_status = false;
+    },
   },
   watch: {
     remain() {
@@ -156,10 +159,10 @@ export default {
 
 <style scoped>
 .btn-dropdown-item {
-  width: 100%; 
-  height: 50px; 
-  background: transparent; 
-  border: none; 
+  width: 100%;
+  height: 45px;
+  background: transparent;
+  border: none;
   border-bottom: 1px solid;
 }
 .item-in-row {
@@ -176,24 +179,23 @@ export default {
 }
 .btn-ghost {
   width: 100px;
-  height: 50px;
+  height: 45px;
   border: 1px solid #65b0f6;
   color: #65b0f6;
-  margin-left: 28px;
 }
 .table {
   margin-top: 15px;
 }
 .btn-dropdown {
-  width: 110px;
-  height: 50px;
+  border: 0;
+  width: 100%;
+  height: 45px;
   color: #889898;
   background: #303344;
   font-weight: bold;
   font-size: 24px;
   border-radius: 10px;
   text-align: center;
-  margin-left: 20px;
 }
 span.icon-dropdown {
   background: url("../../assets/icon/down-arrow.png") no-repeat transparent;

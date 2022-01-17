@@ -21,26 +21,35 @@
     <button class="tab-item" v-if="elements.length > 5">></button>
   </div> -->
 
-  <div class="tab">
-    <button
+    <div class="tab">
+      <button
         @click="select_all()"
-        class="tab-item"
+        class="btn-gray"
+        style="min-width: 65px; line-height: 50px"
+        :class="{
+          active: $store.state.raw_material.tab == 'All',
+        }"
       >
-        <p :class="{'tab-selected': 'All' == $store.state.raw_material.tab}">All</p>
+        <!-- <p :class="{ 'tab-selected': 'All' == $store.state.raw_material.tab }">
+          All
+        </p> -->
+        All
       </button>
       <button
         v-for="(item, idx) in elements"
         :key="idx"
         @click="select_item(item)"
-        class="tab-item"
-        style="height:50px"
+        class="btn-gray"
+        style="height: 50px"
+        :class="{
+          active: $store.state.raw_material.tab == item.name,
+        }"
       >
-      <p :class="{'tab-selected': item.name == $store.state.raw_material.tab}">{{ item.name }}</p>
-        
+        <!-- <p :class="{'tab-selected': item.name == $store.state.raw_material.tab}"></p> -->
+        {{ item.name }}
       </button>
-      <button class="tab-item" v-if="elements.length > 5">></button>
+      <!-- <button class="tab-item" v-if="elements.length > 5">></button> -->
     </div>
-
   </div>
 </template>
 
@@ -50,18 +59,17 @@ export default {
   name: "Tabs",
   props: ["elements", "status"],
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     select_all() {
-      this.$store.state.raw_material.tab = "All"
-      this.$emit('all_category')
+      this.$store.state.raw_material.tab = "All";
+      this.$emit("all_category");
     },
     select_item(item) {
-      console.log(this.$store.state.raw_material.tab, 'tab1')
-      this.$store.state.raw_material.tab = item.name
-      console.log(this.$store.state.raw_material.tab, 'tab2')
+      console.log(this.$store.state.raw_material.tab, "tab1");
+      this.$store.state.raw_material.tab = item.name;
+      console.log(this.$store.state.raw_material.tab, "tab2");
       this.$emit("select_item", item.id);
     },
   },
@@ -69,7 +77,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .tab-selected {
   color: white;
 }
@@ -77,31 +85,17 @@ export default {
   overflow: hidden;
   width: 90%;
   height: 46px;
-  margin-right: 1%;
-  margin-left: 5%;
-  margin-top: 10px;
+  margin: auto;
   text-align: left !important;
 }
 
-.tab-item {
-  background-color: #2f3446;
-  color: gray;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 10px;
-  padding-top: 6px;
-  transition: 0.3s;
-  font-size: 26.5px;
-  font-style: normal;
-  border-radius: 15px 15px 0px 0px;
-  margin-top: 0px;
-  margin: 5px;
-  margin-bottom: 1em;
-  height: 46px;
-  width: fit-content;
-  block-size: fit-content;
-  text-decoration: none;
-  line-height: 31px;
+.btn-gray {
+  opacity: 0.5;
+  display: inline;
+  height:100%;
+}
+.active {
+  opacity: 1;
+  color:#fff;
 }
 </style>
