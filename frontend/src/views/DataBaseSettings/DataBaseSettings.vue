@@ -162,7 +162,7 @@
           <div class="col-6 w-100" style="margin: 0px">
             <div class="row w-100">
               <div class="col-3 w-100">
-                <img src="../../assets/icon/Cash.png" class="IconPayment" />
+                <img src="../../assets/icon/cash.png" class="IconPayment" />
               </div>
               <div
                 class="col-4 w-100"
