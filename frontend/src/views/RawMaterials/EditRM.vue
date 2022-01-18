@@ -20,7 +20,7 @@
                   >
                     <img
                       :src="
-                        require(`../../../../backend${rm_item.raw_material_set.img}`)
+                        rm_item.raw_material_set.img
                       "
                       class="image"
                     />

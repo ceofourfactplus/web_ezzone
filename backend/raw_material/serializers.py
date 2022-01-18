@@ -66,9 +66,9 @@ class RawMaterialSerializer(serializers.ModelSerializer):
     category_set = RawMaterialCategorySerializer(
         read_only=True, source="raw_material_category")
     unit_set = UnitSerializer(read_only=True, source="unit_s")
-    unit_l_id = serializers.IntegerField(required=None)
-    unit_m_id = serializers.IntegerField(required=None)
-    unit_s_id = serializers.IntegerField(required=None)
+    unit_l_id = serializers.IntegerField(required=None, validators=None, allow_null=True)
+    unit_m_id = serializers.IntegerField(required=None, validators=None, allow_null=True)
+    unit_s_id = serializers.IntegerField(required=None, validators=None, allow_null=True)
 
     class Meta:
         model = RawMaterial

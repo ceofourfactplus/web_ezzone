@@ -142,7 +142,7 @@
         margin-bottom: 20px;
         border-radius: 10px;
         height: 455px;
-        width: 672px;">
+        width: 772px;">
         <!-- header Reward -->
             <div class="col-12 w-100" id="ColHeaderReward">
                 <div class="row" 

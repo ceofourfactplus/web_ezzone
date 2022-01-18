@@ -454,14 +454,12 @@ export default {
       }
 
       this.units.forEach((element) => {
-        console.log(element, "el");
         if (this.selected_unit_id.indexOf(element.id) + 1 != 0) {
           if (this.selected_units.indexOf(element) + 1 == 0) {
             this.selected_units.push(element);
           }
         }
       });
-      console.log(this.selected_units, "units");
     },
     makeUnitPrice() {
       this.unit_price_list.push({price: this.price, unit: this.units.find(x => x.id == this.unit_price_id).unit, unit_id: this.unit_price_id})
@@ -526,7 +524,6 @@ export default {
       this.categories = response.data;
     });
     api_raw_material.get("unit").then((response) => {
-      console.log(response.data, "unit");
       this.units = response.data;
     });
   },
