@@ -9,7 +9,7 @@
     <!-- CustommerPhone Block -->
     <div class="row Area Name">
       <div class="BlockName">Name :</div>
-      <div class="input BlockInputName">
+      <div class="BlockInputName">
         <input type="text" v-model="input_customer" 
         style="background: #717171;
         border-radius: 10px;
