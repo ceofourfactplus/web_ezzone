@@ -63,9 +63,8 @@
           position: relative;
         "
       >
-        <!-- <img
-            v-if="customer != {}"
-            :src="require(`../../../../backend${customer.img}`)"
+        <img
+            :src="require(`../../../../backend${$store.state.promotion.customer.img}`)"
             style="
                 height: 184px;
                 width: 184px;
@@ -73,7 +72,7 @@
                 top: -2px;
                 position: relative;
             "
-        /> -->
+        />
       </div>
       <!-- Description Block -->
       <div class="col-8 w-100" style="font-size: 30px; color: #ffffff">
@@ -159,7 +158,7 @@
             
             <div id="ColItemReward">
                 <div class="column" v-for="reward in rewards" :key="reward.id">
-                  <img :src="require(`../../../../backend${reward.img}`)" style="width: 100%; height: 100%; border-radius: 10px;">
+                  <img @click="see_detail(reward)" :src="require(`../../../../backend${reward.img}`)" style="width: 100%; height: 100%; border-radius: 10px;">
                 </div>
             </div>            
       </div>
@@ -199,16 +198,21 @@ export default {
         this.temp_rewards = response.data;
       });
     },
+    see_detail(reward) {
+        this.$store.state.promotion.reward_detail = reward
+        this.$router.push({ name: "RewardName"})
+    },
     select_customer(cus) {
       console.log(cus, "cus");
       this.selector_status = false;
-      this.input_customer = this.phone_number_layout(cus.phone_number)
       this.$store.state.promotion.customer = cus;
-      this.format_date_show(cus.birth_date);
+      console.log(this.$store.state.promotion.customer, 'store')
       api_promotion.get(`customer-point/${cus.id}`).then((response) => {
         this.customer_point = response.data;
         this.$store.state.promotion.customer_point = response.data
       });
+        this.input_customer = this.phone_number_layout(cus.phone_number)
+        this.format_date_show(cus.birth_date);
     },
     format_date_show(date) {
       var temp_date = date.split("-");
@@ -343,7 +347,7 @@ export default {
 #ColItemReward {
   width: 632px;
   margin-left: 37px;
-  margin-top: 15px;
+  margin-top: 25px;
   content: "";
   display: table;
   clear: both;

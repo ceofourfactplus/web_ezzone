@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app save="true" @save="save()" :url_name="'RawMaterials'">New&#160;RM</nav-app>
+    <nav-app :url_name="'RawMaterials'" save="true" @save="save()">New&#160;RM</nav-app>
     <div class="container-f">
       <div class="frame">
         <div class="row h-100">
@@ -113,7 +113,7 @@
         <div class="row" style="margin-top: 0px; line-height: 50px;">
           <div class="col-6 w-100" style="margin-left: 10px;">
               <label for="price" style="display: inline; margin-left: -100px;">Price&nbsp;:&nbsp;</label>
-              <input v-model="price" type="text" id="price" name="price" style="display: inline; width: 180px; margin-right: -110px;">
+              <input v-model="price" type="text" id="price" name="price" style="display: inline; width: 240px; margin-right: -110px;">
           </div>
           <div class="col-1 w-100" style="color: white; font-size: 36px; height: 100%; position: relative; bottom: 4px; right: 10px;">/</div>
           <div class="col-2 w-100">
@@ -154,7 +154,7 @@
               class="i-25 ig"
               style="
                 border-radius: 10px;
-                width: 550px;
+                width: 655px;
                 margin-right: -25px;
                 height: 40px;
               "
@@ -551,7 +551,7 @@ input {
 .input-prepend {
   margin-right: 6px;
   border-radius: 10px 0px 0px 10px;
-  width: 100px;
+  width: 130px;
 }
 .row-wrapper {
   width: 100%;
@@ -654,7 +654,7 @@ raw-img {
 .g {
   border-radius: 10px 0px 0px 10px;
   margin-right: 10px;
-  width: 155px;
+  width: 175px;
 }
 .ig {
   border-radius: 0px 10px 10px 0px;

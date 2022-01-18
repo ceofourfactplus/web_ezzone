@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav-app :url_name="'Promotion'" :save="true" @save="edit">Package Detail</nav-app>
+    <div style="color: white; font-size: 30px; margin-top: 20px;" v-if="loading"></div>
+    <div v-else>
+      <nav-app :url_name="'Promotion'" :save="true" @save="edit">Package Detail</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
@@ -123,7 +125,7 @@
     </div>
     <!-- Table -->
     <div class="table" style="margin-top: 10px">
-      <div class="table-header">
+      <div class="table-header" style="width: 104%; margin-left: -11px;">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -144,7 +146,7 @@
         </div>
       </div>
       <!-- Menu -->
-      <div class="table-item" v-for="item in item_of_package" :key="item">
+      <div class="table-item" v-for="(item, idx) in item_of_package" :key="item" style="width: 104%; margin-left: -11px;">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-1 w-100">
             <div class="checkbox-orange">
@@ -159,13 +161,14 @@
           <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
             {{ item.product_set.name }}
           </div>
-          <div class="col-3 w-100">{{ item.product_set.name }}</div>
-          <div class="col-1 w-100">{{ item.amount }}</div>
+          <div class="col-3 w-100" v-if="item_toppings[idx] != undefined">{{ item_toppings[idx].topping_set.name }}</div>
+          <div class="col-3 w-100" v-else>-</div>
+          <div class="col-1 w-100">{{ item.qty }}</div>
           <div class="col-2 w-100">{{ item.total_price }}</div>
         </div>
       </div>
       <!-- Add Menu -->
-      <div class="table-item" v-if="add_menu">
+      <div class="table-item" v-if="add_menu" style="width: 104%; margin-left: -11px;">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-5 w-100 mt--4">
             <input
@@ -250,18 +253,20 @@
         </div>
       </div>
       <!-- Total -->
-      <div class="table-item">
+      <div class="table-item" style="width: 104%; margin-left: -11px;">
         <div
           class="row"
           style="font-size: 24px; color: white; line-height: 14px"
         >
           <div class="col-6 w-100"></div>
           <div class="col-4 w-100" style="text-align: right">Total</div>
-          <!-- <div class="col-2 w-100">{{ item_of_package.reduce((x,y) => parseInt( x.total_price) + parseInt(y.total_price)) }}</div> -->
+          <div class="col-2 w-100" v-if="item_of_package.length == 1">{{ item_of_package[0].total_price }}</div>
+          <div class="col-2 w-100" v-else-if="item_of_package.length > 1">{{ item_of_package.reduce((x, y) => x.total_price + y.total_price) }}</div>
+          <div class="col-2 w-100" v-else>0</div>
         </div>
       </div>
       <!-- Discount Total Price -->
-      <div class="table-item">
+      <div class="table-item" style="width: 104%; margin-left: -11px;">
         <div
           class="row"
           style="font-size: 24px; color: white; line-height: 14px"
@@ -291,6 +296,7 @@
       </div>
       <div class="main-text">Saved successfully</div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -318,6 +324,7 @@ export default {
       alert: false,
       add_menu: false,
       select_all: false,
+      loading: false,
       item_toppings: [],
       package_items: [],
       selected_items: [],
@@ -353,9 +360,11 @@ export default {
   },
   methods: {
     fetchPackage() {
+      this.loading = true
       api_promotion.get(`package/${this.$route.params.id}`).then((response) => {
         console.log(response.data, 'package');
         this.package_item = response.data;
+        this.loading = false
       });
     },
     fetchPackageItem() {
@@ -425,7 +434,7 @@ export default {
                 this.alert = true;
                 setTimeout(() => {
                   this.alert = false;
-                  this.$router.push({ name: "Point" });
+                  this.$router.push({ name: "Promotion" });
                 }, 2000);
               });
           });
@@ -521,7 +530,6 @@ export default {
                 this.topping_item = {};
                 this.qty = null;
                 this.total_price = null;
-                this.description = null;
               });
           });
           
@@ -663,7 +671,7 @@ span.icon-save {
   margin: 20px 0px 0px 120px; */
 }
 .card-content {
-  width: 670px;
+  width: 765px;
   height: 342px;
   background: #303344;
   border-radius: 20px;

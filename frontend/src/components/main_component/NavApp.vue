@@ -24,14 +24,14 @@
         <div class="col-1" v-else-if="rm_menu">
           <img
             src="../../assets/icon/Menu-icon.png"
-            style="top: 0.7%; right: 25px; position: absolute; height: 80px"
+            style="top: 0px; right: 25px; position: absolute; height: 100px;"
             @click="open_slide"
           />
         </div>
         <div class="col-1" v-else-if="reward_menu">
           <img
             src="../../assets/icon/Menu-icon.png"
-            style="top: 0px; right: 25px; position: absolute; height: 100px"
+            style="top: 0px; right: 25px; position: absolute; height: 100px;"
             @click="open_slide"
           />
         </div>

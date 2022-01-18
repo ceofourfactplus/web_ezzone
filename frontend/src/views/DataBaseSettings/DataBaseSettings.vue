@@ -184,6 +184,85 @@
       </div>
     </div>
 
+    <!-- Payment Channel setting -->
+    <div class="BlockChannel">
+      <!-- Payment Channel Setting -->
+      <div class="row" id="Setting" style="margin-bottom:10px;" >
+        <div class="col-7 w-100 dbs-font">Payment Channel Setting</div>
+        <div class="col-1 w-100">
+          <img src="../../assets/icon/edit-orange.png"
+          style="width: 25px; height: 30px; margin-top: -9px"
+          @click="$router.push({ name: 'SaleChannel' })"
+          />
+        </div>
+      </div>
+      <!-- Payment Channel 1 -->
+      <div class="row">
+        <div class="col-1 w-100"></div>
+        <div class="col-5 w-100" id="PaymentBlock">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/Cash.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding-left:0px;text-align:left;">
+              <p id="TextPaymentChannel">Cash</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/COD.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding:0px;text-align:left;">
+              <p id="TextPaymentChannel">COD</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Payment Channel 2 -->
+      <div class="row">
+        <div class="col-1 w-100"></div>
+        <div class="col-5 w-100" id="PaymentBlock">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/Credit.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding:0px;text-align:left;">
+              <p id="TextPaymentChannel">Credit</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div> 
+        </div>
+        
+        <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
+          <div class="row">
+            <div class="col-3 w-100">
+              <img src="../../assets/icon/Transfer.png" class="IconPayment"/>
+            </div>
+            <div class="col-4 w-100" style="padding:0px;text-align:left;">
+              <p id="TextPaymentChannel">Transfer</p>
+            </div>
+            <div class="col-3 w-100" style="padding:0px;">
+              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+    </div>
+  
     <!-- card pop up -->
     <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">

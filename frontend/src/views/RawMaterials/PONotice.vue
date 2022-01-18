@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <nav-app :rm_menu="true" :url_name="'DashBoard'">PO&#160;Notice</nav-app>
+    <nav-app :url_name="'RawMaterials'" :rm_menu="true">PO&#160;Notice</nav-app>
     <!-- Second Nav -->
     <div class="row" style="width: 90%; margin: auto">
       <div class="col-8" style="width: 100%; padding-left: 0px">

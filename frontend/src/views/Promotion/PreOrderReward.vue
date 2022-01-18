@@ -39,7 +39,7 @@
             </div>
 
         </div>
-    <!-- Itme -->
+    <!-- Item -->
             <div class="row table-item" id="BlockItem" style="line-height:50px;" v-for="item in rewards" :key="item.id">
                 <div class="col-1" style="background-color:#717171;
                 border-radius: 10px;
@@ -81,7 +81,7 @@ export default {
             console.log(response.data, "rewards");
             response.data.forEach((element) => {
                 console.log(element.reward_set.is_pre_order, 'element')
-                if (element.is_pre_order) {
+                if (element.reward_set.is_pre_order) {
                     this.rewards.push(element)
                     this.temp_rewards.push(element)
                 }
@@ -101,7 +101,7 @@ export default {
 
 <style scoped>
 .BlockSearch {
-
+    min-width: 615px;
     height: 45px;
     margin-left: 20px;
     margin-right: 20px;
@@ -118,7 +118,7 @@ export default {
 }
 
 #Header {
-    width: 672px;
+    width: 770px;
     height: 50px;
     margin-left: 24px;
     margin-right: 24px;
