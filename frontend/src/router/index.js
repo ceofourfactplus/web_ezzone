@@ -87,6 +87,7 @@ import RewardName from "../views/Promotion/RewardName.vue"
 // Consignment
 import Consigner from "../views/Consignment/Consigner.vue"
 import ConsignerProduct from "../views/Consignment/ConsignerProduct.vue"
+import RecordProduct from "../views/Consignment/RecordProduct.vue"
 import NewConsignment from "../views/Consignment/NewConsignment.vue"
 
 
@@ -570,6 +571,12 @@ const routes = [
     name: "ConsignerProduct",
     props: true,
     component: ConsignerProduct,
+  },
+  {
+    path: "/consignment/recordproduct",
+    name: "RecordProduct",
+    props: true,
+    component: RecordProduct,
   },
   {
     path: "/consignment/newconsignment",
