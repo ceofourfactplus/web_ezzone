@@ -1,12 +1,16 @@
 <template>
   <div>
     <nav-app :url_name="'DashBoard'" :rm_menu="true">Unit</nav-app>
-    <div class="row" v-if="is_staff">
-      <div class="col-11 wrap-search">
+    <div class="row" v-if="is_staff" style="width: 90%; margin: auto">
+      <div class="col-10 w-100 ps-0">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px">
-        <button class="btn-ghost" @click="add_category_status = true">
+      <div class="col-2 w-100" style="padding-left: 0px">
+        <button
+          class="btn-ghost"
+          style="white-space: nowrap;height:45px;"
+          @click="add_category_status = true"
+        >
           + New
         </button>
       </div>
@@ -23,7 +27,7 @@
       </div>
       <div
         style="
-          height: 660px;
+          height: 740px;
           overflow-y: scroll;
           overflow-x: hidden;
           border-radius: 10px;
@@ -42,15 +46,18 @@
               line-height: 18px;
             "
           >
-            <div class="col-6" style="text-align: left; width: 100%;margin-left:20px">
+            <div
+              class="col-6"
+              style="text-align: left; width: 100%; margin-left: 50px"
+            >
               {{ item.unit }}
             </div>
             <div class="col-2" style="margin-left: -5px">100</div>
-            <div class="col-1" style="position: absolute; right: 70px">
+            <div class="col-4 w-100" style="right:10px">
               <img
                 @click="SelectUnit(item)"
                 src="../../assets/icon/edit.png"
-                style="position: relative; bottom: 3px; width: 25px; height: 30px;"
+                style="bottom: 3px; width: 25px; height: 30px"
               />
             </div>
           </div>
@@ -63,7 +70,7 @@
       <div class="category-popup" v-if="add_category_status">
         <img
           @click="add_category_status = false"
-          style="position: absolute; right: 10px; top: 10px;width:30px;"
+          style="position: absolute; right: 10px; top: 10px; width: 30px"
           src="../../assets/icon/delete.png"
         />
         <h2>Create RM Unit</h2>
@@ -85,7 +92,7 @@
       <div class="category-popup" v-if="edit_unit">
         <img
           @click="edit_unit = false"
-          style="position: absolute; right: 10px; top: 10px;width:30px;"
+          style="position: absolute; right: 10px; top: 10px; width: 30px"
           src="../../assets/icon/delete.png"
         />
         <h2>Edit RM Unit</h2>
@@ -176,7 +183,7 @@ export default {
           this.alert = false;
           this.add_category_status = false;
           this.fetchRMUnit();
-          this.unit = ''
+          this.unit = "";
         }, 1000);
       });
     },

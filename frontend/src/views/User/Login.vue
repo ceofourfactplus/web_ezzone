@@ -42,18 +42,23 @@
         </div>
         <div class="m" v-else></div>
 
-        <button type="submit" class="btn m mt-2" id="btn-login">Login</button>
-        <button
-          type="button"
-          class="btn-ghost"
-          @click="$router.push({ name: 'Register' })"
-          id="btn-login"
-        >
-          Register
+        <button type="submit" class="btn m mt-2 col-12" id="btn-login">
+          Login
         </button>
-        <div class="col-12 mt-3">
-          <router-link :to="{name:'ForgotPassword'}"
-          style="color:#fff;font-size:18px;text-decoration: underline;"
+        <div class="col-12">
+          <button
+            type="button"
+            class="btn-ghost"
+            @click="$router.push({ name: 'Register' })"
+            id="btn-login"
+          >
+            Register
+          </button>
+        </div>
+        <div class="col-12 mt-3 w-100">
+          <router-link
+            :to="{ name: 'ForgotPassword' }"
+            style="color: #fff; font-size: 18px; text-decoration: underline"
             >Forget password</router-link
           >
         </div>
@@ -93,14 +98,14 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          this.$router.push({name:'DashBoard'})
+          this.$router.push({ name: "DashBoard" });
           this.auth.accessToken = response.data.token;
           this.auth.userInfo = response.data.user_set;
         })
         .catch((err) => {
           console.log(err);
           this.error.status = true;
-          this.error.data = err.response.data
+          this.error.data = err.response.data;
         });
     },
   },
@@ -121,11 +126,10 @@ export default {
   margin-bottom: 20px;
 }
 input {
-  height: 80px!important;
+  height: 80px !important;
 }
 #btn-login {
   width: 300px;
   height: 70px;
 }
- 
 </style>

@@ -1,12 +1,18 @@
 <template>
   <div>
-    <nav-app :save="true" @save="save2">Edit Category</nav-app>
+    <nav-app :save="true" @save="save2" :url_name="'ToppingCategory'"
+      >Edit Category</nav-app
+    >
     <div class="row" style="width: 90%; margin: auto">
       <div class="col-12" style="display: flex">
         <label for="category" style="display: inline; line-height: 55px">
           <pre>Category Name : </pre>
         </label>
-        <input type="text" style="display: inline" v-model="category" />
+        <input
+          type="text"
+          style="display: inline; width: 100%"
+          v-model="category"
+        />
       </div>
       <div class="col-6 w-100">
         <button
@@ -63,7 +69,7 @@
             margin: 10px 0px 0px 0px;
             background-color: #303344;
             border-radius: 10px;
-            line-height:100%;
+            line-height: 100%;
           "
         >
           <div
@@ -104,8 +110,8 @@ export default {
       .then((response) => {
         this.data_topping = response.data;
         console.log(this.data_topping.settopping_set);
-        this.category = response.data.category
-        this.change_to_list()
+        this.category = response.data.category;
+        this.change_to_list();
       });
     // this.change_to_list()
     this.fetchTopping();
@@ -127,18 +133,21 @@ export default {
           this.topping = response.data;
         });
     },
-    save2(){
+    save2() {
       const data = {
-        category:this.category,
-        create_by:this.data_topping.create_by,
-        update_by:1,
-        settopping_set:[]
-      }
-      for(var id of this.select_topping){
-        data.settopping_set.push({topping:parseInt(id),category:this.data_topping.id})
+        category: this.category,
+        create_by: this.data_topping.create_by,
+        update_by: 1,
+        settopping_set: [],
+      };
+      for (var id of this.select_topping) {
+        data.settopping_set.push({
+          topping: parseInt(id),
+          category: this.data_topping.id,
+        });
       }
       api_product
-        .put("topping/category/"+this.$route.params.id, data)
+        .put("topping/category/" + this.$route.params.id, data)
         .then(() => {
           this.$router.push({ name: "ToppingCategory" });
         })
@@ -173,7 +182,7 @@ export default {
       this.data_topping.settopping_set.forEach((item) => {
         this.select_topping.push(item.topping);
       });
-      console.log(this.select_topping)
+      console.log(this.select_topping);
     },
   },
   watch: {

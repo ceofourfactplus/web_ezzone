@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app  :url_name="'KeyOrder'">{{ product.product_set.name }}</nav-app>
+    <nav-app :url_name="'KeyOrder'">{{ product.product_set.name }}</nav-app>
     <div class="frame">
       <div class="row mt-2 w-100" style="margin-left: 0px">
         <div class="col-4 mt-3 w-100" style="margin: auto">
@@ -94,14 +94,17 @@
               v-for="topping in product.product_set.topping_category_set
                 .settopping_set"
               :key="topping.topping"
+              class="col-3 m-1 w-100"
             >
               <div
                 v-if="
                   topping.topping_set.pricetopping_set.filter((item) => {
-                    return item.sale_channel == $store.state.pos.order.sale_channel_id;
+                    return (
+                      item.sale_channel ==
+                      $store.state.pos.order.sale_channel_id
+                    );
                   }).length == 1
                 "
-                class="col-3 m-1 w-100"
                 style="padding: 0px"
               >
                 <div class="img-topping">
@@ -299,12 +302,11 @@ export default {
       mouse_start: 0,
       topping: null,
       blur: false,
-      description_list: [
-        "ไม่ไส่น้ำแข็ง",
-        "ไม่โรยหน้า",
-        "ไม่ไส่ถุง",
-        "แยกน้ำแข็ง",
-      ],
+      description_list: {
+        drink: ["ไม่ไส่น้ำแข็ง", "ไม่โรยหน้า", "ไม่ไส่ถุง", "แยกน้ำแข็ง"],
+        food: ["ไม่สุก", "ข้าวน้อย", "ข้าวเยอะ", "ไม่ไส่ผัก", "ไม่ไส่พริก"],
+        roti: ["ไม่ไส่น้ำแข็ง", "ไม่โรยหน้า", "ไม่ไส่ถุง", "แยกน้ำแข็ง"],
+      },
       select_description: [],
     };
   },
@@ -318,7 +320,9 @@ export default {
       if (price_list[0] != undefined) {
         const price = parseInt(
           price_list.filter((item) => {
-            return item.sale_channel == this.$store.state.pos.order.sale_channel_id;
+            return (
+              item.sale_channel == this.$store.state.pos.order.sale_channel_id
+            );
           })[0].price
         );
         this.product.price_item = price;
@@ -329,7 +333,9 @@ export default {
       if (price_list[0] != undefined) {
         return parseInt(
           price_list.filter((item) => {
-            return item.sale_channel == this.$store.state.pos.order.sale_channel_id;
+            return (
+              item.sale_channel == this.$store.state.pos.order.sale_channel_id
+            );
           })[0].price
         );
       }

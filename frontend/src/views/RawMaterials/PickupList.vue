@@ -1,18 +1,27 @@
 <template>
   <div>
     <nav-app :rm_menu="true" :url_name="'DashBoard'">Pickup&#160;List</nav-app>
-    <SearchBar
-      @search="serchByTyping"
-      style="width: 680px; margin-left: 17px;"
-    />
+    <div class="row" style="width: 90%; margin: auto">
+      <div class="col-12">
+        <SearchBar
+          @search="serchByTyping"
+          style="width: 680px; margin-left: 17px"
+        />
+      </div>
+    </div>
 
     <div class="table">
       <div class="table-header">
         <div class="row">
           <div class="col-3 w-100" style="margin-left: 10px">Date</div>
-          <div class="col-4 w-100" style="margin-left: 18px; text-align: center;">Name</div>
+          <div
+            class="col-4 w-100"
+            style="margin-left: 18px; text-align: center"
+          >
+            Name
+          </div>
           <div class="col-1 w-100">Qty</div>
-          <div class="col-1 w-100" style="margin-left: 14px;">Unit</div>
+          <div class="col-1 w-100" style="margin-left: 14px">Unit</div>
           <div class="col-3 w-100">Pickup By</div>
         </div>
       </div>
@@ -20,18 +29,18 @@
         <div class="col-3 w-100">
           {{ item.create_at.slice(0, 10).replace(/-/g, "/") }}
         </div>
-        <div
-          class="col-4 w-100"
-          style="
-            text-align: left;
-            padding-left: 20px;
-          "
-        >
+        <div class="col-4 w-100" style="text-align: left; padding-left: 20px">
           {{ item.raw_material_set.name }}
         </div>
-        <div class="col-1 w-100" style="margin-left: 5px">{{ item.amount }}</div>
-        <div class="col-1 w-100" style="margin-left: 20px; margin-right: -20px;">{{ item.unit_set.unit }}</div>
-        <div class="col-3 w-100" style="margin-left: 10px">{{ item.create_by_set.username }}</div>
+        <div class="col-1 w-100" style="margin-left: 5px">
+          {{ item.amount }}
+        </div>
+        <div class="col-1 w-100" style="margin-left: 20px; margin-right: -20px">
+          {{ item.unit_set.unit }}
+        </div>
+        <div class="col-3 w-100" style="margin-left: 10px">
+          {{ item.create_by_set.username }}
+        </div>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product">Edit&#160;Topping</nav-app>
-    <div class="container-f">
+    <nav-app save="true" @save="create_product" :url_name="'Topping'">Edit&#160;Topping</nav-app>
+    <div class="container-f w-100">
       <div class="frame f-1">
         <div class="row h-100">
           <div class="col-5 w-100">
@@ -42,7 +42,7 @@
               <label for=""
                 >Status&nbsp;&nbsp;:&nbsp;<button
                   class="btn-y"
-                  style="white-space:nowrap"
+                  style="white-space:nowrap;width:150px"
                   :class="{ 'btn-g': topping['remain'] > topping['minimum'] }"
                 >
                 status label
@@ -192,13 +192,11 @@ export default {
     },
     create_product() {
       api_product.put("topping/"+this.$route.params.id, this.topping).then((response) => {
-        
         if (this.change_img) {
           const data = new FormData();
           data.append("img", this.topping['img'], this.topping['img'].name);
           api_product.put('get-topping/'+response.data.id,data)
         }
-
         this.$router.push({ name: "Topping" });
       });
     },
@@ -214,8 +212,7 @@ export default {
 
 <style scoped>
 .frame {
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin: 15px auto 20px auto;
   background-color: #303344;
   border-radius: 20px;
   padding-top: 20px;
@@ -231,7 +228,6 @@ export default {
   height: 170px;
 }
 .container-f {
-  padding-left: 22px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -280,7 +276,7 @@ label {
   position: absolute;
   width: 74px;
   height: 28.23px;
-  left: 60px;
+  left: 100px;
   top: 350px;
 
   background-color: #c4c4c4;

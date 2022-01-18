@@ -1,13 +1,12 @@
 <template>
   <div>
-    <nav-app>Topping</nav-app>
+    <nav-app :url_name="'DashBoard'" :product_menu="true">Topping</nav-app>
     <div class="row" style="margin: auto; width: 94%">
       <div class="col-10 w-100">
         <SearchBar @search="search_by_typing" />
       </div>
       <div class="col-2 w-100" style="padding-left: 0px">
         <button
-          style="width: 100px"
           class="btn-ghost"
           @click="$router.push({ name: 'CreateTopping' })"
         >
@@ -62,7 +61,6 @@
         >
           <div
             class="row"
-            
             style="
               width: 100%;
               line-height: 100%;
@@ -92,10 +90,10 @@
               {{ get_price(product.pricetopping_set) }}
             </div>
             <div class="col-2 w-100" style="margin: auto">
-              <Switch />
-            </div>
-            <div class="col-1 w-100" style="margin: auto; padding: 0px">
-              <img src="../../assets/icon/edit.png" style="width: 45%" alt="" />
+              <Switch
+                @switch="change_status(product)"
+                :value="Boolean(Number(product.status))"
+              />
             </div>
           </div>
         </div>
@@ -159,9 +157,25 @@ export default {
         this.show_products = temp;
       }
     },
-    get_price(item) {
-      console.log(item);
-      return 0.0;
+    get_price(price_list) {
+      const price = price_list.filter((item) => {
+        return item.sale_channel === this.$store.state.ezzone_id;
+      })[0];
+      if (price != undefined) {
+        return price.price;
+      }
+      return "free";
+    },
+    change_status(product) {
+      console.log(product);
+      api_product
+        .put("topping/status/" + product.id + "/", {
+          status: !Boolean(Number(product.status)),
+          update_by: this.$store.state.auth.userInfo.id,
+        })
+        .then((response) => {
+          product.status = Boolean(Number(response.data.status));
+        });
     },
   },
 };
@@ -186,7 +200,7 @@ export default {
   margin: 0px;
 }
 .type-active {
-  opacity: 1 !important;  
+  opacity: 1 !important;
   color: #fff !important;
 }
 </style>

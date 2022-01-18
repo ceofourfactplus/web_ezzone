@@ -260,6 +260,8 @@ export default {
     total_price: (state) => {
       return state.order.total_price;
     },
+
+    // orderitemtopping_set orderitemtopping_set
     cash: (state) => {
       if (state.order.cash != null) {
         return state.order.cash.toLocaleString(undefined);

@@ -79,7 +79,7 @@ class Order(models.Model):
         Payment, on_delete=models.PROTECT, null=True, default=None)
     sale_channel = models.ForeignKey(SaleChannel, on_delete=models.PROTECT)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, null=True)
-    delivery_price = models.DecimalField(max_digits=5, decimal_places=2)
+    delivery_price = models.DecimalField(max_digits=9, decimal_places=2)
     description = models.TextField(null=True, blank=True, default='')
     status_order = models.IntegerField(
         choices=STATUS_ORDER, default=WAITING)
@@ -145,10 +145,10 @@ class OrderItem(models.Model):
         ConsignmentProduct, on_delete=models.PROTECT, null=True, default=None)
     package = models.ForeignKey(
         PromotionPackage, on_delete=models.PROTECT, null=True, default=None)
-    price_item = models.DecimalField(max_digits=5, decimal_places=2)
+    price_item = models.DecimalField(max_digits=7, decimal_places=2)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     size = models.CharField(max_length=1, choices=SIZE, default=SIZE_M)
-    total_price = models.DecimalField(max_digits=5, decimal_places=2)
+    total_price = models.DecimalField(max_digits=7, decimal_places=2)
     description = models.TextField(null=True)
     amount = models.IntegerField()
 
@@ -156,6 +156,6 @@ class OrderItem(models.Model):
 class OrderItemTopping(models.Model):
     item = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
     topping = models.ForeignKey(Topping, on_delete=models.PROTECT)
-    price_topping = models.DecimalField(max_digits=5, decimal_places=2)
-    total_price = models.DecimalField(max_digits=5, decimal_places=2)
+    price_topping = models.DecimalField(max_digits=7, decimal_places=2)
+    total_price = models.DecimalField(max_digits=7, decimal_places=2)
     amount = models.IntegerField()

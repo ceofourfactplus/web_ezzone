@@ -72,7 +72,6 @@ class ToppingByType(APIView):
         category = Topping.objects.filter(type_topping=type)
         serializer = ToppingSerializer(
             category, context={"request": request}, many=True)
-        print(serializer.data)
         return Response(serializer.data, status=200)
 
 
@@ -81,7 +80,6 @@ class CategoryByType(APIView):
         category = ProductCategory.objects.filter(type_category=type)
         serializer = ProductCategorySerializer(
             category, many=True)
-        print(serializer.data)
         return Response(serializer.data, status=200)
 
 
@@ -92,7 +90,6 @@ class ProductByType(APIView):
         category = Product.objects.filter(type_product=type)
         serializer = ProductSerializer(
             category, context={"request": request}, many=True)
-        print(serializer.data)
         return Response(serializer.data, status=200)
 
 
@@ -101,7 +98,6 @@ class ChangeList(APIView):
         category = ProductCategory.objects.exclude(type_category=4)
         serializer = ProductCategorySerializer(
             category, context={"request": request}, many=True)
-        print(serializer.data)
         return Response(serializer.data)
 
     def post(self, request):
@@ -150,8 +146,6 @@ class ToppingCategoryList(APIView):
             serializer = ToppingCategorySerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-
-                print(request.data['select_topping'])
                 for top_id in request.data['select_topping']:
                     if(not top_id == ','):
                         SetTopping.objects.create(
@@ -247,7 +241,6 @@ class ToppingDetail(APIView):
         serializer = ToppingSerializer(sale_channel, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            print(request.data['price'])
             ezzone = SaleChannel.objects.get(sale_channel='EZZone').id
             if PriceTopping.objects.filter(topping_id=serializer.data['id'], sale_channel_id=ezzone).exists():
                 price = PriceTopping.objects.get(
@@ -321,7 +314,6 @@ class SalechannelList(APIView):
 class CreateSaleChannel(APIView):
     def post(self, request):
         serializer = SaleChannelSerializer(data=request.data)
-        print(serializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
@@ -429,8 +421,24 @@ class ProductStatus(APIView):
         topping.status = request.data['status']
         topping.update_by_id = request.data['update_by']
         topping.save()
-        serializer = ProductSerializer(topping)
-        return Response(serializer.data)
+        print(topping.status)
+        return Response('ok')
+
+
+class ToppingStatus(APIView):
+    def get_object(self, pk):
+        try:
+            return Topping.objects.get(pk=pk)
+        except Topping.DoesNotExist:
+            raise 404
+
+    def put(self, request, pk):
+        topping = self.get_object(pk)
+        topping.status = request.data['status']
+        topping.update_by_id = request.data['update_by']
+        topping.save()
+        print(topping.status)
+        return Response({'status':topping.status})
 
 
 class UpdateImageProduct(APIView):

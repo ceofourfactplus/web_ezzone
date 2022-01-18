@@ -1,13 +1,15 @@
 <template>
   <div>
-    <nav-app :save="true" @save="create_sale_channel">New Sale Channel</nav-app>
+    <nav-app :save="true" :url_name="'SaleChannel'" @save="create_sale_channel"
+      >New Sale Channel</nav-app
+    >
     <div class="row" style="margin-top: 20px">
       <!-- form sale channel -->
       <div class="col-4 w-100" style="margin: auto">
         <label id="select_img" for="file" style="margin-top: 0px">
           <img
             :src="show_img"
-            style="border-radius: 10px; width: 150px; height: 132px"
+            style="border-radius: 10px; width: 150px; height: 132px;object-fit:cover;"
             class="image"
             v-if="show_img != null"
           />
@@ -29,7 +31,12 @@
       <div class="col-8 w-100">
         <div style="display: flex" class="mb-2">
           <label class="col-3" for="name">Name </label>
-          <input v-model="sale_channel_set.sale_channel" class="input" type="text" id="name" />
+          <input
+            v-model="sale_channel_set.sale_channel"
+            class="input"
+            type="text"
+            id="name"
+          />
         </div>
         <div style="display: flex">
           <label class="col-3" for="gp">GP% </label>
@@ -56,7 +63,7 @@
             <div class="col-9">
               <button
                 class="btn-ghost-b me-3"
-                style="width: 202px; height: 50px"
+                style="width: 202px; height: 50px;white-space:nowrap;"
                 @click="
                   add_product_to_salechannel = true;
                   select_product_update_id = null;
@@ -68,7 +75,7 @@
               <button
                 v-if="!delete_status"
                 class="btn-ghost-r"
-                style="width: 235px; height: 50px"
+                style="width: 235px; height: 50px;white-space:nowrap;"
                 @click="
                   delete_status = true;
                   add_product_to_salechannel = false;
@@ -76,7 +83,7 @@
                 "
               >
                 <img
-                  src="../../assets/icon/bin.png"
+                  src="../../assets/icon/r-trash.png"
                   width="20"
                   alt=""
                 />&#160;Delete Product
@@ -88,7 +95,7 @@
                 @click="delete_selected()"
               >
                 <img
-                  src="../../assets/icon/bin.png"
+                  src="../../assets/icon/r-trash.png"
                   width="20"
                   alt=""
                 />&#160;Delete Product
@@ -106,6 +113,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 3 }"
           @click="type_item = 3"
+          style="width:16%;padding:0px;margin:auto;"
           class="btn-gray me-2"
         >
           FOOD
@@ -113,6 +121,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 2 }"
           @click="type_item = 2"
+          style="width:18%;padding:0px;margin:auto;"
           class="btn-gray me-2"
         >
           DRINK
@@ -120,6 +129,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 1 }"
           @click="type_item = 1"
+          style="width:18%;padding:0px;margin:auto;"
           class="btn-gray me-2"
         >
           DRESSERT
@@ -127,6 +137,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 4 }"
           @click="type_item = 4"
+          style="width:18%;padding:0px;margin:auto;"
           class="btn-gray me-2"
         >
           TOPPING
@@ -134,6 +145,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 5 }"
           @click="type_item = 5"
+          style="width:24%;padding:0px;margin:auto;"
           class="btn-gray"
         >
           CONSIGNMENT
@@ -143,15 +155,24 @@
     <!-- table -->
     <div class="table" style="margin-top: 10px">
       <!-- header -->
-      <div class="table-header" style="line-height: 40px; font-size: 24px">
+      <div class="table-header" style="font-size: 24px">
         <div class="row">
-          <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
+          <div
+            class="col-5 w-100 p-0"
+            style="margin-left: 10px; line-height: 40px; text-align: left"
+          >
             Product Name
           </div>
-          <div class="col-3 w-100" style="margin-left: 10px; text-align: left">
+          <div
+            class="col-3 w-100 p-0"
+            style="margin-left: 10px; line-height: 40px; text-align: left"
+          >
             Sale Price
           </div>
-          <div class="col-4 w-100" style="margin: auto; margin-left: -10px">
+          <div
+            class="col-4 w-100 p-0"
+            style="margin: auto; line-height: 40px; margin-left: -10px"
+          >
             Net Price
           </div>
         </div>
@@ -165,7 +186,7 @@
             v-if="check_type_update(item)"
           >
             <div class="row">
-              <div class="col-5 w-100" style="margin: auto; line-height: 100%">
+              <div class="col-5 w-100" style="width: 100%; margin: auto; line-height: 100%">
                 <input
                   type="text"
                   class="input-product"
@@ -227,7 +248,7 @@
           <div
             class="row"
             v-else-if="item['topping'] !== undefined"
-            style="width: 90%; margin: auto; font-size: 24px"
+            style="width: 100%; margin: auto; font-size: 24px"
           >
             <div class="col-1">
               <div class="checkbox-orange" v-if="delete_status">
@@ -261,7 +282,7 @@
           <div
             class="row"
             v-else
-            style="width: 90%; margin: auto; font-size: 24px"
+            style="width: 100%; margin: auto; font-size: 24px"
           >
             <div class="col-1">
               <div class="checkbox-orange" v-if="delete_status">
@@ -371,7 +392,7 @@ export default {
   data() {
     return {
       show_img: null,
-      img:null,
+      img: null,
       sale_channel_set: {
         sale_channel: "",
         gp: 0,
@@ -588,8 +609,19 @@ export default {
           )
           .then((response) => {
             this.sale_channel_set = response.data;
-            this.sale_channel_set.sale_channel = ''
-            console.log(this.sale_channel_set.sale_channel)
+            this.sale_channel_set.sale_channel = "";
+            delete this.sale_channel_set.id
+            this.sale_channel_set.create_by = this.$store.state.auth.userInfo.id
+            delete this.sale_channel_set.create_at
+            console.log(this.sale_channel_set.sale_channel);
+            for(const item of this.sale_channel_set.price_product){
+              delete item.id
+              delete item.sale_channel
+            }
+            for(const items of this.sale_channel_set.price_topping){
+              delete items.id
+              delete items.sale_channel
+            }
           });
       }
     },
