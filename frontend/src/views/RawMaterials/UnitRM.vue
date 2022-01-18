@@ -257,7 +257,7 @@ h2 {
 .category-popup {
   position: absolute;
   top: 230px;
-  left: 90px;
+  left: 160px;
   font-weight: bold;
   font-size: 30px;
   width: 520px;
@@ -275,7 +275,7 @@ h2 {
   margin: 0px 40px 0px 0px;
 }
 .wrap-search {
-  min-width: 505px;
+  min-width: 610px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

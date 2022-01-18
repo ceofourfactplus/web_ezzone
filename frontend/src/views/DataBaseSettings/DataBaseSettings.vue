@@ -179,7 +179,7 @@
         <div class="col-5 w-100" id="PaymentBlock">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/cash.png" class="IconPayment"/>
+              <img src="../../assets/icon/Cash.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding-left:0px;text-align:left;">
               <p id="TextPaymentChannel">Cash</p>
@@ -193,7 +193,7 @@
         <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/cod.png" class="IconPayment"/>
+              <img src="../../assets/icon/COD.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding:0px;text-align:left;">
               <p id="TextPaymentChannel">COD</p>
@@ -225,7 +225,7 @@
         <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
           <div class="row">
             <div class="col-3 w-100">
-              <img src="../../assets/icon/transfer.png" class="IconPayment"/>
+              <img src="../../assets/icon/Transfer.png" class="IconPayment"/>
             </div>
             <div class="col-4 w-100" style="padding:0px;text-align:left;">
               <p id="TextPaymentChannel">Transfer</p>

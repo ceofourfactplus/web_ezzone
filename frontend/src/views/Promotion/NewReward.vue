@@ -131,7 +131,7 @@
       ></textarea>
     </div>
     <div class="table" style="margin-top: 10px;">
-      <div class="table-header">
+      <div class="table-header" style="width: 104%; margin-left: -11px;">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -143,7 +143,7 @@
         </div>
       </div>
       <!-- Menu -->
-      <div class="table-item" v-for="item in point_promotions_of_reward" :key="item.id">
+      <div class="table-item" v-for="item in point_promotions_of_reward" :key="item.id" style="width: 104%; margin-left: -11px;">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
             {{ item.promotion }}
@@ -160,7 +160,7 @@
         </div>
       </div>
       <!-- Add Item -->
-      <div class="table-item">
+      <div class="table-item" style="width: 104%; margin-left: -11px;">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-3 w-100" style="margin-left: 20px; text-align: left; color: #50D1AA;" @click="add_item = true">
             + Add Item
@@ -168,7 +168,7 @@
         </div>
       </div>
       <!-- Point Promotion -->
-      <div class="table-item" v-if="add_item">
+      <div class="table-item" v-if="add_item" style="width: 104%; margin-left: -11px;">
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-3 w-100" style="margin-left: 20px; text-align: left; color: #50D1AA;">
             <select
@@ -337,7 +337,7 @@ export default {
   color: white;
 }
 .input-top {
-  width: 428px;
+  width: 448px;
   height: 50px;
   background: rgb(113, 113, 113);
   border-radius: 12px;
@@ -361,7 +361,7 @@ export default {
   text-align: left;
 }
 .card-content {
-  width: 670px;
+  width: 765px;
   height: 470px;
   background: #303344;
   border-radius: 20px;

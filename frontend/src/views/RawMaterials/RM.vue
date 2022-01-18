@@ -434,7 +434,7 @@ input[type="checkbox"] {
 }
 
 .wrap-search {
-  min-width: 470px;
+  min-width: 560px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

@@ -138,7 +138,7 @@ export default {
         this.alert = true;
         setTimeout(() => {
           this.alert = false;
-          this.$router.push({ name: "Point" });
+          this.$router.push({ name: "Promotion" });
         }, 2000);
       })
     },
@@ -206,7 +206,7 @@ export default {
   margin: 20px 0px 0px 120px;
 }
 .card-content {
-  width: 670px;
+  width: 765px;
   height: 675px;
   background: #303344;
   border-radius: 20px;

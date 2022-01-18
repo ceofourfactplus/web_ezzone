@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav-app :url_name="'Promotion'" :save="true" @save="save">New Package</nav-app>
+    <nav-app :url_name="'Promotion'" :save="true" @save="save"
+      >New Package</nav-app
+    >
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
@@ -18,15 +20,17 @@
           </div>
           <!-- Start Date -->
           <div class="row" style="margin-top: 20px">
-            <div class="col-12 w-100 txt">  
-              <div style="display: inline;" v-if="temp_start == null">
-                <span style="margin-left: -140px">Start Date</span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{temp_start}}&nbsp;&nbsp;
+            <div class="col-12 w-100 txt">
+              <div style="display: inline" v-if="temp_start == null">
+                <span style="margin-left: -140px">Start Date</span
+                >&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{ temp_start }}&nbsp;&nbsp;
               </div>
-              <div style="display: inline;" v-else>
-                <span style="margin-left: 23px">Start Date</span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{temp_start}}&nbsp;&nbsp;
+              <div style="display: inline" v-else>
+                <span style="margin-left: 23px">Start Date</span
+                >&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{ temp_start }}&nbsp;&nbsp;
               </div>
               <input
-                style="display: inline;"
+                style="display: inline"
                 type="date"
                 class="input-date"
                 @change="format_date($event)"
@@ -127,7 +131,7 @@
     </div>
     <!-- Table -->
     <div class="table" style="margin-top: 10px">
-      <div class="table-header">
+      <div class="table-header" style="width: 104%; margin-left: -11px">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -148,7 +152,12 @@
         </div>
       </div>
       <!-- Menu -->
-      <div class="table-item" v-for="item in package_items" :key="item">
+      <div
+        class="table-item"
+        v-for="item in package_items"
+        :key="item"
+        style="width: 104%; margin-left: -11px"
+      >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-1 w-100">
             <div class="checkbox-orange">
@@ -169,7 +178,11 @@
         </div>
       </div>
       <!-- Add Menu -->
-      <div class="table-item" v-if="add_menu">
+      <div
+        class="table-item"
+        v-if="add_menu"
+        style="width: 104%; margin-left: -11px"
+      >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
           <div class="col-5 w-100 mt--4">
             <input
@@ -220,7 +233,9 @@
               @click="
                 product_item = { ...product };
                 search_product = false;
-                new_menu_price = parseInt(product_item.priceproduct_set[0].price);
+                new_menu_price = parseInt(
+                  product_item.priceproduct_set[0].price
+                );
               "
               class="product-menu"
               v-for="product in products"
@@ -245,7 +260,9 @@
                 topping_id = product.id;
                 topping_item = { ...product };
                 search_topping = false;
-                new_menu_price += parseInt(topping_item.priceproduct_set[0].price);
+                new_menu_price += parseInt(
+                  topping_item.priceproduct_set[0].price
+                );
               "
               class="product-menu"
               v-for="product in products_for_topping"
@@ -257,20 +274,24 @@
         </div>
       </div>
       <!-- Total -->
-      <div class="table-item">
+      <div class="table-item" style="width: 104%; margin-left: -11px">
         <div
           class="row"
           style="font-size: 24px; color: white; line-height: 14px"
         >
           <div class="col-6 w-100"></div>
           <div class="col-4 w-100" style="text-align: right">Total</div>
-          <div class="col-2 w-100" v-if="package_items.length == 1">{{ package_items[0].price }}</div>
-          <div class="col-2 w-100" v-else-if="package_items.length != 0">{{ package_items.reduce((x, y) => x.price + y.price) }}</div>
+          <div class="col-2 w-100" v-if="package_items.length == 1">
+            {{ package_items[0].price }}
+          </div>
+          <div class="col-2 w-100" v-else-if="package_items.length != 0">
+            {{ package_items.reduce((x, y) => x.price + y.price) }}
+          </div>
           <div class="col-2 w-100" v-else>0</div>
         </div>
       </div>
       <!-- Discount Total Price -->
-      <div class="table-item">
+      <div class="table-item" style="width: 104%; margin-left: -11px">
         <div
           class="row"
           style="font-size: 24px; color: white; line-height: 14px"
@@ -380,43 +401,49 @@ export default {
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
       if (this.package_items.length == 1) {
         data.append("normal_price", this.package_items[0].price);
-      } else if(this.package_items.length > 0) {
-        data.append("normal_price", this.package_items.reduce((x, y) => x.price + y.price));
+      } else if (this.package_items.length > 0) {
+        data.append(
+          "normal_price",
+          this.package_items.reduce((x, y) => x.price + y.price)
+        );
       } else {
         data.append("normal_price", 0);
       }
 
       api_promotion.post("package/", data).then((response) => {
         console.log(response.data, "response");
-        this.package_items.forEach(element => {
+        this.package_items.forEach((element) => {
           const package_item = {
             product_id: element.product.id,
             qty: element.qty,
-            total_price: parseInt(element.price) + parseInt(element.topping.priceproduct_set[0].price),
+            total_price: element.price,
             description: element.description,
             package_id: response.data.id,
           };
           api_promotion.post("package-item/", package_item).then((res) => {
             console.log(res.data, "res");
-            const item_topping = {
-              topping_id: element.topping.id,
-              item_id: res.data.id,
-              total_price: parseInt(element.topping.priceproduct_set[0].price),
-              qty: 10,
-            };
-            api_promotion
-              .post("package-item-topping/", item_topping)
-              .then((it_res) => {
-                console.log(it_res.data, "it_res");
-                this.alert = true;
-                setTimeout(() => {
-                  this.alert = false;
-                  this.$router.push({ name: "Promotion" });
-                }, 2000);
-              });
+            if (Object.keys(element.topping).length != 0) {
+              const item_topping = {
+                topping_id: element.topping.id,
+                item_id: res.data.id,
+                total_price: parseInt(
+                  element.topping.priceproduct_set[0].price
+                ),
+                qty: 10,
+              };
+              api_promotion
+                .post("package-item-topping/", item_topping)
+                .then((it_res) => {
+                  console.log(it_res.data, "it_res");
+                  this.alert = true;
+                  setTimeout(() => {
+                    this.alert = false;
+                    this.$router.push({ name: "Promotion" });
+                  }, 2000);
+                });
+            }
           });
         });
-        
       });
     },
     searchByTyping(e, type) {
@@ -501,7 +528,6 @@ export default {
     delete_pip() {
       console.log(this.selected_items.length, "len");
       for (let index = 0; index < this.selected_items.length; index++) {
-        print(index, "idx");
         var idx = this.package_items.indexOf(this.selected_items[index]);
         this.package_items.splice(idx, 1);
       }
@@ -609,7 +635,7 @@ span.icon-save {
   margin: 20px 0px 0px 120px; */
 }
 .card-content {
-  width: 670px;
+  width: 765px;
   height: 342px;
   background: #303344;
   border-radius: 20px;

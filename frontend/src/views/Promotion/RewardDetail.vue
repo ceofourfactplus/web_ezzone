@@ -361,7 +361,7 @@ export default {
   color: white;
 }
 .input-top {
-  width: 428px;
+  width: 448px;
   height: 50px;
   background: rgb(113, 113, 113);
   border-radius: 12px;
@@ -385,7 +385,7 @@ export default {
   text-align: left;
 }
 .card-content {
-  width: 670px;
+  width: 765px;
   height: 470px;
   background: #303344;
   border-radius: 20px;

@@ -244,6 +244,7 @@ class ItemToppingGET(APIView):
         
     def get(self, request, pk):
         item_topping = self.get_object(pk)
+        print(item_topping, 'item_topping')
         data = []
         if len(item_topping) != 0:
             for i in item_topping:

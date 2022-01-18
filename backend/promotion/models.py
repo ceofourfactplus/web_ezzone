@@ -100,8 +100,8 @@ class PromotionPackage(models.Model):
   start_date = models.DateField()
   img = models.ImageField(_("Image"), upload_to=upload_to_package, null=True, blank=True)
   amount_day = models.IntegerField()
-  discount_price = models.DecimalField(max_digits=4,decimal_places=2)
-  normal_price = models.DecimalField(max_digits=4,decimal_places=2)
+  discount_price = models.DecimalField(max_digits=6,decimal_places=2)
+  normal_price = models.DecimalField(max_digits=6,decimal_places=2)
   status = models.BooleanField(default=True)
   total_amount = models.IntegerField()
   description = models.TextField(null=True,blank=True)
@@ -115,7 +115,7 @@ class PromotionPackage(models.Model):
 class PackageItem(models.Model):
   product = models.ForeignKey(Product,on_delete=models.PROTECT)
   qty = models.IntegerField(default=1)
-  total_price = models.DecimalField(max_digits=4,decimal_places=2)
+  total_price = models.DecimalField(max_digits=6,decimal_places=2)
   description = models.TextField(null=True,blank=True)
   package = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
 

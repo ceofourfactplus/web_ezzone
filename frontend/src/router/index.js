@@ -89,6 +89,8 @@ import Consigner from "../views/Consignment/Consigner.vue"
 import ConsignerProduct from "../views/Consignment/ConsignerProduct.vue"
 import NewConsignment from "../views/Consignment/NewConsignment.vue"
 
+// Home
+import Home from "../views/Test.vue"
 
 // Report
 import MainReport from '../views/Report/MainReport.vue'
@@ -566,6 +568,43 @@ const routes = [
         component: EditSaleChannel,
       },
     ]
+  },
+  // sale channel
+  {
+    path: "/sale-channel",
+    name: "SaleChannel",
+    component: SaleChannel,
+  },
+  {
+    path: "/sale-channel/create",
+    name: "CreateSaleChannel",
+    component: CreateSaleChannel,
+  },
+  {
+    path: "/sale-channel/edit/:id",
+    name: "EditSaleChannel",
+    props: true,
+    component: EditSaleChannel,
+  },
+  
+  // Consingment
+  {
+    path: "/consignment/consigner",
+    name: "Consigner",
+    props: true,
+    component: Consigner,
+  },
+  {
+    path: "/consignment/consignerproduct",
+    name: "ConsignerProduct",
+    props: true,
+    component: ConsignerProduct,
+  },
+  {
+    path: "/consignment/newconsignment",
+    name: "NewConsignment",
+    props: true,
+    component: NewConsignment,
   },
   // {
   //   path: "/face-login/",

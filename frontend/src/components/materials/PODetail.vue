@@ -131,7 +131,7 @@ export default {
   width: 619px;
   height: 640px;
   top: 20%;
-  left: 7%;
+  left: 100px;
   position: absolute;
   background-color: #252836;
   border: 2px solid #ea7c69;
