@@ -38,6 +38,8 @@ export default {
 
 <style scoped>
 .search-bar {
+  line-height: 10px;
+  font-size: 30px;
   background-size: 40px;
   background-repeat: no-repeat;
   background-color: #3a3d49;
@@ -46,7 +48,7 @@ export default {
   margin-left: 3px;
   border-radius: 10px;
   width: 100%;
-  height: 45px;
+  height: 60px;
   background-image: url("../../assets/icon/search.png");
   background-position: 2% 50%;
   /* Extra Styling */

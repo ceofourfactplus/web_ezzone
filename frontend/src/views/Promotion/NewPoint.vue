@@ -219,7 +219,7 @@ export default {
   margin: 12px 0px 0px 90px;
 }
 .card-content {
-  width: 668px;
+  width: 765px;
   height: 367px;
   background: #303344;
   border-radius: 20px;

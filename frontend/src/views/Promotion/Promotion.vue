@@ -208,7 +208,7 @@
       style="margin-top: 10px"
       v-else-if="$store.state.promotion.tab == 'Voucher'"
     >
-      <div class="table-header" style="width: 670px; margin-left: -10px">
+      <div class="table-header" style="width: 760px; margin-left: -10px">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -223,7 +223,7 @@
       </div>
       <div
         class="table-item"
-        style="width: 670px; margin-left: -10px"
+        style="width: 760px; margin-left: -10px"
         v-for="voucher in vouchers"
         :key="voucher.id"
       >
@@ -232,7 +232,8 @@
             {{ voucher.voucher }}
           </div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
-          <div class="col-2 w-100">{{ voucher.discount }}</div>
+          <div class="col-2 w-100" v-if="voucher.is_percent">{{ format_percent(voucher.discount) }}</div>
+          <div class="col-2 w-100" v-else>{{ voucher.discount }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
             <label class="switch">
@@ -265,7 +266,7 @@
       style="margin-top: 10px"
       v-else-if="$store.state.promotion.tab == 'Package'"
     >
-      <div class="table-header" style="width: 670px; margin-left: -10px">
+      <div class="table-header" style="width: 760px; margin-left: -10px">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -279,7 +280,7 @@
       </div>
       <div
         class="table-item"
-        style="width: 670px; margin-left: -10px"
+        style="width: 760px; margin-left: -10px"
         v-for="item in packages"
         :key="item.id"
       >
@@ -313,7 +314,7 @@
     </div>
     <!-- Reward -->
     <div class="table" style="margin-top: 10px" v-else>
-      <div class="table-header" style="width: 670px; margin-left: -10px">
+      <div class="table-header" style="width: 760px; margin-left: -10px">
         <div
           class="row"
           style="font-size: 24px; font-weight: bold; color: white"
@@ -327,7 +328,7 @@
       </div>
       <div
         class="table-item"
-        style="width: 670px; margin-left: -10px"
+        style="width: 760px; margin-left: -10px"
         v-for="reward in rewards"
         :key="reward.id"
       >
@@ -492,6 +493,10 @@ export default {
       var temp_date = date.split("-");
       return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
     },
+    format_percent(discount) {
+      var temp = discount.split(".");
+      return `${temp[0]}%`
+    },
     delete_confirm(item) {
       console.log(item, "item");
       this.point_item = item;
@@ -544,7 +549,7 @@ export default {
   left: 20%;
 }
 .card-content {
-  width: 672px;
+  width: 765px;
   height: 304px;
   background: #303344;
   border-radius: 20px;
@@ -564,10 +569,10 @@ export default {
   color: #50d1aa;
   width: 133px;
   height: 45px;
-  margin: 0px 25px 0px 0px;
+  margin: 0px 35px 0px 0px;
 }
 .wrap-search {
-  min-width: 530px;
+  min-width: 610px;
   width: fit-content;
   padding: 0px;
   margin-left: 35px;

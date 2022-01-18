@@ -13,7 +13,8 @@
       </div>
       <div class="table-item AreaRedeemPopup">
         <div class="row">
-          <div class="col-6 StatusBlock" @click="save"><b>Confirm Redeem</b></div>
+          <div class="col-6 StatusBlock" style="color: #FF7CA3; border: 3px solid #FF7CA3;" v-if="$store.state.promotion.customer_point[0].point < $store.state.promotion.reward_detail.point"><b>Not enough points</b></div>
+          <div class="col-6 StatusBlock" @click="save" v-else><b>Confirm Redeem</b></div>
           <div class="col-6 RedeemNamePhone" style="margin-bottom: 5px">
             {{ $store.state.promotion.customer.nick_name }}
           </div>

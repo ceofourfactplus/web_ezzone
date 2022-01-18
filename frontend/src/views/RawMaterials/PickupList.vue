@@ -11,7 +11,7 @@
     </div>
 
     <div class="table">
-      <div class="table-header">
+      <div class="table-header" style="width: 115%; margin-left: -49px;">
         <div class="row">
           <div class="col-3 w-100" style="margin-left: 10px">Date</div>
           <div
@@ -25,7 +25,7 @@
           <div class="col-3 w-100">Pickup By</div>
         </div>
       </div>
-      <div class="row table-item" v-for="item in pickup_items" :key="item.id">
+      <div class="row table-item" v-for="item in pickup_items" :key="item.id" style="width: 115%; margin-left: -49px;">
         <div class="col-3 w-100">
           {{ item.create_at.slice(0, 10).replace(/-/g, "/") }}
         </div>

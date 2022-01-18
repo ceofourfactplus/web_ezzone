@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <nav-app :rm_menu="true" :url_name="'DashBoard'">RM Category</nav-app>
+    <nav-app :url_name="'RawMaterials'" :rm_menu="true">RM Category</nav-app>
     <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
@@ -65,7 +65,7 @@
       <div class="category-popup" v-if="add_category_status">
         <img
           @click="add_category_status = false"
-          style="position: absolute; right: 10px; top: 10px"
+          style="position: absolute; right: 10px; top: 10px; width: 25px;"
           src="../../assets/icon/delete.png"
         />
         <h2>Create RM Category</h2>
@@ -87,7 +87,7 @@
       <div class="category-popup" v-if="edit_category">
         <img
           @click="edit_category = false"
-          style="position: absolute; right: 10px; top: 10px"
+          style="position: absolute; right: 10px; top: 10px; width: 25px;"
           src="../../assets/icon/delete.png"
         />
         <h2>Edit RM Category</h2>
@@ -258,7 +258,7 @@ h2 {
 .category-popup {
   position: absolute;
   top: 230px;
-  left: 90px;
+  left: 160px;
   font-weight: bold;
   font-size: 30px;
   width: 520px;
@@ -276,7 +276,7 @@ h2 {
   margin: 0px 38px 0px 0px;
 }
 .wrap-search {
-  min-width: 505px;
+  min-width: 610px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

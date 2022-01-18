@@ -27,6 +27,7 @@
               height: 50px;
               width: 282px;
               font-size: 28px;
+              text-align: center;
             "
             readonly
             value="Pre-order"
@@ -39,6 +40,7 @@
               height: 50px;
               width: 282px;
               font-size: 28px;
+              text-align: center;
             "
             readonly
             value="รับสินค้าเลย"
@@ -78,7 +80,7 @@
                 font-size: 28px;
               "
             >
-              Value {{ $store.state.promotion.reward_detail.value }}B.
+              Value {{ $store.state.promotion.reward_detail.value.split('.')[0] }}&nbsp;฿
             </dir>
           </div>
         </div>

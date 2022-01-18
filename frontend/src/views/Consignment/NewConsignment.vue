@@ -2,25 +2,21 @@
   <div>
 
     <div class="row Header">
-        <div class="col-1 w-100" style="padding-left:0px;"><img src="../../assets/icon/save.png" style="height:45px"></div>
-        <div class="col-10 w-100" style="line-height: 85px;"><b>New Consignment</b></div>
-        <div class="col-1 w-100" style="padding-right:0px;"><img src="../../assets/img/btn-close.png" style="height:45px"></div>
+        <div class="col-1 w-100" style="padding-left:0px;"><img src="../../assets/icon/save.png" style="height:60px"></div>
+        <div class="col-10 w-100" style="line-height: 105px;"><b>New Consignment</b></div>
+        <div class="col-1 w-100" style="padding-right:0px;"><img src="../../assets/img/btn-close.png" style="height:60px"></div>
     </div>
     <!-- CustommerPhone Block -->
     <div class="row Area Name">
-      <div class="col-2 w-100"
-      style="font-size: 30px;
-      padding: 0px;
-      text-align: right;
-      color: #ffffff"
-      >Name :</div>
-      <div class="input col-10">
+      <div class="BlockName">Name :</div>
+      <div class="input BlockInputName">
         <input type="text" v-model="input_customer" 
         style="background: #717171;
         border-radius: 10px;
-        width: 535px;
-        height: 50px;
-        margin-top: 10px;" />
+        width: 585px;
+        height: 60px;
+        margin-top: 15px;
+        font-size: 32px;" />
         <ul class="selector" v-if="selector_status">
           <li v-for="cus in selector_customer" :key="cus.id">
             <pre @click="select_customer(cus)"
@@ -34,17 +30,17 @@
     </div>
 
     <!-- Img Detail -->
-    <div class="row Area Img" style="height:305px;padding-top:25px;padding-bottom:15px;">
+    <div class="row Area Img">
         <!-- Img Block -->
-        <div class="col-5 RedeemImg" style="background-color: #717171;">
+        <div class="RedeemImg" style="background-color: #717171;width: 293px;left:0px;">
             <div class="EditImg">
                 <img src="../../assets/icon/el_camera.png" style="position:relative;top:-2.9px;left:-5px;">
                 <b>Edit</b>
             </div>
-            <img src="" style="height:260px;width:253px;position: absolute;left:0px; border-radius:10%">
+            <img src="" style="height:300px;width:293px;position: absolute;left:0px; border-radius:10%">
         </div>
         <!-- Detail Block -->
-        <div class="col-7 RedeemImg" style="margin:0px; width:100%;">
+        <div class="RedeemImg" style="margin-left:10px; width:100%;padding-right:20px">
             <!-- Code -->
             <div class="row AreaDetail">
                 <div class="BlockSubject">Code</div>
@@ -52,8 +48,9 @@
                 <div class="BlockInputCode"><input type="text" 
                     style="background: #717171;
                     border-radius: 10px;
-                    width: 230px;
-                    height: 50px;
+                    width: 280px;
+                    height: 60px;
+                    font-size: 38px;
                     ">
                 </div>
  
@@ -62,28 +59,28 @@
             <div class="row AreaDetail">
                 <div class="BlockSubject">Status</div>
                 <div class="BlockColon">:</div>
-                <div class="BlockInputCode">
+                <div class="BlockInputCode" style="line-height: 50px;">
                     <div class="IconStatus"><b>Minimum</b></div>
-                    <img src="../../assets/icon/btn-alert-icon.png" style="display:inline-block; height:29px;margin-bottom:3px;">
+                    <img src="../../assets/icon/btn-alert-icon.png" style="display:inline-block; height:35px;margin-bottom:3px;">
                 </div>
             </div>
             <!-- Active -->
             <div class="row AreaDetail">
                 <div class="BlockSubject">Active</div>
                 <div class="BlockColon">:</div>
-                <div class="BlockInputCode" style="padding-top:7px;"><Switch></Switch></div>
+                <div class="BlockInputCode" style="padding-top:8px;"><Switch style="width:65px;"></Switch></div>
  
             </div>
             <!-- Consigner -->
             <div class="row AreaDetail">
-                <div class="BlockSubject" style="width:120px;">Consigner</div>
+                <div class="BlockSubject" style="width:150px;">Consigner</div>
                 <div class="BlockColon">:</div>
                 <div class="BlockSelect">
                     <select
                     name="category"
                     id="category"
                     v-model="category_id"
-                    style="background:#717171;height:50px;width:160px;"
+                    style="background:#717171;height:55px;width:170px;"
                     >
                     <!-- <option
                         v-for="category in categories"
@@ -110,8 +107,8 @@
                 <div class="BlockInputQty"><input type="text" 
                     style="background: #717171;
                     border-radius: 10px;
-                    width: 220px;
-                    height: 50px;">
+                    width: 255px;
+                    height: 60px;">
                 </div>
             </div>
             <!-- Unit -->
@@ -123,7 +120,7 @@
                     name="category"
                     id="category"
                     v-model="category_id"
-                    style="background:#717171;height:50px;width:220px;"
+                    style="background:#717171;height:60px;width:255px;"
                     >
                     <!-- <option
                         v-for="category in categories"
@@ -145,8 +142,9 @@
                 <div class="BlockInputQty"><input type="text" 
                     style="background: #717171;
                     border-radius: 10px;
-                    width: 170px;
-                    height: 50px;">
+                    width: 185px;
+                    height: 60px;
+                    font-size: 32px;">
                 </div>
             </div>
             <!-- Qty Max -->
@@ -156,8 +154,9 @@
                 <div class="BlockInputQty"><input type="text" 
                     style="background: #717171;
                     border-radius: 10px;
-                    width: 170px;
-                    height: 50px;">
+                    width: 185px;
+                    height: 60px;
+                    font-size: 32px;">
                 </div>
             </div>
         </div>
@@ -173,20 +172,21 @@
                 <div class="BlockInputQty"><input type="text" 
                     style="background: #717171;
                     border-radius: 10px;
-                    width: 220px;
-                    height: 50px;">
+                    width: 255px;
+                    height: 60px;
+                    font-size: 32px;">
                 </div>
             </div>
             <!-- Type Topping -->
             <div class="row QtyHalf">
-                <div class="BlockSubjectQty" style="width:165px;">Type Topping</div>
+                <div class="BlockSubjectQty" style="width:196px;">Type Topping</div>
                 <div class="BlockColonQty">:</div>
                 <div class="BlockSelect">
                     <select
                     name="category"
                     id="category"
                     v-model="category_id"
-                    style="background:#717171;height:50px;width:115px;"
+                    style="background:#717171;height:60px;width:134px;"
                     >
                     <!-- <option
                         v-for="category in categories"
@@ -208,8 +208,9 @@
                 <div class="BlockInputQty"><input type="text" 
                     style="background: #717171;
                     border-radius: 10px;
-                    width: 170px;
-                    height: 50px;">
+                    width: 185px;
+                    height: 60px;
+                    font-size: 32px;">
                 </div>
             </div>
             <!-- Stock -->
@@ -221,7 +222,7 @@
                     name="category"
                     id="category"
                     v-model="category_id"
-                    style="background:#717171;height:50px;width:170px;"
+                    style="background:#717171;height:60px;width:185px;"
                     >
                     <!-- <option
                         v-for="category in categories"
@@ -277,22 +278,45 @@ export default {
 }
 .Header {
     color:#fff;
-    font-size: 48px;
+    font-size: 62px;
     text-align: center;
     position: relative;
-    height: 70px;
+    height: 90px;
     margin-left: 24px;
     margin-right: 24px;
     margin-bottom: 50px;  
+    margin-top: 10px;  
 }
 
 .Name {
     padding-top: 10px;
-    line-height: 65px;
-    height: 90px;
+    line-height: 80px;
+    height: 110px;
 }
+
+.BlockName {
+    color: #ffffff;
+    font-size: 38px;
+    padding: 0px;
+    text-align: right;
+    display: inline-block;
+    width: 145px;
+    
+}
+
+.BlockInputName {
+    width: 535px;
+    height: 60px;
+    display: inline-block;
+
+}
+
 .Img {
-    padding: 5px;
+    height:360px;
+    padding: 20px;
+    padding-top:30px;
+    padding-bottom:30px;
+
 }
 
 .EditImg {
@@ -302,8 +326,8 @@ export default {
     font-size: 18px;
     padding-right: 8px;
     border-radius: 5px;
-    top: 205px;
-    left: 25px;
+    top: 235px;
+    left: 30px;
     height: 30px;
     width: 80px;
     line-height: 30px;
@@ -311,14 +335,13 @@ export default {
 }
 
 .RedeemImg {
-    width: 253px;
-    height: 260px;
+    height: 300px;
     position: relative;
     font-size: 23px;
     text-align: center;
     padding:0px;
-    margin-left:12px;
     border-radius: 25px;
+    margin:0px;
 
 }
 .RedeemPoint {
@@ -337,9 +360,9 @@ export default {
 .AreaDetail {
     color: #fff;
     width:380px;
-    height: 50px;
+    height: 60px;
     padding-left:10px ;
-    font-size: 30px;
+    font-size: 38px;
     line-height: 40px;
     margin-bottom: 20px;
 
@@ -357,7 +380,7 @@ export default {
 .BlockSubjectQty {
     
     display: inline-block;
-    width: 60px;
+    width: 75px;
     text-align: left;
     padding: 0px;
     margin-left:15px;
@@ -368,8 +391,8 @@ export default {
 .BlockSubjectQtyM {
     
     display: inline-block;
-    width: 110px;
-    height: 50px;
+    width: 140px;
+    height: 60px;
     text-align: left;
     padding: 0px;
     margin-left:10px;
@@ -430,12 +453,12 @@ export default {
 .IconStatus {
     color: black;
     background-color: #FFB572;
-    height: 35px;
+    height: 41px;
     width: 120px;
-    font-size: 22px;
+    font-size: 26px;
     border-radius: 10px;
     text-align: center;
-    line-height: 33px;
+    line-height: 35px;
     display:inline-block;
     margin-right: 10px;
 
@@ -443,28 +466,29 @@ export default {
 
 .AddButton {
     display:inline-block;
-    line-height: 27px;
+    font-size: 45px;
+    line-height: 37px;
     color: #50D1AA;
     border-radius: 10px;
     border: 2px solid #50D1AA;
-    height: 40px;
-    width: 40px;
-    margin-left:10px;
-    margin-top:5.5px;
+    height: 55px;
+    width: 55px;
+    margin-left:25px;
     padding: 0px;
 
 }
 
 .QtyBlock {
-    height: 180px;
+    height: 220px;
     color: #fff;
-    font-size: 28px;
+    font-size: 34px;
     padding-top: 20px;
 
 }
 
 .QtyHalf {
-    margin-top: 5px;
-    margin-bottom: 25px;
+    margin-top: 15px;
+    margin-bottom: 35px;
+    height: 60px;
 }
 </style>
