@@ -7,7 +7,7 @@
       </div>
       <div class="col-2 w-100" style="padding-left: 0px">
         <button
-          style="width: 100px"
+          style="width: 100%"
           class="btn-ghost"
           @click="$router.push({ name: 'CreateProduct' })"
         >

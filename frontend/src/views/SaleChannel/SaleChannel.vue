@@ -1,14 +1,13 @@
 <template>
   <div>
-    <nav-app>Sale&#160;Channel</nav-app>
+    <nav-app :url_name="'DataBaseSettings'">Sale&#160;Channel</nav-app>
     <div class="row" style="width: 90%; margin: auto">
-      <div class="col-7 w-100" style="padding: 0px">
+      <div class="col-8 w-100" style="padding: 0px">
         <search-bar @search="search" style="width: 100%" />
       </div>
       <div
-        class="col-5 w-100"
+        class="col-2 w-100"
         style="
-          padding-right: 0px;
           padding-left: 12px;
           margin: auto;
           justify-content: space-between;
@@ -17,25 +16,35 @@
       >
         <button
           class="btn-ghost-b"
-          style="width: 125px; height: 50px"
+          style="width: 100%; height: 45px; white-space: nowrap; padding: 0px"
           @click="$router.push({ name: 'CreateSaleChannel' })"
         >
-          +&#160;New</button
-        ><button
+          +&#160;New
+        </button>
+      </div>
+      <div class="col-2 w-100 pe-0 ps-0">
+        <button
           class="btn-ghost-r"
-          style="width: 125px; height: 50px"
+          style="width: 100%; height: 45px; white-space: nowrap; padding: 0px"
           v-if="delete_status"
           @click="delete_list_f()"
         >
-          <img src="../../assets/icon/delete_icon.png" style="object-fit:cover;width:20px;height:30px;" />&#160;Delete
+          <img
+            src="../../assets/icon/delete_icon.png"
+            style="object-fit: cover; width: 20px; height: 25px"
+          />&#160;Delete
         </button>
         <button
           v-else
           class="btn-ghost-r"
-          style="width: 125px; height: 50px"
+          style="width: 125px; height: 45px;white-space:nowrap;padding: 0px;"
           @click="delete_status = true"
         >
-          <img src="../../assets/icon/bin.png" width="20" alt="" />&#160;Delete
+          <img
+            src="../../assets/icon/r-trash.png"
+            style="width: 19px; height: 26px; object-fit: cover"
+            alt=""
+          />&#160;Delete
         </button>
       </div>
     </div>
@@ -57,7 +66,7 @@
           :key="channel.id"
           class="table-item"
         >
-          <div class="row" style="width: 100%; line-height: 100%">
+          <div class="row" style="width: 100%; padding: 0px">
             <div class="col-1" v-if="delete_status">
               <div
                 class="checkbox-orange"
@@ -75,7 +84,7 @@
               style="margin: auto; margin-left: 0px; text-align: right"
             >
               <span>
-                <img :src="get_img(channel.id)" class="img-user-status me-1" />
+                <img :src="channel.img" class="img-user-status me-1" />
                 <!-- <img
                   v-else
                   src="../../assets/icon/blank-user.png"
@@ -86,35 +95,20 @@
             <div
               class="col-4 w-100"
               v-if="!delete_status"
-              style="
-                margin: auto;
-                text-align: left;
-                line-height: 100%;
-                height: 100%;
-              "
+              style="margin: auto; text-align: left; height: 100%"
             >
               {{ channel.sale_channel }}
             </div>
             <div
               class="col-3 w-100"
               v-else
-              style="
-                margin: auto;
-                text-align: left;
-                line-height: 100%;
-                height: 100%;
-              "
+              style="margin: auto; text-align: left; height: 100%"
             >
               {{ channel.sale_channel }}
             </div>
             <div
               class="col-2 w-100"
-              style="
-                margin: auto;
-                text-align: center;
-                line-height: 100%;
-                height: 100%;
-              "
+              style="margin: auto; text-align: center; height: 100%"
             >
               {{ get_date(channel.create_at) }}
             </div>
@@ -129,13 +123,7 @@
             </div>
             <div
               class="col-1 w-100"
-              style="
-                margin: auto;
-                text-align: left;
-                padding: 0px;
-                line-height: 100%;
-                height: 100%;
-              "
+              style="margin: auto; text-align: left; padding: 0px; height: 100%"
               @click="
                 $router.push({
                   name: 'EditSaleChannel',
@@ -244,5 +232,6 @@ pre {
 }
 img {
   height: 30px;
+  margin-bottom: 4px;
 }
 </style>

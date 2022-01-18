@@ -1,7 +1,9 @@
 <template>
   <div>
-    <nav-app save="true" @save="create_product">New&#160;Topping&#160;</nav-app>
-    <div class="container-f">
+    <nav-app save="true" :url_name="'Topping'" @save="create_product"
+      >New&#160;Topping&#160;</nav-app
+    >
+    <div class="container-f w-100">
       <div class="frame f-1">
         <div class="row h-100">
           <div class="col-5 w-100">
@@ -34,16 +36,23 @@
               <label for=""
                 >Status&nbsp;&nbsp;:&nbsp;<button
                   class="btn-y"
-                  style="width: 100px; display: inilne; height: 30px"
+                  style="
+                    width: 150px;
+                    display: inilne;
+                    height: 36px;
+                    line-height: 100%;
+                  "
                   :class="{ 'btn-g': remain > minimum }"
                 >
-                  {{ status_label }}
+                  out of stock
                 </button></label
               >
             </div>
             <div class="col-12 h-25">
               <label for="">Active&nbsp;&nbsp;:</label>
-              <div class="switch"><Switch @switch="switch_active" /></div>
+              <div class="switch">
+                <Switch @switch="switch_active()" :value="active" />
+              </div>
             </div>
           </div>
         </div>
@@ -81,7 +90,7 @@
         <div class="row">
           <div class="col-5 label-input">
             <label for="flavour">Price&nbsp;:</label
-            ><input type="text" style="width: 160px" />
+            ><input type="number" v-model="price" style="width: 160px" />
           </div>
           <div class="col-7 label-input">
             <label for="stock">Stock :</label
@@ -138,7 +147,6 @@ export default {
       minimum: 0,
       maximum: 0,
       price: 0,
-      show_img: null,
       name: "",
       warehouse: 0,
       type_topping: 0,
@@ -161,41 +169,45 @@ export default {
       });
     },
     onFileChange(e) {
-      this.show_img = e.target.files[0];
-      if (this.show_img) {
+      this.img = e.target.files[0];
+      if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.show_img);
+        reader.readAsDataURL(this.img);
       }
     },
     create_product() {
-      const data = new FormData();
-      data.append("code", this.code);
-      data.append("category_id", this.category_id);
-      data.append("unit_id", this.unit_id);
-      data.append("status", this.status);
-      data.append("is_active", this.active);
-      data.append("remain", this.remain);
-      data.append("minimum", this.minimum);
-      data.append("maximum", this.maximum);
-      data.append("price", this.price);
-      data.append("name", this.name);
-      data.append("warehouse", this.warehouse);
-      data.append("type_topping", this.type_topping);
-      data.append("create_by_id", 1);
-      data.append("old_product_id", 1);
-      api_product.post("topping/", data).then((response) => {
+      if (this.img != null) {
         const data = new FormData();
-        data.append("img", this.img, this.img.name);
-        api_product.put("get-topping/" + response.data.id, data);
-        this.$router.push({ name: "Topping" });
-      });
+        data.append("code", this.code);
+        data.append("category_id", this.category_id);
+        data.append("unit_id", this.unit_id);
+        data.append("status", this.status);
+        data.append("is_active", this.active);
+        data.append("remain", this.remain);
+        data.append("minimum", this.minimum);
+        data.append("maximum", this.maximum);
+        data.append("price", this.price);
+        data.append("name", this.name);
+        data.append("warehouse", this.warehouse);
+        data.append("type_topping", this.type_topping);
+        data.append("create_by_id", 1);
+        data.append("old_product_id", 1);
+        api_product.post("topping/", data).then((response) => {
+          const img = new FormData();
+          img.append("img", this.img, this.img.name);
+          api_product.put("get-topping/" + response.data.id, img).then(() => {
+            this.$router.push({ name: "Topping" });
+          });
+        });
+      }
     },
+
     switch_flavour_level(val) {
       this.flavour_level = val;
     },
-    switch_active(val) {
-      this.active = val;
+    switch_active() {
+      this.active = !this.active;
     },
   },
   watch: {
@@ -217,8 +229,7 @@ export default {
 
 <style scoped>
 .frame {
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin: 15px auto 20px auto;
   background-color: #303344;
   border-radius: 20px;
   padding-top: 20px;
@@ -234,7 +245,6 @@ export default {
   height: 170px;
 }
 .container-f {
-  padding-left: 22px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -283,8 +293,8 @@ label {
   position: absolute;
   width: 74px;
   height: 28.23px;
-  left: 60px;
-  top: 350px;
+  left: 100px;
+  top: 340px;
 
   background-color: #c4c4c4;
   border-radius: 5px;

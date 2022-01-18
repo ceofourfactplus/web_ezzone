@@ -109,6 +109,18 @@ class PriceProductSerializer(serializers.ModelSerializer):
                   "sale_channel", "status", 'product_set']
         read_only_fields = ('sale_channel',)
 
+class OnlyPriceProduct(serializers.ModelSerializer):
+    class Meta:
+        model = PriceProduct
+        fields = ["id", "price", "product",
+                  "sale_channel", "status"]
+
+class OnlyPriceTopping(serializers.ModelSerializer):
+    class Meta:
+        model = PriceTopping
+        fields = ["id", "price", "topping",
+                  "sale_channel", "status"]
+
 
 class ToppingSerializer(serializers.ModelSerializer):
 
@@ -116,7 +128,7 @@ class ToppingSerializer(serializers.ModelSerializer):
     unit_id = serializers.IntegerField()
     create_by_id = serializers.IntegerField()
     update_by_id = serializers.IntegerField(allow_null=True, required=False)
-    pricetopping_set = PriceToppingSerializer(read_only=True, many=True)
+    pricetopping_set = OnlyPriceTopping(read_only=True, many=True)
     # all set
     unit_set = UnitSerializer(read_only=True, source='unit')
     create_by_set = UserSerializer(read_only=True, source='create_by')
@@ -155,6 +167,16 @@ class ToppingCategorySerializer(serializers.ModelSerializer):
                   'create_by', 'update_by', 'settopping_set']
 
 
+class GetterSaleChannel(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    img = serializers.ImageField(read_only=True)
+
+    class Meta:
+        model = SaleChannel
+        fields = ['id', 'sale_channel', 'gp', 'img',
+                  'status', 'create_by', 'update_by',
+                  'create_at', 'update_at']
+
 class SaleChannelSerializer(serializers.ModelSerializer):
     price_topping = PriceToppingSerializer(many=True, source="pricetopping")
     price_product = PriceProductSerializer(many=True, source="priceproduct")
@@ -171,7 +193,7 @@ class SaleChannelSerializer(serializers.ModelSerializer):
         price_toppings = validated_data.pop('pricetopping')
         price_products = validated_data.pop('priceproduct')
         sale_channel = SaleChannel.objects.create(**validated_data)
-
+        print('finish')
         for price_topping in price_toppings:
             PriceTopping.objects.create(
                 **price_topping, sale_channel=sale_channel)
@@ -226,6 +248,13 @@ class SaleChannelSerializer(serializers.ModelSerializer):
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
+    product_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    class Meta:
+        model = ProductCategory
+        fields = ['id', 'category', 'type_category',
+                  'create_by', 'update_by','product_set']
+
+class OnlyProductCategory(serializers.ModelSerializer):
     class Meta:
         model = ProductCategory
         fields = ['id', 'category', 'type_category',
@@ -248,9 +277,9 @@ class ProductSerializer(serializers.ModelSerializer):
     topping_category_id = serializers.IntegerField(
         allow_null=True, required=False)
     # all set
-    category_set = ProductCategorySerializer(read_only=True, source='category')
+    category_set = OnlyProductCategory(read_only=True, source='category')
     unit_set = UnitSerializer(read_only=True, source='unit')
-    priceproduct_set = PriceProductSerializer(many=True, read_only=True)
+    priceproduct_set = OnlyPriceProduct(many=True, read_only=True)
     topping_category_set = ToppingCategorySerializer(
         read_only=True, source="topping_category")
     img = serializers.ImageField(read_only=True)

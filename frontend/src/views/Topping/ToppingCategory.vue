@@ -1,12 +1,15 @@
 <template>
   <div>
-    <nav-app>Topping Category</nav-app>
-    <div class="row">
-      <div class="col-11 wrap-search">
+    <nav-app :url_name="'DashBoard'" :product_menu="true"
+      >Topping Category</nav-app
+    >
+    <div class="row" style="margin: auto; width: 90%">
+      <div class="col-10 w-100" style="padding-left: 0px">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px">
+      <div class="col-2 w-100" style="padding-left: 0px">
         <button
+          style="margin: 0px;"
           class="btn-ghost"
           @click="$router.push({ name: 'CreateCategoryTopping' })"
         >
@@ -50,15 +53,18 @@
               <img
                 src="../../assets/icon/trash.png"
                 @click="delete_category(item.id)"
-                style="width: 90%"
+                style="width: 70%"
                 alt=""
               />
             </div>
             <div class="col-5" style="margin: auto; width: 100%">
               {{ item.category }}
             </div>
-            <div class="col-5" style="margin-left: 40px">
-              {{ get_topping(item.id) }}
+            <div
+              class="col-5 w-100"
+              style="margin: auto; font-size: 24px; font-weight: bold"
+            >
+              {{ item.settopping_set.length }}
             </div>
             <div class="col-1">
               <img
@@ -82,7 +88,7 @@
 
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
-import NavApp from "../../components/main_component/NavAppHam.vue";
+import NavApp from "../../components/main_component/NavApp.vue";
 import { api_product } from "../../api/api_product";
 
 export default {

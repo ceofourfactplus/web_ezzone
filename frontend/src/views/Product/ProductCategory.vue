@@ -1,17 +1,18 @@
 <template>
   <div>
-    <nav-app :url_name="'DashBoard'" :product_menu="true">Product Category</nav-app>
-    <div class="row" v-if="is_staff">
-      <div class="col-11 wrap-search">
+    <nav-app :url_name="'DashBoard'" :product_menu="true"
+      >Product Category</nav-app
+    >
+    <div class="row" style="width: 90%; margin: auto">
+      <div class="col-10 w-100" style="padding-left:0px;">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px">
+      <div class="col-2 w-100" style="padding-left: 0px">
         <button class="btn-ghost" @click="add_category_status = true">
           + New
         </button>
       </div>
     </div>
-    <SearchBar v-else @search="search_by_typing" />
     <!-- Table -->
     <div class="table" style="margin-top: 10px">
       <div class="table-header">
@@ -43,14 +44,14 @@
             line-height: 100%;
           "
         >
-          <div class="col-6" style="text-align: left; width: 100%">
+          <div class="col-6" style="text-align: left; width: 100%;padding-left:80px;">
             {{ item.category }}
           </div>
           <div class="col-2" style="margin-left: -5px">
             {{ get_type_category(item.type_category) }}
           </div>
           <div class="col-2" style="margin-left: 40px">
-            {{ get_product(item.id) }}
+            {{ item.product_set.length }}
           </div>
           <div class="col-1" style="position: absolute; right: 50px">
             <img
@@ -69,7 +70,7 @@
       <div class="category-popup">
         <img
           @click="add_category_status = false"
-          style="position: absolute; right: 10px; top: 10px;height:30px;"
+          style="position: absolute; right: 10px; top: 10px; height: 30px"
           src="../../assets/icon/delete.png"
         />
         <div class="h1 mt-2" style="color: #ea7c69">Create Categories</div>
@@ -110,7 +111,7 @@
       <div class="category-popup">
         <img
           @click="edit_category_status = false"
-          style="position: absolute; right: 10px; top: 10px"
+          style="position: absolute; right: 10px; top: 10px;width:30px;"
           src="../../assets/icon/delete.png"
         />
         <div class="h1 mt-2" style="color: #ea7c69">Edit Categories</div>

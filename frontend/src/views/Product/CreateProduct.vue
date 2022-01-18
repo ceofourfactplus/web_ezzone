@@ -3,7 +3,7 @@
     <nav-app save="true" @save="create_product" :url_name="'Product'"
       >New&#160;Product&#160;Detail</nav-app
     >
-    <div class="container-f">
+    <div class="container-f w-100">
       <div class="frame f-1">
         <div class="row h-100">
           <div class="col-5 w-100">
@@ -67,7 +67,7 @@
             </div>
             <div class="col-12 h-20">
               <label for="">Active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-              <div class="switch"><Switch @switch="switch_active" /></div>
+              <div class="switch"><Switch @switch="switch_active()" :value="active" /></div>
             </div>
             <div class="col-12 h-20">
               <label for="">Price&nbsp;&nbsp;:</label
@@ -124,7 +124,10 @@
           </div>
           <div class="col-5 label-input m-15">
             <label for="">Flavour Level&nbsp;&nbsp;:</label
-            ><Switch @switch="switch_flavour_level" />
+            ><Switch
+              @switch="change_status()"
+              :value="flavour_level"
+            />
           </div>
           <div class="col-7 label-input m-15">
             <label for="type_topping">Type Topping:</label
@@ -174,7 +177,7 @@ export default {
       img: null,
       category_id: null,
       type_product: 1,
-      active: true,
+      active: false,
       unit_id: null,
       remain: 0,
       minimum: 0,
@@ -183,7 +186,6 @@ export default {
       flavour: 0,
       flavour_level: false,
       price: 0,
-      show_img: null,
       name: "",
       warehouse: 0,
       toppingcategory_id: null,
@@ -211,43 +213,51 @@ export default {
       });
     },
     onFileChange(e) {
-      this.show_img = e.target.files[0];
-      if (this.show_img) {
+      this.img = e.target.files[0];
+      if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
-        reader.readAsDataURL(this.show_img);
+        reader.readAsDataURL(this.img);
       }
     },
     create_product() {
-      const data = new FormData();
-      data.append("code", this.code);
       if (this.img != null) {
-        data.append("img", this.img, this.img.name);
+        const data = new FormData();
+        data.append("code", this.code);
+        data.append("category_id", this.category_id);
+        data.append("unit_id", this.unit_id);
+        data.append("type_product", this.type_product);
+        data.append("is_active", this.active);
+        data.append("remain", this.remain);
+        data.append("minimum", this.minimum);
+        data.append("maximum", this.maximum);
+        data.append("price", this.price);
+        data.append("flavour", this.flavour);
+        data.append("flavour_level", this.flavour_level);
+        data.append("share", 0);
+        data.append("name", this.name);
+        data.append("warehouse", this.stock);
+        data.append("topping_category_id", this.toppingcategory_id);
+        data.append("create_by_id", 1);
+        api_product.post("product/", data).then((response) => {
+          const img = new FormData();
+          img.append("img", this.img, this.img.name);
+          api_product
+            .put("update-img-product/" + response.data.id + "/", img)
+            .then(() => {
+              this.$router.push({ name: "Product" });
+            });
+        });
       }
-      data.append("category_id", this.category_id);
-      data.append("unit_id", this.unit_id);
-      data.append("type_product", this.type_product);
-      data.append("is_active", this.active);
-      data.append("remain", this.remain);
-      data.append("minimum", this.minimum);
-      data.append("maximum", this.maximum);
-      data.append("price", this.price);
-      data.append("flavour", this.flavour);
-      data.append("flavour_level", this.flavour_level);
-      data.append("share", 0);
-      data.append("name", this.name);
-      data.append("warehouse", this.stock);
-      data.append("topping_category_id", this.toppingcategory_id);
-      data.append("create_by_id", 1);
-      api_product.post("product/", data).then(() => {
-        this.$router.push({ name: "Product" });
-      });
     },
     switch_flavour_level(val) {
       this.flavour_level = val;
     },
-    switch_active(val) {
-      this.active = val;
+    switch_active() {
+      this.active = !this.active;
+    },
+    change_status() {
+      this.flavour_level = !this.flavour_level;
     },
   },
   watch: {
@@ -269,8 +279,7 @@ export default {
 
 <style scoped>
 .frame {
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin: 15px auto 20px auto;
   background-color: #303344;
   border-radius: 20px;
   padding-top: 20px;
@@ -286,7 +295,6 @@ export default {
   height: 170px;
 }
 .container-f {
-  padding-left: 22px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -335,8 +343,9 @@ label {
   position: absolute;
   width: 74px;
   height: 28.23px;
-  left: 60px;
-  top: 420px;
+
+  left: 115px;
+  top: 415px;
 
   background-color: #c4c4c4;
   border-radius: 5px;

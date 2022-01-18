@@ -244,6 +244,7 @@ class ItemToppingGET(APIView):
         
     def get(self, request, pk):
         item_topping = self.get_object(pk)
+        print(item_topping, 'item_topping')
         data = []
         if len(item_topping) != 0:
             for i in item_topping:
@@ -441,6 +442,13 @@ class ExchangeHistoryAPI(APIView):
         return Response(serializer.errors, status=400)
     
     def post(self, request):
+        print(request.data)
+        reward = Rewards.objects.get(id=request.data['reward_id'])
+        reward.qty -= 1
+        reward.save()
+        customer = CustomerPoint.objects.get(customer_id=request.data['customer_id'])
+        customer.point -= int(request.data['point'])
+        customer.save()
         serializer = ExchangeHistorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

@@ -209,7 +209,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import {api_customer} from "../../api/api_customer";
 import NavApp from "../../components/main_component/NavApp.vue";
 // import CheckBoxWhite from '../../components/main_component/CheckBoxWhite.vue';
 export default {
@@ -238,12 +238,6 @@ export default {
   },
   methods: {
     create_customer() {
-      if (
-        this.nick_name != "" &&
-        this.gender != "" &&
-        String(this.phone_number).length == 10 &&
-        this.birth_date != ""
-      ) {
         const user = new FormData();
         user.append("nick_name", this.nick_name);
         user.append("first_name", this.first_name);
@@ -256,12 +250,12 @@ export default {
         user.append("address", this.address);
         if (this.img != null) {
           user.append("img", this.img, this.img.name);
-        }else{
-          user.append("img", '');
+        } else {
+          user.append("img", "");
         }
         user.append("gender", this.gender);
-        axios
-          .post("http://127.0.0.1:8000/customer/customer", user)
+        api_customer
+          .post("customer", user)
           .then(() => {
             this.alert = true;
             setTimeout(() => {
@@ -274,11 +268,6 @@ export default {
             this.error.data = err.response.data;
             this.error.status = true;
           });
-      } else {
-        console.log("2");
-        this.error.data = "some thing went wrong";
-        this.error.status = true;
-      }
     },
     onFileChange(e) {
       this.img = e.target.files[0];

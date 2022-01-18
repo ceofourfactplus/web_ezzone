@@ -1,13 +1,13 @@
 <template>
   <div>
-    <nav-app :save="true" @save="create_sale_channel">New Sale Channel</nav-app>
+    <nav-app :save="true" @save="create_sale_channel" :url_name="'SaleChannel'">Edit Sale Channel</nav-app>
     <div class="row" style="margin-top: 20px">
       <!-- form sale channel -->
       <div class="col-4 w-100" style="margin: auto">
         <label id="select_img" for="file" style="margin-top: 0px">
           <img
             :src="show_img"
-            style="border-radius: 10px; width: 150px; height: 132px"
+            style="border-radius: 10px; width: 150px; height: 132px;object-fit:cover;"
             class="image"
             v-if="show_img != null"
           />
@@ -61,7 +61,7 @@
             <div class="col-9">
               <button
                 class="btn-ghost-b me-3"
-                style="width: 202px; height: 50px"
+                style="width: 202px; height: 50px;white-space:nowrap;"
                 @click="
                   add_product_to_salechannel = true;
                   select_product_update_id = null;
@@ -73,7 +73,7 @@
               <button
                 v-if="!delete_status"
                 class="btn-ghost-r"
-                style="width: 235px; height: 50px"
+                style="width: 235px; height: 50px;white-space:nowrap;"
                 @click="
                   delete_status = true;
                   add_product_to_salechannel = false;
@@ -81,7 +81,7 @@
                 "
               >
                 <img
-                  src="../../assets/icon/bin.png"
+                  src="../../assets/icon/r-trash.png"
                   width="20"
                   alt=""
                 />&#160;Delete Product
@@ -93,9 +93,7 @@
                 @click="delete_selected()"
               >
                 <img
-                  src="../../assets/icon/bin.png"
-                  width="20"
-                  alt=""
+                  src="../../assets/icon/r-trash.png"
                 />&#160;Delete Product
               </button>
             </div>
@@ -112,6 +110,7 @@
           :class="{ 'btn-gray-active': type_item == 3 }"
           @click="type_item = 3"
           class="btn-gray me-2"
+          style="width:16%;padding:0px;margin:auto;"
         >
           FOOD
         </button>
@@ -119,6 +118,7 @@
           :class="{ 'btn-gray-active': type_item == 2 }"
           @click="type_item = 2"
           class="btn-gray me-2"
+          style="width:18%;padding:0px;margin:auto;"
         >
           DRINK
         </button>
@@ -126,6 +126,7 @@
           :class="{ 'btn-gray-active': type_item == 1 }"
           @click="type_item = 1"
           class="btn-gray me-2"
+          style="width:18%;padding:0px;margin:auto;"
         >
           DRESSERT
         </button>
@@ -133,6 +134,7 @@
           :class="{ 'btn-gray-active': type_item == 4 }"
           @click="type_item = 4"
           class="btn-gray me-2"
+          style="width:18%;padding:0px;margin:auto;"
         >
           TOPPING
         </button>
@@ -140,6 +142,7 @@
           :class="{ 'btn-gray-active': type_item == 5 }"
           @click="type_item = 5"
           class="btn-gray"
+          style="width:24%;padding:0px;margin:auto;"
         >
           CONSIGNMENT
         </button>
@@ -170,7 +173,7 @@
           </div>
         </div>
       </div>
-      <div style="overflow-x: auto; height: 430px">
+      <div style="overflow-x: auto; height: 470px">
         <div class="table-item" v-for="item in items" :key="item.id">
           <!-- update -->
           <form
@@ -275,7 +278,7 @@
           <div
             class="row"
             v-else
-            style="width: 90%; margin: auto; font-size: 24px"
+            style="width: 100%; margin: auto; font-size: 24px"
           >
             <div class="col-1">
               <div class="checkbox-orange" v-if="delete_status">

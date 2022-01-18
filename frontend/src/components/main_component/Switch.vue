@@ -1,6 +1,6 @@
 <template>
   <label class="switch">
-    <input type="checkbox" v-model="input" />
+    <input type="checkbox" v-model="input"  @click="$emit('switch')"/>
     <span class="slider round"></span>
   </label>
 </template>
@@ -10,21 +10,22 @@ export default {
   name: "Switch",
   props: {
     value: {
-      type: String,
-      default: "",
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
-      input: "",
+      input: true,
     };
   },
   watch: {
     input: function (val) {
       this.input = val;
-      console.log(val, "val")
-      this.$emit("switch", val);
     },
+    value(val){
+      this.input = val
+    }
   },
   mounted() {
     this.input = this.value;

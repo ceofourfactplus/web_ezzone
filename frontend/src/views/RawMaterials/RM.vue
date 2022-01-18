@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Head -->
-    <nav-app :rm_menu="true" :url_name="'DashBoard'">Raw Material</nav-app>
-    <div class="row mb-2" v-if="is_staff">
+    <nav-app :url_name="'DashBoard'" :rm_menu="true">Raw Material</nav-app>
+    <div class="row" v-if="is_staff">
       <div class="col-11 wrap-search">
         <SearchBar @search="serchByTyping" style="width: 108%" />
       </div>
@@ -434,7 +434,7 @@ input[type="checkbox"] {
 }
 
 .wrap-search {
-  min-width: 470px;
+  min-width: 560px;
   width: fit-content;
   padding: 0px;
   margin-left: 45px;

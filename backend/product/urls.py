@@ -31,6 +31,7 @@ urlpatterns = [
     path('update-product/<int:pk>/', views.UpdateProduct.as_view()),
     path('update-img-product/<int:pk>/', views.UpdateImageProduct.as_view()),
     path('product/status/<int:pk>/', views.ProductStatus.as_view()),
+    path('topping/status/<int:pk>/', views.ToppingStatus.as_view()),
     path('many-price-product/', views.PriceProductMany.as_view()),
     path('check-category-topping/<str:category_name>', views.CheckCategoryTopping.as_view()),
     path('sale-channel-update-img/<int:pk>/',views.UpdateImageSaleChannel.as_view()),

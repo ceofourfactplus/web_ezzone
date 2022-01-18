@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 def upload_to_customer(instance,filename):
-    return 'customer/{filename}'.format(filename=str(instance.nick_name)+'_'+str(instance.first_name))
+    return 'customer/{filename}'.format(filename=str(instance.nick_name)+'_'+str(instance.first_name)+'.png')
 
 
 class Customer(models.Model):

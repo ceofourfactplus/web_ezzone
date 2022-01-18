@@ -37,7 +37,6 @@ class SelectPaymentOrder(APIView):
         orders = Order.objects.get(pk=order_id)
         orders.payment_status = 4
         payment = Payment.objects.get(pk=payment_id)
-        print(request.data)
         if payment.payment.upper() == "CASH":
             orders.payment_status = 3
             orders.cash = request.data['cash']
@@ -166,12 +165,9 @@ class FinishFoodOrderItem(APIView):
         product = [p.id for p in Product.objects.filter(
             type_product__in=[3, 1])]
         o = Order.objects.get(pk=orders.order_id)
-        print(not OrderItem.objects.filter(order_id=o.id,
-              status_order=1, product_id__in=product).exists())
         if not OrderItem.objects.filter(order_id=o.id, status_order=1, product_id__in=product).exists():
             if (o.status_drink == None or o.status_drink == 2) and (o.payment_status == 3 or o.payment_status == 4):
                 o.status_order = 3
-                print('in loop')
             o.status_food = 2
             o.save()
         return Response('ok')
@@ -183,8 +179,6 @@ class FinishFoodOrder(APIView):
         orders.status_food = 2
         product = [p.id for p in Product.objects.filter(
             type_product__in=[1, 3])]
-        print(not OrderItem.objects.filter(order_id=pk,
-              status_order=1, product_id__in=product).exists())
         if not OrderItem.objects.filter(order_id=pk, status_order=1, product_id__in=product).exists():
             if (orders.status_drink == None or orders.status_drink == 2) and (orders.payment_status == 3 or orders.payment_status == 4):
                 orders.status_order = 3
@@ -248,13 +242,12 @@ class OrderList(APIView):
 
     def post(self, request):
         # check customer
-        pprint(request.data)
-        if request.data['customer_set'] == {}:
+        if not 'phone_number' in request.data['customer_set']:
             request.data['customer_id'] = None
             request.data['address_id'] = None
 
         # check is has customer in data
-        if Customer.objects.filter(nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).exists():
+        elif Customer.objects.filter(nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).exists():
             request.data['customer_id'] = Customer.objects.get(
                 nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).id
             if not request.data['address_set'] == {}:
@@ -408,7 +401,6 @@ class OrderItemToppingDetail(APIView):
 
 class AllOrder(APIView):
     def post(self, request):
-        print(request.data)
         # order_before = request.data
         # order_before['']
         # order = OrderSerializer(data=request.data)
@@ -626,7 +618,6 @@ class ReportMonth (APIView):
 
     def get(self, request):
         now = datetime.datetime.now()
-        print(datetime.datetime(now.year, now.month, 1))
         order = Order.objects.filter(
             create_at__gte=datetime.datetime(now.year, now.month, 1))
         order_id_list = [item.id for item in order]

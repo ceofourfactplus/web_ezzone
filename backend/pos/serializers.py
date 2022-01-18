@@ -2,7 +2,7 @@ import datetime
 from pos.models import Order, OrderItem, OrderItemTopping, Payment
 from rest_framework import serializers
 from customer.serializers import CustomerSerializer, AddressCustomerSerializer
-from product.serializers import ProductSerializer, ToppingSerializer, SaleChannelSerializer
+from product.serializers import ProductSerializer, ToppingSerializer, GetterSaleChannel
 from pprint import pprint
 
 
@@ -70,7 +70,7 @@ class OrderSerializer(serializers.ModelSerializer):
     customer_id = serializers.IntegerField(required=False, allow_null=True)
     sale_channel_id = serializers.IntegerField(required=False, allow_null=True)
 
-    sale_channel_set = SaleChannelSerializer(
+    sale_channel_set = GetterSaleChannel(
         read_only=True, source="sale_channel")
     payment_set = PaymentSerializer(read_only=True, source="payment")
     address_set = AddressCustomerSerializer(read_only=True, source="address")
@@ -133,11 +133,13 @@ class OrderSerializer(serializers.ModelSerializer):
         orderitem_set = validated_data.pop('orderitem_set')
         order = Order.objects.create(**validated_data)
         for item in orderitem_set:
-            pprint('orderitemtopping_set' in item)
+            pprint(item['orderitemtopping_set'])
             if 'orderitemtopping_set' in item:
                 orderitemtopping_set = item.pop('orderitemtopping_set')
+                print(orderitemtopping_set)
             order_item = OrderItem.objects.create(**item, order=order)
-            if 'orderitemtopping_set' in item:
+            if not orderitemtopping_set == []:
+                print('hello in loop')
                 for topping in orderitemtopping_set:
                     OrderItemTopping.objects.create(**topping, item=order_item)
         return order

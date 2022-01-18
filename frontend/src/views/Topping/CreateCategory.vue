@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :save="true" @save="save">Create Category</nav-app>
+    <nav-app :save="true" :url_name="'ToppingCategory'" @save="save">Create Category</nav-app>
     <div class="row" style="width: 90%; margin: auto">
       <div class="col-12" style="display: flex">
         <label for="category" style="display: inline; line-height: 55px">

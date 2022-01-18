@@ -3,7 +3,7 @@
     <nav-app save="true" @save="create_product" :url_name="'Product'"
       >Edit&#160;Product</nav-app
     >
-    <div class="container-f">
+    <div class="container-f w-100">
       <div class="frame f-1">
         <div class="row h-100">
           <div class="col-5 w-100">
@@ -272,8 +272,7 @@ export default {
 
 <style scoped>
 .frame {
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin: 15px auto 20px auto;
   background-color: #303344;
   border-radius: 20px;
   padding-top: 20px;
@@ -289,7 +288,6 @@ export default {
   height: 170px;
 }
 .container-f {
-  padding-left: 22px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -338,7 +336,7 @@ label {
   position: absolute;
   width: 74px;
   height: 28.23px;
-  left: 60px;
+  left: 100px;
   top: 420px;
 
   background-color: #c4c4c4;
