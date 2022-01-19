@@ -52,6 +52,7 @@ class CustomerDetail(APIView):
 
     def put(self, request, pk):
         customer = self.get_object(pk)
+        print(request.data)
         serializer = CustomerSerializer(customer, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -62,9 +63,19 @@ class CustomerDetail(APIView):
 class SaveAddress(APIView):
 
     def put(self, request, pk):
-        customer = Customer.objects.get(pk=pk)
+        customer = AddressCustomer.objects.get(pk=pk)
         customer.address = request.data['address']
         customer.save()
+        print(customer.address)
+        return Response('ok')
+
+class CreateAddress(APIView):
+    def put(self, request):
+        AddressCustomer.objects.create(
+                address = request.data['address'],
+                customer_id = request.data['customer_id'],
+                status_address = 1,
+            )
         return Response('ok')
 
 class SearchName (APIView):

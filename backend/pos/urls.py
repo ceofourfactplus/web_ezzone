@@ -3,6 +3,7 @@ from pos import views
 
 urlpatterns = [
     path('payment/', views.PaymentList.as_view()),
+    path('payment/<int:pk>', views.PaymentDetial.as_view()),
     path('order/', views.OrderList.as_view()),
     path('order/cancel/<int:pk>/', views.cancel_order.as_view()),
     path('order/payment-channel/<int:order_id>/<int:payment_id>', views.SelectPaymentOrder.as_view()),
@@ -30,5 +31,6 @@ urlpatterns = [
     path('report/daily/<int:year>/<int:month>/<int:date>', views.ReportFilterByDate.as_view()),
     path('report/monthly', views.ReportMonth.as_view()),
     path('report/all-product', views.ReportAllProduct.as_view()),
+    path('order-number', views.GetOrderNumber.as_view())
 ]
  

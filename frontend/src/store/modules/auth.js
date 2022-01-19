@@ -8,10 +8,10 @@ export default {
     userInfo: {
       is_barista: false,
       is_staff: true,
-      is_chef: true,
-      is_purchesing: true,
+      is_chef: false,
+      is_purchesing: false,
       is_receptionist: false,
-      id: 1,
+      id: null,
     },
     error: {
       status: false,

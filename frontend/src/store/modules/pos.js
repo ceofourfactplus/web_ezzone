@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     order: {
+      order_number:0,
       address_id: null,
       address_set: {},
       status_delivery: 1,
@@ -32,7 +33,7 @@ export default {
       change: null,
     },
     category: 1,
-    type_product: 1,
+    type_product: 2,
     select_product_index: null,
     select_topping_index: null,
     is_edit_product: false,
@@ -44,7 +45,7 @@ export default {
     },
     cal_total_price(state) {
       state.order.total_price = 0;
-      state.order.amount = 0;
+      state.order.total_amount = 0;
       for (var item of state.order.orderitem_set) {
         item.total_price = parseInt(item.total_price);
         state.order.total_price += item.total_price;
@@ -291,7 +292,7 @@ export default {
       var discount = "";
       if (state.order.discount_percent) {
         discount = parseInt(
-          (state.order.discount / 100) * state.order.total_price
+          Math.round((state.order.discount / 100) * state.order.total_price)
         );
       } else if (state.order.discount != 0) {
         discount = state.order.discount;

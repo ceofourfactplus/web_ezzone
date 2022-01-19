@@ -7,7 +7,7 @@
       </div>
       <div class="col-2 w-100" style="padding-left: 0px">
         <button
-          style="width: 100%"
+          style="width: 100%;white-space: nowrap;"
           class="btn-ghost"
           @click="$router.push({ name: 'CreateProduct' })"
         >
@@ -23,7 +23,7 @@
       <button
         v-for="category in products_categories"
         :key="category.id"
-        class="btn-gray me-2"
+        class="btn-gray p-0 me-2"
         style="
           min-width: 100px;
           height: 50px;
@@ -173,7 +173,7 @@ export default {
         this.show_products = this.products;
       } else {
         this.products.forEach((element) => {
-          if (element.name.indexOf(val) + 1 != 0) {
+          if (element.name.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
             temp.push(element);
           }
         });

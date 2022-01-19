@@ -3,7 +3,7 @@
     <nav-app :url_name="'DataBaseSettings'">Sale&#160;Channel</nav-app>
     <div class="row" style="width: 90%; margin: auto">
       <div class="col-8 w-100" style="padding: 0px">
-        <search-bar @search="search" style="width: 100%" />
+        <search-bar @search="search" style="width: 100%; height: 45px" />
       </div>
       <div
         class="col-2 w-100"
@@ -37,7 +37,7 @@
         <button
           v-else
           class="btn-ghost-r"
-          style="width: 125px; height: 45px;white-space:nowrap;padding: 0px;"
+          style="width: 125px; height: 45px; white-space: nowrap; padding: 0px"
           @click="delete_status = true"
         >
           <img
@@ -67,29 +67,12 @@
           class="table-item"
         >
           <div class="row" style="width: 100%; padding: 0px">
-            <div class="col-1" v-if="delete_status">
-              <div
-                class="checkbox-orange"
-                v-if="channel.sale_channel != 'EZZone'"
-              >
-                <input
-                  type="checkbox"
-                  :value="channel.id"
-                  v-model="delete_list"
-                />
-              </div>
-            </div>
             <div
               class="col-1 w-100"
               style="margin: auto; margin-left: 0px; text-align: right"
             >
               <span>
                 <img :src="channel.img" class="img-user-status me-1" />
-                <!-- <img
-                  v-else
-                  src="../../assets/icon/blank-user.png"
-                  class="img-user-status me-1"
-                /> -->
               </span>
             </div>
             <div
@@ -119,7 +102,35 @@
               {{ count_product(channel.id) }}
             </div>
             <div class="col-2 w-100" style="margin: auto">
-              {{ channel.status }}
+              
+              <button
+                v-if="channel.status"
+                class="btn-g"
+                style="
+                  width: 90px;
+                  height: 30px;
+                  margin-top: 5px;
+                  line-height: 25px;
+                  font-weight: bold;
+                  font-size: 18px;
+                "
+              >
+                Active
+              </button>
+              <button
+                v-else
+                class="btn-r"
+                style="
+                  width: 90px;
+                  height: 30px;
+                  margin-top: 5px;
+                  line-height: 25px;
+                  font-weight: bold;
+                  font-size: 18px;
+                "
+              >
+                Inactive
+              </button>
             </div>
             <div
               class="col-1 w-100"
@@ -204,7 +215,7 @@ export default {
         this.show_channel = this.sale_channels;
       } else {
         this.sale_channels.forEach((element) => {
-          if (element.sale_channel.indexOf(val) + 1 != 0) {
+          if (element.sale_channel.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
             temp.push(element);
           }
         });

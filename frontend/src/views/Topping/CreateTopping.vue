@@ -37,10 +37,11 @@
                 >Status&nbsp;&nbsp;:&nbsp;<button
                   class="btn-y"
                   style="
-                    width: 150px;
+                    width:  %;
                     display: inilne;
                     height: 36px;
                     line-height: 100%;
+                    white-space:nowrap;
                   "
                   :class="{ 'btn-g': remain > minimum }"
                 >

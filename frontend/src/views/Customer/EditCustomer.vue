@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav-app :url_name="'Customer'" save=true @save="edit_customer">Customer&#160;Data</nav-app>
+    <nav-app :url_name="'Customer'" save="true" @save="edit_customer"
+      >Customer&#160;Data</nav-app
+    >
     <div class="container-fluid">
       <!-- detail  -->
       <div
@@ -8,7 +10,7 @@
         style="margin-top: 0px; margin-left: 20px; height: 230px"
       >
         <!-- img -->
-        <div class="col-3 w-100" style="margin-right: 20px"> 
+        <div class="col-3 w-100" style="margin-right: 20px">
           <div class="row">
             <div class="col-12">
               <label for="file">
@@ -17,13 +19,13 @@
                   width="160"
                   height="160"
                   src="../../assets/icon/User.png"
-                  style="border-radius: 50%;"
+                  style="border-radius: 50%"
                 />
                 <img
                   v-else
                   :src="show_img"
                   width="160"
-                  style="border-radius: 50%;object-fit: cover;"
+                  style="border-radius: 50%; object-fit: cover"
                   height="160"
                 />
               </label>
@@ -214,14 +216,17 @@
             <div class="col-3 w-100">
               <label for="address">Address</label>
             </div>
-            <div class="col-9 w-100" style="margin-left:12px">
-              <div class="row">
-                <textarea
-                  v-model="customer.address"
-                  id="address"
-                  style="width: 516px; height: 80px"
-                ></textarea>
-              </div>
+            <div class="col-9 w-100">
+              <textarea
+                v-if="customer.addresscustomer_set.length != 0"
+                v-model="customer.addresscustomer_set[0]['address']"
+                id="address"
+              ></textarea>
+              <textarea
+                v-else
+                v-model="addresscustomer.address"
+                id="address"
+              ></textarea>
             </div>
           </div>
           <div class="row mb-3">
@@ -229,16 +234,24 @@
               <label for="line_id">Line ID</label>
             </div>
             <div class="col-9 w-100">
-              <input type="text" v-model="customer.line_customer_id" id="line_id" />
+              <input
+                type="text"
+                v-model="customer.line_customer_id"
+                id="line_id"
+              />
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="invite_by">Invite By
-              </label>
+              <label for="invite_by">Invite By </label>
             </div>
             <div class="col-9 w-100">
-              <input type="number" v-model="customer.invite_by" id="invite_by" />
+              <select v-model="customer['invited_by']">
+                <option v-for="user in all_cus" :key="user.id" :value="user.id">
+                  {{ user.nick_name }} {{ user.first_name }}
+                </option>
+                <option value="null">None</option>
+              </select>
             </div>
           </div>
         </div>
@@ -255,10 +268,17 @@ export default {
   components: { NavApp },
   data() {
     return {
-      customer: {},
+      customer: {
+        addresscustomer_set: [],
+      },
       show_img: null,
       favorite_menu: [],
       new_img: false,
+      all_cus: [],
+      addresscustomer: {
+        address: "",
+        customer_id: "",
+      },
     };
   },
   methods: {
@@ -280,7 +300,9 @@ export default {
       customer_data.append("line_customer_id", this.customer.line_id);
       customer_data.append("phone_number", this.customer.phone_number);
       customer_data.append("address", this.customer.address);
-      customer_data.append("birth_date", this.customer.birth_date);
+      if ((this.customer.birth_date = null)) {
+        customer_data.append("birth_date", this.customer.birth_date);
+      }
       customer_data.append("invite", this.customer.invite);
       if (this.new_img) {
         customer_data.append("img", this.customer.img, this.customer.img.name);
@@ -289,26 +311,47 @@ export default {
       api_customer
         .put("customer/" + this.$route.params.id, customer_data)
         .then(() => {
-          this.$router.go(-1);
+          console.log('hello1')
+          if (this.addresscustomer.address != "" || this.customer.addresscustomer_set !=[]) {
+          console.log('hello2')
+            if (this.customer.addresscustomer_set == []) {
+          console.log('hello3')
+              api_customer
+                .post("create-address", this.addresscustomer)
+                .then(() => {
+                  this.$router.push({ name: "Customer" });
+                });
+            } else {
+          console.log('hello4')
+              api_customer
+                .put(
+                  "save-address/" + this.customer.addresscustomer_set[0].id,
+                 this.customer.addresscustomer_set[0]
+                )
+                .then(() => {
+                  this.$router.push({ name: "Customer" });
+                });
+            }
+          } else {
+            this.$router.push({ name: "Customer" });
+          }
         });
     },
     Menu(menu) {
       return menu.id;
     },
-    update(){
-
-    }
   },
 
-  mounted() {
-    api_customer
-      .get("customer/" + this.$route.params.id)
-      .then((reponse) => {
-        this.customer = reponse.data;
-        if (this.customer.img != null) {
-          this.show_img = this.customer.img;
-        }
-      });
+  beforeCreate() {
+    api_customer.get("customer").then((response) => {
+      this.all_cus = response.data;
+    });
+    api_customer.get("customer/" + this.$route.params.id).then((reponse) => {
+      this.customer = reponse.data;
+      if (this.customer.img != null) {
+        this.show_img = this.customer.img;
+      }
+    });
   },
 };
 </script>
@@ -345,11 +388,13 @@ export default {
 }
 
 textarea,
+select,
 input[type="email"],
 input[type="date"],
 input[type="text"],
 input[type="number"] {
-  width: 100%;
+  text-align: left;
+  min-width: 100%;
   height: 45px;
 }
 

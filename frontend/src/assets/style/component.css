@@ -463,6 +463,7 @@ h1 {
 .img-select {
   border-radius: 50%;
   width: 84px;
+  object-fit: cover;
   height: 84px;
 }
 

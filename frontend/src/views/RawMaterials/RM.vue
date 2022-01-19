@@ -2,12 +2,16 @@
   <div>
     <!-- Head -->
     <nav-app :url_name="'DashBoard'" :rm_menu="true">Raw Material</nav-app>
-    <div class="row" v-if="is_staff">
-      <div class="col-11 wrap-search">
-        <SearchBar @search="serchByTyping" style="width: 108%" />
+    <div class="row" v-if="is_staff" style="margin: auto; width: 90%">
+      <div class="col-10 w-100 ps-0">
+        <SearchBar @search="serchByTyping" />
       </div>
-      <div style="padding-left: 0px">
-        <button class="btn-ghost" style="height:45px;" @click="$router.push({ name: 'CreateRM' })">
+      <div class="col-2 w-100" style="padding: 0px">
+        <button
+          class="btn-ghost w-100 p-0"
+          style="height: 45px; white-space: nowrap;"
+          @click="$router.push({ name: 'CreateRM' })"
+        >
           + New
         </button>
       </div>
@@ -16,17 +20,35 @@
     <!-- search bar -->
     <SearchBar
       v-else
-      style="width: 90%; margin: auto;"
+      style="width: 90%; margin: auto"
       @search="serchByTyping"
     />
 
     <!-- select category -->
-    <div>
-      <Tabs
-        :elements="categories"
-        @select_item="queryCategory"
-        @all_category="fetchRawMaterials"
-      />
+    <div
+      style="
+        display: flex;
+        height: 50px;
+        overflow-x: auto;
+        margin: auto;
+        width: 90%;
+        overflow-y: hidden;
+      "
+      class="mt-2"
+    >
+      <button
+        v-for="category in categories"
+        :key="category.id"
+        class="btn-gray category me-1"
+        style="min-width: 165px; white-space: nowrap; padding: 0px;opacity:0.6;"
+        :class="{
+          active: select_category == category.id,
+          'text-active': select_category == category.id,
+        }"
+        @click="select_category = category.id"
+      >
+        {{ category.name }}
+      </button>
     </div>
 
     <!-- Table for admin -->
@@ -92,10 +114,10 @@ export default {
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
-    console.log(this.$route.name, 'query page')
+    console.log(this.$route.name, "query page");
     this.fetchRMCategories();
   },
-  beforeMount () {
+  beforeMount() {
     this.fetchRawMaterials();
   },
   data() {
@@ -109,6 +131,7 @@ export default {
       unit: "",
       alert: false,
       slide_show: false,
+      select_category: "",
       raw_material_item: {
         img: "",
         status: 1,
@@ -266,6 +289,10 @@ export default {
 input::-webkit-calendar-picker-indicator {
   opacity: 0;
 }
+.active {
+  color:#fff;
+  opacity: 1 !important;
+}
 .edit-block {
   position: absolute;
   top: 250px;
@@ -421,16 +448,11 @@ input[type="checkbox"] {
   border: 2px solid #ea7c69;
   border-radius: 20px;
 }
-.row {
-  padding-right: 50px;
-}
 .btn-ghost {
   border-color: #65b0f6;
   color: #65b0f6;
   width: 119px;
   height: 50px;
-  margin-left: 15px;
-  margin-right: -12px;
 }
 
 .wrap-search {

@@ -75,7 +75,7 @@
           v-for="category in categories"
           :key="category.id"
           class="btn-gray category me-1"
-          style="min-width: 165px; white-space: nowrap; padding-bottom: 0px"
+          style="min-width: 165px; white-space: nowrap; padding: 0px"
           :class="{
             active: select_category == category.id,
             'text-active': select_category == category.id,
@@ -169,11 +169,7 @@ export default {
     };
   },
   mounted() {
-    api_product.get("category/").then((response) => {
-      this.categories = response.data;
-    });
     this.select_type_product = this.$store.state.pos.type_product;
-    this.select_category = this.$store.state.pos.category;
   },
   watch: {
     select_type_product(newType) {
@@ -194,15 +190,19 @@ export default {
             category: "Food",
           },
         ];
+        this.select_category = 1
       } else if (newType == 5) {
+        this.categories = []
         this.header = "Consignment";
         this.products = [];
       } else if (newType == 4) {
         this.header = "Promotion";
+        this.categories = []
         this.products = [];
       } else {
         api_product.get("category-by-type/" + newType).then((response) => {
           this.categories = response.data;
+          this.select_category = response.data[0].id;
         });
       }
       if (newType == 1) {

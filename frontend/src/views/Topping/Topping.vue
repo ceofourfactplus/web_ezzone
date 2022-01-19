@@ -7,7 +7,8 @@
       </div>
       <div class="col-2 w-100" style="padding-left: 0px">
         <button
-          class="btn-ghost"
+          class="btn-ghost" style="
+          white-space: nowrap;" 
           @click="$router.push({ name: 'CreateTopping' })"
         >
           + New
@@ -17,7 +18,7 @@
 
     <div class="mt-2" style="margin: auto; width: 90%; display: flex">
       <button
-        class="btn-gray me-2"
+        class="btn-gray me-2 p-0"
         style="width: 100px; height: 50px; opacity: 0.5"
         @click="select_category(2)"
         :class="{ 'type-active': select_type == 2 }"
@@ -25,7 +26,7 @@
         Drink
       </button>
       <button
-        class="btn-gray me-2"
+        class="btn-gray me-2 "
         style="width: 100px; height: 50px; opacity: 0.5"
         @click="select_category(3)"
         :class="{ 'type-active': select_type == 3 }"
@@ -33,7 +34,7 @@
         Food
       </button>
       <button
-        class="btn-gray"
+        class="btn-gray p-0"
         style="width: 120px; height: 50px; opacity: 0.5"
         @click="select_category(1)"
         :class="{ 'type-active': select_type == 1 }"
@@ -150,7 +151,7 @@ export default {
         this.show_products = this.products;
       } else {
         this.products.forEach((element) => {
-          if (element.name.indexOf(val) + 1 != 0) {
+          if (element.name.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
             temp.push(element);
           }
         });

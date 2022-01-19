@@ -195,7 +195,8 @@
     >
       <div class="col-12">{{ this.product.code }}</div>
     </div>
-    <div class="blur" v-if="blur">
+    <div v-if="blur">
+      <div class="blur" @click="blur=false"></div>
       <div class="card" :class="{ 'card-active': blur }">
         <div
           class="row"
@@ -252,7 +253,7 @@
           <div class="col-6 w-100 mt-3">
             <button
               class="btn-ghost-g"
-              style="width: 165px; height: 65px; font-size: 30px"
+              style="width: 165px; height: 65px; font-size: 30px;white-space: nowrap;"
               @click="blur = false"
             >
               Confirm
@@ -279,6 +280,8 @@ export default {
         .then((response) => {
           this.product.product_set = response.data;
           this.product.product = response.data.id;
+          this.description_list =
+            this.all_description[this.product.product_set.type_product - 1];
         });
     }
   },
@@ -302,11 +305,12 @@ export default {
       mouse_start: 0,
       topping: null,
       blur: false,
-      description_list: {
-        drink: ["ไม่ไส่น้ำแข็ง", "ไม่โรยหน้า", "ไม่ไส่ถุง", "แยกน้ำแข็ง"],
-        food: ["ไม่สุก", "ข้าวน้อย", "ข้าวเยอะ", "ไม่ไส่ผัก", "ไม่ไส่พริก"],
-        roti: ["ไม่ไส่น้ำแข็ง", "ไม่โรยหน้า", "ไม่ไส่ถุง", "แยกน้ำแข็ง"],
-      },
+      all_description: [
+      ["ไม่ไส่น้ำแข็ง", "ไม่โรยหน้า", "ไม่ไส่ถุง", "แยกน้ำแข็ง"],
+      ["ไม่ไส่น้ำแข็ง", "ไม่โรยหน้า", "ไม่ไส่ถุง", "แยกน้ำแข็ง"],
+      ["ไม่สุก", "ข้าวน้อย", "ข้าวเยอะ", "ไม่ใส่ผัก"],
+      ],
+      description_list: [],
       select_description: [],
     };
   },

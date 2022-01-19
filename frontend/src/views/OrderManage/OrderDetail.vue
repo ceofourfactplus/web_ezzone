@@ -1,7 +1,7 @@
 <template>
   <div>
-    <nav-app  :url_name="'DashBoard'">Order Detail</nav-app>
-    <div class="row" style="width: 90%; margin: auto">
+    <nav-app :url_name="'DashBoard'">Order Detail</nav-app>
+    <div class="row" style="width: 90%; margin: auto;">
       <div class="col-9 w-100" style="padding: 0px">
         <search-bar></search-bar>
       </div>
@@ -24,7 +24,7 @@
         "
       >
         <button
-        style="width:19%; padding:0px;margin:auto;"
+          style="width: 19%; padding: 0px;"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '1' }"
           @click="select_status('on_going')"
@@ -32,7 +32,7 @@
           On going
         </button>
         <button
-        style="width:19%; padding:0px;margin:auto;"
+          style="width: 19%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '2' }"
           @click="select_status('unpaid')"
@@ -40,7 +40,7 @@
           Unpaid
         </button>
         <button
-        style="width:19%; padding:0px;margin:auto;"
+          style="width: 19%; padding: 0px;"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '3' }"
           @click="select_status('completed')"
@@ -48,7 +48,7 @@
           Completed
         </button>
         <button
-        style="width:19%; padding:0px;margin:auto;"
+          style="width: 19%; padding: 0px;"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '4' }"
           @click="select_status('void')"
@@ -56,7 +56,7 @@
           Cancel
         </button>
         <button
-        style="width:19%; padding:0px;margin:auto;"
+          style="width: 19%; padding: 0px;"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '5' }"
           @click="select_status('all')"
@@ -84,7 +84,7 @@
             <div class="col-1" @click="selected_order = order">
               <img
                 :src="order.sale_channel_set.img"
-                style="height: 30px"
+                style="height: 33px; width: 33px; object-fit: cover"
                 id="sale_channel"
               />
             </div>
@@ -100,14 +100,14 @@
               @click="selected_order = order"
               style="line-height: 30px"
             >
-              {{ order.total_balance }}
+              {{ parseInt(order.total_balance) }}
             </div>
             <div
               class="col-3"
               style="
                 display: flex;
                 margin: auto;
-                width:160px;
+                width: 160px;
                 line-height: 30px;
                 justify-content: space-between;
               "
@@ -118,19 +118,18 @@
                 :class="{
                   cooking: order.status_food == 1,
                   paid: order.status_food == 2,
+                  none: order.status_food == null,
                 }"
-                v-if="order.status_food != null"
               >
                 Food
               </div>
-              <div style="width: 75px" v-else></div>
               <div
                 class="status"
                 :class="{
                   cooking: order.status_drink == 1,
                   paid: order.status_drink == 2,
+                  none: order.status_drink == null,
                 }"
-                v-if="order.status_drink != null"
               >
                 Drink
               </div>
@@ -431,5 +430,8 @@ div {
 }
 .paid {
   background-color: #50d1aa !important;
+}
+.none {
+  background-color: #717171 !important;
 }
 </style>

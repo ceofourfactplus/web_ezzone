@@ -193,7 +193,7 @@ export default {
         this.all_unit = this.temp_categories;
       } else {
         this.temp_categories.forEach((element) => {
-          if (element.unit.indexOf(val) + 1 != 0) {
+          if (element.unit.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
             temp.push(element);
           }
         });

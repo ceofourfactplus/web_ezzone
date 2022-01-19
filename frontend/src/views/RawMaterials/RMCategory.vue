@@ -187,7 +187,7 @@ export default {
         this.rm_categories = this.temp_categories;
       } else {
         this.temp_categories.forEach((element) => {
-          if (element.name.indexOf(val) + 1 != 0) {
+          if (element.name.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
             temp.push(element);
           }
         });

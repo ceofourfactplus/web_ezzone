@@ -101,6 +101,7 @@ import ProductReport from '../views/Report/ProductReport.vue'
 
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
+import Payment from "../views/Payment/Payment.vue"
 
 const routes = [
 
@@ -612,6 +613,11 @@ const routes = [
     name: "NewConsignment",
     props: true,
     component: NewConsignment,
+  },
+  {
+    path:'/payments',
+    name: "Payments",
+    component: Payment,
   },
   // {
   //   path: "/face-login/",

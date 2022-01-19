@@ -103,43 +103,57 @@
             />
           </div>
         </div>
-        <!-- Sale Channel 1 -->
-        <div class="row w-100" style="margin: 0px">
-          <div
-            class="col-6 w-100"
-            v-for="channel in channels"
-            :key="channel.id"
-          >
-            <div class="row w-100" style="margin: 0px">
-              <div class="col-3 w-100">
-                <img
-                  :src="channel.img"
-                  style="
-                    display: inline;
-                    width: 35px;
-                    height: 35px;
-                    object-fit: cover;
-                    border-radius: 10px;
-                  "
-                />
-              </div>
-              <div class="col-5 w-100" style="padding: 0px; text-align: left">
-                <p id="TextSaleChannel">{{ channel.sale_channel }}</p>
-              </div>
-              <div class="col-3 w-100" style="padding: 0px">
-                <div
-                  class="sc-status"
-                  style="
-                    font-size: 12px;
-                    line-height: 42px;
-                    margin: 0px;
-                    font-weight: bold;
-                  "
-                >
-                  ACTIVE
+        <div class="w-100" style="height: 140px; overflow-y: auto">
+          <!-- Sale Channel 1 -->
+          <div class="row w-100" style="margin: 0px">
+            <div
+              class="col-6 w-100"
+              v-for="channel in channels"
+              :key="channel.id"
+            >
+              <div class="row w-100" style="margin: 0px">
+                <div class="col-3 w-100">
+                  <img
+                    :src="channel.img"
+                    style="
+                      display: inline;
+                      width: 35px;
+                      height: 35px;
+                      object-fit: cover;
+                      border-radius: 10px;
+                    "
+                  />
+                </div>
+                <div class="col-6 w-100" style="padding: 0px; text-align: left">
+                  <p id="TextSaleChannel">{{ channel.sale_channel }}</p>
+                </div>
+                <div class="col-3 w-100" style="padding: 0px">
+                  <div
+                    v-if="channel.status"
+                    class="sc-status"
+                    style="
+                      font-size: 12px;
+                      line-height: 42px;
+                      margin: 0px;
+                      font-weight: bold;
+                    "
+                  >
+                    ACTIVE
+                  </div>
+                  <div
+                    v-else
+                    class="r-status"
+                    style="
+                      font-size: 12px;
+                      line-height: 42px;
+                      margin: 0px;
+                      font-weight: bold;
+                    "
+                  >
+                    INACTIVE
+                  </div>
                 </div>
               </div>
-              <div class="col-1 w-100"></div>
             </div>
           </div>
         </div>
@@ -153,29 +167,62 @@
             <img
               src="../../assets/icon/edit-orange.png"
               style="width: 25px; height: 30px; margin-top: -9px"
-              @click="$router.push({ name: 'SaleChannel' })"
+              @click="$router.push({ name: 'Payments' })"
             />
           </div>
         </div>
         <!-- Payment Channel 1 -->
-        <div class="row w-100">
-          <div class="col-6 w-100" style="margin: 0px">
-            <div class="row w-100">
-              <div class="col-3 w-100">
-                <img src="../../assets/icon/cash.png" class="IconPayment" />
-              </div>
-              <div
-                class="col-4 w-100"
-                style="padding-left: 0px; text-align: left"
-              >
-                <p id="TextPaymentChannel">Cash</p>
-              </div>
-              <div class="col-3 w-100" style="padding: 0px">
+        <div class="w-100" style="height: 140px; overflow-y: auto">
+          <div class="row w-100" style="margin: 0px">
+            <div
+              class="col-6 w-100 mb-2"
+              v-for="payment in payments"
+              :key="payment.id"
+            >
+              <div class="row w-100" style="margin: 0px">
+                <div class="col-3 w-100">
+                  <img
+                    :src="payment.img"
+                    style="
+                      display: inline;
+                      width: 35px;
+                      height: 35px;
+                      object-fit: cover;
+                      border-radius: 10px;
+                    "
+                  />
+                </div>
                 <div
-                  class="sc-status"
-                  style="font-size: 12px; line-height: 55px; margin: 0px"
+                  class="col-6 w-100"
+                  style="padding-left: 0px; text-align: left"
                 >
-                  ACTIVE
+                  <p id="TextSaleChannel">{{ payment.payment }}</p>
+                </div>
+                <div class="col-3 w-100" style="padding: 0px">
+                  <div
+                    v-if="payment.is_active"
+                    class="sc-status"
+                    style="
+                      font-size: 12px;
+                      line-height: 42px;
+                      margin: 0px;
+                      font-weight: bold;
+                    "
+                  >
+                    ACTIVE
+                  </div>
+                  <div
+                    v-else
+                    class="r-status"
+                    style="
+                      font-size: 12px;
+                      line-height: 42px;
+                      margin: 0px;
+                      font-weight: bold;
+                    "
+                  >
+                    INACTIVE
+                  </div>
                 </div>
               </div>
             </div>
@@ -183,86 +230,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Payment Channel setting -->
-    <div class="BlockChannel">
-      <!-- Payment Channel Setting -->
-      <div class="row" id="Setting" style="margin-bottom:10px;" >
-        <div class="col-7 w-100 dbs-font">Payment Channel Setting</div>
-        <div class="col-1 w-100">
-          <img src="../../assets/icon/edit-orange.png"
-          style="width: 25px; height: 30px; margin-top: -9px"
-          @click="$router.push({ name: 'SaleChannel' })"
-          />
-        </div>
-      </div>
-      <!-- Payment Channel 1 -->
-      <div class="row">
-        <div class="col-1 w-100"></div>
-        <div class="col-5 w-100" id="PaymentBlock">
-          <div class="row">
-            <div class="col-3 w-100">
-              <img src="../../assets/icon/cash.png" class="IconPayment"/>
-            </div>
-            <div class="col-4 w-100" style="padding-left:0px;text-align:left;">
-              <p id="TextPaymentChannel">Cash</p>
-            </div>
-            <div class="col-3 w-100" style="padding:0px;">
-              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
-          <div class="row">
-            <div class="col-3 w-100">
-              <img src="../../assets/icon/cod.png" class="IconPayment"/>
-            </div>
-            <div class="col-4 w-100" style="padding:0px;text-align:left;">
-              <p id="TextPaymentChannel">COD</p>
-            </div>
-            <div class="col-3 w-100" style="padding:0px;">
-              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <!-- Payment Channel 2 -->
-      <div class="row">
-        <div class="col-1 w-100"></div>
-        <div class="col-5 w-100" id="PaymentBlock">
-          <div class="row">
-            <div class="col-3 w-100">
-              <img src="../../assets/icon/credit.png" class="IconPayment"/>
-            </div>
-            <div class="col-4 w-100" style="padding:0px;text-align:left;">
-              <p id="TextPaymentChannel">Credit</p>
-            </div>
-            <div class="col-3 w-100" style="padding:0px;">
-              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
-            </div>
-          </div> 
-        </div>
-        
-        <div class="col-5 w-100" id="PaymentBlock" style="left:32px;">
-          <div class="row">
-            <div class="col-3 w-100">
-              <img src="../../assets/icon/transfer.png" class="IconPayment"/>
-            </div>
-            <div class="col-4 w-100" style="padding:0px;text-align:left;">
-              <p id="TextPaymentChannel">Transfer</p>
-            </div>
-            <div class="col-3 w-100" style="padding:0px;">
-              <div class="sc-status" style="font-size:12px;line-height:55px;margin:0px;">ACTIVE</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      
-    </div>
-  
     <!-- card pop up -->
     <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">
@@ -282,6 +249,7 @@ import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
 import { api_promotion } from "../../api/api_promotion";
 import { api_product } from "../../api/api_product";
+import { api_pos } from "../../api/api_pos";
 
 export default {
   components: {
@@ -298,11 +266,15 @@ export default {
     api_product.get("sale-channel/").then((response) => {
       this.channels = response.data;
     });
+    api_pos.get("payment/").then((response) => {
+      this.payments = response.data;
+    });
   },
 
   data() {
     return {
       channels: [],
+      payments: [],
       alert: false,
       dbs_item: {
         change: null,
@@ -323,6 +295,16 @@ export default {
 </script>
 
 <style scoped>
+.r-status {
+  width: 80px;
+  height: 30px;
+  display: inline;
+  font-size: 12px;
+  background: #ff7ca3;
+  border-radius: 50px;
+  padding: 4px 8px;
+  margin-left: 10px;
+}
 .sc-status {
   width: 80px;
   height: 30px;
@@ -389,18 +371,11 @@ export default {
   display: inline;
   font-size: 24px;
   color: white;
-}
-
-#TextPaymentChannel {
-  display: inline;
-  font-size: 24px;
-  line-height: 50px;
-  color: white;
+  white-space: nowrap;
 }
 
 .IconPayment {
-  display: inline;
-  height: 50px;
-  width: 50px;
+  height: 30px;
+  width: 30px;
 }
 </style>

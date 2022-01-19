@@ -9,7 +9,8 @@
       </div>
       <div class="col-2 w-100" style="padding-left: 0px">
         <button
-          style="margin: 0px;"
+          style="margin: 0px;
+          white-space: nowrap;"
           class="btn-ghost"
           @click="$router.push({ name: 'CreateCategoryTopping' })"
         >
@@ -120,7 +121,7 @@ export default {
         this.categories = this.temp_categories;
       } else {
         this.temp_categories.forEach((element) => {
-          if (element.category.indexOf(val) + 1 != 0) {
+          if (element.category.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
             temp.push(element);
           }
         });

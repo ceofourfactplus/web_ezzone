@@ -116,7 +116,7 @@ export default {
               this.products = this.temp_products
           } else {
               this.temp_products.forEach(element => {
-                if(element.name.indexOf(val) + 1 != 0) {
+                if(element.name.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
                     temp.push(element)
                 }
             });
