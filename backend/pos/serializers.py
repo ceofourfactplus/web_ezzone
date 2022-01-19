@@ -7,6 +7,8 @@ from pprint import pprint
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    description = serializers.CharField(allow_blank=True, required=False)
+    is_used = serializers.BooleanField(read_only=True)
     class Meta:
         model = Payment
         fields = '__all__'
@@ -80,8 +82,7 @@ class OrderSerializer(serializers.ModelSerializer):
     status_order = serializers.IntegerField(required=False, allow_null=True)
     status_food = serializers.IntegerField(required=False, allow_null=True)
     status_drink = serializers.IntegerField(required=False, allow_null=True)
-    create_at = serializers.DateTimeField(required=False, allow_null=True)
-    update_at = serializers.DateTimeField(required=False, allow_null=True)
+    create_at = serializers.DateTimeField(required=False, allow_null=True) 
     voucher = serializers.IntegerField(required=False, allow_null=True)
     point_promotion = serializers.IntegerField(required=False, allow_null=True)
     point = serializers.IntegerField(required=False, allow_null=True)
@@ -92,7 +93,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = [
+        fields = [                   
             "sale_channel_set",
             "orderitem_set",
             'payment_set',
@@ -133,7 +134,6 @@ class OrderSerializer(serializers.ModelSerializer):
         orderitem_set = validated_data.pop('orderitem_set')
         order = Order.objects.create(**validated_data)
         for item in orderitem_set:
-            pprint(item['orderitemtopping_set'])
             if 'orderitemtopping_set' in item:
                 orderitemtopping_set = item.pop('orderitemtopping_set')
                 print(orderitemtopping_set)

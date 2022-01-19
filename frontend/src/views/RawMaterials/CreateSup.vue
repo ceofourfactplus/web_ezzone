@@ -53,7 +53,7 @@ export default {
       supplier_name:'',
       google_map:'',
       contact:'',
-      phone:0,
+      phone:'',
       email:'',
       address:'',
     };

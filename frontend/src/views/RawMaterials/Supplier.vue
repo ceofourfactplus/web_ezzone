@@ -3,10 +3,10 @@
     <nav-app :url_name="'DashBoard'">Supplier</nav-app>
     <div
       class="row"
-      style="width: 98%; align-items: center; justify-items: center"
+      style="width: 93%;margin:auto; align-items: center; justify-items: center"
     >
       <div class="col-9 w-100">
-        <search-bar @search="search" style="margin-left: 35px" />
+        <search-bar @search="search_by_typing" />
       </div>
       <div class="col-3 w-100" style="padding-left: 0px">
         <button
@@ -29,11 +29,11 @@
       </div>
       <div style="height: 650px">
         <div
-          v-for="supplier in all_supplier"
+          v-for="supplier in show_supplier"
           :key="supplier.id"
           class="table-item"
         >
-          <div class="row" style="width: 100%; margin-left: 0px px">
+          <div class="row" style="width: 100%; margin-left: 0px 0px; padding:0px">
             <div
               class="col-4"
               style="margin-left: 15px; width: 100%; display: flex"
@@ -42,6 +42,7 @@
                 <img
                   src="../../assets/icon/home_white.png"
                   class="me-4 mb-1"
+                  style="width: 25px; height: 25px; object-fit: cover"
                   alt=""
                 />
                 <span>{{ supplier.company_name }}</span>
@@ -56,6 +57,7 @@
             <div class="col-1 w-100">
               <img
                 src="../../assets/icon/edit.png"
+                style="width: 25px; height: 25px; object-fit: contain"
                 alt=""
                 @click="EditSupplier(supplier)"
               />
@@ -78,11 +80,13 @@ export default {
       all_supplier: [],
       blur: false,
       select_user: {},
+      show_supplier:[]
     };
   },
   mounted() {
     api_raw_material.get("/supplier/").then((response) => {
       this.all_supplier = response.data;
+      this.show_supplier = response.data
     });
   },
   methods: {
@@ -105,6 +109,19 @@ export default {
       return (
         phone.substr(0, 3) + "-" + phone.substr(3, 3) + "-" + phone.substr(6, 4)
       );
+    },
+    search_by_typing(val) {
+      var temp = [];
+      if (val == "") {
+        this.show_supplier = this.all_supplier;
+      } else {
+        this.all_supplier.forEach((element) => {
+          if (element.company_name.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
+            temp.push(element);
+          }
+        });
+        this.show_supplier = temp;
+      }
     },
   },
 };

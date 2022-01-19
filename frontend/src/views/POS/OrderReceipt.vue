@@ -17,7 +17,7 @@
               font-size: 20px;
               margin: 0px 10px;
             "
-            ># 123</span
+            ># {{ $store.state.pos.order.order_number}}</span
           >
           <label for="tel">Tel.</label>
           <div
@@ -432,7 +432,7 @@ export default {
   border-radius: 5px;
 }
 textarea {
-  width: 578px;
+  width: 100%;
   height: 64px;
   border-radius: 5px;
   font-size: 20px;
@@ -468,7 +468,7 @@ label {
 .note-input {
   border-radius: 0px 5px 5px 0px;
   background-color: #fafafacc;
-  width: 575px;
+  width: 100%;
   color: black;
 }
 div {

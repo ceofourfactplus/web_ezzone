@@ -5,10 +5,10 @@
       <div class="col-9 w-100" style="padding: 0px">
         <search-bar @search="search" />
       </div>
-      <div class="col-3 w-100">
+      <div class="col-3 w-100 pe-0">
         <button
           class="btn-ghost-b"
-          style="width: 150px; height: 45px"
+          style="width: 100%; height: 45px"
           @click="$router.push({ name: 'CreateCustomer' })"
         >
           +&#160;Customer
@@ -94,6 +94,7 @@
             <img
               v-if="select_customer.img != null"
               class="img-select me-2"
+              style="vertical-align: text-top"
               :src="select_customer.img"
               alt=""
             />
@@ -234,6 +235,7 @@ export default {
 .table-item {
   font-size: 20px;
 }
+
 textarea {
   height: 200px;
   width: 100%;
@@ -244,9 +246,11 @@ textarea {
   resize: none;
   text-indent: 0px;
 }
-img .card-address {
-  top: 20%;
-  left: 23%;
+.card-address {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   justify-self: center;
   align-self: center;
   width: 400px;
@@ -259,10 +263,10 @@ img .card-address {
 }
 .input-label {
   color: #fff;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: bold;
   line-height: 30px;
-  margin: auto;
 }
 
 .btn-ghost {
@@ -272,8 +276,9 @@ img .card-address {
   line-height: 30px;
 }
 .exit {
-  top: 23%;
-  right: 180px;
-  position: fixed;
+  top: 3%;
+  right: 4%;
+  position: absolute;
+  width: 30px;
 }
 </style>

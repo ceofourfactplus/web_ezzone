@@ -1,1 +1,1 @@
-{'change': '10', 'pretty_cash': '3000'}
+{'change': '1000', 'pretty_cash': '3000'}

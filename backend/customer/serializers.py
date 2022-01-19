@@ -12,6 +12,8 @@ class AddressCustomerSerializer(serializers.ModelSerializer):
 
 class CustomerSerializer(serializers.ModelSerializer):
     addresscustomer_set = AddressCustomerSerializer(many=True, read_only=True)
+    email = serializers.CharField(required=False,allow_blank=True)
+    birth_date = serializers.DateField(required=False, allow_null=True)
 
     class Meta:
         model = Customer

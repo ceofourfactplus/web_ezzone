@@ -1,3 +1,4 @@
+import os
 from django.db.models import Sum, F, Count
 from product.models import SaleChannel
 from pos.models import Order, OrderItem, OrderItemTopping, Payment
@@ -11,12 +12,14 @@ from product.models import Product, SaleChannel
 from product.serializers import ProductReportSerialiser, ChannelReportSerializer
 import datetime
 
+
 class cancel_order(APIView):
-    def put(self,request,pk):
+    def put(self, request, pk):
         order = Order.objects.get(pk=pk)
         order.status_order = 4
         order.save()
         return Response('ok')
+
 
 def check_is_finish(order_id):
     try:
@@ -48,13 +51,37 @@ class SelectPaymentOrder(APIView):
         return Response('ok')
 
 
+class PaymentDetial(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def delete(self, request, pk):
+        payment = Payment.objects.get(pk=pk)
+        if not payment.img == None:
+            os.remove(payment.img)
+        payment.delete()
+        return Response('ok')
+
+    def put(self, request, pk):
+        payment = Payment.objects.get(pk=pk)
+        serializer = PaymentSerializer(payment, request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response('ok')
+        return Response(serializer.errors, status=400)
+
+
 class PaymentList(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def get(self, request):
-        Orders = Payment.objects.all()
+        payments = Payment.objects.all()
+        for payment in payments:
+            if Order.objects.filter(payment_id=payment.id).exists():
+                payment.is_used = True
+            else:
+                payment.is_used = False
         serializer = PaymentSerializer(
-            Orders, context={'request': request}, many=True)
+            payments, context={'request': request}, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -241,6 +268,12 @@ class OrderList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+
+        order = Order.objects.filter(
+            create_at__gte=datetime.datetime.now().date())
+        amount_order = len(order)+1
+        request.data['order_number'] = amount_order
+
         # check customer
         if not 'phone_number' in request.data['customer_set']:
             request.data['customer_id'] = None
@@ -733,3 +766,12 @@ class ReportAllProduct (APIView):
             'total_price__sum']
 
         return Response(report, status=200)
+
+
+class GetOrderNumber(APIView):
+    def get(self, request):
+        order = Order.objects.filter(
+            create_at__gte=datetime.datetime.now().date())
+        amount_order = len(order)
+        print(amount_order+1)
+        return Response({'order_number': amount_order+1})

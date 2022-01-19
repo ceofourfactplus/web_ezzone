@@ -45,10 +45,9 @@ export default {
   background-color: #3a3d49;
   text-indent: 60px;
   padding-left: 10px;
-  margin-left: 3px;
   border-radius: 10px;
   width: 100%;
-  height: 50px;
+  height: 45px;
   background-image: url("../../assets/icon/search.png");
   background-position: 2% 50%;
   /* Extra Styling */

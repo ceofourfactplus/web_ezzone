@@ -9,7 +9,7 @@
       <ul class="selector" v-if="selector_customer.length != 0">
         <li v-for="cus in selector_customer" :key="cus.id">
           <pre style="font-size: 24px;" @click="select_cus(cus)"
-            >{{ phone_number_layout(cus.phone_number) }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{cus.first_name}}</pre>
+            >{{ phone_number_layout(cus.phone_number) }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{cus.nick_name}}</pre>
         </li>
       </ul>
     </div>
@@ -68,10 +68,10 @@ export default {
 }
 .input {
   top: 10.5%;
-  left: 25.5%;
+  left: 23%;
   position: absolute;
   background-color: #303344;
-  min-width: 250px;
+  min-width: 320px;
   min-height: 40px;
   border-radius: 10px;
 }
@@ -88,7 +88,7 @@ input {
   border-radius: 0px 0px 10px 10px;
   text-align: left;
   padding-left: 10px;
-  min-width: 250px;
+  min-width: 320px;
   color: #fff;
   font-size: 20px;
   font-weight: 400;

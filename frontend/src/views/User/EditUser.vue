@@ -58,15 +58,14 @@
               <div class="col-3" style="width: 100%">
                 <input
                   type="checkbox"
-                  class="me-3 mt-2"
+                  class="me-4 mt-2"
                   v-model="user.is_staff"
                   id="Manager"
                 />
               </div>
               <div class="col-9" style="width: 100%">
                 <label
-                  class="ms-2"
-                  style="color: #fff; font-weight: 700"
+                  style="color: #fff; font-weight: 70margin-left:20px;"
                   for="Manager"
                   >Manager</label
                 >
@@ -89,8 +88,8 @@
               </div>
               <div class="col-8">
                 <label
-                  class="ms-2"
-                  style="color: #fff; font-weight: 700"
+                  class="ms-4"
+                  style="color: #fff; font-weight: 700;white-space:nowrap;"
                   for="Perchesing"
                   >Purchesing</label
                 >
@@ -113,7 +112,7 @@
               </div>
               <div class="col-8">
                 <label
-                  class="ms-2"
+                  class="ms-4"
                   style="color: #fff; font-weight: 700"
                   for="Barista"
                   >Barista</label
@@ -137,7 +136,7 @@
               </div>
               <div class="col-8">
                 <label
-                  class="ms-2"
+                  class="ms-4"
                   style="color: #fff; font-weight: 700"
                   for="Chef"
                   >Chef</label
@@ -161,7 +160,7 @@
               </div>
               <div class="col-8">
                 <label
-                  class="ms-2"
+                  class="ms-4"
                   style="color: #fff; font-weight: 700"
                   for="Raceptionist"
                   >Raceptionist</label
@@ -412,7 +411,7 @@ export default {
         return "Wait for Activate";
       }
       if (this.user.is_working == 1) {
-        return "Actvate";
+        return "Activate";
       }
       if (this.user.is_working == 2) {
         return "Banned";
@@ -550,7 +549,8 @@ input[type="email"],
 input[type="date"],
 input[type="text"],
 input[type="number"] {
-  width: 100%;
+  text-align: left;   
+  min-width: 100%;
   height: 40px;
 }
 

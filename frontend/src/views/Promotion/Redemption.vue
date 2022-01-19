@@ -28,7 +28,7 @@
         <ul class="selector" v-if="selector_status">
           <li v-for="cus in selector_customer" :key="cus.id">
             <p style="font-size: 24px;" @click="select_customer(cus)"
-              >{{ phone_number_layout(cus.phone_number) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{cus.first_name}}</p
+              >{{ phone_number_layout(cus.phone_number) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{cus.nick_name}}</p
             >
           </li>
         </ul>
@@ -283,7 +283,7 @@ export default {
   border-radius: 0px 0px 10px 10px;
   text-align: left;
   padding-left: 10px;
-  min-width: 250px;
+  min-width: 400px;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
