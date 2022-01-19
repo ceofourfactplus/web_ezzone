@@ -98,11 +98,12 @@ class RawMaterialListAPIView(APIView):
         except:
             unit = Unit.objects.create(unit=request.data['unit_m_name'])
             request.data['unit_m_id'] = unit.id
-        try:
-            Unit.objects.get(unit=request.data['unit_l_name'])
-        except:
-            unit = Unit.objects.create(unit=request.data['unit_l_name'])
-            request.data['unit_l_id'] = unit.id
+        if request.data['unit_l_name'] != 'null':
+            try:
+                Unit.objects.get(unit=request.data['unit_l_name'])
+            except:
+                unit = Unit.objects.create(unit=request.data['unit_l_name'])
+                request.data['unit_l_id'] = unit.id
         serializer = RawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -125,7 +126,7 @@ class PriceRawMaterialAPIView(APIView):
         print(serializer.data, 'serializer')
         val = 0
         price = 0
-        if int(request.data['last_price']) != 0:
+        if int(float(request.data['last_price'])) != 0:
             rm = RawMaterial.objects.get(id=request.data['raw_material_id'])
             prm = PriceRawMaterial.objects.get(raw_material_id=request.data['raw_material_id'], unit_id=request.data['unit_id'])
             if rm.unit_s_id == request.data['unit_id']:

@@ -18,11 +18,11 @@
                     for="file"
                     style="margin-top: 0px; margin-left: -25px"
                   >
+                    <img :src="show_img" class="image" v-if="show_img != null" />
                     <img
-                      :src="
-                        require(`../../../../backend${rm_item.raw_material_set.img}`)
-                      "
+                      :src="require(`../../../../backend${rm_item.raw_material_set.img}`)"
                       class="image"
+                      v-else
                     />
                     <div class="edit-block">Edit</div>
                   </label>
@@ -444,7 +444,9 @@ export default {
   data() {
     return {
       loading: false,
+      img: null,
       new_img: false,
+      show_img: null,
       unit_s_name: null,
       unit_m_name: null,
       unit_l_name: null,
@@ -463,16 +465,18 @@ export default {
       });
     },
     fetchRawMaterials() {
+      this.loading = true
       api_raw_material
         .get(`/raw-material/${this.$route.params.id}`)
         .then((response) => {
           console.log(response.data, "raw_material");
           this.rm_item = response.data[0];
           this.many_items = response.data;
+          this.loading = false
           // api_raw_material.post('/pickup-raw-material/', {raw_material_id: response.data.id}).then((response) => {
           //   console.log(response.data, 'pick rm')
           // })
-          console.log(this.rm_item, "rm_item");
+          console.log(this.rm_item.raw_material_set.img, "rm_item");
         });
     },
     onFileChange(e) {
@@ -513,10 +517,10 @@ export default {
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
       if (this.new_img) {
-        user_data.append(
+        data.append(
           "img",
-          this.rm_item.raw_material_set.img,
-          this.rm_item.raw_material_set.img.name
+          this.img,
+          this.img.name
         );
       }
       await api_raw_material.put("rm-update/", data).then((response) => {
@@ -549,9 +553,12 @@ export default {
       ).unit;
     },
     find_unit_l() {
-      this.unit_l_name = this.units.find(
-        (x) => x.id == this.rm_item.raw_material_set.unit_l_id
-      ).unit;
+      if (this.rm_item.raw_material_set.unit_l_id != null) {
+        this.unit_l_name = this.units.find(
+          (x) => x.id == this.rm_item.raw_material_set.unit_l_id
+        ).unit;
+      }
+      
     },
   },
   beforeMount() {
@@ -580,12 +587,12 @@ export default {
       this.categories = response.data;
     });
     this.loading = true;
-    api_raw_material.get("unit").then((response) => {
+    api_raw_material.get("unit").then(async (response) => {
       console.log(response.data, "unit");
       this.units = response.data;
-      this.find_unit_s();
-      this.find_unit_m();
-      this.find_unit_l();
+      await this.find_unit_s();
+      await this.find_unit_m();
+      await this.find_unit_l();
       this.loading = false;
     });
   },

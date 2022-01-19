@@ -79,7 +79,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 
 <style scoped>
 .BlockSearch {
-    width: 672px;
+    width: 772px;
     height: 45px;
     margin-left: 20px;
     margin-right: 20px;
@@ -89,7 +89,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 }
 
 #Header {
-    width: 672px;
+    width: 772px;
     height: 50px;
     margin-left: 24px;
     margin-right: 24px;
@@ -103,7 +103,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 }
 
 #BlockItem {
-    width: 672px;
+    width: 772px;
     height: 50px;
     margin-left: 24px;
     margin-right: 24px;

@@ -32,7 +32,7 @@
               />
             </div>
             <!-- Category -->
-            <div class="col-12 h-25">
+            <div class="col-12 h-25" style="margin-top: 10px;">
               <label for="">Category&nbsp;:</label>
               <select
                 name="category"
@@ -62,7 +62,7 @@
               >
             </div>
             <!-- Fridge -->
-            <div class="col-12 h-25">
+            <div class="col-12 h-25" style="line-height: 60px;">
               <label for="">Fridge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
               <div class="switch"><Switch @switch="fridge" /></div>
             </div>
@@ -306,7 +306,6 @@ export default {
   data() {
     return {
       status_txt: 'Out of Stock',
-      new_img: false,
       raw_material_id: null,
       img: null,
       status: null,
@@ -362,7 +361,6 @@ export default {
     onFileChange(e) {
       console.log(e, "e");
       this.img = e.target.files[0];
-      this.new_img = true;
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
@@ -454,14 +452,12 @@ export default {
       }
 
       this.units.forEach((element) => {
-        console.log(element, "el");
         if (this.selected_unit_id.indexOf(element.id) + 1 != 0) {
           if (this.selected_units.indexOf(element) + 1 == 0) {
             this.selected_units.push(element);
           }
         }
       });
-      console.log(this.selected_units, "units");
     },
     makeUnitPrice() {
       this.unit_price_list.push({price: this.price, unit: this.units.find(x => x.id == this.unit_price_id).unit, unit_id: this.unit_price_id})
@@ -526,7 +522,6 @@ export default {
       this.categories = response.data;
     });
     api_raw_material.get("unit").then((response) => {
-      console.log(response.data, "unit");
       this.units = response.data;
     });
   },

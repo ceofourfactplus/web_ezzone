@@ -5,7 +5,7 @@
       <!-- Status & Code -->
       <div class="row">
         <div class="col-6 w-100 head-col">
-          Status&nbsp;:&nbsp; <Switch @switch="switch_active" style="top: 9px" />
+          Status&nbsp;:&nbsp; <Switch :value="status" @switch="switch_active" style="top: 9px" />
         </div>
         <div class="col-6 w-100 head-col">
           Code&nbsp;:&nbsp;<input type="text" style="width: 167px;" class="input-promotion" v-model="code" />
@@ -164,8 +164,8 @@ export default {
         this.temp_end = `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`;
       }
     },
-    switch_active(val) {
-      this.status = val
+    switch_active() {
+      this.status = !this.status
     },
   },
 };
