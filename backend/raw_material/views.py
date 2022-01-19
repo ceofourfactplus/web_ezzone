@@ -126,7 +126,7 @@ class PriceRawMaterialAPIView(APIView):
         print(serializer.data, 'serializer')
         val = 0
         price = 0
-        if int(request.data['last_price']) != 0:
+        if int(float(request.data['last_price'])) != 0:
             rm = RawMaterial.objects.get(id=request.data['raw_material_id'])
             prm = PriceRawMaterial.objects.get(raw_material_id=request.data['raw_material_id'], unit_id=request.data['unit_id'])
             if rm.unit_s_id == request.data['unit_id']:

@@ -75,14 +75,14 @@
                 </div>
               </div>
               <div
-                class="col-2 w-100"
-                style="margin-top: -1px; margin-left: -20px"
+                class="col-6 w-100"
+                style="margin-top: -1px; text-align: left;"
               >
                 <label :for="recept.supplier.company_name">
                   {{ recept.supplier.company_name }}</label
                 >
               </div>
-              <div class="col-5 w-100"></div>
+              <div class="col-1 w-100"></div>
               <div class="col-4 w-100">
                 <pre
                   style="font-size: 28px; font-weight: 800"
@@ -179,17 +179,19 @@ Total  {{ recept.total_price }}</pre
             <img
               src="../../assets/icon/delete.png"
               @click="add_po = false"
-              alt=""
+              style="width: 30px;"
             />
           </div>
         </div>
 
         <div class="frame f-1">
           <div class="row">
-            <label for="name"><pre>Name       :</pre></label>
+            <div style="display: inline;">
+                <div class="po-item-label">Name</div>
+                <div style="margin-left: 96px;" class="po-item-label">:</div>
+            </div>
             <input
               class="g-s"
-              id="name"
               type="text"
               style="width: 270px"
               v-model="raw_material"
@@ -204,10 +206,12 @@ Total  {{ recept.total_price }}</pre
               </option>
             </select>
           </div>
-          <div class="row">
-            <label for="name"><pre>supplier   :</pre></label
-            ><input
-              id="name"
+          <div class="row" style="margin-top: 15px;">
+            <div style="display: inline;">
+                <div class="po-item-label">Supplier</div>
+                <div style="margin-left: 69px;" class="po-item-label">:</div>
+            </div>
+            <input
               class="g-s"
               type="text"
               v-model="supplier"
@@ -225,11 +229,11 @@ Total  {{ recept.total_price }}</pre
         </div>
         <div class="frame f-2">
           <div class="row">
-            <label for="name">
-              <pre>Qty        :</pre>
-            </label>
+              <div style="display: inline;">
+                <div class="po-item-label">Qty</div>
+                <div style="margin-left: 125px;" class="po-item-label">:</div>
+              </div>
             <input
-              id="name"
               v-model="amount"
               type="number"
               style="text-align: right"
@@ -250,20 +254,26 @@ Total  {{ recept.total_price }}</pre
               </option>
             </select>
           </div>
-          <div class="row">
-            <label for="name"><pre>Price      :</pre></label
-            ><input
-              id="name"
+          <div class="row" style="margin-top: 15px;">
+            <div style="display: inline;">
+                <div class="po-item-label">Price</div>
+                <div style="margin-left: 108px;" class="po-item-label">:</div>
+            </div>
+            <input
               v-model="price"
               type="text"
               style="text-align: right"
-            /><label for="total_cost">
+            />
+            <label for="total_cost">
               <pre>บาท</pre>
             </label>
           </div>
           <div class="row">
-            <label for="name"><pre>Discount   :</pre></label
-            ><input
+            <div style="display: inline;">
+                <div class="po-item-label">Discount</div>
+                <div style="margin-left: 66px;" class="po-item-label">:</div>
+            </div>
+            <input
               id="name"
               type="text"
               style="text-align: right"
@@ -273,9 +283,11 @@ Total  {{ recept.total_price }}</pre
             </label>
           </div>
           <div class="row">
-            <label for="name">
-              <pre>Total Cost :    {{ cal_total_cost }} บาท</pre>
-            </label>
+            <div style="width: 540px; text-align: left">
+                <div class="po-item-label">Total Cost</div>
+                <div class="po-item-label" style="margin-left: 52px;">:</div>
+                <div class="po-item-label" style="margin-left: 15px;">{{ cal_total_cost }} บาท</div>
+            </div>
           </div>
         </div>
       </div>
@@ -807,8 +819,7 @@ export default {
             update_by_id: this.$store.state.auth.userInfo.id
           }
           this.$store.state.raw_material.all_receipt_detail.push(receipt_raw_material_detail)
-        })
-      });
+        }) });
       this.$store.state.raw_material.all_po_selected = this.data
       this.$router.push({ name: "ConfirmPO"})
     },
@@ -849,6 +860,11 @@ export default {
 </script>
 
 <style scoped>
+.po-item-label {
+  display: inline; 
+  font-size: 26px; 
+  color: white;
+}
 .under-wrapper-unput {
   width: 150px;
   height: 40px;
@@ -900,18 +916,45 @@ export default {
   background: #252836;
   border-radius: 20px;
 }
-.checkbox-white input:checked::after {
-  font-size: 20px;
-  top: -6px;
-  left: 1px;
-}
-.checkbox-white input::before {
+.checkbox-white input {
+  position: relative;
+  appearance: none;
   height: 30px;
   width: 30px;
+  justify-content: center;
+  align-content: center;
+  display: flex;
+  text-indent: 3px;
 }
-.checkbox-white input {
-  height: 28px;
-  width: 28px;
+.checkbox-white input::before {
+  position: absolute;
+  content: "";
+  height: 30px;
+  width: 30px;
+  background-color: white;
+  border: 2px solid #ffffff80;
+  border-radius: 3px;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: 0.3s all ease;
+}
+.checkbox-white input:checked::before {
+  background-color: #ffffff80;
+  border: 0px solid #ffffff80;
+}
+.checkbox-white input:checked::after {
+  position: absolute;
+  content: "\f00c";
+  font-family: "FontAwesome";
+  color: #252836;
+  background-color: #ea7c69;
+  font-size: 14px;
+  top: 0px;
+  left: 0px;
+  display: flex;
 }
 .checkbox-orange input:checked::after {
   font-size: 20px;

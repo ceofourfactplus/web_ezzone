@@ -32,7 +32,7 @@
               />
             </div>
             <!-- Category -->
-            <div class="col-12 h-25">
+            <div class="col-12 h-25" style="margin-top: 10px;">
               <label for="">Category&nbsp;:</label>
               <select
                 name="category"
@@ -62,7 +62,7 @@
               >
             </div>
             <!-- Fridge -->
-            <div class="col-12 h-25">
+            <div class="col-12 h-25" style="line-height: 60px;">
               <label for="">Fridge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
               <div class="switch"><Switch @switch="fridge" /></div>
             </div>
@@ -306,7 +306,6 @@ export default {
   data() {
     return {
       status_txt: 'Out of Stock',
-      new_img: false,
       raw_material_id: null,
       img: null,
       status: null,
@@ -362,7 +361,6 @@ export default {
     onFileChange(e) {
       console.log(e, "e");
       this.img = e.target.files[0];
-      this.new_img = true;
       if (this.img) {
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);

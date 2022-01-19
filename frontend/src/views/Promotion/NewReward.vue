@@ -263,7 +263,8 @@ export default {
 
       api_promotion.post('reward/', data).then((response) => {
         console.log(response.data)
-        this.point_promotions_of_reward.forEach(el => {
+        if(this.point_promotions_of_reward.length != 0){
+          this.point_promotions_of_reward.forEach(el => {
           const condition_reward = {
             point_promotion_id: el.id,
             reward_id: response.data.id,
@@ -277,6 +278,13 @@ export default {
             }, 2000);
           })
         });
+        } else {
+          this.alert = true;
+            setTimeout(() => {
+              this.alert = false;
+              this.$router.push({ name: "Promotion" });
+            }, 2000);
+        }
       })
     },
     fetchPointPromotion() {

@@ -1,11 +1,11 @@
 <template>
   <div>
     <nav-app :rm_menu="true" :url_name="'DashBoard'">Pickup&#160;List</nav-app>
-    <div class="row" style="width: 90%; margin: auto">
+    <div class="row" style="width: 100%; margin: auto">
       <div class="col-12">
         <SearchBar
           @search="serchByTyping"
-          style="width: 680px; margin-left: 17px"
+          style="width: 98%; margin-left: 5px"
         />
       </div>
     </div>
