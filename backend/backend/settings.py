@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
-""" 
+"""
 
 import os
 
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'material',
     'customer',
     'consignment',
-    'promotion',  
+    'promotion',
     'user',
 ]
 
@@ -80,7 +80,7 @@ TEMPLATES = [
         },
     },
 ]
- 
+
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
@@ -152,4 +152,3 @@ DEFAULT_FROM_EMAIL = 'testezzone@gmail.com'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
