@@ -89,6 +89,7 @@ import Consigner from "../views/Consignment/Consigner.vue"
 import ConsignerProduct from "../views/Consignment/ConsignerProduct.vue"
 import RecordProduct from "../views/Consignment/RecordProduct.vue"
 import NewConsignment from "../views/Consignment/NewConsignment.vue"
+import NewConsigner from "../views/Consignment/NewConsigner.vue"
 
 // Home
 import Home from "../views/Test.vue"
@@ -612,6 +613,12 @@ const routes = [
     name: "NewConsignment",
     props: true,
     component: NewConsignment,
+  },
+  {
+    path: "/consignment/newconsigner",
+    name: "NewConsigner",
+    props: true,
+    component: NewConsigner,
   },
   // {
   //   path: "/face-login/",
