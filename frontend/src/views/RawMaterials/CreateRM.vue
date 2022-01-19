@@ -294,6 +294,7 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
@@ -301,8 +302,10 @@
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import { api_raw_material } from "../../api/api_raw_material.js";
+import SavePopup from "../../components/main_component/SavePopup.vue"
+
 export default {
-  components: { NavApp, Switch },
+  components: { NavApp, Switch, SavePopup },
   data() {
     return {
       status_txt: 'Out of Stock',
@@ -317,6 +320,7 @@ export default {
       in_refrigerator: null,
       supplier_id: null,
       price: null,
+      alert: false,
       create_by_id: null,
       update_by_id: null,
       category_id: null,
@@ -402,6 +406,7 @@ export default {
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
         
        await api_raw_material.post("raw-material/", data).then(async (response) => {
+        this.alert = true
         console.log(response.data, "response data");
         var unit_list = [this.unit_s_id, this.unit_m_id, this.unit_l_id];
         var avg_list = [this.avg_s, this.avg_m, this.avg_l];
@@ -423,6 +428,9 @@ export default {
               supplier_id: this.supplier_id,
             };
           }
+          setTimeout(() => {
+            this.alert = false;
+          }, 2000)
           await api_raw_material.post("price-raw-material/", prm_data).then((res) => {  
               console.log(res.data, "res data");
             });

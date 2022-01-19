@@ -244,18 +244,22 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import { api_customer } from "../../api/api_customer";
 import NavApp from "../../components/main_component/NavApp.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
+
 export default {
   name: "EditUser",
-  components: { NavApp },
+  components: { NavApp, SavePopup },
   data() {
     return {
       customer: {},
+      alert: false,
       show_img: null,
       favorite_menu: [],
       new_img: false,
@@ -289,7 +293,11 @@ export default {
       api_customer
         .put("customer/" + this.$route.params.id, customer_data)
         .then(() => {
-          this.$router.go(-1);
+          this.alert = true
+          setTimeout(() => {
+            this.alert = false
+            this.$router.go(-1);
+          }, 2000)
         });
     },
     Menu(menu) {

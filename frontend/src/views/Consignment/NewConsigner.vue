@@ -112,25 +112,27 @@
         </div>
 
     </div>
-    
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 
 export default {
   name: "NewConsigner",
   components: {
-
+      SavePopup,
   },
   data() {
     return {
-      CustommerPhone: null,
-      input_customer: "",
-      temp_date: null,
-      selector_status: false,
-      selector_customer: [],
-      customer_point: [],
+        alert: false,
+        CustommerPhone: null,
+        input_customer: "",
+        temp_date: null,
+        selector_status: false,
+        selector_customer: [],
+        customer_point: [],
     };
   },
   

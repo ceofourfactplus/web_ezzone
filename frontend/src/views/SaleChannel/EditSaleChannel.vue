@@ -372,16 +372,18 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_product } from "../../api/api_product";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
 export default {
-  components: { NavApp, Switch, SearchBar },
+  components: { NavApp, Switch, SearchBar, SavePopup },
   mounted() {
     api_product
       .get("sale-channel/" + this.$route.params.id + "/")
@@ -396,6 +398,7 @@ export default {
   },
   data() {
     return {
+      alert: false,
       show_img: null,
       img: null,
       sale_channel_set: {
@@ -582,10 +585,18 @@ export default {
             api_product
               .put("sale-channel-update-img/" + response.data.id + "/", data)
               .then(() => {
+              this.alert = true
+              setTimeout(() => {
+                this.alert = false
                 this.$router.push({ name: "SaleChannel" });
+              }, 2000)
               });
           } else {
-            this.$router.push({ name: "SaleChannel" });
+            this.alert = true
+            setTimeout(() => {
+              this.alert = false
+              this.$router.push({ name: "SaleChannel" });
+            }, 2000)
           }
         });
     },

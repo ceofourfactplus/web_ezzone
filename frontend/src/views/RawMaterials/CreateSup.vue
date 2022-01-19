@@ -35,16 +35,19 @@
       <textarea name="text" v-model="address" id="" placeholder="Address"></textarea>
       <input type="url" v-model="google_map" placeholder="Google Map"/>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_raw_material } from '../../api/api_raw_material';
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
-  components: { NavApp },
+  components: { NavApp, SavePopup },
   data() {
     return {
+      alert: false,
       img: "",
       show_img: null,
       supplier_name:'',
@@ -75,7 +78,11 @@ export default {
         user.append("img", this.img,this.img.name);
         user.append('create_by',1)
       api_raw_material.post('/supplier/',user).then(()=>{
-        this.$router.push({name:'Supplier'})
+        this.alert = true
+        setTimeout(() => {
+          this.alert = false;
+          this.$router.push({name:'Supplier'})
+        }, 2000)
       })
     }
   },

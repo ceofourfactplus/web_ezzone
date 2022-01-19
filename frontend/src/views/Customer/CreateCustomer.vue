@@ -198,22 +198,17 @@
     </div>
 
     <!-- card pop up -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="" />
-      </div>
-      <div class="main-text">Saved account</div>
-      <div class="second">wait for admin tp activate</div>
-    </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import {api_customer} from "../../api/api_customer";
 import NavApp from "../../components/main_component/NavApp.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 // import CheckBoxWhite from '../../components/main_component/CheckBoxWhite.vue';
 export default {
-  components: { NavApp },
+  components: { NavApp, SavePopup },
   // components: { CheckBoxWhite },
   name: "Register",
   data() {

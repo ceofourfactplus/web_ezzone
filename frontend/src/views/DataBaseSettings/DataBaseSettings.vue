@@ -264,12 +264,7 @@
     </div>
   
     <!-- card pop up -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="" />
-      </div>
-      <div class="main-text">Saved successfully</div>
-    </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
@@ -280,6 +275,7 @@ import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
 import PickupPopup from "../../components/materials/PickupPopup.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_promotion } from "../../api/api_promotion";
 import { api_product } from "../../api/api_product";
 
@@ -290,6 +286,7 @@ export default {
     NavApp,
     Table,
     PickupPopup,
+    SavePopup,
   },
   mounted() {
     api_promotion.get("dbs/").then((response) => {

@@ -148,6 +148,7 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
@@ -157,9 +158,11 @@ import { api_raw_material } from "../../api/api_raw_material";
 import { api_user } from "../../api/api_user";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
+
 
 export default {
-  components: { NavApp, Switch },
+  components: { NavApp, Switch, SavePopup },
   mounted() {
     this.get_unit();
     this.get_user();
@@ -168,6 +171,7 @@ export default {
   },
   data() {
     return {
+      alert: false,
       topping_categories: [],
       show_img: null,
       all_user: [],
@@ -245,7 +249,11 @@ export default {
           api_product
             .put("update-img-product/" + response.data.id + "/", img)
             .then(() => {
-              this.$router.push({ name: "Product" });
+              this.alert = true
+              setTimeout(() => {
+                this.alert = false
+                this.$router.push({ name: "Product" });
+              }, 2000)
             });
         });
       }
