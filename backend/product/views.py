@@ -455,7 +455,9 @@ class UpdateProduct(APIView):
     # parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request, pk):
+        print(request.data, 'data')
         object = Product.objects.get(pk=pk)
+        print(object, 'object')
         serializer = ProductSerializer(object, data=request.data)
         if serializer.is_valid():
             serializer.save()

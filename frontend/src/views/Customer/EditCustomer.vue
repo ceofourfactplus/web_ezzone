@@ -342,7 +342,8 @@ export default {
                       this.$router.go(-1);
                     }, 2000);
                   });
-              } else {
+              } 
+              else {
                 api_customer
                   .put(
                     "save-address/" + this.customer.addresscustomer_set[0].id,
@@ -355,7 +356,7 @@ export default {
             } else {
               this.$router.push({ name: "Customer" });
             }
-          });
+        });
       }
     },
     Menu(menu) {

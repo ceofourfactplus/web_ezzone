@@ -69,8 +69,8 @@
           >
             {{ item.promotion }}&nbsp;&nbsp;&nbsp;
           </div>
-          <div class="col-4 w-100" style="margin: 10px 0px 0px -10px">
-            <label class="switch" style="margin-top: 30px">
+          <div class="col-4 w-100">
+            <label class="switch" style="margin: 24px 0px 0px 90px;">
               <input
                 type="checkbox"
                 v-model="item.status"
@@ -103,7 +103,7 @@
           <div class="col-4 w-100"></div>
           <div
             class="col-3 w-100"
-            style="font-size: 100px; font-weight: bold; color: white"
+            style="font-size: 100px; font-weight: bold; color: white; text-align: right;"
           >
             {{ item.price_per_point }}
           </div>

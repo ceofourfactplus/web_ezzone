@@ -14,7 +14,7 @@
           <div class="col-12 w-100 txt-promotion">Start Date</div>
           <div class="col-12 w-100 txt-promotion">End Date</div>
           <div class="col-12 w-100 txt-promotion">End Redeem</div>
-          <div class="col-12 w-100 txt-promotion">Price per Point</div>
+          <div class="col-12 w-100 txt-promotion">Price / Point</div>
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->

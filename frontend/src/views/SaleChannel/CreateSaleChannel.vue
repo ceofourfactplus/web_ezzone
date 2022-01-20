@@ -277,7 +277,6 @@
               {{ net_price(item.price) }}
             </div>
           </div>
-
           <!-- product -->
           <div
             class="row"
