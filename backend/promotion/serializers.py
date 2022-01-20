@@ -68,8 +68,11 @@ class VoucherSerializer(serializers.ModelSerializer):
     ]
     
 class PromotionPackageSerializer(serializers.ModelSerializer):
+  id = serializers.IntegerField(required=False)
   create_by_id = serializers.IntegerField()
   update_by_id = serializers.IntegerField()
+  product_set = ProductSerializer(read_only=True)
+  topping_set = ProductSerializer(read_only=True)
   class Meta:
     model = PromotionPackage
     fields = [
@@ -87,9 +90,28 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
       'update_by_id',
       'create_at',
       'update_at',
+      'product_set',
+      'topping_set',
     ]
     
+    def create(self, validated_data):
+      package_items = validated_data.pop('package_items')
+      pro_pack = PromotionPackage.objects.create(**validated_data)
+      if package_items != []:
+        for item in package_items:
+            package_item_topping = item.pop('package_item_topping')
+            package_item = PackageItem.objects.create(**item, package=pro_pack)
+            if package_item_topping != []:
+              for topping in package_item_topping:
+                ItemTopping.objects.create(**topping, item=package_item)
+      return pro_pack
+          
+      
+      
+      
+      
 class PackageItemSerializer(serializers.ModelSerializer):
+  id = serializers.IntegerField(required=False)
   product_id = serializers.IntegerField()
   package_id = serializers.IntegerField()
   product_set = ProductSerializer(read_only=True, source='product')
@@ -108,6 +130,7 @@ class PackageItemSerializer(serializers.ModelSerializer):
     ]
     
 class ItemToppingSerializer(serializers.ModelSerializer):
+  id = serializers.IntegerField(required=False)
   topping_id = serializers.IntegerField()
   item_id = serializers.IntegerField()
   topping_set = ProductSerializer(read_only=True, source='topping')

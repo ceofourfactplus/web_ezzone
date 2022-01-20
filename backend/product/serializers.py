@@ -212,13 +212,10 @@ class SaleChannelSerializer(serializers.ModelSerializer):
         instance.save()
 
         # create update delete pricetopping
-        pricetopping_id = [c['id']
-                           for c in validated_data['pricetopping'] if c.get('id')]
-        PriceTopping.objects.filter(sale_channel_id=instance.id).exclude(
-            id__in=pricetopping_id).delete()
+        pricetopping_id = [c['id'] for c in validated_data['pricetopping'] if c.get('id')]
+        PriceTopping.objects.filter(sale_channel_id=instance.id).exclude(id__in=pricetopping_id).delete()
 
-        to_be_create_topping = [
-            c for c in validated_data['pricetopping'] if c.get('id') == None]
+        to_be_create_topping = [c for c in validated_data['pricetopping'] if c.get('id') == None]
         for p in to_be_create_topping:
             PriceTopping.objects.create(**p, sale_channel_id=instance.id)
 

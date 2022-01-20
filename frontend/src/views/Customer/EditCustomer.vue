@@ -314,13 +314,6 @@ export default {
       api_customer
         .put("customer/" + this.$route.params.id, customer_data)
         .then(() => {
-<<<<<<< HEAD
-          this.alert = true
-          setTimeout(() => {
-            this.alert = false
-            this.$router.go(-1);
-          }, 2000)
-=======
           console.log('hello1')
           if (this.addresscustomer.address != "" || this.customer.addresscustomer_set !=[]) {
           console.log('hello2')
@@ -345,7 +338,11 @@ export default {
           } else {
             this.$router.push({ name: "Customer" });
           }
->>>>>>> 3810f7c09e5c50fe816ee21aaa46b830e757a5fa
+          this.alert = true
+          setTimeout(() => {
+            this.alert = false
+            this.$router.go(-1);
+          }, 2000)
         });
     },
     Menu(menu) {

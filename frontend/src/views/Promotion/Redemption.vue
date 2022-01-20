@@ -37,7 +37,7 @@
 
     <!-- Data Block -->
     <div
-      v-if="$store.state.promotion.customer_point.length != 0"
+      v-if="Object.keys($store.state.promotion.customer).length != 0"
       class="row"
       style="
         line-height: 65px;
@@ -98,7 +98,21 @@
             {{ $store.state.promotion.customer_point[0].point }}
             <!-- {{ customer_point.reduce((x, y) => {x.point + y.point}) }} -->
           </div>
-          <div class="col-5 w-100" v-else></div>
+          <div
+            v-else
+            class="col-5 w-100"
+            style="
+              height: 64px;
+              display: inline-block;
+              font-size: 42px;
+              line-height: 75px;
+              padding-left: 10px;
+              text-align: left;
+            "
+          >
+            0
+            <!-- {{ customer_point.reduce((x, y) => {x.point + y.point}) }} -->
+          </div>
           <div class="col-3 w-100" id="LinkHistory">
             <p style="color: #65B0F6; text-decoration: underline;" @click="$router.push({ name: 'History'})">History</p>
           </div>
@@ -132,7 +146,7 @@
     </div>
     <!-- Reward -->
     <div
-      v-if="$store.state.promotion.customer_point.length != 0"
+      v-if="Object.keys($store.state.promotion.customer).length != 0"
       class="col-12"
       style="
         background-color: #303344;
@@ -206,8 +220,8 @@ export default {
       console.log(cus, "cus");
       this.selector_status = false;
       this.$store.state.promotion.customer = cus;
-      console.log(this.$store.state.promotion.customer, 'store')
       api_promotion.get(`customer-point/${cus.id}`).then((response) => {
+        console.log(response.data,' point')
         this.customer_point = response.data;
         this.$store.state.promotion.customer_point = response.data
       });

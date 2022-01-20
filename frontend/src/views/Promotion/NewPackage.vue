@@ -273,6 +273,66 @@
           </div>
         </div>
       </div>
+      <!-- to create product -->
+        <!-- <div class="table-item" v-if="add_menu">
+          <form style="padding: 3px" @submit="add_product">
+            <div class="row">
+              <div class="col-5 w-100" style="margin: auto; line-height: 100%">
+                <input
+                  type="text"
+                  class="input-product"
+                  v-model="product"
+                  :class="{ incorrect: create_input }"
+                  required
+                />
+                <ul>
+                  <li
+                    v-for="product in products"
+                    :key="product.id"
+                    @click="select_product(product)"
+                  >
+                    <p
+                      class="w-100"
+                      :class="{ selected: product_item.id == product.id }"
+                    >
+                      {{ product.name }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <div
+                class="col-3 w-100"
+                style="
+                  margin: auto;
+                  text-align: left;
+                  line-height: 100%;
+                  margin-top: 0px;
+                "
+              >
+                <input
+                  type="number"
+                  class="input-product"
+                  v-model="price"
+                  required
+                />
+              </div>
+              <div
+                class="col-3 w-100"
+                style="line-height: 130%; font-size: 24px"
+              >
+                <input type="submit" style="display: none" />
+              </div>
+              <div class="col-1" style="line-height: 145%">
+                <img
+                  src="../../assets/icon/incorrect.png"
+                  style="width: 30px"
+                  alt=""
+                  @click="cancel_to_create"
+                />
+              </div>
+            </div>
+          </form>
+        </div> -->
       <!-- Total -->
       <div class="table-item" style="width: 104%; margin-left: -11px">
         <div
@@ -371,6 +431,7 @@ export default {
       products_for_topping: [],
       temp_products: [],
       new_menu_price: null,
+      product: '',
     };
   },
   methods: {
@@ -439,6 +500,14 @@ export default {
           });
         });
       });
+    },
+    select_product(item) {
+      this.product_item = { ...item };
+      this.search_product = false;
+      this.new_menu_price = parseInt(this.product_item.priceproduct_set[0].price);
+      setTimeout(() => {
+        this.search_product = [];
+      }, 100);
     },
     searchByTyping(e, type) {
       var temp = [];
@@ -534,6 +603,49 @@ export default {
       this.total_price = 0;
     },
   },
+  watch: {
+    product(newProduct) {
+      this.create_input = false;
+      if (newProduct != "") {
+        if (this.type_item == 4) {
+          api_product
+            .get("topping-by-search/" + newProduct + "/")
+            .then((response) => {
+              var arr = [];
+              this.search_product = response.data;
+              this.search_product.forEach((item) => {
+                if (this.filter_same_topping(item)) {
+                  arr.push(item);
+                }
+              });
+              this.search_product = arr;
+            });
+        } else {
+          api_product
+            .get(
+              "product-by-type-and-search/" +
+                this.type_item +
+                "/" +
+                newProduct +
+                "/"
+            )
+            .then((response) => {
+              var arr = [];
+              this.search_product = response.data;
+              this.search_product.forEach((item) => {
+                if (this.filter_same_product(item)) {
+                  arr.push(item);
+                }
+              });
+              this.search_product = arr;
+            });
+        }
+      } else {
+        this.selected_product = {};
+      }
+      this.search_product = [];
+    },
+  }
 };
 </script>
 
@@ -662,5 +774,23 @@ span.icon-save {
 .checkbox-orange input {
   height: 28px;
   width: 28px;
+}
+ul {
+  background-color: #ea7c69;
+  margin-top: 10px;
+  list-style-type: none;
+  padding: 0px;
+  border-radius: 10px;
+  position: absolute;
+  min-width: 30%;
+  z-index: 1;
+}
+p {
+  font-size: 20px;
+  font-weight: 500;
+  text-align: left;
+  padding-left: 10px !important;
+  padding: 7px;
+  margin: 0px;
 }
 </style>

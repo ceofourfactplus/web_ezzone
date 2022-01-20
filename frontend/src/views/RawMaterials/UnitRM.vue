@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'DashBoard'" :rm_menu="true">Unit</nav-app>
+    <nav-app :url_name="'DashBoard'">Unit</nav-app>
     <div class="row" v-if="is_staff" style="width: 90%; margin: auto">
       <div class="col-10 w-100 ps-0">
         <SearchBar @search="search_by_typing" />

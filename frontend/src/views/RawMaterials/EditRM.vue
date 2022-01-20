@@ -479,7 +479,6 @@ export default {
           // api_raw_material.post('/pickup-raw-material/', {raw_material_id: response.data.id}).then((response) => {
           //   console.log(response.data, 'pick rm')
           // })
-          console.log(this.rm_item.raw_material_set.img, "rm_item");
         });
     },
     onFileChange(e) {
