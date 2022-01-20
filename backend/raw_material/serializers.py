@@ -72,17 +72,11 @@ class RawMaterialSerializer(serializers.ModelSerializer):
     category_set = RawMaterialCategorySerializer(
         read_only=True, source="raw_material_category")
     unit_set = UnitSerializer(read_only=True, source="unit_s")
-<<<<<<< HEAD
     unit_l_id = serializers.IntegerField(required=False, allow_null=True)
     unit_m_id = serializers.IntegerField(required=False, allow_null=True)
     unit_s_id = serializers.IntegerField(required=False, allow_null=True)
     remain = serializers.IntegerField(default=0, required=False)
     pricerawmaterial_set = PriceRawMaterialListSeriallizer(many=True)
-=======
-    unit_l_id = serializers.CharField(default='',required=False, allow_null=True)
-    unit_m_id = serializers.CharField(default='',required=False, allow_null=True)
-    unit_s_id = serializers.CharField(default='',required=False, allow_null=True)
->>>>>>> b01c9a435a459806c1fa81489b580f4a64ffdd7c
 
     class Meta:
         model = RawMaterial
