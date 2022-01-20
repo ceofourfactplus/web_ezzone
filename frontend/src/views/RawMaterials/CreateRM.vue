@@ -1,13 +1,15 @@
 <template>
   <div>
-    <nav-app :url_name="'RawMaterials'" save="true" @save="save()">New&#160;RM</nav-app>
+    <nav-app :url_name="'RawMaterials'" save="true" @save="save()"
+      >New&#160;RM</nav-app
+    >
     <div class="container-f">
       <div class="frame">
         <div class="row h-100">
           <div class="col-5 w-100">
             <div class="row">
               <div class="col-12" style="padding: 0px">
-                <label id="select_img" for="file" style="margin-top: 0px;">
+                <label id="select_img" for="file" style="margin-top: 0px">
                   <img :src="show_img" class="image" v-if="show_img != null" />
                   <div class="edit-block">Edit</div>
                 </label>
@@ -26,19 +28,24 @@
             <div class="col-12 h-25">
               <input
                 type="text"
-                style="width: 95%; margin: auto; background: #717171; height: 50px;"
+                style="
+                  width: 95%;
+                  margin: auto;
+                  background: #717171;
+                  height: 50px;
+                "
                 placeholder="Name"
                 v-model="name"
               />
             </div>
             <!-- Category -->
-            <div class="col-12 h-25" style="margin-top: 10px;">
+            <div class="col-12 h-25" style="margin-top: 10px">
               <label for="">Category&nbsp;:</label>
               <select
                 name="category"
                 id="category"
                 v-model="category_id"
-                style="height: 40px; width: 180px;"
+                style="height: 40px; width: 180px"
               >
                 <option
                   v-for="category in categories"
@@ -55,14 +62,18 @@
                 >Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
                 <button
                   style="width: 180px; height: 50px; display: inilne"
-                  :class="{ 'btn-g': remain > minimum , 'btn-r': remain == 0 || remain == '' || remain == null, 'btn-y': remain < minimum || remain == minimum}"
+                  :class="{
+                    'btn-g': remain > minimum,
+                    'btn-r': remain == 0 || remain == '' || remain == null,
+                    'btn-y': remain < minimum || remain == minimum,
+                  }"
                 >
                   {{ status_txt }}
                 </button></label
               >
             </div>
             <!-- Fridge -->
-            <div class="col-12 h-25" style="line-height: 60px;">
+            <div class="col-12 h-25" style="line-height: 60px">
               <label for="">Fridge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
               <div class="switch"><Switch @switch="fridge" /></div>
             </div>
@@ -90,19 +101,19 @@
         </div>
         <!-- Min & Max -->
         <div class="row">
-          <div class="col-6 row-wrapper" style="margin-left: 0.5px;">
+          <div class="col-6 row-wrapper" style="margin-left: 0.5px">
             <label for="">Min&nbsp;Qty&nbsp;:&nbsp;</label
             ><input
               type="number"
-              style="background: #717171; width: 180px; height: 40px;"
+              style="background: #717171; width: 180px; height: 40px"
               v-model="minimum"
             />
           </div>
-          <div class="col-6 w-100" style="margin-left: 3px;">
+          <div class="col-6 w-100" style="margin-left: 3px">
             <label for="">Max Qty&nbsp;:&nbsp;</label
             ><input
               type="number"
-              style="background: #717171; width: 180px; height: 40px;"
+              style="background: #717171; width: 180px; height: 40px"
               v-model="maximum"
             />
           </div>
@@ -110,45 +121,69 @@
       </div>
       <div class="frame" style="height: 160px; padding-left: 0px">
         <!-- Price & Qty -->
-        <div class="row" style="margin-top: 0px; line-height: 50px;">
-          <div class="col-6 w-100" style="margin-left: 10px;">
-              <label for="price" style="display: inline; margin-left: -100px;">Price&nbsp;:&nbsp;</label>
-              <input v-model="price" type="text" id="price" name="price" style="display: inline; width: 240px; margin-right: -110px;">
+        <div class="row" style="margin-top: 0px; line-height: 50px">
+          <div class="col-4">
+            <input type="text">
           </div>
-          <div class="col-1 w-100" style="color: white; font-size: 36px; height: 100%; position: relative; bottom: 4px; right: 10px;">/</div>
-          <div class="col-2 w-100">
-            <input type="text" placeholder="Qty" style="width: 100%; margin-top: 5px;" @input="remain_func($event)">
+          <!-- <div class="col-6 w-100" style="margin-left: 10px">
+            <label for="price" style="display: inline; margin-left: -100px"
+              >Price&nbsp;:&nbsp;</label
+            >
+            <input
+              v-model="price"
+              type="text"
+              id="price"
+              name="price"
+              style="display: inline; width: 240px; margin-right: -110px"
+            />
           </div>
-          <div class="col-3 w-100" style="margin-left: -17px;">
-            <select
-            @change="calc_status_rm"
-            v-model="unit_price_id"
-            class="i-25 ig"
+          <div
+            class="col-1 w-100"
             style="
-            border-radius: 10px; 
-            color: white; 
-            width: 100%;
-            height: 40px;
-            margin-top: 5px;
+              color: white;
+              font-size: 36px;
+              height: 100%;
+              position: relative;
+              bottom: 4px;
+              right: 10px;
             "
           >
-            <option value="" selected disabled style="color: white">
-              unit
-            </option>
-            <option
-              v-for="unit in units"
-              :key="unit.id"
-              :value="unit.id"
-            >
-              {{ unit.unit }}
-            </option>
-          </select>
+            /
           </div>
+          <div class="col-2 w-100">
+            <input
+              type="text"
+              placeholder="Qty"
+              style="width: 100%; margin-top: 5px"
+              @input="remain_func($event)"
+            />
+          </div>
+          <div class="col-3 w-100" style="margin-left: -17px">
+            <select
+              @change="calc_status_rm"
+              v-model="unit_price_id"
+              class="i-25 ig"
+              style="
+                border-radius: 10px;
+                color: white;
+                width: 100%;
+                height: 40px;
+                margin-top: 5px;
+              "
+            >
+              <option value="" selected disabled style="color: white">
+                unit
+              </option>
+              <option v-for="unit in units" :key="unit.id" :value="unit.id">
+                {{ unit.unit }}
+              </option>
+            </select>
+          </div> -->
         </div>
         <!-- Supplier -->
         <div class="row" style="margin-top: 20px">
           <div class="col-12 row-wrapper">
-            <label style="margin-left: -2px;">Supplier&nbsp;:&nbsp;&nbsp;</label>
+            <label style="margin-left: -2px">Supplier&nbsp;:&nbsp;&nbsp;</label>
             <select
               v-model="supplier_id"
               class="i-25 ig"
@@ -192,7 +227,7 @@
           </div>
         </div>
         <!-- First Row -->
-        <div class="row" style="width: 99%; margin-left: -1px;">
+        <div class="row" style="width: 99%; margin-left: -1px">
           <input
             type="number"
             class="g"
@@ -201,21 +236,34 @@
             placeholder="S Unit"
             style="text-align: right; border-radius: 10px; background: #717171"
           />
-          <input type="text" class="input-prepend" style="color: white; background: #717171;" v-model="unit_s_name">
+          <input
+            type="text"
+            class="input-prepend"
+            style="color: white; background: #717171"
+            v-model="unit_s_name"
+          />
           <select
             v-model="unit_s_id"
             @change="find_unit_s"
             class="ig select-append"
           >
             <option value="" selected style="color: white">
-              <input type="text">
+              <input type="text" />
             </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
               {{ unit.unit }}
             </option>
           </select>
 
-          <span style="color: #fff; font-size: 30px; position: relative; bottom: 7px;">=</span>
+          <span
+            style="
+              color: #fff;
+              font-size: 30px;
+              position: relative;
+              bottom: 7px;
+            "
+            >=</span
+          >
 
           <input
             type="number"
@@ -225,7 +273,12 @@
             readonly
             style="text-align: right; border-radius: 10px; background: #717171"
           />
-          <input type="text" class="input-prepend" style="color: white; background: #717171;" v-model="unit_m_name">
+          <input
+            type="text"
+            class="input-prepend"
+            style="color: white; background: #717171"
+            v-model="unit_m_name"
+          />
           <select
             name=""
             id=""
@@ -242,7 +295,7 @@
           </select>
         </div>
         <!-- Second Row -->
-        <div class="row m-15" style="width: 99%; margin-left: -1px;">
+        <div class="row m-15" style="width: 99%; margin-left: -1px">
           <input
             type="number"
             class="i-25 g"
@@ -251,7 +304,12 @@
             placeholder="M to L Unit"
             style="text-align: right; border-radius: 10px; background: #717171"
           />
-          <input type="text" class="input-prepend" style="color: white; background: #717171;" v-model="unit_m_name">
+          <input
+            type="text"
+            class="input-prepend"
+            style="color: white; background: #717171"
+            v-model="unit_m_name"
+          />
           <select
             v-model="unit_m_id"
             @change="find_unit_m"
@@ -270,7 +328,15 @@
             </option>
           </select>
 
-          <span style="color: #fff; font-size: 30px; position: relative; bottom: 7px;">=</span>
+          <span
+            style="
+              color: #fff;
+              font-size: 30px;
+              position: relative;
+              bottom: 7px;
+            "
+            >=</span
+          >
 
           <input
             type="number"
@@ -278,13 +344,23 @@
             class="i-25 g"
             style="text-align: right; border-radius: 10px; background: #717171"
           />
-          <input type="text" class="input-prepend" style="color: white; background: #717171;" v-model="unit_l_name">
+          <input
+            type="text"
+            class="input-prepend"
+            style="color: white; background: #717171"
+            v-model="unit_l_name"
+          />
           <select
             v-model="unit_l_id"
             @change="find_unit_l"
             class="ig select-append"
           >
-            <option value="" selected disabled style="color: white; width: 50px;">
+            <option
+              value=""
+              selected
+              disabled
+              style="color: white; width: 50px"
+            >
               unit
             </option>
             <option v-for="unit in units" :key="unit.id" :value="unit.id">
@@ -305,7 +381,7 @@ export default {
   components: { NavApp, Switch },
   data() {
     return {
-      status_txt: 'Out of Stock',
+      status_txt: "Out of Stock",
       raw_material_id: null,
       img: null,
       status: null,
@@ -318,18 +394,14 @@ export default {
       supplier_id: null,
       price: null,
       create_by_id: null,
-      update_by_id: null,
       category_id: null,
       unit_price_id: null,
       unit_l_name: null,
       unit_m_name: null,
       unit_s_name: null,
-      unit_l_id: "",
-      unit_m_id: "",
-      unit_s_id: "",
-      price_s: "",
-      price_m: "",
-      price_l: "",
+      price_s: 0,
+      price_m: 0,
+      price_l: 0,
       m_to_l: "",
       s_to_m: "",
       avg_l: 0,
@@ -373,60 +445,27 @@ export default {
     },
     async save() {
       if (this.unit_price_id == this.unit_m_id) {
-        this.remain = this.temp_remain * this.s_to_m
+        this.remain = this.temp_remain * this.s_to_m;
       } else if (this.unit_price_id == this.unit_l_id) {
-        this.remain = this.temp_remain * this.m_to_l * this.s_to_m
+        this.remain = this.temp_remain * this.m_to_l * this.s_to_m;
       }
-      const data = new FormData();
-      data.append("maximum", this.maximum);
-      data.append("minimum", this.minimum);
-      data.append("remain", this.remain);
-      data.append("category_id", this.category_id);
-      data.append("name", this.name);
-      data.append("is_refrigerator", this.is_refrigerator);
-      data.append("img", this.img, this.img.name);
-      data.append("to_amount", this.to_amount);
-      data.append("supplier_id", this.supplier_id);
-      data.append("unit_l_id", this.unit_l_id);
-      data.append("unit_m_id", this.unit_m_id);
-      data.append("unit_s_id", this.unit_s_id);
-      data.append("unit_l_name", this.unit_l_name);
-      data.append("unit_m_name", this.unit_m_name);
-      data.append("unit_s_name", this.unit_s_name);
-      data.append("m_to_l", this.m_to_l);
-      data.append("s_to_m", this.s_to_m);
-      data.append("avg_l", this.avg_l);
-      data.append("avg_m", this.avg_m);
-      data.append("avg_s", this.avg_s);
-      data.append("update_by_id", this.$store.state.auth.userInfo.id);
-      data.append("create_by_id", this.$store.state.auth.userInfo.id);
-        
-       await api_raw_material.post("raw-material/", data).then(async (response) => {
-        console.log(response.data, "response data");
-        var unit_list = [this.unit_s_id, this.unit_m_id, this.unit_l_id];
-        var avg_list = [this.avg_s, this.avg_m, this.avg_l];
-        for (let index = 0; index < unit_list.length; index++) {
-          if (unit_list[index] == this.unit_price_id) {
-            var prm_data = {
-              avg_price: avg_list[index],
-              last_price: this.price,
-              raw_material_id: response.data.id,
-              unit_id: unit_list[index],
-              supplier_id: this.supplier_id,
-            };
-          } else {
-            var prm_data = {
-              avg_price: avg_list[index],
-              last_price: 0,
-              raw_material_id: response.data.id,
-              unit_id: unit_list[index],
-              supplier_id: this.supplier_id,
-            };
-          }
-          await api_raw_material.post("price-raw-material/", prm_data).then((res) => {  
-              console.log(res.data, "res data");
-            });
-        }
+      const data = {
+        maximum: this.maximum,
+        minimum: this.minimum,
+        category_id: this.category_id,
+        name: this.name,
+        is_refrigerator: this.is_refrigerator,
+        to_amount: this.to_amount,
+        supplier_id: this.supplier,
+        unit_l_name: this.unit_l_name,
+        unit_m_name: this.unit_m_name,
+        unit_s_name: this.unit_s_name,
+        m_to_l: this.m_to_l,
+        s_to_m: this.s_to_m,
+        create_by: 1,
+        pricerawmaterial_set: this.pricerawmaterial_set,
+      };
+      api_raw_material.post("raw-material/", data).then(() => {
         this.$router.push({ name: "RawMaterials" });
       });
     },
@@ -460,39 +499,43 @@ export default {
       });
     },
     makeUnitPrice() {
-      this.unit_price_list.push({price: this.price, unit: this.units.find(x => x.id == this.unit_price_id).unit, unit_id: this.unit_price_id})
-      this.price = null
-      this.unit_price_id = null
+      this.unit_price_list.push({
+        price: this.price,
+        unit: this.units.find((x) => x.id == this.unit_price_id).unit,
+        unit_id: this.unit_price_id,
+      });
+      this.price = null;
+      this.unit_price_id = null;
     },
     find_unit_s() {
-      this.unit_s_name = this.units.find(x => x.id == this.unit_s_id).unit
-      this.calc_status_rm()
-      this.status_am
+      this.unit_s_name = this.units.find((x) => x.id == this.unit_s_id).unit;
+      this.calc_status_rm();
+      this.status_am;
     },
     find_unit_m() {
-      this.unit_m_name = this.units.find(x => x.id == this.unit_m_id).unit
-      this.calc_status_rm()
-      this.status_am
+      this.unit_m_name = this.units.find((x) => x.id == this.unit_m_id).unit;
+      this.calc_status_rm();
+      this.status_am;
     },
     find_unit_l() {
-      this.unit_l_name = this.units.find(x => x.id == this.unit_l_id).unit
-      this.calc_status_rm()
-      this.status_am
+      this.unit_l_name = this.units.find((x) => x.id == this.unit_l_id).unit;
+      this.calc_status_rm();
+      this.status_am;
     },
     remain_func(e) {
-      this.temp_remain = e.target.value
-      this.calc_status_rm()
+      this.temp_remain = e.target.value;
+      this.calc_status_rm();
     },
     calc_status_rm() {
       if (this.unit_price_id == this.unit_m_id) {
-        this.remain = this.temp_remain * this.s_to_m
+        this.remain = this.temp_remain * this.s_to_m;
       } else if (this.unit_price_id == this.unit_l_id) {
-        this.remain = this.temp_remain * this.m_to_l * this.s_to_m
+        this.remain = this.temp_remain * this.m_to_l * this.s_to_m;
       } else if (this.unit_price_id == this.unit_s_id) {
-        this.remain = this.temp_remain
+        this.remain = this.temp_remain;
       }
-      this.status_am
-    }
+      this.status_am;
+    },
   },
   watch: {
     remain() {
@@ -506,10 +549,10 @@ export default {
     status_am: function () {
       if (this.remain > this.minimum) {
         this.status_txt = "In Stock";
-      } else if  (this.remain == 0 || this.remain == '' || this.remain == null) {
+      } else if (this.remain == 0 || this.remain == "" || this.remain == null) {
         this.status_txt = "Out of Stock";
       } else {
-        this.status_txt = "Minimum"
+        this.status_txt = "Minimum";
       }
     },
   },
@@ -576,10 +619,6 @@ input {
 option {
   font-size: 20px;
 }
-raw-img {
-  width: 236px;
-  height: 235px;
-}
 
 ::placeholder {
   text-indent: 5 px;
@@ -629,6 +668,7 @@ raw-img {
   height: 220px;
   border-radius: 25px;
   right: 0px;
+  object-fit: cover;
   position: absolute;
 }
 .switch {

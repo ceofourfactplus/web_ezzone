@@ -1,19 +1,23 @@
 from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.utils import field_mapping
-from .models import  RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail, PO, PriceRawMaterial
+from .models import RawMaterialCategory, RawMaterial, ReceiptRawMaterial, ReceiptRawMaterial, Supplier, Unit, PickUpRawMaterial, ReceiptRawMaterialDetail, PO, PriceRawMaterial
 from user.serializers import UserSerializer
 
 
 class RawMaterialListSeriallizer(serializers.ModelSerializer):
+    remain = serializers.IntegerField(required=False)
+
     class Meta:
         model = RawMaterial
         fields = '__all__'
+
 
 class PriceRawMaterialListSeriallizer(serializers.ModelSerializer):
     class Meta:
         model = PriceRawMaterial
         fields = '__all__'
+
 
 class RawMaterialCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +26,9 @@ class RawMaterialCategorySerializer(serializers.ModelSerializer):
 
 
 class SupplierSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(required=False, allow_blank=True)
+    google_map = serializers.URLField(required=False, allow_blank=True)
+
     class Meta:
         model = Supplier
         fields = '__all__'
@@ -31,8 +38,7 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = '__all__'
-        
-        
+
 
 class POSerializer(serializers.ModelSerializer):
     raw_material_id = serializers.IntegerField(required=True)
@@ -42,6 +48,7 @@ class POSerializer(serializers.ModelSerializer):
     supplier_set = SupplierSerializer(read_only=True, source="supplier")
     raw_material_set = RawMaterialListSeriallizer(
         read_only=True, source="raw_material")
+
     class Meta:
         model = PO
         fields = [
@@ -56,19 +63,20 @@ class POSerializer(serializers.ModelSerializer):
             'create_at',
         ]
 
-
 class RawMaterialSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(required=True)
     create_by_id = serializers.IntegerField(required=True)
-    update_by_id = serializers.IntegerField()
+    update_by_id = serializers.IntegerField(required=False,allow_null=True)
     create_by_set = UserSerializer(read_only=True, source="user")
     update_by_set = UserSerializer(read_only=True, source="user")
     category_set = RawMaterialCategorySerializer(
         read_only=True, source="raw_material_category")
     unit_set = UnitSerializer(read_only=True, source="unit_s")
-    unit_l_id = serializers.IntegerField(default='',required=False, allow_null=True)
-    unit_m_id = serializers.IntegerField(default='',required=False, allow_null=True)
-    unit_s_id = serializers.IntegerField(default='',required=False, allow_null=True)
+    unit_l_id = serializers.IntegerField(required=False, allow_null=True)
+    unit_m_id = serializers.IntegerField(required=False, allow_null=True)
+    unit_s_id = serializers.IntegerField(required=False, allow_null=True)
+    remain = serializers.IntegerField(default=0, required=False)
+    pricerawmaterial_set = PriceRawMaterialListSeriallizer(many=True)
 
     class Meta:
         model = RawMaterial
@@ -79,7 +87,7 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'name',
             'minimum',
             'remain',
-            'maximum',  
+            'maximum',
             'in_refrigerator',
             'create_by_id',
             'update_by_id',
@@ -98,9 +106,16 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'update_by_set',
             'create_by_set',
             'unit_set',
+            'pricerawmaterial_set'
         ]
-        
-        
+
+    def create(self, validated_data):
+        price =  validated_data.pop('pricerawmaterial_set')
+        raw_material = RawMaterial.objects.create(**validated_data)
+        for p in price:
+            PriceRawMaterial.objects.create(**p,raw_material=raw_material)
+        return raw_material
+
 class PriceRawMaterialSerializer(serializers.ModelSerializer):
     raw_material_id = serializers.IntegerField()
     unit_id = serializers.IntegerField()
@@ -109,7 +124,7 @@ class PriceRawMaterialSerializer(serializers.ModelSerializer):
         read_only=True, source="raw_material")
     supplier_set = SupplierSerializer(read_only=True, source="supplier")
     unit_set = UnitSerializer(read_only=True, source="unit")
-    
+
     class Meta:
         model = PriceRawMaterial
         fields = [
@@ -138,16 +153,16 @@ class PickUpRawMaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = PickUpRawMaterial
         fields = [
-            'id', 
-            'raw_material_set', 
+            'id',
+            'raw_material_set',
             'unit_id',
-            'unit_set', 
+            'unit_set',
             'raw_material_id',
-            'amount', 
-            'create_at', 
-            'create_by_set', 
+            'amount',
+            'create_at',
+            'create_by_set',
             'create_by_id',
-            ]
+        ]
 
 
 class ReceiptRawMaterialDetailSerializer(serializers.ModelSerializer):
@@ -168,7 +183,7 @@ class ReceiptRawMaterialDetailSerializer(serializers.ModelSerializer):
                   'total_price', 'amount', 'remark', 'discount',
                   'create_at', 'create_by_id', 'update_at',
                   'update_by_id', 'supplier_id', 'supplier_set',
-                   'raw_material_set', 'create_by', 'update_by', 'receipt_raw_material_id']
+                  'raw_material_set', 'create_by', 'update_by', 'receipt_raw_material_id']
 
 
 class ReceiptRawMaterialSerializer(serializers.ModelSerializer):
@@ -195,12 +210,14 @@ class POSerializer(serializers.ModelSerializer):
     supplier_id = serializers.IntegerField()
     unit_id = serializers.IntegerField()
     create_by_id = serializers.IntegerField()
-    supplier_set = SupplierSerializer(read_only=True,source="supplier")
-    raw_material_set = RawMaterialSerializer(read_only=True,source="raw_material")
-    unit_set = UnitSerializer(read_only=True,source="unit")
+    supplier_set = SupplierSerializer(read_only=True, source="supplier")
+    raw_material_set = RawMaterialSerializer(
+        read_only=True, source="raw_material")
+    unit_set = UnitSerializer(read_only=True, source="unit")
     create_by_set = UserSerializer(read_only=True, source="create_by")
+
     class Meta:
         model = PO
         fields = ['id', 'supplier_id', 'raw_material_id',
-                  'last_price', 'unit_id', 'unit_set', 'supplier_set', 
+                  'last_price', 'unit_id', 'unit_set', 'supplier_set',
                   'raw_material_set', 'amount', 'create_by_id', 'create_by_set', 'create_at']

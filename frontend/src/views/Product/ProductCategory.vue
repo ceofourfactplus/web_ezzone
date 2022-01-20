@@ -54,7 +54,7 @@
           <div class="col-2" style="margin-left: 40px">
             {{ item.product_set.length }}
           </div>
-          <div class="col-1" style="position: absolute; right: 50px">
+          <div class="col-1" style="right: 50px">
             <img
               style="width: 20px"
               @click="edit(item)"

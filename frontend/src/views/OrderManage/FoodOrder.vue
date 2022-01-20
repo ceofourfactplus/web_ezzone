@@ -24,7 +24,7 @@
                 #{{ order.order_number }}
               </div>
               <div
-                class="col-3 w-100"
+                class="col-2 w-100"
                 style="font-size: 30px; line-height: 30px"
               >
                 <img
@@ -49,7 +49,7 @@
                 "
               />
             </div> -->
-              <div class="col-3 w-100" style="display: flex">
+              <div class="col-4 w-100" style="display: flex">
                 <div style="font-size: 24px; line-height: 40px">
                   <img
                     src="../../assets/icon/clock.png"

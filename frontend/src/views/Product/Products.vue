@@ -25,7 +25,7 @@
         :key="category.id"
         class="btn-gray p-0 me-2"
         style="
-          min-width: 100px;
+          min-width: 150px;
           height: 50px;
           opacity: 0.5;
           white-space: nowrap;

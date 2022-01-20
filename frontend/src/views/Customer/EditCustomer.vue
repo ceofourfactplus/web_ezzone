@@ -175,7 +175,12 @@
               <label for="nick_name">Nick Name</label>
             </div>
             <div class="col-9 w-100">
-              <input type="text" v-model="customer.nick_name" id="nick_name" />
+              <input
+                type="text"
+                v-model="customer.nick_name"
+                :class="{ error: error.nick_name }"
+                id="nick_name"
+              />
             </div>
           </div>
           <div class="row mb-3">
@@ -198,7 +203,8 @@
             </div>
             <div class="col-9 w-100">
               <input
-                type="number"
+                type="text"
+                :class="{ error: error.phone_number }"
                 v-model="customer.phone_number"
                 id="phone_number"
               />
@@ -279,6 +285,10 @@ export default {
         address: "",
         customer_id: "",
       },
+      error: {
+        nick_name: false,
+        phone_number: false,
+      },
     };
   },
   methods: {
@@ -292,50 +302,52 @@ export default {
       }
     },
     edit_customer() {
-      const customer_data = new FormData();
-      customer_data.append("email", this.customer.email);
-      customer_data.append("first_name", this.customer.first_name);
-      customer_data.append("last_name", this.customer.last_name);
-      customer_data.append("nick_name", this.customer.nick_name);
-      customer_data.append("line_customer_id", this.customer.line_id);
-      customer_data.append("phone_number", this.customer.phone_number);
-      customer_data.append("address", this.customer.address);
-      if ((this.customer.birth_date = null)) {
-        customer_data.append("birth_date", this.customer.birth_date);
+      for (const item of ["email", "last_name", "first_name"]) {
+        if (this.customer[item] == null) {
+          this.customer[item] = "";
+        }
       }
-      customer_data.append("invite", this.customer.invite);
-      if (this.new_img) {
-        customer_data.append("img", this.customer.img, this.customer.img.name);
+      var err = false;
+      if (this.customer.nick_name == "") {
+        err = true;
+        this.error.nick_name = true;
       }
-      customer_data.append("gender", this.customer.gender);
-      api_customer
-        .put("customer/" + this.$route.params.id, customer_data)
-        .then(() => {
-          console.log('hello1')
-          if (this.addresscustomer.address != "" || this.customer.addresscustomer_set !=[]) {
-          console.log('hello2')
-            if (this.customer.addresscustomer_set == []) {
-          console.log('hello3')
-              api_customer
-                .post("create-address", this.addresscustomer)
-                .then(() => {
-                  this.$router.push({ name: "Customer" });
+      var check_number = [...this.customer.phone_number].some((number) => {
+        return isNaN(parseInt(number));
+      });
+      if (this.customer.phone_number.length != 10 || check_number) {
+        err = true;
+        this.error.phone_number = true;
+      }
+      if (!err) {
+        api_customer
+          .put("customer/" + this.$route.params.id, this.customer)
+          .then(() => {
+         if (
+           this.addresscustomer.address != "" ||
+           this.customer.addresscustomer_set.length != 0
+         ) {
+           if (this.customer.addresscustomer_set.length == 0) {
+             api_customer
+               .post("create-address", this.addresscustomer)
+               .then(() => {
+                   this.$router.push({ name: "Customer" });
                 });
-            } else {
-          console.log('hello4')
-              api_customer
-                .put(
-                  "save-address/" + this.customer.addresscustomer_set[0].id,
+           } else {
+             api_customer
+               .put(
+                 "save-address/" + this.customer.addresscustomer_set[0].id,
                  this.customer.addresscustomer_set[0]
-                )
-                .then(() => {
-                  this.$router.push({ name: "Customer" });
-                });
-            }
-          } else {
-            this.$router.push({ name: "Customer" });
-          }
+               )
+               .then(() => {
+                 this.$router.push({ name: "Customer" });
+               });
+           }
+         } else {
+           this.$router.push({ name: "Customer" });
+         }
         });
+      }
     },
     Menu(menu) {
       return menu.id;
@@ -346,12 +358,22 @@ export default {
     api_customer.get("customer").then((response) => {
       this.all_cus = response.data;
     });
-    api_customer.get("customer/" + this.$route.params.id).then((reponse) => {
-      this.customer = reponse.data;
-      if (this.customer.img != null) {
-        this.show_img = this.customer.img;
-      }
-    });
+    api_customer
+      .get("get-customer/" + this.$route.params.id)
+      .then((reponse) => {
+        this.customer = reponse.data;
+        if (this.customer.img != null) {
+          this.show_img = this.customer.img;
+        }
+      });
+  },
+  watch: {
+    "customer.nick_name"() {
+      this.error.nick_name = false;
+    },
+    "customer.phone_number"() {
+      this.error.phone_number = false;
+    },
   },
 };
 </script>
