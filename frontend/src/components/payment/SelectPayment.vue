@@ -201,14 +201,14 @@
           <div class="col-5" style="color: #50d1aa">{{ total_balance }}</div>
           <div class="col-12 line mt-2 mb-3"></div>
           <div class="col-12">Prepare Change</div>
-          <div class="col-7" style="color: #ea7c60">1,000 ฿ :</div>
-          <div class="col-5">{{ 1000 - total_balance }}</div>
-          <div class="col-7" style="color: #ea7c69">500 ฿ :</div>
-          <div class="col-5">{{ 500 - total_balance }}</div>
-          <div class="col-7" style="color: #ea7c60">200 ฿ :</div>
-          <div class="col-5">{{ 200 - total_balance }}</div>
-          <div class="col-7" style="color: #ea7c60">100 ฿ :</div>
-          <div class="col-5">{{ 100 - total_balance }}</div>
+          <div class="col-7" v-if="(1000 - total_balance)>0" style="color: #ea7c60">1,000 ฿ :</div>
+          <div class="col-5" v-if="(1000 - total_balance)>0">{{ 1000 - total_balance }}</div>
+          <div class="col-7" v-if="(500 - total_balance)>0" style="color: #ea7c69">500 ฿ :</div>
+          <div class="col-5" v-if="(500 - total_balance)>0">{{ 500 - total_balance }}</div>
+          <div class="col-7" v-if="(200 - total_balance)>0" style="color: #ea7c60">200 ฿ :</div>
+          <div class="col-5" v-if="(200 - total_balance)>0">{{ 200 - total_balance }}</div>
+          <div class="col-7" v-if="(100 - total_balance)>0" style="color: #ea7c60">100 ฿ :</div>
+          <div class="col-5" v-if="(100 - total_balance)>0">{{ 100 - total_balance }}</div>
           <div class="col-12 line mb-3 mt-4"></div>
           <div class="col-4 w-100" style="padding-right: 0px">
             <button
@@ -362,7 +362,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      total_price: "pos/total_balance",
+      total_price: "pos/total_price",
       total_amount: "pos/total_amount",
       discount: "pos/discount",
       cash: "pos/cash",

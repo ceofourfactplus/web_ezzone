@@ -194,19 +194,12 @@
       </div>
     </div>
     <!-- Card Popup -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img
-          src="../../assets/icon/btn-pass.png"
-          style="width: 150px; height: 150px"
-        />
-      </div>
-      <div class="main-text">Saved successfully</div>
-    </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import { api_promotion } from "../../api/api_promotion";
@@ -215,6 +208,7 @@ import { api_promotion } from "../../api/api_promotion";
 export default {
   name: "NewReward",
   components: {
+    SavePopup,
     NavApp,
     Switch,
   },
@@ -263,7 +257,8 @@ export default {
 
       api_promotion.post('reward/', data).then((response) => {
         console.log(response.data)
-        this.point_promotions_of_reward.forEach(el => {
+        if(this.point_promotions_of_reward.length != 0){
+          this.point_promotions_of_reward.forEach(el => {
           const condition_reward = {
             point_promotion_id: el.id,
             reward_id: response.data.id,
@@ -277,6 +272,13 @@ export default {
             }, 2000);
           })
         });
+        } else {
+          this.alert = true;
+            setTimeout(() => {
+              this.alert = false;
+              this.$router.push({ name: "Promotion" });
+            }, 2000);
+        }
       })
     },
     fetchPointPromotion() {

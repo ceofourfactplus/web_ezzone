@@ -1,13 +1,20 @@
 <template>
   <div>
-    <nav-app :save="true" @save="create_sale_channel" :url_name="'SaleChannel'">Edit Sale Channel</nav-app>
+    <nav-app :save="true" @save="create_sale_channel" :url_name="'SaleChannel'"
+      >Edit Sale Channel</nav-app
+    >
     <div class="row" style="margin-top: 20px">
       <!-- form sale channel -->
       <div class="col-4 w-100" style="margin: auto">
         <label id="select_img" for="file" style="margin-top: 0px">
           <img
             :src="show_img"
-            style="border-radius: 10px; width: 150px; height: 132px;object-fit:cover;"
+            style="
+              border-radius: 10px;
+              width: 150px;
+              height: 132px;
+              object-fit: cover;
+            "
             class="image"
             v-if="show_img != null"
           />
@@ -47,7 +54,12 @@
           />
           <div class="status ms-1">
             Status :
-            <div class="switch"><Switch @switch="status_switch" /></div>
+            <div class="switch">
+              <Switch
+                @switch="sale_channel_set.status = !sale_channel_set.status"
+                :value="sale_channel_set.status"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -61,7 +73,7 @@
             <div class="col-9">
               <button
                 class="btn-ghost-b me-3"
-                style="width: 202px; height: 50px;white-space:nowrap;"
+                style="width: 202px; height: 50px; white-space: nowrap"
                 @click="
                   add_product_to_salechannel = true;
                   select_product_update_id = null;
@@ -73,7 +85,7 @@
               <button
                 v-if="!delete_status"
                 class="btn-ghost-r"
-                style="width: 235px; height: 50px;white-space:nowrap;"
+                style="width: 235px; height: 50px; white-space: nowrap"
                 @click="
                   delete_status = true;
                   add_product_to_salechannel = false;
@@ -92,9 +104,7 @@
                 style="width: 235px; height: 50px"
                 @click="delete_selected()"
               >
-                <img
-                  src="../../assets/icon/r-trash.png"
-                />&#160;Delete Product
+                <img src="../../assets/icon/r-trash.png" />&#160;Delete Product
               </button>
             </div>
           </div>
@@ -110,7 +120,7 @@
           :class="{ 'btn-gray-active': type_item == 3 }"
           @click="type_item = 3"
           class="btn-gray me-2"
-          style="width:16%;padding:0px;margin:auto;"
+          style="width: 16%; padding: 0px; margin: auto"
         >
           FOOD
         </button>
@@ -118,7 +128,7 @@
           :class="{ 'btn-gray-active': type_item == 2 }"
           @click="type_item = 2"
           class="btn-gray me-2"
-          style="width:18%;padding:0px;margin:auto;"
+          style="width: 18%; padding: 0px; margin: auto"
         >
           DRINK
         </button>
@@ -126,7 +136,7 @@
           :class="{ 'btn-gray-active': type_item == 1 }"
           @click="type_item = 1"
           class="btn-gray me-2"
-          style="width:18%;padding:0px;margin:auto;"
+          style="width: 18%; padding: 0px; margin: auto"
         >
           DRESSERT
         </button>
@@ -134,7 +144,7 @@
           :class="{ 'btn-gray-active': type_item == 4 }"
           @click="type_item = 4"
           class="btn-gray me-2"
-          style="width:18%;padding:0px;margin:auto;"
+          style="width: 18%; padding: 0px; margin: auto"
         >
           TOPPING
         </button>
@@ -142,7 +152,7 @@
           :class="{ 'btn-gray-active': type_item == 5 }"
           @click="type_item = 5"
           class="btn-gray"
-          style="width:24%;padding:0px;margin:auto;"
+          style="width: 24%; padding: 0px; margin: auto"
         >
           CONSIGNMENT
         </button>
@@ -372,16 +382,18 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_product } from "../../api/api_product";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
 export default {
-  components: { NavApp, Switch, SearchBar },
+  components: { NavApp, Switch, SearchBar, SavePopup },
   mounted() {
     api_product
       .get("sale-channel/" + this.$route.params.id + "/")
@@ -396,6 +408,7 @@ export default {
   },
   data() {
     return {
+      alert: false,
       show_img: null,
       img: null,
       sale_channel_set: {
@@ -582,10 +595,18 @@ export default {
             api_product
               .put("sale-channel-update-img/" + response.data.id + "/", data)
               .then(() => {
+              this.alert = true
+              setTimeout(() => {
+                this.alert = false
                 this.$router.push({ name: "SaleChannel" });
+              }, 2000)
               });
           } else {
-            this.$router.push({ name: "SaleChannel" });
+            this.alert = true
+            setTimeout(() => {
+              this.alert = false
+              this.$router.push({ name: "SaleChannel" });
+            }, 2000)
           }
         });
     },

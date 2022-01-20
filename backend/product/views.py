@@ -187,7 +187,7 @@ class ToppingList(APIView):
             serializer = ToppingSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                ezzone = SaleChannel.objects.get(sale_channel='EZZone').id
+                ezzone = SaleChannel.objects.get(sale_channel='EZ Zone').id
                 PriceTopping.objects.create(
                     sale_channel_id=ezzone,
                     topping_id=serializer.data['id'],
@@ -241,7 +241,7 @@ class ToppingDetail(APIView):
         serializer = ToppingSerializer(sale_channel, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            ezzone = SaleChannel.objects.get(sale_channel='EZZone').id
+            ezzone = SaleChannel.objects.get(sale_channel='EZ Zone').id
             if PriceTopping.objects.filter(topping_id=serializer.data['id'], sale_channel_id=ezzone).exists():
                 price = PriceTopping.objects.get(
                     topping_id=serializer.data['id'], sale_channel_id=ezzone)
@@ -297,7 +297,7 @@ class ToppingCategoryDetail(APIView):
 
 class SaleChannelEzzone(APIView):
     def get(self, request):
-        ezzone = SaleChannel.objects.get(sale_channel='EZZone')
+        ezzone = SaleChannel.objects.get(sale_channel='EZ Zone')
         return Response({'id': ezzone.id}, status=200)
 
 
@@ -398,7 +398,7 @@ class ProductList(APIView):
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            ezzone = SaleChannel.objects.get(sale_channel='EZZone').id
+            ezzone = SaleChannel.objects.get(sale_channel='EZ Zone').id
             PriceProduct.objects.create(
                 sale_channel_id=ezzone,
                 product_id=serializer.data['id'],
@@ -455,11 +455,13 @@ class UpdateProduct(APIView):
     # parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request, pk):
+        print(request.data, 'data')
         object = Product.objects.get(pk=pk)
+        print(object, 'object')
         serializer = ProductSerializer(object, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            ezzone = SaleChannel.objects.get(sale_channel='EZZone').id
+            ezzone = SaleChannel.objects.get(sale_channel='EZ Zone').id
             if PriceProduct.objects.filter(product_id=serializer.data['id'], sale_channel_id=ezzone).exists():
                 price = PriceProduct.objects.get(
                     product_id=serializer.data['id'], sale_channel_id=ezzone)

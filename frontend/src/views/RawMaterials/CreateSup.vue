@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav-app :url_name="'RawMaterials'" save="true" @save="create_sup()">Create&#160;Supplier</nav-app>
+    <nav-app :url_name="'RawMaterials'" save="true" @save="create_sup()"
+      >Create&#160;Supplier</nav-app
+    >
     <div class="container">
       <div style="height: 250px">
         <label for="file">
@@ -28,31 +30,61 @@
         />
         <!-- <check-box-white/> -->
       </div>
-      <input type="text" v-model="supplier_name" placeholder="Supplier Name"/>
-      <input type="text" v-model="contact" placeholder="Contact Person"/>
-      <input type="text" v-model="phone" placeholder="Phone"/>
-      <input type="email" v-model="email" placeholder="E-mail"/>
-      <textarea name="text" v-model="address" id="" placeholder="Address"></textarea>
-      <input type="url" v-model="google_map" placeholder="Google Map"/>
+      <input
+        :class="{ error: error.supplier_name }"
+        type="text"
+        v-model="supplier_name"
+        placeholder="Supplier Name"
+      />
+      <input
+        :class="{ error: error.contact }"
+        type="text"
+        v-model="contact"
+        placeholder="Contact Person"
+      />
+      <input
+        :class="{ error: error.phone_number }"
+        type="text"
+        v-model="phone_number"
+        placeholder="Phone"
+      />
+      <input type="email" v-model="email" placeholder="E-mail" />
+      <textarea
+        name="text"
+        :class="{ error: error.address }"
+        v-model="address"
+        id=""
+        placeholder="Address"
+      ></textarea>
+      <input type="url" v-model="google_map" placeholder="Google Map" />
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_raw_material } from '../../api/api_raw_material';
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
-  components: { NavApp },
+  components: { NavApp, SavePopup },
   data() {
     return {
+      alert: false,
       img: "",
       show_img: null,
-      supplier_name:'',
-      google_map:'',
-      contact:'',
-      phone:0,
-      email:'',
-      address:'',
+      supplier_name: "",
+      google_map: "",
+      contact: "",
+      phone_number: "",
+      email: "",
+      address: "",
+      error: {
+        contact: false,
+        phone_number: false,
+        address: false,
+        supplier_name: false,
+      },
     };
   },
   methods: {
@@ -64,20 +96,57 @@ export default {
         reader.readAsDataURL(this.img);
       }
     },
-    create_sup(){
-      const user = new FormData();
+    create_sup() {
+      var err = false;
+      for (const item of ["contact", "address", "supplier_name"]) {
+        console.log(item);
+        if (this[item] == "") {
+          console.log("in i");
+          err = true;
+          this.error[item] = true;
+        }
+      }
+      var check_number = [...this.phone_number].some((number) => {
+        return isNaN(parseInt(number));
+      });
+      if (this.phone_number.length != 10 || check_number) {
+        err = true;
+        this.error.phone_number = true;
+      }
+      if (!err) {
+        const user = new FormData();
         user.append("company_name", this.supplier_name);
         user.append("contact", this.contact);
         user.append("email", this.email);
         user.append("address", this.address);
         user.append("google_map", this.google_map);
-        user.append("phone", this.phone);
-        user.append("img", this.img,this.img.name);
-        user.append('create_by',1)
-      api_raw_material.post('/supplier/',user).then(()=>{
-        this.$router.push({name:'Supplier'})
-      })
-    }
+        user.append("phone", this.phone_number);
+        if (this.img != null) {
+          user.append("img", this.img, this.img.name);
+        }
+        user.append("create_by", 1);
+        api_raw_material.post("/supplier/", user).then(() => {this.alert = true
+        setTimeout(() => {
+          this.alert = false;
+          this.$router.push({name:'Supplier'})
+        }, 1000)
+        });
+      }
+    },
+  },
+  watch: {
+    supplier_name() {
+      this.error.supplier_name = false;
+    },
+    contact() {
+      this.error.contact = false;
+    },
+    phone_number() {
+      this.error.phone_number = false;
+    },
+    address() {
+      this.error.address = false;
+    },
   },
 };
 </script>

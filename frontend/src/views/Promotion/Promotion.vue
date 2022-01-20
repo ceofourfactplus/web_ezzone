@@ -69,8 +69,8 @@
           >
             {{ item.promotion }}&nbsp;&nbsp;&nbsp;
           </div>
-          <div class="col-4 w-100" style="margin: 10px 0px 0px -10px">
-            <label class="switch" style="margin-top: 30px">
+          <div class="col-4 w-100">
+            <label class="switch" style="margin: 24px 0px 0px 90px;">
               <input
                 type="checkbox"
                 v-model="item.status"
@@ -103,7 +103,7 @@
           <div class="col-4 w-100"></div>
           <div
             class="col-3 w-100"
-            style="font-size: 100px; font-weight: bold; color: white"
+            style="font-size: 100px; font-weight: bold; color: white; text-align: right;"
           >
             {{ item.price_per_point }}
           </div>
@@ -364,17 +364,12 @@
       </div>
     </div>
 
-    <!-- Card Popup -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="" />
-      </div>
-      <div class="main-text">Saved successfully</div>
-    </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
@@ -386,6 +381,7 @@ export default {
     SearchBar,
     NavApp,
     Switch,
+    SavePopup,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
@@ -557,12 +553,6 @@ export default {
 }
 .tab-selected {
   color: white;
-}
-.card {
-  width: 542px;
-  height: 350px;
-  top: 230px;
-  left: 90px;
 }
 .btn-ghost {
   border-color: #50d1aa;

@@ -56,6 +56,7 @@
   grid-column: auto/span 12;
 }
 
+
 textarea,
 input,
 select {
@@ -224,61 +225,6 @@ h1 {
   position: fixed;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.card {
-  left: 25%;
-  top: 25%;
-  width: 390px;
-  height: 500px;
-  position: fixed;
-  background: #303344;
-  border: 2px solid #ea7c69;
-  box-sizing: border-box;
-  border-radius: 10px;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s, opacity 0.5s linear;
-}
-
-.card-active {
-  visibility: visible;
-  opacity: 1;
-}
-
-.card .icon {
-  margin: 0;
-  position: relative;
-  top: 26%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
-.card .main-text {
-  margin: 0;
-  position: absolute;
-  width: 100%;
-  top: 55%;
-  font-weight: bold;
-  color: #fff;
-  font-size: 50px;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
-.card .second {
-  margin: 0;
-  position: absolute;
-  width: 100%;
-  top: 75%;
-  font-weight: bold;
-  color: #ffb572;
-  font-size: 28px;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
 }
 
 .checkbox-white label {
@@ -463,6 +409,7 @@ h1 {
 .img-select {
   border-radius: 50%;
   width: 84px;
+  object-fit: cover;
   height: 84px;
 }
 
@@ -604,4 +551,12 @@ h1 {
   color: #ffffff;
   font-weight: bold;
   font-size: 30px;
+}
+
+
+.error {
+  background-image: url("../icon/cancel.png");
+  background-repeat: no-repeat, repeat;
+  background-position: 95% 50%;
+  background-size: 30px 30px;
 }

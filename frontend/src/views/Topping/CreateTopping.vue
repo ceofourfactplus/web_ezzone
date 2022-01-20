@@ -37,10 +37,11 @@
                 >Status&nbsp;&nbsp;:&nbsp;<button
                   class="btn-y"
                   style="
-                    width: 150px;
+                    width:  %;
                     display: inilne;
                     height: 36px;
                     line-height: 100%;
+                    white-space:nowrap;
                   "
                   :class="{ 'btn-g': remain > minimum }"
                 >
@@ -115,10 +116,12 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_product } from "../../api/api_product";
 import { api_raw_material } from "../../api/api_raw_material";
 import { api_user } from "../../api/api_user";
@@ -126,7 +129,7 @@ import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 
 export default {
-  components: { NavApp, Switch },
+  components: { NavApp, Switch, SavePopup },
   mounted() {
     this.get_unit();
     this.get_user();
@@ -135,6 +138,7 @@ export default {
   data() {
     return {
       show_img: null,
+      alert: false,
       all_user: [],
       categories: [],
       all_unit: [],
@@ -197,7 +201,11 @@ export default {
           const img = new FormData();
           img.append("img", this.img, this.img.name);
           api_product.put("get-topping/" + response.data.id, img).then(() => {
-            this.$router.push({ name: "Topping" });
+            this.alert = true
+            setTimeout(() => {
+              this.alert = false
+              this.$router.push({ name: "Topping" });
+            },)
           });
         });
       }

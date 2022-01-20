@@ -277,7 +277,6 @@
               {{ net_price(item.price) }}
             </div>
           </div>
-
           <!-- product -->
           <div
             class="row"
@@ -376,21 +375,24 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import { api_product } from "../../api/api_product";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
 export default {
-  components: { NavApp, Switch, SearchBar },
+  components: { NavApp, Switch, SearchBar, SavePopup },
   mounted() {
     this.get_duplicate();
   },
   data() {
     return {
+      alert: false,
       show_img: null,
       img: null,
       sale_channel_set: {
@@ -456,6 +458,10 @@ export default {
           api_product
             .put("sale-channel-update-img/" + response.data.id + "/", data)
             .then(() => {
+              this.alert = true
+              setTimeout(() => {
+                this.alert = false
+              }, 2000)
               this.$router.push({ name: "SaleChannel" });
             });
         });

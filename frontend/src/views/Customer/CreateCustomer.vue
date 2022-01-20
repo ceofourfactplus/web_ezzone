@@ -96,6 +96,7 @@
               type="text"
               v-model="nick_name"
               placeholder="Nick Name"
+              :class="{ error: error.nick_name }"
               aria-label=".form-control-lg example"
               style="width: 400px"
             />
@@ -136,6 +137,7 @@
             <input
               type="text"
               v-model="phone_number"
+              :class="{ error: error.phone_number }"
               placeholder="Phone Number"
               aria-label=".form-control-lg example"
               style="width: 400px"
@@ -155,7 +157,7 @@
           <div class="row">
             <input
               type="text"
-              v-model="line_id"
+              v-model="line_customer_id"
               placeholder="Line ID"
               aria-label=".form-control-lg example"
               style="width: 400px"
@@ -163,17 +165,12 @@
           </div>
           <!-- Invite by -->
           <div class="row">
-            <input
-              type="text"
-              v-model="invite_by"
-              placeholder="Invite by"
-              aria-label=".form-control-lg example"
-              style="width: 400px"
-              list="browsers"
-            />
-            <datalist id="browsers">
-              <option value="Chrome"></option>
-            </datalist>
+            <select v-model="invited_by" style="width: 400px">
+              <option v-for="user in all_cus" :key="user.id" :value="user.id">
+                {{ user.nick_name }} {{ user.first_name }}
+              </option>
+              <option value="null">None</option>
+            </select>
           </div>
 
           <!-- address -->
@@ -198,65 +195,85 @@
     </div>
 
     <!-- card pop up -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="" />
-      </div>
-      <div class="main-text">Saved account</div>
-      <div class="second">wait for admin tp activate</div>
-    </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
-import {api_customer} from "../../api/api_customer";
+import { api_customer } from "../../api/api_customer";
 import NavApp from "../../components/main_component/NavApp.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 // import CheckBoxWhite from '../../components/main_component/CheckBoxWhite.vue';
 export default {
-  components: { NavApp },
+  components: { NavApp, SavePopup },
   // components: { CheckBoxWhite },
+  mounted() {
+    api_customer.get("customer").then((response) => {
+      this.all_cus = response.data;
+    });
+  },
   name: "Register",
   data() {
     return {
       nick_name: "",
       first_name: "",
       last_name: "",
-      birth_date: "",
+      birth_date: null,
       phone_number: "",
       email: "",
-      img: "",
-      invite_by: "",
+      img: null,
+      invited_by: null,
+      line_customer_id: "",
       address: "",
-      show_img: null,
       gender: "",
       error: {
         data: "",
         status: false,
-      },
+        nick_name: false,
+        phone_number: false,
+      }, 
+      show_img: null,
       alert: false,
+      all_cus: [],
     };
   },
   methods: {
     create_customer() {
-        const user = new FormData();
-        user.append("nick_name", this.nick_name);
-        user.append("first_name", this.first_name);
-        user.append("last_name", this.last_name);
-        user.append("birth_date", this.birth_date);
-        user.append("phone_number", this.phone_number);
-        user.append("email", this.email);
-        user.append("line_customer_id", this.line_id);
-        user.append("invite_by", this.invite_by);
-        user.append("address", this.address);
-        if (this.img != null) {
-          user.append("img", this.img, this.img.name);
-        } else {
-          user.append("img", "");
-        }
-        user.append("gender", this.gender);
+      var err = false;
+      if (this.nick_name == "") {
+        err = true;
+        this.error.nick_name = true;
+      }
+      var check_number = [...this.phone_number].some((number) => {
+        return isNaN(parseInt(number));
+      });
+      if (this.phone_number.length != 10 || check_number) {
+        err = true;
+        this.error.phone_number = true;
+      }
+      if (!err) {
+        const data = {
+          nick_name: this.nick_name,
+          first_name: this.first_name,
+          last_name: this.last_name,
+          phone_number: this.phone_number,
+          gender: this.gender,
+          email: this.email,
+          birth_date: this.birth_date,
+          line_customer_id: this.line_customer_id,
+          invited_by: this.invited_by,
+          addresscustomer_set:{
+            address:this.address,
+          }
+        };
         api_customer
-          .post("customer", user)
-          .then(() => {
+          .post("customer", data)
+          .then((response) => {
+            if (this.img != null) {
+              const img = new FormData();
+              img.append("img", this.img, this.img.name);
+              api_customer.put("customer-img/" + response.data.id, img);
+            }
             this.alert = true;
             setTimeout(() => {
               this.alert = false;
@@ -268,6 +285,7 @@ export default {
             this.error.data = err.response.data;
             this.error.status = true;
           });
+      }
     },
     onFileChange(e) {
       this.img = e.target.files[0];
@@ -286,6 +304,10 @@ export default {
     },
   },
   watch: {
+    nick_name() {
+      this.error.status = false;
+      this.error.nick_name = false;
+    },
     first_name() {
       this.error.status = false;
     },
@@ -300,6 +322,7 @@ export default {
     },
     phone_number() {
       this.error.status = false;
+      this.error.phone_number = false;
     },
     email() {
       this.error.status = false;
@@ -321,7 +344,8 @@ export default {
 </script>
 
 <style scoped>
-input {
+input,
+select {
   margin-bottom: 15px;
   height: 60px;
 }

@@ -69,20 +69,20 @@ import FoodOrder from "../views/OrderManage/FoodOrder.vue";
 import DrinkOrder from "../views/OrderManage/DrinkOrder.vue";
 
 // promotion
-import Promotion from "../views/Promotion/Promotion.vue"
-import NewPoint from "../views/Promotion/NewPoint.vue"
-import NewVoucher from "../views/Promotion/NewVoucher.vue"
-import NewPackage from "../views/Promotion/NewPackage.vue"
-import NewReward from "../views/Promotion/NewReward.vue"
-import PointDetail from "../views/Promotion/PointDetail.vue"
-import VoucherDetail from "../views/Promotion/VoucherDetail.vue"
-import PackageDetail from "../views/Promotion/PackageDetail.vue"
-import Redemption from "../views/Promotion/Redemption.vue"
-import History from "../views/Promotion/History.vue"
-import AllReward from "../views/Promotion/AllReward.vue"
-import PreOrderReward from "../views/Promotion/PreOrderReward.vue"
-import RewardDetail from "../views/Promotion/RewardDetail.vue"
-import RewardName from "../views/Promotion/RewardName.vue"
+import Promotion from "../views/Promotion/Promotion.vue";
+import NewPoint from "../views/Promotion/NewPoint.vue";
+import NewVoucher from "../views/Promotion/NewVoucher.vue";
+import NewPackage from "../views/Promotion/NewPackage.vue";
+import NewReward from "../views/Promotion/NewReward.vue";
+import PointDetail from "../views/Promotion/PointDetail.vue";
+import VoucherDetail from "../views/Promotion/VoucherDetail.vue";
+import PackageDetail from "../views/Promotion/PackageDetail.vue";
+import Redemption from "../views/Promotion/Redemption.vue";
+import History from "../views/Promotion/History.vue";
+import AllReward from "../views/Promotion/AllReward.vue";
+import PreOrderReward from "../views/Promotion/PreOrderReward.vue";
+import RewardDetail from "../views/Promotion/RewardDetail.vue";
+import RewardName from "../views/Promotion/RewardName.vue";
 
 // Consignment
 import Consigner from "../views/Consignment/Consigner.vue"
@@ -96,19 +96,19 @@ import OutConsignment from "../components/consignment/OutConsignment.vue"
 import AddConsignment from "../components/consignment/AddConsignment.vue"
 
 // Home
-import Home from "../views/Test.vue"
+import Home from "../views/Test.vue";
 
 // Report
-import MainReport from '../views/Report/MainReport.vue'
-import SelectReport from '../views/Report/SelectReport.vue'
-import ProductReportDetail from '../views/Report/ProductReportDetail.vue'
-import ProductReport from '../views/Report/ProductReport.vue'
+import MainReport from "../views/Report/MainReport.vue";
+import SelectReport from "../views/Report/SelectReport.vue";
+import ProductReportDetail from "../views/Report/ProductReportDetail.vue";
+import ProductReport from "../views/Report/ProductReport.vue";
 
 import Chart1 from "../views/TestChart/Chart1.vue";
 import FaceLogin from "../views/FaceDetector/LoginFace.vue";
+import Payment from "../views/Payment/Payment.vue";
 
 const routes = [
-
   {
     path: "/admin",
     name: "Home",
@@ -117,7 +117,7 @@ const routes = [
       if (store.state.auth.userInfo.is_staff) {
         next();
       } else {
-        next('/');
+        next("/");
       }
     },
     children: [
@@ -136,26 +136,26 @@ const routes = [
         path: "/report/:type",
         props: true,
         name: "MainReport",
-        component: MainReport
+        component: MainReport,
       },
       {
         path: "/select-report",
         name: "SelectReport",
-        component: SelectReport
+        component: SelectReport,
       },
       {
         path: "/product-report",
         name: "ProductReport",
-        component: ProductReport
+        component: ProductReport,
       },
       {
-        path: '/report/product/:type',
+        path: "/report/product/:type",
         props: true,
-        name: 'ProductReportDetail',
-        component: ProductReportDetail
+        name: "ProductReportDetail",
+        component: ProductReportDetail,
       },
       // Order manage
-    
+
       {
         path: "/order-manage/order-detail",
         name: "OrderDetail",
@@ -171,7 +171,7 @@ const routes = [
         name: "DrinkOrder",
         component: DrinkOrder,
       },
-    
+
       // promotion
       {
         path: "/promotion",
@@ -215,7 +215,7 @@ const routes = [
           requiresLogin: false,
         },
       },
-    
+
       {
         path: "/promotion/new-promotion",
         name: "NewPoint",
@@ -288,7 +288,7 @@ const routes = [
           requiresLogin: false,
         },
       },
-    
+
       // database settings
       {
         path: "/dbs/dbs",
@@ -298,7 +298,7 @@ const routes = [
           requiresLogin: false,
         },
       },
-    
+
       // pos
       {
         path: "/pos/select-sale-channel",
@@ -327,7 +327,7 @@ const routes = [
         name: "OrderReceipt",
         component: OrderReceipt,
       },
-    
+
       // product
       {
         path: "/product/category",
@@ -362,7 +362,7 @@ const routes = [
           requiresLogin: false,
         },
       },
-    
+
       // topping
       {
         path: "/topping/category",
@@ -414,7 +414,7 @@ const routes = [
           requiresLogin: false,
         },
       },
-    
+
       // dash board
       {
         path: "/dash-board",
@@ -424,7 +424,7 @@ const routes = [
           requiresLogin: false,
         },
       },
-    
+
       // user
       {
         path: "/user/login",
@@ -452,7 +452,7 @@ const routes = [
         component: EditUser,
         name: "EditUser",
       },
-    
+
       // customer
       {
         path: "/customer",
@@ -472,7 +472,7 @@ const routes = [
         component: EditCustomer,
         name: "EditCustomer",
       },
-    
+
       // raw material
       {
         path: "/rm/unit",
@@ -517,7 +517,7 @@ const routes = [
         name: "RawMaterials",
         component: RawMaterials,
       },
-    
+
       // supplier
       {
         path: "/rm/supplier",
@@ -535,7 +535,7 @@ const routes = [
         name: "EditSupplier",
         component: EditSupplier,
       },
-    
+
       // po
       {
         path: "/rm/po-notice",
@@ -555,7 +555,7 @@ const routes = [
         name: "ConfirmPO",
         component: ConfirmPO,
       },
-    
+
       // sale channel
       {
         path: "/sale-channel",
@@ -573,7 +573,7 @@ const routes = [
         props: true,
         component: EditSaleChannel,
       },
-    ]
+    ],
   },
   // sale channel
   {
@@ -592,7 +592,7 @@ const routes = [
     props: true,
     component: EditSaleChannel,
   },
-  
+
   // Consingment
   {
     path: "/consignment/consigner",
@@ -617,6 +617,11 @@ const routes = [
     name: "NewConsignment",
     props: true,
     component: NewConsignment,
+  },
+  {
+    path: "/payments",
+    name: "Payments",
+    component: Payment,
   },
   {
     path: "/consignment/newconsigner",
@@ -1117,7 +1122,7 @@ const routes = [
     props: true,
     component: EditSaleChannel,
   },
-  
+
   // Consingment
   {
     path: "/consignment/consigner",

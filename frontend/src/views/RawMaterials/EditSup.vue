@@ -1,6 +1,8 @@
 <template>
   <div>
-    <nav-app save="true" :url_name="'Supplier'" @save="create_sup()">Edit&#160;Supplier</nav-app>
+    <nav-app save="true" :url_name="'Supplier'" @save="create_sup()"
+      >Edit&#160;Supplier</nav-app
+    >
     <div class="container">
       <div style="height: 250px">
         <label for="file">
@@ -28,21 +30,48 @@
         />
         <!-- <check-box-white/> -->
       </div>
-      <input type="text" v-model="supplier.company_name" placeholder="Supplier Name"/>
-      <input type="text" v-model="supplier.contact" placeholder="Contact Person"/>
-      <input type="text" v-model="supplier.phone" placeholder="Phone"/>
-      <input type="email" v-model="supplier.email" placeholder="E-mail"/>
-      <textarea name="text" v-model="supplier.address" id="" placeholder="Address"></textarea>
-      <input type="url" v-model="supplier.google_map" placeholder="Google Map"/>
+      <input
+        :class="{ error: error.company_name }"
+        type="text"
+        v-model="supplier.company_name"
+        placeholder="Supplier Name"
+      />
+      <input
+        :class="{ error: error.contact }"
+        type="text"
+        v-model="supplier.contact"
+        placeholder="Contact Person"
+      />
+      <input
+        :class="{ error: error.phone_number }"
+        type="text"
+        v-model="supplier.phone"
+        placeholder="Phone"
+      />
+      <input type="email" v-model="supplier.email" placeholder="E-mail" />
+      <textarea
+        :class="{ error: error.address }"
+        name="text"
+        v-model="supplier.address"
+        id=""
+        placeholder="Address"
+      ></textarea>
+      <input
+        type="url"
+        v-model="supplier.google_map"
+        placeholder="Google Map"
+      />
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_raw_material } from '../../api/api_raw_material';
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
-  components: { NavApp },
+  components: { NavApp, SavePopup },
   mounted(){
     api_raw_material.get('supplier/'+this.$route.params.id).then((response)=>{
       this.supplier = response.data
@@ -51,37 +80,63 @@ export default {
   },
   data() {
     return {
-      supplier:{},
+      supplier: {},
       show_img: null,
-      change_img:false
+      change_img: false,
+      error: {
+        address: false,
+        contact: false,
+        company_name: false,
+        phone_number: false,
+      },
     };
   },
   methods: {
     onFileChange(e) {
       this.supplier.img = e.target.files[0];
       if (this.supplier.img) {
-        this.change_img = true
+        this.change_img = true;
         const reader = new FileReader();
         reader.onload = (e) => (this.show_img = e.target.result);
         reader.readAsDataURL(this.supplier.img);
       }
     },
-    create_sup(){
-      const user = new FormData();
+    create_sup() {
+      var err = false;
+      for (const item of ["contact", "address", "supplier_name"]) {
+        console.log(item);
+        if (this[item] == "") {
+          console.log("in i");
+          err = true;
+          this.error[item] = true;
+        }
+      }
+      var check_number = [...this.supplier.phone].some((number) => {
+        return isNaN(parseInt(number));
+      });
+      if (this.supplier.phone.length != 10 || check_number) {
+        err = true;
+        this.error.phone_number = true;
+      }
+      if (!err) {
+        const user = new FormData();
         user.append("company_name", this.supplier.company_name);
         user.append("contact", this.supplier.contact);
         user.append("email", this.supplier.email);
         user.append("address", this.supplier.address);
         user.append("google_map", this.supplier.google_map);
         user.append("phone", this.supplier.phone);
-        if(this.change_img){
-           user.append("img", this.supplier.img,this.supplier.img.name);
+        if (this.change_img) {
+          user.append("img", this.supplier.img, this.supplier.img.name);
         }
-        user.append('create_by',1)
-      api_raw_material.put('supplier/'+this.$route.params.id,user).then(()=>{
-        this.$router.push({name:'Supplier'})
-      })
-    }
+        user.append("create_by", 1);
+        api_raw_material
+          .put("supplier/" + this.$route.params.id, user)
+          .then(() => {
+            this.$router.push({ name: "Supplier" });
+          });
+      }
+    },
   },
 };
 </script>

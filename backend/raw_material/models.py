@@ -24,7 +24,7 @@ class Supplier(models.Model):
     contact = models.CharField(max_length=100)  # ติดต่อใคร
     phone = models.CharField(max_length=13)
     address = models.CharField(max_length=500)
-    email = models.EmailField(null=True)
+    email = models.EmailField(null=False, blank=False)
     google_map = models.URLField(max_length=400, default='')
     create_at = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True)
@@ -49,9 +49,9 @@ class RawMaterial(models.Model):
     create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_create_by")
     update_by = models.ForeignKey(
-        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_update_by", null=True, blank=True)
+        AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="raw_material_update_by", null=True, blank=True, default=None)
     img = models.ImageField(
-        _("Image"), upload_to=upload_to_raw_material, default=None,null=True)
+        _("Image"), upload_to=upload_to_raw_material, default=None, null=True)
     unit_l = models.ForeignKey(Unit, on_delete=models.PROTECT,
                                related_name="raw_material_unit_l", null=True, blank=True, default=None)
     unit_m = models.ForeignKey(Unit, on_delete=models.PROTECT,
@@ -60,16 +60,26 @@ class RawMaterial(models.Model):
                                related_name="raw_material_unit_s", null=True, blank=True, default=None)
     m_to_l = models.IntegerField(null=True, blank=True, default=None)
     s_to_m = models.IntegerField(null=True, blank=True, default=None)
-    avg_l = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
-    avg_m = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
-    avg_s = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+    avg_l = models.DecimalField(
+        max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+    avg_m = models.DecimalField(
+        max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+    avg_s = models.DecimalField(
+        max_digits=5, decimal_places=2, default=None, null=True, blank=True)
+
 
 class PriceRawMaterial(models.Model):
-    avg_price = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
-    last_price = models.DecimalField(max_digits=5, decimal_places=2, default=None, null=True, blank=True)
-    raw_material = models.ForeignKey(RawMaterial,on_delete=models.PROTECT, null=True, blank=True)
-    unit = models.ForeignKey(Unit,on_delete=models.PROTECT, null=True, blank=True)
-    supplier = models.ForeignKey(Supplier,on_delete=models.PROTECT, null=True, blank=True)
+    avg_price = models.DecimalField(
+        max_digits=5, decimal_places=2, default=0)
+    last_price = models.DecimalField(
+        max_digits=5, decimal_places=2, default=0)
+    raw_material = models.ForeignKey(
+        RawMaterial, on_delete=models.PROTECT, null=True, blank=True)
+    unit = models.ForeignKey(
+        Unit, on_delete=models.PROTECT, null=True, blank=True)
+    supplier = models.ForeignKey(
+        Supplier, on_delete=models.PROTECT, null=True, blank=True)
+
 
 class PickUpRawMaterial(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.PROTECT)
@@ -124,5 +134,5 @@ class PO(models.Model):
     status = models.BooleanField(default=True)
     unit = models.ForeignKey(Unit, on_delete=models.PROTECT)
     create_at = models.DateTimeField(auto_now_add=True)
-    create_by = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.PROTECT)
+    create_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT)
     last_price = models.DecimalField(max_digits=5, decimal_places=2)

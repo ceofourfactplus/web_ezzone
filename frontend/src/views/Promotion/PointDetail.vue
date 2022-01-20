@@ -14,7 +14,7 @@
           <div class="col-12 w-100 txt-promotion">Start Date</div>
           <div class="col-12 w-100 txt-promotion">End Date</div>
           <div class="col-12 w-100 txt-promotion">End Redeem</div>
-          <div class="col-12 w-100 txt-promotion">Price per Point</div>
+          <div class="col-12 w-100 txt-promotion">Price / Point</div>
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->
@@ -107,19 +107,12 @@
       </div>
     </div>
     <!-- Card Popup -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img
-          src="../../assets/icon/btn-pass.png"
-          style="width: 150px; height: 150px"
-        />
-      </div>
-      <div class="main-text">Saved successfully</div>
-    </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_promotion } from "../../api/api_promotion";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
@@ -127,6 +120,7 @@ import Switch from "../../components/main_component/Switch.vue";
 export default {
   name: "EditPoint",
   components: {
+    SavePopup,
     NavApp,
     Switch,
   },

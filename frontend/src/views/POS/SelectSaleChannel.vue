@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { api_pos } from '../../api/api_pos';
 import { api_product } from "../../api/api_product";
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
@@ -44,6 +45,9 @@ export default {
     select_channel(channel) {
       this.$store.state.pos.order.sale_channel_id = channel.id
       this.$store.state.pos.order.sale_channel_set = channel
+      api_pos.get('order-number').then((response) => {
+        this.$store.state.pos.order.order_number = response.data.order_number
+      })
       this.$router.push({
         name: "KeyOrder",
       });

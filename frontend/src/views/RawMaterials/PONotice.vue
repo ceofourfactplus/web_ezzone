@@ -179,7 +179,7 @@ export default {
 }
 .btn-ghost {
   width: 100px;
-  height: 45px;
+  height: 50px;
   border: 1px solid #65b0f6;
   color: #65b0f6;
 }
@@ -189,7 +189,7 @@ export default {
 .btn-dropdown {
   border: 0;
   width: 100%;
-  height: 45px;
+  height: 50px;
   color: #889898;
   background: #303344;
   font-weight: bold;

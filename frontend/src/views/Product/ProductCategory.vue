@@ -8,7 +8,8 @@
         <SearchBar @search="search_by_typing" />
       </div>
       <div class="col-2 w-100" style="padding-left: 0px">
-        <button class="btn-ghost" @click="add_category_status = true">
+        <button class="btn-ghost" style="
+          white-space: nowrap;" @click="add_category_status = true">
           + New
         </button>
       </div>
@@ -53,7 +54,7 @@
           <div class="col-2" style="margin-left: 40px">
             {{ item.product_set.length }}
           </div>
-          <div class="col-1" style="position: absolute; right: 50px">
+          <div class="col-1" style="right: 50px">
             <img
               style="width: 20px"
               @click="edit(item)"
@@ -95,7 +96,7 @@
             style="margin-top: 10px; width: 180px"
             class="for-category"
           >
-            <option value="1">DRESSERT</option>
+            <option value="1">DESSERT</option>
             <option value="2">DRINK</option>
             <option value="3">FOOD</option>
           </select>
@@ -136,7 +137,7 @@
             style="margin-top: 10px; width: 180px"
             class="for-category"
           >
-            <option value="1">DRESSERT</option>
+            <option value="1">DESSERT</option>
             <option value="2">DRINK</option>
             <option value="3">FOOD</option>
           </select>
@@ -232,7 +233,7 @@ export default {
         this.products_categories = this.temp_categories;
       } else {
         this.temp_categories.forEach((element) => {
-          if (element.category.indexOf(val) + 1 != 0) {
+          if (element.category.toLowerCase().indexOf(val.toLowerCase()) + 1 != 0) {
             temp.push(element);
           }
         });
