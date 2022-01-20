@@ -263,15 +263,18 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import { api_customer } from "../../api/api_customer";
 import NavApp from "../../components/main_component/NavApp.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue";
+
 export default {
   name: "EditUser",
-  components: { NavApp },
+  components: { NavApp, SavePopup },
   data() {
     return {
       customer: {
@@ -323,30 +326,36 @@ export default {
         api_customer
           .put("customer/" + this.$route.params.id, this.customer)
           .then(() => {
-         if (
-           this.addresscustomer.address != "" ||
-           this.customer.addresscustomer_set.length != 0
-         ) {
-           if (this.customer.addresscustomer_set.length == 0) {
-             api_customer
-               .post("create-address", this.addresscustomer)
-               .then(() => {
-                   this.$router.push({ name: "Customer" });
-                });
-           } else {
-             api_customer
-               .put(
-                 "save-address/" + this.customer.addresscustomer_set[0].id,
-                 this.customer.addresscustomer_set[0]
-               )
-               .then(() => {
-                 this.$router.push({ name: "Customer" });
-               });
-           }
-         } else {
-           this.$router.push({ name: "Customer" });
-         }
-        });
+            if (
+              this.addresscustomer.address != "" ||
+              this.customer.addresscustomer_set.length != 0
+            ) {
+              if (this.customer.addresscustomer_set.length == 0) {
+                api_customer
+                  .post("create-address", this.addresscustomer)
+                  .then(() => {
+                    this.$router.push({ name: "Customer" });
+
+                    this.alert = true;
+                    setTimeout(() => {
+                      this.alert = false;
+                      this.$router.go(-1);
+                    }, 2000);
+                  });
+              } else {
+                api_customer
+                  .put(
+                    "save-address/" + this.customer.addresscustomer_set[0].id,
+                    this.customer.addresscustomer_set[0]
+                  )
+                  .then(() => {
+                    this.$router.push({ name: "Customer" });
+                  });
+              }
+            } else {
+              this.$router.push({ name: "Customer" });
+            }
+          });
       }
     },
     Menu(menu) {

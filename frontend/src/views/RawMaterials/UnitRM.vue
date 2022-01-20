@@ -109,44 +109,23 @@
         </button>
       </div>
     </div>
+
+
     <!-- Card Popup -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="" />
-      </div>
-      <div class="main-text">Saved successfully</div>
-    </div>
-
-    <!-- Input Datalist -->
-    <!-- <label class="category-select-for-add">Category : </label>
-    <input
-      list="categories"
-      type="text"
-      v-model="raw_material_item.category"
-      class="select-input"
-    />
-    <datalist id="categories">
-      <option v-for="(cate, idx) in categories" :key="idx">
-        {{ cate }}
-      </option>
-    </datalist>
-
-    .select-input { width: 200px; height: 35px; background-color: #2f414e;
-    color: white; margin: 17px -10px 0px 5px; background-image:
-    url("../../assets/icon/down-arrow.png"); background-position: center right;
-    background-size: 24px; background-repeat: no-repeat; } -->
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
-// import Table from "../../components/main_component/Table.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_raw_material } from "../../api/api_raw_material";
 
 export default {
   name: "RMUnit",
   components: {
+    SavePopup,
     SearchBar,
     NavApp,
   },

@@ -195,19 +195,12 @@
       </div>
     </div>
     <!-- Card Popup -->
-    <div class="card" :class="{ 'card-active': alert }">
-      <div class="icon">
-        <img
-          src="../../assets/icon/btn-pass.png"
-          style="width: 150px; height: 150px"
-        />
-      </div>
-      <div class="main-text">Saved successfully</div>
-    </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import { api_promotion } from "../../api/api_promotion";
@@ -216,6 +209,7 @@ import { api_promotion } from "../../api/api_promotion";
 export default {
   name: "RewardDetail",
   components: {
+    SavePopup,
     NavApp,
     Switch,
   },

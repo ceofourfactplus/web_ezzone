@@ -338,17 +338,20 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import { api_raw_material } from "../../api/api_raw_material.js";
 export default {
-  components: { NavApp, Switch },
+  components: { NavApp, Switch, SavePopup },
   data() {
     return {
+      alert: false,
       loading: false,
       new_img: false,
       show_img: null,

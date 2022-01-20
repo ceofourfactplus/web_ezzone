@@ -370,6 +370,7 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
@@ -377,8 +378,10 @@
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import { api_raw_material } from "../../api/api_raw_material.js";
+import SavePopup from "../../components/main_component/SavePopup.vue"
+
 export default {
-  components: { NavApp, Switch },
+  components: { NavApp, Switch, SavePopup },
   data() {
     return {
       status_txt: "Out of Stock",
@@ -393,6 +396,7 @@ export default {
       in_refrigerator: null,
       supplier_id: null,
       price: null,
+      alert: false,
       create_by_id: null,
       category_id: null,
       unit_price_id: null,
@@ -449,6 +453,7 @@ export default {
       } else if (this.unit_price_id == this.unit_l_id) {
         this.remain = this.temp_remain * this.m_to_l * this.s_to_m;
       }
+<<<<<<< HEAD
       const data = {
         maximum: this.maximum,
         minimum: this.minimum,
@@ -466,6 +471,62 @@ export default {
         pricerawmaterial_set: this.pricerawmaterial_set,
       };
       api_raw_material.post("raw-material/", data).then(() => {
+=======
+      const data = new FormData();
+      data.append("maximum", this.maximum);
+      data.append("minimum", this.minimum);
+      data.append("remain", this.remain);
+      data.append("category_id", this.category_id);
+      data.append("name", this.name);
+      data.append("is_refrigerator", this.is_refrigerator);
+      data.append("img", this.img, this.img.name);
+      data.append("to_amount", this.to_amount);
+      data.append("supplier_id", this.supplier_id);
+      data.append("unit_l_id", this.unit_l_id);
+      data.append("unit_m_id", this.unit_m_id);
+      data.append("unit_s_id", this.unit_s_id);
+      data.append("unit_l_name", this.unit_l_name);
+      data.append("unit_m_name", this.unit_m_name);
+      data.append("unit_s_name", this.unit_s_name);
+      data.append("m_to_l", this.m_to_l);
+      data.append("s_to_m", this.s_to_m);
+      data.append("avg_l", this.avg_l);
+      data.append("avg_m", this.avg_m);
+      data.append("avg_s", this.avg_s);
+      data.append("update_by_id", this.$store.state.auth.userInfo.id);
+      data.append("create_by_id", this.$store.state.auth.userInfo.id);
+        
+       await api_raw_material.post("raw-material/", data).then(async (response) => {
+        this.alert = true
+        console.log(response.data, "response data");
+        var unit_list = [this.unit_s_id, this.unit_m_id, this.unit_l_id];
+        var avg_list = [this.avg_s, this.avg_m, this.avg_l];
+        for (let index = 0; index < unit_list.length; index++) {
+          if (unit_list[index] == this.unit_price_id) {
+            var prm_data = {
+              avg_price: avg_list[index],
+              last_price: this.price,
+              raw_material_id: response.data.id,
+              unit_id: unit_list[index],
+              supplier_id: this.supplier_id,
+            };
+          } else {
+            var prm_data = {
+              avg_price: avg_list[index],
+              last_price: 0,
+              raw_material_id: response.data.id,
+              unit_id: unit_list[index],
+              supplier_id: this.supplier_id,
+            };
+          }
+          setTimeout(() => {
+            this.alert = false;
+          }, 2000)
+          await api_raw_material.post("price-raw-material/", prm_data).then((res) => {  
+              console.log(res.data, "res data");
+            });
+        }
+>>>>>>> 0cb64391092b1a4af718c4a13c253de491cc7ae1
         this.$router.push({ name: "RawMaterials" });
       });
     },

@@ -91,11 +91,13 @@
         </div>
       </div>
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import SearchBar from "../../components/materials/SearchBar.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import NavApp from "../../components/main_component/NavApp.vue";
 import { api_product } from "../../api/api_product";
 
@@ -103,6 +105,7 @@ export default {
   components: {
     SearchBar,
     NavApp,
+    SavePopup,
   },
   mounted() {
     api_product
@@ -120,6 +123,7 @@ export default {
     return {
       data_topping: {},
       category: "",
+      alert: false,
       type_topping: 1,
       select_topping: [],
       topping: [],
@@ -149,7 +153,11 @@ export default {
       api_product
         .put("topping/category/" + this.$route.params.id, data)
         .then(() => {
-          this.$router.push({ name: "ToppingCategory" });
+          this.alert = true
+          setTimeout(() => {
+            this.alert = false
+            this.$router.push({ name: "ToppingCategory" });
+          }, 2000)
         })
         .catch((error) => {
           this.err = error;

@@ -62,21 +62,21 @@
         placeholder="Google Map"
       />
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
-import { api_raw_material } from "../../api/api_raw_material";
+import SavePopup from "../../components/main_component/SavePopup.vue"
+import { api_raw_material } from '../../api/api_raw_material';
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
-  components: { NavApp },
-  mounted() {
-    api_raw_material
-      .get("supplier/" + this.$route.params.id)
-      .then((response) => {
-        this.supplier = response.data;
-        this.show_img = response.data.img;
-      });
+  components: { NavApp, SavePopup },
+  mounted(){
+    api_raw_material.get('supplier/'+this.$route.params.id).then((response)=>{
+      this.supplier = response.data
+      this.show_img = response.data.img
+    })
   },
   data() {
     return {

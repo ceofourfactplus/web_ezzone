@@ -236,13 +236,14 @@
             </div>
         </div>
     </div>
-    
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 
 
 export default {
@@ -250,16 +251,17 @@ export default {
   components: {
     NavApp,
     Switch,
-
+    SavePopup,
   },
   data() {
     return {
-      CustommerPhone: null,
-      input_customer: "",
-      temp_date: null,
-      selector_status: false,
-      selector_customer: [],
-      customer_point: [],
+        alert: false,
+        CustommerPhone: null,
+        input_customer: "",
+        temp_date: null,
+        selector_status: false,
+        selector_customer: [],
+        customer_point: [],
     };
   },
   
