@@ -373,17 +373,7 @@ export default {
       api_raw_material
         .get(`/raw-material/${this.$route.params.id}`)
         .then((response) => {
-<<<<<<< HEAD
           this.raw_material = response.data;
-=======
-          console.log(response.data, "raw_material");
-          this.rm_item = response.data[0];
-          this.many_items = response.data;
-          this.loading = false
-          // api_raw_material.post('/pickup-raw-material/', {raw_material_id: response.data.id}).then((response) => {
-          //   console.log(response.data, 'pick rm')
-          // })
->>>>>>> b01c9a435a459806c1fa81489b580f4a64ffdd7c
         });
     },
     onFileChange(e) {
