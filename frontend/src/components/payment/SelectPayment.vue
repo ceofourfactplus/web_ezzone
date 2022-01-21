@@ -33,7 +33,7 @@
             @click="select_payment({ payment: 'credit' })"
           >
             <img
-              src="../../assets/icon/Credit.png"
+              src="../../assets/icon/credit.png"
               style="width: 80px; margin-top: 10px"
             />
             <p style="font-size: 24px; margin-bottom: 5px">CREDIT</p>
@@ -270,7 +270,7 @@
             style="white-space: normal; width: 75%; margin: 20px auto"
           >
             <img
-              src="../../assets/icon/Credit.png"
+              src="../../assets/icon/credit.png"
               style="width: 50px"
               class="me-2"
             />
