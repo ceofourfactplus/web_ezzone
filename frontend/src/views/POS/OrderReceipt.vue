@@ -59,7 +59,7 @@
           <img
             v-if="
               this.$store.state.pos.order.sale_channel_set.sale_channel ==
-              'EZZone'
+              'EZ Zone'
             "
             src="../../assets/icon/table-white.png"
             style="height: 40px; margin-right: 15px"
@@ -68,7 +68,7 @@
           <div
             v-if="
               this.$store.state.pos.order.sale_channel_set.sale_channel ==
-              'EZZone'
+              'EZ Zone'
             "
             @click="select_table_s = true"
             style="

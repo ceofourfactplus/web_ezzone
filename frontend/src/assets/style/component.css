@@ -555,7 +555,7 @@ h1 {
 
 
 .error {
-  background-image: url("../icon/cancel.png");
+  background-image: url("../icon/incorrect-input.png");
   background-repeat: no-repeat, repeat;
   background-position: 95% 50%;
   background-size: 30px 30px;

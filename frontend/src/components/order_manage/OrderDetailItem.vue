@@ -144,11 +144,11 @@ export default {
       console.log(p)
       if (p.topping == null) {
         description = p.product_set.name;
-        if (p.flavour_level == 4) {
+        if (p.flavour_level == 3) {
           description += "(S+)";
-        } else if (p.flavour_level == 2) {
-          description += "(S-)";
         } else if (p.flavour_level == 1) {
+          description += "(S-)";
+        } else if (p.flavour_level == 0) {
           description += "(Sx)";
         }
         if (p.size == "L") {

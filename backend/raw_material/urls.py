@@ -3,7 +3,9 @@ from . import views
 
 urlpatterns = [
     path('raw-material/', views.RawMaterialListAPIView().as_view()),
-    path('raw-material/<int:pk>', views.RMAPIView().as_view()),
+    path('raw-material/<int:pk>', views.GetRM().as_view()),
+    path('edit-rm/<int:pk>', views.EditRM().as_view()),
+    path('rm-img/<int:pk>', views.UpdateRmImg().as_view()),
     path('price-raw-material/', views.PriceRawMaterialAPIView().as_view()),
     path('pickup-raw-material/', views.PickupPriceRM().as_view()),
     path('rm-po/notice', views.PONotice.as_view()),

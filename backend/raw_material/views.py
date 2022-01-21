@@ -5,10 +5,20 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import RawMaterial, RawMaterialCategory, Unit, Supplier, PO, PriceRawMaterial, PickUpRawMaterial
-from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer, SupplierSerializer, PickUpRawMaterialSerializer, POSerializer, PriceRawMaterialSerializer, ReceiptRawMaterialSerializer, ReceiptRawMaterialDetailSerializer
+from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer, SupplierSerializer, PickUpRawMaterialSerializer, POSerializer, PriceRawMaterialSerializer, ReceiptRawMaterialSerializer, ReceiptRawMaterialDetailSerializer, RMimg
 
 from django.db.models import F
 from rest_framework.parsers import FormParser, MultiPartParser
+
+
+class UpdateRmImg(APIView):
+    def put(self, request, pk):
+        rm = RawMaterial.objects.get(id=pk)
+        serializer = RMimg(rm, request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)
 
 
 class ReceiptRawMaterial(APIView):
@@ -60,6 +70,65 @@ class ReceiptRawMaterialDetail(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
+
+class GetRM(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get_object(self, pk):
+        try:
+            return RawMaterial.objects.get(pk=pk)
+        except RawMaterial.DoesNotExist:
+            raise 404
+
+    def get(self, request, pk):
+        RawMaterials = self.get_object(pk)
+        serializer = RawMaterialSerializer(
+            RawMaterials, context={'request': request})
+        return Response(serializer.data)
+
+        
+
+class EditRM(APIView):
+
+    def put(self, request, pk):
+        for item in request.data['pricerawmaterial_set']:
+            if Unit.objects.filter(unit=item['unit_name']).exists():
+                item['unit'] = Unit.objects.get(unit=item['unit_name']).id
+            elif not request.data['unit_name'] == '':
+                print(1)
+                item['unit'] = Unit.objects.create(
+                    unit=item['unit_name']).id
+
+        if Unit.objects.filter(unit=request.data['unit_s_name']).exists():
+            request.data['unit_s_id'] = Unit.objects.get(
+                unit=request.data['unit_s_name']).id
+        elif not request.data['unit_s_name'] == '':
+            print(2)
+            request.data['unit_s_id'
+                         ] = Unit.objects.create(
+                unit=request.data['unit_s_name']).id
+        if Unit.objects.filter(unit=request.data['unit_m_name']).exists():
+            request.data['unit_m_id'] = Unit.objects.get(
+                unit=request.data['unit_m_name']).id
+        elif not request.data['unit_m_name'] == '':
+            print(3)
+            request.data['unit_m_id'] = Unit.objects.create(
+                unit=request.data['unit_m_name']).id
+        if Unit.objects.filter(unit=request.data['unit_l_name']).exists():
+            request.data['unit_l_id'] = Unit.objects.get(
+                unit=request.data['unit_l_name']).id
+        elif not request.data['unit_l_name'] == '':
+            print(4)
+            request.data['unit_l_id'] = Unit.objects.create(
+                unit=request.data['unit_l_name']).id
+        RawMaterials = RawMaterial.objects.get(pk=pk)
+        serializer = RawMaterialSerializer(RawMaterials, request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)
+
+
 class RawMaterialListAPIView(APIView):
     def get_object(self, pk):
         try:
@@ -69,46 +138,49 @@ class RawMaterialListAPIView(APIView):
 
     def get(self, request):
         RawMaterials = RawMaterial.objects.all()
-        for item in RawMaterials:
-            if item.remain <= item.minimum and item.remain > 0:
-                item.status = 2
-            elif item.remain <= 0:
-                item.status = 3
-            else:
-                item.status = 1
-            item.save()
-        serializer = RawMaterialSerializer(RawMaterials, many=True)
+        serializer = RawMaterialSerializer(RawMaterials,context={'request': request}, many=True)
         return Response(serializer.data)
 
-    def put(self, request):
-        pickup_serializer = PickUpRawMaterialSerializer(data=request.data)
-        if pickup_serializer.is_valid():
-            pickup_serializer.save()
-            raw_material = self.get_object(request.data['raw_material_id'])
-            raw_material.remain -= int(request.data['amount'])
-            if raw_material.remain <= raw_material.minimum and raw_material.remain > 0:
-                raw_material.status = 2
-            elif raw_material.remain <= 0:
-                raw_material.status = 3
-            raw_material.save()
-            serializer = RawMaterialSerializer(raw_material)
-            return Response(serializer.data, status=200)
-        return Response(pickup_serializer.errors, status=400)
-
     def post(self, request):
-        request.data['remain'] = 0
+        for item in request.data['pricerawmaterial_set']:
+            if Unit.objects.filter(unit=item['unit_name']).exists():
+                item['unit'] = Unit.objects.get(unit=item['unit_name']).id
+            else:
+                print(1)
+                item['unit'] = Unit.objects.create(
+                    unit=item['unit_name']).id
+
         if Unit.objects.filter(unit=request.data['unit_s_name']).exists():
-            request.data['unit_s_id'] =  Unit.objects.get(unit=request.data['unit_s_name']).id    
-            if Unit.objects.filter(unit=request.data['unit_m_name']).exists():
-                request.data['unit_m_id'] =  Unit.objects.get(unit=request.data['unit_m_name']).id    
-                if Unit.objects.filter(unit=request.data['unit_l_name']).exists():
-                    request.data['unit_l_id'] =  Unit.objects.get(unit=request.data['unit_l_name']).id  
-        pprint(request.data)
+            request.data['unit_s_id'] = Unit.objects.get(
+                unit=request.data['unit_s_name']).id
+        else:
+            print(2)
+            request.data['unit_s_id'
+                         ] = Unit.objects.create(
+                unit=request.data['unit_s_name']).id
+        if Unit.objects.filter(unit=request.data['unit_m_name']).exists():
+            request.data['unit_m_id'] = Unit.objects.get(
+                unit=request.data['unit_m_name']).id
+        elif not request.data['unit_m_name'] == '':
+            print(3)
+            request.data['unit_m_id'] = Unit.objects.create(
+                unit=request.data['unit_m_name']).id
+        if Unit.objects.filter(unit=request.data['unit_l_name']).exists():
+            request.data['unit_l_id'] = Unit.objects.get(
+                unit=request.data['unit_l_name']).id
+        elif not request.data['unit_l_name'] == '':
+            print(4)
+            request.data['unit_l_id'] = Unit.objects.create(
+                unit=request.data['unit_l_name']).id
+            # else:
+            #     item['unit'] = Unit.objects.create(unit=item['unit_name']).id
+
         serializer = RawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+        # return Response('ok')
 
 
 class PriceRawMaterialAPIView(APIView):

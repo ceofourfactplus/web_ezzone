@@ -79,7 +79,7 @@ export default {
     return {
       show_status: false,
       alert: false,
-      show_img: require(`../../../../backend${this.item.img}`),
+      show_img: this.item.img,
       name: "",
       qty: 0,
       pickup_amount: 0,

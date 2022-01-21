@@ -1,3 +1,5 @@
+from pprint import pprint
+import re
 from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.utils import field_mapping
@@ -63,10 +65,17 @@ class POSerializer(serializers.ModelSerializer):
             'create_at',
         ]
 
+
+class RMimg(serializers.ModelSerializer):
+    class Meta:
+        model = RawMaterial
+        fields = ['id', 'img']
+import datetime
+
 class RawMaterialSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(required=True)
     create_by_id = serializers.IntegerField(required=True)
-    update_by_id = serializers.IntegerField(required=False,allow_null=True)
+    update_by_id = serializers.IntegerField(required=False, allow_null=True)
     create_by_set = UserSerializer(read_only=True, source="user")
     update_by_set = UserSerializer(read_only=True, source="user")
     category_set = RawMaterialCategorySerializer(
@@ -75,8 +84,12 @@ class RawMaterialSerializer(serializers.ModelSerializer):
     unit_l_id = serializers.IntegerField(required=False, allow_null=True)
     unit_m_id = serializers.IntegerField(required=False, allow_null=True)
     unit_s_id = serializers.IntegerField(required=False, allow_null=True)
+    m_to_l = serializers.IntegerField(default=0)
+    s_to_m = serializers.IntegerField(default=0)
+
     remain = serializers.IntegerField(default=0, required=False)
     pricerawmaterial_set = PriceRawMaterialListSeriallizer(many=True)
+    img = serializers.ImageField(read_only=True)
 
     class Meta:
         model = RawMaterial
@@ -110,11 +123,49 @@ class RawMaterialSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        price =  validated_data.pop('pricerawmaterial_set')
+        price = validated_data.pop('pricerawmaterial_set')
         raw_material = RawMaterial.objects.create(**validated_data)
         for p in price:
-            PriceRawMaterial.objects.create(**p,raw_material=raw_material)
+            PriceRawMaterial.objects.create(**p, raw_material=raw_material)
         return raw_material
+
+    def update(self, instance, validated_data):
+        pprint(validated_data)
+        instance.category_id = validated_data['category_id']
+        instance.status = validated_data['status']
+        instance.name = validated_data['name']
+        instance.remain = validated_data['remain']
+        instance.minimum = validated_data['minimum']
+        instance.maximum = validated_data['maximum']
+        instance.in_refrigerator = validated_data['in_refrigerator']
+        instance.update_at = datetime.datetime.now()
+        instance.update_by_id = validated_data['update_by_id']
+        instance.unit_l_id = validated_data['unit_l_id']
+        instance.unit_m_id = validated_data['unit_m_id']
+        instance.unit_s_id = validated_data['unit_s_id']
+        instance.m_to_l = validated_data['m_to_l']
+        instance.s_to_m = validated_data['s_to_m']
+        instance.avg_l = validated_data['avg_l']
+        instance.avg_m = validated_data['avg_m']
+        instance.avg_s = validated_data['avg_s']
+        instance.save()
+        # create update delete price raw
+        pricetopping_id = [c['id']
+                           for c in validated_data['pricerawmaterial_set'] if c.get('id')]
+        PriceRawMaterial.objects.filter(raw_material_id=instance.id).exclude(
+            id__in=pricetopping_id).delete()
+
+        to_be_create_topping = [
+            c for c in validated_data['pricerawmaterial_set'] if c.get('id') == None]
+        for p in to_be_create_topping:
+            PriceRawMaterial.objects.create(**p, raw_material_id=instance.id)
+
+        to_be_update_topping = [
+            c for c in validated_data['pricerawmaterial_set'] if c.get('id')]
+        for p in to_be_update_topping:
+            PriceRawMaterial.objects.filter(id=p['id']).update(**p)
+        return instance
+
 
 class PriceRawMaterialSerializer(serializers.ModelSerializer):
     raw_material_id = serializers.IntegerField()

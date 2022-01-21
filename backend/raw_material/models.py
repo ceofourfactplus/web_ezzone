@@ -24,7 +24,7 @@ class Supplier(models.Model):
     contact = models.CharField(max_length=100)  # ติดต่อใคร
     phone = models.CharField(max_length=13)
     address = models.CharField(max_length=500)
-    email = models.EmailField(null=False, blank=False)
+    email = models.EmailField(null=False, blank=False,default=None)
     google_map = models.URLField(max_length=400, default='')
     create_at = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(blank=True, null=True)
@@ -74,7 +74,7 @@ class PriceRawMaterial(models.Model):
     last_price = models.DecimalField(
         max_digits=5, decimal_places=2, default=0)
     raw_material = models.ForeignKey(
-        RawMaterial, on_delete=models.PROTECT, null=True, blank=True)
+        RawMaterial, on_delete=models.CASCADE, null=True, blank=True)
     unit = models.ForeignKey(
         Unit, on_delete=models.PROTECT, null=True, blank=True)
     supplier = models.ForeignKey(
