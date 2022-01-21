@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 import ast
 from .models import PointPromotion, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint, ExchangeHistory
-from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer, ExchangeHistorySerializer
+from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer, ExchangeHistorySerializer, PromotionPackageImage
 
 
 class PointPromotionAPI(APIView):
@@ -151,6 +151,25 @@ class PackageGET(APIView):
         serializer = PromotionPackageSerializer(package)
         return Response(serializer.data)
     
+class PackageImage(APIView):
+    def get_object(self, pk):
+        try:
+            return PromotionPackage.objects.get(id=pk)
+        except PromotionPackage.DoesNotExist:
+            raise 404
+    
+    def put(self, request, pk):
+        package = self.get_object(pk)
+        serializer = PromotionPackageImage(package, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)
+
+
+        return Response(serializer.data)
+    
+
 class PackageItemAPI(APIView):
     def get_object(self, pk):
         try:

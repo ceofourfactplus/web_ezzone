@@ -1,9 +1,10 @@
 from django.db.models import fields
 from rest_framework import serializers
 from user.serializers import UserSerializer
-from product.serializers import ProductSerializer, ProductCategorySerializer, PriceProductSerializer, ToppingCategorySerializer
+from product.serializers import ProductSerializer, ProductCategorySerializer, PriceProductSerializer, ToppingCategorySerializer, OnlyPriceProduct, ToppingSerializer
 from customer.serializers import CustomerSerializer, AddressCustomerSerializer
 from .models import PointPromotion, Voucher, PromotionPackage, PackageItem, ItemTopping, Rewards, ConditionRewards, Redemption, CustomerPoint, ExchangeHistory
+from pprint import pprint
 
 class PointListSerializer(serializers.ModelSerializer):
   class Meta:
@@ -18,6 +19,11 @@ class PackageListSerializer(serializers.ModelSerializer):
   class Meta:
     model = PromotionPackage
     fields = '__all__'
+    
+class PromotionPackageImage(serializers.ModelSerializer):
+    class Meta:
+        model = PromotionPackage
+        fields = ['img']
 
 class PointSerializer(serializers.ModelSerializer):
   create_by_id = serializers.IntegerField()
@@ -67,55 +73,32 @@ class VoucherSerializer(serializers.ModelSerializer):
       'update_at',
     ]
     
-class PromotionPackageSerializer(serializers.ModelSerializer):
+    
+class ItemToppingSerializer(serializers.ModelSerializer):
   id = serializers.IntegerField(required=False)
-  create_by_id = serializers.IntegerField()
-  update_by_id = serializers.IntegerField()
-  product_set = ProductSerializer(read_only=True)
-  topping_set = ProductSerializer(read_only=True)
+  topping_id = serializers.IntegerField()
+  item_id = serializers.IntegerField(read_only=True)
+  topping_set = ToppingSerializer(read_only=True, source='topping')
+  description = serializers.CharField(required=False, allow_blank=True)
   class Meta:
-    model = PromotionPackage
+    model = ItemTopping
     fields = [
       'id',
-      'promotion',
-      'start_date',
-      'img',
-      'amount_day',
-      'discount_price',
-      'normal_price',
-      'status',
-      'total_amount',
+      'topping_id',
+      'qty',
+      'total_price',
       'description',
-      'create_by_id',
-      'update_by_id',
-      'create_at',
-      'update_at',
-      'product_set',
+      'item_id',
       'topping_set',
     ]
-    
-    def create(self, validated_data):
-      package_items = validated_data.pop('package_items')
-      pro_pack = PromotionPackage.objects.create(**validated_data)
-      if package_items != []:
-        for item in package_items:
-            package_item_topping = item.pop('package_item_topping')
-            package_item = PackageItem.objects.create(**item, package=pro_pack)
-            if package_item_topping != []:
-              for topping in package_item_topping:
-                ItemTopping.objects.create(**topping, item=package_item)
-      return pro_pack
-          
-      
-      
-      
       
 class PackageItemSerializer(serializers.ModelSerializer):
   id = serializers.IntegerField(required=False)
   product_id = serializers.IntegerField()
-  package_id = serializers.IntegerField()
+  package_id = serializers.IntegerField(read_only=True)
   product_set = ProductSerializer(read_only=True, source='product')
-  package_set = PromotionPackageSerializer(read_only=True, source='package')
+  itemtopping_set = ItemToppingSerializer(many=True)
+  description = serializers.CharField(required=False, allow_blank=True)
   class Meta:
     model = PackageItem
     fields = [
@@ -126,28 +109,49 @@ class PackageItemSerializer(serializers.ModelSerializer):
       'description',
       'package_id',
       'product_set',
-      'package_set',
-    ]
+      'itemtopping_set',
+    ] 
     
-class ItemToppingSerializer(serializers.ModelSerializer):
+
+class PromotionPackageSerializer(serializers.ModelSerializer):
   id = serializers.IntegerField(required=False)
-  topping_id = serializers.IntegerField()
-  item_id = serializers.IntegerField()
-  topping_set = ProductSerializer(read_only=True, source='topping')
-  item_set = PackageItemSerializer(read_only=True, source='item')
+  create_by_id = serializers.IntegerField()
+  update_by_id = serializers.IntegerField()
+  description = serializers.CharField(required=False, allow_blank=True)
+  packageitem_set = PackageItemSerializer(many=True)
   class Meta:
-    model = ItemTopping
+    model = PromotionPackage
     fields = [
       'id',
-      'topping_id',
-      'qty',
-      'total_price',
+      'start_date',
+      'promotion',
+      'amount_day',
+      'discount_price',
+      'normal_price',
+      'status',
+      'total_amount',
       'description',
-      'item_id',
-      'item_set',
-      'topping_set',
+      'create_by_id',
+      'update_by_id',
+      'create_at',
+      'update_at',
+      'packageitem_set',
     ]
     
+  def create(self, validated_data):
+    print(validated_data)
+    packageitem_set = validated_data.pop('packageitem_set')
+    pp = PromotionPackage.objects.create(**validated_data)
+    if packageitem_set != []:
+      for item in packageitem_set:
+        itemtopping_set = item.pop('itemtopping_set')
+        package_item = PackageItem.objects.create(**item, package=pp)
+        if not itemtopping_set == []:
+            for topping in itemtopping_set:
+                ItemTopping.objects.create(**topping, item=package_item)
+    return pp
+          
+
 class RewardsSerializer(serializers.ModelSerializer):
   create_by_id = serializers.IntegerField()
   update_by_id = serializers.IntegerField()

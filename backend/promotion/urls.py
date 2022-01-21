@@ -7,6 +7,7 @@ urlpatterns = [
     path('voucher/', views.VoucherAPI().as_view()),
     path('voucher/<int:pk>', views.VoucherGET().as_view()),
     path('package/', views.PackageAPI().as_view()),
+    path('package-image/<int:pk>', views.PackageImage().as_view()),
     path('package/<int:pk>', views.PackageGET().as_view()),
     path('package-item/', views.PackageItemAPI().as_view()),
     path('package-item/<int:pk>', views.PackageItemGET().as_view()),
