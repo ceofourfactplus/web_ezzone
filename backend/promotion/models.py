@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from customer.models import Customer
 from backend.settings import AUTH_USER_MODEL
-from product.models import Product
+from product.models import Product, Topping
 
 def upload_to_promotion(instance,filename):
     return 'promotion/{filename}'.format(filename=filename)
@@ -120,7 +120,7 @@ class PackageItem(models.Model):
   package = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
 
 class ItemTopping(models.Model):
-  topping = models.ForeignKey(Product,on_delete=models.PROTECT)
+  topping = models.ForeignKey(Topping,on_delete=models.PROTECT)
   item = models.ForeignKey(PackageItem,on_delete=models.CASCADE)
   qty = models.IntegerField()
   total_price = models.DecimalField(max_digits=4,decimal_places=2)

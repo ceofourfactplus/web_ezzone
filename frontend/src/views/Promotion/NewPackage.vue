@@ -39,11 +39,11 @@
           </div>
           <!-- Amount Day -->
           <div class="row" style="margin-top: 20px">
-            <div class="col-12 w-100 txt" style="margin-left: 8px">
+            <div class="col-12 w-100 txt" style="margin-left: 18px">
               Amount Day&nbsp;:&nbsp;<input
                 type="text"
                 class="input-promotion"
-                style="width: 204px"
+                style="width: 240px"
                 v-model="amount_day"
               />
             </div>
@@ -103,14 +103,7 @@
       >
         Product in Package
       </div>
-      <div class="col-1 w-100">
-        <img
-          src="../../assets/icon/save.png"
-          style="position: relative; top: 5px"
-          v-if="add_menu"
-          @click="make_package_item"
-        />
-      </div>
+      <div class="col-1 w-100"></div>
       <div class="col-2 w-100" v-if="add_menu">
         <button
           class="btn-ghost"
@@ -145,194 +138,249 @@
               />
             </div>
           </div>
-          <div class="col-5 w-100">Product</div>
-          <div class="col-3 w-100">Topping</div>
-          <div class="col-1 w-100">Qty</div>
-          <div class="col-2 w-100">Price</div>
+          <div class="col-6 w-100">Product</div>
+          <div class="col-1 w-100" style="margin-left: -10px">Qty</div>
+          <div class="col-3 w-100" style="margin-left: -20px">Price</div>
+          <div class="col-1 w-100"></div>
         </div>
       </div>
       <!-- Menu -->
-      <div
-        class="table-item"
-        v-for="item in package_items"
-        :key="item"
-        style="width: 104%; margin-left: -11px"
-      >
-        <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-1 w-100">
-            <div class="checkbox-orange">
-              <input
-                type="checkbox"
-                style="margin-top: -2px; left: 23px"
-                :value="item"
-                v-model="selected_items"
-              />
+      <div v-for="item in package_items" :key="item">
+        <!-- Package Item -->
+        <div class="table-item" style="width: 104%; margin-left: -11px">
+          <div
+            class="row"
+            style="font-size: 20px; color: white; line-height: 1"
+          >
+            <div class="col-1 w-100">
+              <div class="checkbox-orange">
+                <input
+                  type="checkbox"
+                  style="margin-top: -2px; left: 23px"
+                  :value="item"
+                  v-model="selected_items"
+                />
+              </div>
             </div>
+            <div
+              class="col-6 w-100"
+              style="margin-left: 10px; text-align: left"
+            >
+              {{ item.product.name }}
+            </div>
+            <div class="col-1 w-100">{{ item.qty }}</div>
+            <div class="col-3 w-100">{{ item.price }}</div>
           </div>
-          <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
-            {{ item.product.name }}
+        </div>
+        <!-- Item Topping -->
+        <div
+          class="table-item"
+          v-for="topping in item.topping"
+          :key="topping"
+          style="width: 104%; margin-left: -11px"
+        >
+          <div
+            class="row"
+            style="font-size: 20px; color: white; line-height: 1"
+          >
+          <div class="col-1 w-100"></div>
+            <div class="col-1 w-100">
+              <div class="checkbox-orange">
+                <input
+                  type="checkbox"
+                  style="margin-top: -2px; left: 23px"
+                  :value="topping"
+                  v-model="selected_items"
+                />
+              </div>
+            </div>
+            <div
+              class="col-5 w-100"
+              style="margin-left: 10px; text-align: left"
+            >
+              {{ topping.name }}
+            </div>
+            <div class="col-1 w-100">{{ topping.remain }}</div>
+            <div class="col-3 w-100">{{ topping.pricetopping_set[0].price }}</div>
           </div>
-          <div class="col-3 w-100">{{ item.topping.name }}</div>
-          <div class="col-1 w-100">{{ item.qty }}</div>
-          <div class="col-2 w-100">{{ item.price }}</div>
         </div>
       </div>
-      <!-- Add Menu -->
+
+      <!-- to create product -->
       <div
         class="table-item"
         v-if="add_menu"
         style="width: 104%; margin-left: -11px"
       >
+        <form style="padding: 3px" @submit="make_package_item">
+          <div class="row" style="padding-top: 0px">
+            <div class="col-7 w-100" style="margin: auto; line-height: 100%">
+              <input
+                type="text"
+                class="input-add-package"
+                @input="searchByTyping($event, 'product')"
+                v-model="product_item.name"
+                :class="{ incorrect: create_input }"
+                required
+              />
+              <ul>
+                <li
+                  v-for="product in products"
+                  :key="product.id"
+                  @click="select_product(product)"
+                >
+                  <p
+                    class="w-100"
+                    :class="{ selected: product_item.id == product.id }"
+                  >
+                    {{ product.name }}
+                  </p>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="col-1 w-100"
+              style="
+                margin: auto;
+                text-align: left;
+                line-height: 100%;
+                margin-top: 0px;
+              "
+            >
+              <input
+                type="number"
+                class="input-add-package"
+                v-model="qty"
+                required
+              />
+            </div>
+            <div class="col-3 w-100" style="line-height: 130%; font-size: 24px">
+              <input
+                v-if="Object.keys(product_item).length != 0"
+                type="number"
+                class="input-add-package"
+                :value="new_menu_price * qty"
+                required
+              />
+              <input
+                v-else
+                type="number"
+                class="input-add-package"
+                value="0"
+                required
+              />
+              <input type="submit" style="display: none" />
+            </div>
+            <div class="col-1" style="line-height: 145%">
+              <img
+                src="../../assets/icon/incorrect.png"
+                style="width: 30px"
+                alt=""
+                @click="cancel_to_create"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Add Topping -->
+      <div
+        class="table-item"
+        v-if="add_topping && add_menu"
+        style="width: 104%; margin-left: -11px"
+      >
+        <form style="padding: 3px" @submit="make_package_item">
+          <div class="row" style="padding-top: 0px">
+            <div class="col-1 w-100">Topping</div>
+            <div class="col-6 w-100" style="margin: auto; line-height: 100%">
+              <input
+                type="text"
+                class="input-add-package"
+                style="margin-left: -23px;"
+                @input="searchByTyping($event, 'topping')"
+                :class="{ incorrect: create_input }"
+                :value="topping_item.name"
+                required
+              />
+              <ul style="min-width: 40%">
+                <li
+                  v-for="topping in toppings"
+                  :key="topping.id"
+                  @click="select_topping(topping)"
+                >
+                  <p
+                    class="w-100"
+                    :class="{ selected: topping_item.id == topping.id }"
+                  >
+                    {{ topping.name }}
+                  </p>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="col-1 w-100"
+              style="
+                margin: auto;
+                text-align: left;
+                line-height: 100%;
+                margin-top: 0px;
+              "
+            >
+              <input
+                type="number"
+                class="input-add-package"
+                v-model="topping_qty"
+                required
+              />
+            </div>
+            <div class="col-3 w-100" style="line-height: 130%; font-size: 24px">
+              <input
+                v-if="Object.keys(topping_item).length != 0"
+                type="number"
+                class="input-add-package"
+                :value="
+                  topping_item.pricetopping_set[0].price * topping_item.remain
+                "
+                required
+              />
+              <input
+                v-else
+                type="number"
+                class="input-add-package"
+                value="0"
+                required
+              />
+              <input type="submit" style="display: none" />
+            </div>
+            <div class="col-1" style="line-height: 145%">
+              <img
+                src="../../assets/icon/incorrect.png"
+                style="width: 30px"
+                @click="
+                  add_topping = false;
+                  topping_item = {};
+                "
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Add Topping Txt -->
+      <div
+        class="table-item"
+        style="width: 104%; margin-left: -11px"
+        v-if="add_menu"
+      >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-5 w-100 mt--4">
-            <input
-              type="text"
-              class="input-add-package w-100"
-              placeholder="Menu"
-              @input="searchByTyping($event, 'product')"
-              v-model="product_item.name"
-            />
-          </div>
-          <div class="col-3 w-100 mt--4">
-            <input
-              type="text"
-              class="input-add-package w-100"
-              placeholder="Topping"
-              @input="searchByTyping($event, 'topping')"
-              v-model="topping_item.name"
-            />
-          </div>
-          <div class="col-2 w-100 mt--4">
-            <input
-              type="text"
-              class="input-add-package w-100"
-              placeholder="Qty"
-              v-model="qty"
-            />
-          </div>
-          <div class="col-2 w-100 mt--4">
-            <input
-              type="text"
-              class="input-add-package w-100"
-              placeholder="Price"
-              :value="new_menu_price"
-              readonly
-            />
-          </div>
           <div
-            v-if="search_product"
-            class="col-5 w-100"
-            style="
-              position: relative;
-              height: 100px;
-              background: white;
-              padding: 0px;
-            "
-          >
-            <div
-              @click="
-                product_item = { ...product };
-                search_product = false;
-                new_menu_price = parseInt(
-                  product_item.priceproduct_set[0].price
-                );
-              "
-              class="product-menu"
-              v-for="product in products"
-              :key="product"
-            >
-              {{ product.name }}
-            </div>
-          </div>
-          <div v-if="search_topping" class="col-5 w-100"></div>
-          <div
-            v-if="search_topping"
             class="col-3 w-100"
-            style="
-              position: relative;
-              height: 100px;
-              background: white;
-              padding: 0px;
-            "
+            style="margin-left: 20px; text-align: left; color: #50d1aa"
+            @click="add_topping = true"
           >
-            <div
-              @click="
-                topping_id = product.id;
-                topping_item = { ...product };
-                search_topping = false;
-                new_menu_price += parseInt(
-                  topping_item.priceproduct_set[0].price
-                );
-              "
-              class="product-menu"
-              v-for="product in products_for_topping"
-              :key="product"
-            >
-              {{ product.name }}
-            </div>
+            + Add Topping
           </div>
         </div>
       </div>
-      <!-- to create product -->
-        <!-- <div class="table-item" v-if="add_menu">
-          <form style="padding: 3px" @submit="add_product">
-            <div class="row">
-              <div class="col-5 w-100" style="margin: auto; line-height: 100%">
-                <input
-                  type="text"
-                  class="input-product"
-                  v-model="product"
-                  :class="{ incorrect: create_input }"
-                  required
-                />
-                <ul>
-                  <li
-                    v-for="product in products"
-                    :key="product.id"
-                    @click="select_product(product)"
-                  >
-                    <p
-                      class="w-100"
-                      :class="{ selected: product_item.id == product.id }"
-                    >
-                      {{ product.name }}
-                    </p>
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="col-3 w-100"
-                style="
-                  margin: auto;
-                  text-align: left;
-                  line-height: 100%;
-                  margin-top: 0px;
-                "
-              >
-                <input
-                  type="number"
-                  class="input-product"
-                  v-model="price"
-                  required
-                />
-              </div>
-              <div
-                class="col-3 w-100"
-                style="line-height: 130%; font-size: 24px"
-              >
-                <input type="submit" style="display: none" />
-              </div>
-              <div class="col-1" style="line-height: 145%">
-                <img
-                  src="../../assets/icon/incorrect.png"
-                  style="width: 30px"
-                  alt=""
-                  @click="cancel_to_create"
-                />
-              </div>
-            </div>
-          </form>
-        </div> -->
+
       <!-- Total -->
       <div class="table-item" style="width: 104%; margin-left: -11px">
         <div
@@ -377,7 +425,7 @@
 </template>
 
 <script>
-import SavePopup from "../../components/main_component/SavePopup.vue"
+import SavePopup from "../../components/main_component/SavePopup.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import { api_product } from "../../api/api_product";
@@ -393,6 +441,7 @@ export default {
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     this.fetchProducts();
+    this.fetchToppings();
   },
   data() {
     return {
@@ -400,8 +449,10 @@ export default {
       search_product: false,
       is_staff: false,
       alert: false,
+      add_topping: false,
       add_menu: false,
       select_all: false,
+      topping_items: [],
       package_items: [],
       selected_items: [],
       temp_start: null,
@@ -409,10 +460,11 @@ export default {
       // Item Topping
       topping_id: null,
       topping_price: null,
+      topping_qty: 1,
       item_id: null,
       // Package Item
       product_item: {},
-      qty: null,
+      qty: 1,
       total_price: null,
       package: null,
       // Promotion Package
@@ -425,13 +477,15 @@ export default {
       normal_price: 0,
       status: true,
       total_amount: 1,
-      description: null,
+      description: "",
       show_img: null,
       products: [],
-      products_for_topping: [],
+      toppings: [],
+      temp_toppings: [],
       temp_products: [],
       new_menu_price: null,
-      product: '',
+      product: "",
+      topping_name: null,
     };
   },
   methods: {
@@ -442,71 +496,78 @@ export default {
         this.temp_products = response.data;
       });
     },
-    save() {
-      const data = new FormData();
-      data.append("promotion", this.promotion);
-      data.append("start_date", this.start_date);
-      data.append("img", this.img, this.img.name);
-      data.append("amount_day", this.amount_day);
-      data.append("discount_price", this.discount_price);
-      data.append("description", this.description);
-      data.append("total_amount", this.package_items.length);
-      data.append("status", this.status);
-      data.append("update_by_id", this.$store.state.auth.userInfo.id);
-      data.append("create_by_id", this.$store.state.auth.userInfo.id);
-      if (this.package_items.length == 1) {
-        data.append("normal_price", this.package_items[0].price);
-      } else if (this.package_items.length > 0) {
-        data.append(
-          "normal_price",
-          this.package_items.reduce((x, y) => x.price + y.price)
-        );
-      } else {
-        data.append("normal_price", 0);
-      }
-
-      api_promotion.post("package/", data).then((response) => {
-        console.log(response.data, "response");
-        this.package_items.forEach((element) => {
-          const package_item = {
-            product_id: element.product.id,
-            qty: element.qty,
-            total_price: element.price,
-            description: element.description,
-            package_id: response.data.id,
-          };
-          api_promotion.post("package-item/", package_item).then((res) => {
-            console.log(res.data, "res");
-            if (Object.keys(element.topping).length != 0) {
-              const item_topping = {
-                topping_id: element.topping.id,
-                item_id: res.data.id,
-                total_price: parseInt(
-                  element.topping.priceproduct_set[0].price
-                ),
-                qty: 10,
-              };
-              api_promotion
-                .post("package-item-topping/", item_topping)
-                .then((it_res) => {
-                  console.log(it_res.data, "it_res");
-                  this.alert = true;
-                  setTimeout(() => {
-                    this.alert = false;
-                    this.$router.push({ name: "Promotion" });
-                  }, 2000);
-                });
-            }
-          });
-        });
+    fetchToppings() {
+      api_product.get("topping/").then((response) => {
+        console.log(response.data, "toppings");
+        this.toppings = response.data;
+        this.temp_toppings = response.data;
       });
+    },
+    save() {
+      const packageitem = [];
+      this.package_items.forEach((element) => {
+        var pi = {
+          product_id: element.product.id,
+          qty: element.qty,
+          total_price: element.price,
+          description: element.description,
+          itemtopping_set: [],
+        };
+        if (element.topping.length != 0) {
+          element.topping.forEach((el) => {
+            pi.itemtopping_set.push({
+              topping_id: el.id,
+              total_price: parseInt(el.pricetopping_set[0].price),
+              qty: el.remain,
+            });
+          });
+        }
+        packageitem.push(pi);
+      });
+      const data = {
+        promotion: this.promotion,
+        start_date: this.start_date,
+        amount_day: this.amount_day,
+        discount_price: this.discount_price,
+        description: this.description,
+        total_amount: this.package_items.length,
+        status: this.status,
+        normal_price: 0,
+        update_by_id: this.$store.state.auth.userInfo.id,
+        create_by_id: this.$store.state.auth.userInfo.id,
+        packageitem_set: packageitem,
+      };
+      if (this.package_items.length == 1) {
+        data.normal_price = this.package_items[0].price;
+      } else if (this.package_items.length > 0) {
+        data.normal_price = this.package_items.reduce(
+          (x, y) => x.price + y.price
+        );
+      }
+      console.log(data, 'data')
+      api_promotion.post("package/", data).then((response) => {
+        const img = new FormData();
+        img.append("img", this.img, this.img.name);
+        api_promotion.put(`package-image/${response.data.id}`, img).then(() => {})
+        this.alert = true
+        setTimeout(() => {
+          this.alert = false
+        }, 2000);
+      });
+    },
+    select_topping(item) {
+      console.log(item, "item");
+      item.remain = this.topping_qty;
+      this.topping_item = item;
+      this.toppings = [];
     },
     select_product(item) {
       this.product_item = { ...item };
-      this.search_product = false;
-      this.new_menu_price = parseInt(this.product_item.priceproduct_set[0].price);
+      this.new_menu_price = parseInt(
+        this.product_item.priceproduct_set[0].price
+      );
       setTimeout(() => {
-        this.search_product = [];
+        this.products = [];
       }, 100);
     },
     searchByTyping(e, type) {
@@ -518,21 +579,26 @@ export default {
         }
         if (type == "topping") {
           this.search_topping = false;
-          this.products_for_topping = this.temp_products;
+          this.toppings = this.temp_toppings;
         }
       } else {
-        this.temp_products.forEach((element) => {
-          if (element.name.indexOf(e.target.value) + 1 != 0) {
-            temp.push(element);
-          }
-        });
         if (type == "product") {
+          this.temp_products.forEach((element) => {
+            if (element.name.indexOf(e.target.value) + 1 != 0) {
+              temp.push(element);
+            }
+          });
           this.search_product = true;
           this.products = temp;
         }
         if (type == "topping") {
+          this.temp_toppings.forEach((element) => {
+            if (element.name.indexOf(e.target.value) + 1 != 0) {
+              temp.push(element);
+            }
+          });
           this.search_topping = true;
-          this.products_for_topping = temp;
+          this.toppings = temp;
         }
       }
     },
@@ -555,18 +621,23 @@ export default {
       this.status = val;
     },
     make_package_item() {
+      if (Object.keys(this.topping_item).length != 0) {
+        this.topping_items.push(this.topping_item);
+      }
       var data = {
         product: this.product_item,
-        topping: this.topping_item,
+        topping: this.topping_items,
         qty: this.qty,
         price: this.new_menu_price,
         description: this.description,
       };
       this.package_items.push(data);
       this.add_menu = false;
+      this.add_topping = false;
       this.product_item = {};
       this.topping_item = {};
-      this.qty = null;
+      this.topping_items = [];
+      this.qty = 1;
       this.total_price = null;
       this.new_menu_price = null;
     },
@@ -603,49 +674,7 @@ export default {
       this.total_price = 0;
     },
   },
-  watch: {
-    product(newProduct) {
-      this.create_input = false;
-      if (newProduct != "") {
-        if (this.type_item == 4) {
-          api_product
-            .get("topping-by-search/" + newProduct + "/")
-            .then((response) => {
-              var arr = [];
-              this.search_product = response.data;
-              this.search_product.forEach((item) => {
-                if (this.filter_same_topping(item)) {
-                  arr.push(item);
-                }
-              });
-              this.search_product = arr;
-            });
-        } else {
-          api_product
-            .get(
-              "product-by-type-and-search/" +
-                this.type_item +
-                "/" +
-                newProduct +
-                "/"
-            )
-            .then((response) => {
-              var arr = [];
-              this.search_product = response.data;
-              this.search_product.forEach((item) => {
-                if (this.filter_same_product(item)) {
-                  arr.push(item);
-                }
-              });
-              this.search_product = arr;
-            });
-        }
-      } else {
-        this.selected_product = {};
-      }
-      this.search_product = [];
-    },
-  }
+  watch: {},
 };
 </script>
 
@@ -663,6 +692,7 @@ export default {
   margin-top: -4px;
 }
 .input-add-package {
+  width: 100%;
   height: 90%;
   line-height: 90%;
   background: #717171;
@@ -715,13 +745,13 @@ span.icon-save {
   color: white;
 }
 .input-top {
-  width: 215px;
+  width: 85%;
   height: 50px;
   background: rgb(113, 113, 113);
   border-radius: 12px;
   color: white;
   float: left;
-  margin: 10px 0px 0px 20px;
+  margin: 10px 0px 0px 56px;
 }
 .input-code {
   width: 167px;
@@ -776,13 +806,13 @@ span.icon-save {
   width: 28px;
 }
 ul {
-  background-color: #ea7c69;
+  background: rgb(113, 113, 113);
   margin-top: 10px;
   list-style-type: none;
   padding: 0px;
   border-radius: 10px;
   position: absolute;
-  min-width: 30%;
+  min-width: 50%;
   z-index: 1;
 }
 p {
