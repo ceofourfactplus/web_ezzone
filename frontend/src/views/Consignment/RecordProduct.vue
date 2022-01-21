@@ -156,18 +156,18 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 /* CheckBox */
 .checkbox-white input:checked::after {
   font-size: 20px;
-  top: -10px;
-  left: 6px;
+  line-height: 23px;
+  top: -1px;
+  left: 2px;
+  height: 30px;
+  width: 30px;
 }
 .checkbox-white input::before {
   height: 30px;
   width: 30px;
-  margin-top:3px;
+  margin-top:0px;
   margin-left:5px;
-}
-.checkbox-white input {
-  height: 28px;
-  width: 28px;
+  border: 3px solid #EA7C69;
 }
 
 .Date {

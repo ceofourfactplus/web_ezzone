@@ -85,11 +85,15 @@ import RewardDetail from "../views/Promotion/RewardDetail.vue";
 import RewardName from "../views/Promotion/RewardName.vue";
 
 // Consignment
-import Consigner from "../views/Consignment/Consigner.vue";
-import ConsignerProduct from "../views/Consignment/ConsignerProduct.vue";
-import RecordProduct from "../views/Consignment/RecordProduct.vue";
-import NewConsignment from "../views/Consignment/NewConsignment.vue";
-import NewConsigner from "../views/Consignment/NewConsigner.vue";
+import Consigner from "../views/Consignment/Consigner.vue"
+import ConsignerProduct from "../views/Consignment/ConsignerProduct.vue"
+import RecordProduct from "../views/Consignment/RecordProduct.vue"
+import NewConsignment from "../views/Consignment/NewConsignment.vue"
+import NewConsigner from "../views/Consignment/NewConsigner.vue"
+import PayShare from "../views/Consignment/PayShare.vue"
+import SharePayment from "../components/consignment/SharePayment.vue"
+import OutConsignment from "../components/consignment/OutConsignment.vue"
+import AddConsignment from "../components/consignment/AddConsignment.vue"
 
 // Home
 import Home from "../views/Test.vue";
@@ -624,6 +628,30 @@ const routes = [
     name: "NewConsigner",
     props: true,
     component: NewConsigner,
+  },
+  {
+    path: "/consignment/payshare",
+    name: "PayShare",
+    props: true,
+    component: PayShare,
+  },
+  {
+    path: "/consignment/sharepayment",
+    name: "SharePayment",
+    props: true,
+    component: SharePayment,
+  },
+  {
+    path: "/consignment/outconsignment",
+    name: "OutConsignment",
+    props: true,
+    component: OutConsignment,
+  },
+  {
+    path: "/consignment/addconsignment",
+    name: "AddConsignment",
+    props: true,
+    component: AddConsignment,
   },
   // {
   //   path: "/face-login/",
