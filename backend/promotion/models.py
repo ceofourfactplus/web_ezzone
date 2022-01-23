@@ -124,7 +124,7 @@ class ItemTopping(models.Model):
   item = models.ForeignKey(PackageItem,on_delete=models.CASCADE)
   qty = models.IntegerField()
   total_price = models.DecimalField(max_digits=4,decimal_places=2)
-  description = models.TextField(null=True,blank=True)
+#   description = models.TextField(null=True,blank=True)
 
 
 class CustomerPoint(models.Model):

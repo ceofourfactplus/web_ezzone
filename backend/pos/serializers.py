@@ -171,13 +171,12 @@ class OrderSerializer(serializers.ModelSerializer):
         instance.change = validated_data['change']
         instance.reason = validated_data['reason']
         instance.save()
-        orderitem_id = [c['id']
-                        for c in validated_data['orderitem_set'] if c.get('id')]
+        orderitem_id = [c['id'] for c in validated_data['orderitem_set'] if c.get('id')]
+        
         OrderItem.objects.filter(order_id=instance.id).exclude(
             id__in=orderitem_id).delete()
 
-        to_be_create = [
-            c for c in validated_data['orderitem_set'] if c.get("id") == None]
+        to_be_create = [c for c in validated_data['orderitem_set'] if c.get("id") == None]
         for i in to_be_create:
             if 'orderitemtopping_set' in i:
                 orderitemtopping_set = i.pop('orderitemtopping_set')

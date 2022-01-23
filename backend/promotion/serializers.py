@@ -79,7 +79,6 @@ class ItemToppingSerializer(serializers.ModelSerializer):
   topping_id = serializers.IntegerField()
   item_id = serializers.IntegerField(read_only=True)
   topping_set = ToppingSerializer(read_only=True, source='topping')
-  description = serializers.CharField(required=False, allow_blank=True)
   class Meta:
     model = ItemTopping
     fields = [
@@ -87,7 +86,6 @@ class ItemToppingSerializer(serializers.ModelSerializer):
       'topping_id',
       'qty',
       'total_price',
-      'description',
       'item_id',
       'topping_set',
     ]
@@ -97,7 +95,7 @@ class PackageItemSerializer(serializers.ModelSerializer):
   product_id = serializers.IntegerField()
   package_id = serializers.IntegerField(read_only=True)
   product_set = ProductSerializer(read_only=True, source='product')
-  itemtopping_set = ItemToppingSerializer(many=True)
+  itemtopping_set = ItemToppingSerializer(many=True, required=False, allow_null=True)
   description = serializers.CharField(required=False, allow_blank=True)
   class Meta:
     model = PackageItem
@@ -125,6 +123,7 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
     model = PromotionPackage
     fields = [
       'id',
+      'img',
       'start_date',
       'promotion',
       'amount_day',
@@ -153,7 +152,49 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
             for topping in itemtopping_set:
                 ItemTopping.objects.create(**topping, item=package_item)
     return pp
-          
+    
+  def update(self, instance, validated_data):
+    instance.promotion = validated_data['promotion']
+    instance.start_date = validated_data['start_date']
+    instance.amount_day = validated_data['amount_day']
+    instance.discount_price = validated_data['discount_price']
+    instance.normal_price = validated_data['normal_price']
+    instance.status = validated_data['status']
+    instance.total_amount = validated_data['total_amount']
+    instance.description = validated_data['description']
+    instance.update_by_id = validated_data['update_by_id']
+    instance.save()
+    
+    package_item_id = [i['id'] for i in validated_data['packageitem_set'] if i.get('id')]
+    PackageItem.objects.filter(package_id=instance.id).exclude(id__in=package_item_id).delete()
+    print(validated_data['packageitem_set'], 'validated_data')
+    to_be_create = [i for i in validated_data['packageitem_set'] if i.get('id') == None]
+    for i in to_be_create:
+      if 'itemtopping_set' in i:
+        itemtopping_set = i.pop('itemtopping_set')
+      package_item = PackageItem.objects.create(**i, package_id=instance.id)
+      for p in itemtopping_set:
+        ItemTopping.objects.create(**p, item_id=package_item.id)
+        
+    to_be_update = [i for i in validated_data['packageitem_set'] if i.get('id')]
+    for i in to_be_update:
+      if 'itemtopping_set' in i:
+        itemtopping_set = i.pop('itemtopping_set')
+      pi = PackageItem.objects.filter(id=i['id']).update(**i, package_id=instance.id)
+      to_be_create_topping = [i for i in itemtopping_set if i.get("id") == None]
+      for p in to_be_create_topping:
+        ItemTopping.objects.create(**p, item_id=pi.id)
+        
+      to_be_delete_topping = [p['id'] for p in itemtopping_set]
+      for p in to_be_delete_topping:
+          ItemTopping.objects.filter(item_id=i['id']).exclude(
+              id__in=to_be_delete_topping).delete()
+
+      to_be_update_topping = [p for p in itemtopping_set ]
+      for p in to_be_update_topping: 
+        print(p, 'p')
+        ItemTopping.objects.filter(id=p['id']).update(**p)
+    return validated_data
 
 class RewardsSerializer(serializers.ModelSerializer):
   create_by_id = serializers.IntegerField()
