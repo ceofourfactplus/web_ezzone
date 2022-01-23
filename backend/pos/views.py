@@ -8,9 +8,9 @@ from customer.models import Customer, AddressCustomer
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from pprint import pprint
-from product.models import Product, SaleChannel
+from product.models import Product, SaleChannel, Topping
 from product.serializers import ProductReportSerialiser, ChannelReportSerializer
-import datetime
+from datetime import datetime
 
 
 class cancel_order(APIView):
@@ -29,9 +29,9 @@ def check_is_finish(order_id):
 
     if (order.payment_status == 3 or order.payment_status == 4) and (order.status_food == 2 or order.status_food == None) and (order.status_drink == 2 or order.status_drink == None):
         order.status_order = 3
+        order.spen_time = str(
+            datetime.now() - order.create_at.replace(tzinfo=None))
         order.save()
-    serializer = OrderSerializer(order)
-    pprint(serializer.data)
 
 
 class SelectPaymentOrder(APIView):
@@ -51,7 +51,7 @@ class SelectPaymentOrder(APIView):
         return Response('ok')
 
 
-class PaymentDetial(APIView):
+class PaymentDetail(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def delete(self, request, pk):
@@ -97,10 +97,12 @@ class TodayOrderList(APIView):
 
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date())
+            create_at__gte=datetime.now().date())
         serializer = OrderSerializer(
             Orders, context={'request': request}, many=True)
         return Response(serializer.data)
+
+# do order
 
 
 class DrinkOrderOnGoing(APIView):
@@ -108,7 +110,7 @@ class DrinkOrderOnGoing(APIView):
 
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date(), status_drink__in=[0, 1]).exclude(status_drink=None)
+            create_at__gte=datetime.now().date(), status_drink__in=[0, 1]).exclude(status_drink=None)
         serializer = OrderSerializer(
             Orders, context={'request': request}, many=True)
         return Response(serializer.data)
@@ -127,6 +129,14 @@ class AcceptDrinkOrder(APIView):
         for item in orderitem:
             item.status_order = 1
             item.save()
+
+        # accept topping_food and topping_dessert
+        topping = [p.id for p in Topping.objects.filter(type_topping__in=[1])]
+        orderitem_topping = OrderItem.objects.filter(
+            order_id=pk, topping_id__in=topping)
+        for item in orderitem_topping:
+            item.status_order = 1
+            item.save()
         return Response('ok')
 
 
@@ -135,13 +145,16 @@ class FinishDrinkOrderItem(APIView):
         orders = OrderItem.objects.get(pk=pk)
         orders.status_order = 2
         orders.save()
+
         product = [p.id for p in Product.objects.filter(type_product=2)]
         o = Order.objects.get(pk=orders.order_id)
         if not OrderItem.objects.filter(order_id=o.id, status_order=1, product_id__in=product).exists():
-            if (o.status_food == None or o.status_food == 2) and (o.payment_status == 3 or o.payment_status == 4):
-                o.status_order = 3
-            o.status_drink = 2
-            o.save()
+            topping = [p.id for p in Topping.objects.filter(type_topping=2)]
+            if not OrderItem.objects.filter(order_id=o.id, status_order=1, topping_id__in=topping).exists():
+                o.status_drink = 2
+                o.save()
+                check_is_finish(o.id)
+
         return Response('ok')
 
 
@@ -149,13 +162,15 @@ class FinishDrinkOrder(APIView):
     def put(self, request, pk):
         orders = Order.objects.get(pk=pk)
         orders.status_drink = 2
-        product = [p.id for p in Product.objects.filter(type_product=2)]
-        if not OrderItem.objects.filter(order_id=pk, status_order=1, product_id__in=product).exists():
-            if (orders.status_food == None or orders.status_food == 2) and (orders.payment_status == 3 or orders.payment_status == 4):
-                orders.status_order = 3
         orders.save()
-
+        check_is_finish(pk)
+        product = [p.id for p in Product.objects.filter(type_product=2)]
         for o in OrderItem.objects.filter(order_id=orders.id, product_id__in=product):
+            o.status_order = 2
+            o.save()
+
+        topping = [p.id for p in Topping.objects.filter(type_topping=2)]
+        for o in OrderItem.objects.filter(order_id=orders.id, topping_id__in=topping):
             o.status_order = 2
             o.save()
         return Response('ok')
@@ -164,7 +179,7 @@ class FinishDrinkOrder(APIView):
 class FoodOrderOnGoing(APIView):
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date(), status_food__in=[0, 1]).exclude(status_food=None)
+            create_at__gte=datetime.now().date(), status_food__in=[0, 1]).exclude(status_food=None)
         serializer = OrderSerializer(
             Orders, many=True)
         return Response(serializer.data)
@@ -177,8 +192,22 @@ class AcceptFoodOrder(APIView):
             orders.status_order = 1
         orders.status_food = 1
         orders.save()
-        orderitem = OrderItem.objects.filter(order_id=pk)
+
+        # accept food and dessert
+        product = [p.id for p in Product.objects.filter(
+            type_product__in=[1, 3])]
+        orderitem = OrderItem.objects.filter(
+            order_id=pk, product_id__in=product)
         for item in orderitem:
+            item.status_order = 1
+            item.save()
+
+        # accept topping_food and topping_dessert
+        topping = [p.id for p in Topping.objects.filter(
+            type_topping__in=[1, 3])]
+        orderitem_topping = OrderItem.objects.filter(
+            order_id=pk, topping_id__in=topping)
+        for item in orderitem_topping:
             item.status_order = 1
             item.save()
         return Response('ok')
@@ -189,14 +218,16 @@ class FinishFoodOrderItem(APIView):
         orders = OrderItem.objects.get(pk=pk)
         orders.status_order = 2
         orders.save()
+        o = Order.objects.get(pk=orders.order_id)
         product = [p.id for p in Product.objects.filter(
             type_product__in=[3, 1])]
-        o = Order.objects.get(pk=orders.order_id)
         if not OrderItem.objects.filter(order_id=o.id, status_order=1, product_id__in=product).exists():
-            if (o.status_drink == None or o.status_drink == 2) and (o.payment_status == 3 or o.payment_status == 4):
-                o.status_order = 3
-            o.status_food = 2
-            o.save()
+            topping = [p.id for p in Topping.objects.filter(
+                type_topping__in=[3, 1])]
+            if not OrderItem.objects.filter(order_id=o.id, status_order=1, topping_id__in=topping).exists():
+                o.status_food = 2
+                o.save()
+                check_is_finish(o.id)
         return Response('ok')
 
 
@@ -204,17 +235,30 @@ class FinishFoodOrder(APIView):
     def put(self, request, pk):
         orders = Order.objects.get(pk=pk)
         orders.status_food = 2
+        orders.save()
+        check_is_finish(pk)
         product = [p.id for p in Product.objects.filter(
             type_product__in=[1, 3])]
-        if not OrderItem.objects.filter(order_id=pk, status_order=1, product_id__in=product).exists():
-            if (orders.status_drink == None or orders.status_drink == 2) and (orders.payment_status == 3 or orders.payment_status == 4):
-                orders.status_order = 3
-        orders.save()
-
         for o in OrderItem.objects.filter(order_id=orders.id, product_id__in=product):
             o.status_order = 2
             o.save()
+
+        topping = [p.id for p in Topping.objects.filter(
+            type_topping__in=[1, 3])]
+        for t in OrderItem.objects.filter(order_id=orders.id, topping_id__in=topping):
+            t.status_order = 2
+            t.save()
         return Response('ok')
+
+# read order
+
+
+class GetKitchenInfo(APIView):
+    def get(self, request):
+        data = {}
+        data['finish_order'] = Order.objects.filter(create_at__gte=datetime.now().date(), status_food=2).count()
+        data['remain_order'] = Order.objects.filter(create_at__gte=datetime.now().date(), status_food=1).count()
+        return Response(data, status=200)
 
 
 class TodayOrderCompleted(APIView):
@@ -222,7 +266,7 @@ class TodayOrderCompleted(APIView):
 
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date(), status_order=3)
+            create_at__gte=datetime.now().date(), status_order=3)
         serializer = OrderSerializer(
             Orders, context={'request': request}, many=True)
         return Response(serializer.data)
@@ -233,7 +277,7 @@ class TodayOrderUnpaid(APIView):
 
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date(), payment_status__in=[1, 2])
+            create_at__gte=datetime.now().date(), payment_status__in=[1, 2]).exclude(status_order=4)  # get not pay today order don`t want cancel order
         serializer = OrderSerializer(
             Orders, context={'request': request}, many=True)
         return Response(serializer.data)
@@ -244,7 +288,7 @@ class TodayOrderOnGoing(APIView):
 
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date(), status_order__in=[0, 1])
+            create_at__gte=datetime.now().date(), status_order__in=[0, 1])
         serializer = OrderSerializer(
             Orders, context={'request': request}, many=True)
         return Response(serializer.data)
@@ -255,7 +299,7 @@ class TodayOrderVoid(APIView):
 
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date(), status_order=4)
+            create_at__gte=datetime.now().date(), status_order=4)
         serializer = OrderSerializer(
             Orders, context={'request': request}, many=True)
         return Response(serializer.data)
@@ -270,7 +314,7 @@ class OrderList(APIView):
     def post(self, request):
 
         order = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date())
+            create_at__gte=datetime.now().date())
         amount_order = len(order)+1
         request.data['order_number'] = amount_order
 
@@ -301,6 +345,7 @@ class OrderList(APIView):
             else:
                 request.data['address_id'] = None
 
+        # check status order
         request.data['status_food'] = None
         request.data['status_drink'] = None
 
@@ -523,7 +568,7 @@ class ReportDaily (APIView):
 
     def get(self, request):
         order = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date())
+            create_at__gte=datetime.now().date())
         order_id_list = [item.id for item in order]
         report = order.aggregate(Sum('total_balance'), Sum('discount'))
         report['total_order'] = order.count()
@@ -587,7 +632,7 @@ class ReportFilterByDate (APIView):
 
     def get(self, request, year, month, date):
         order = Order.objects.filter(
-            create_at__gte=datetime.datetime(year, month, date))
+            create_at__gte=datetime(year, month, date))
         order_id_list = [item.id for item in order]
         report = order.aggregate(Sum('total_balance'), Sum('discount'))
         report['total_order'] = order.count()
@@ -650,9 +695,9 @@ class ReportMonth (APIView):
     parser_classes = [FormParser, MultiPartParser]
 
     def get(self, request):
-        now = datetime.datetime.now()
+        now = datetime.now()
         order = Order.objects.filter(
-            create_at__gte=datetime.datetime(now.year, now.month, 1))
+            create_at__gte=datetime(now.year, now.month, 1))
         order_id_list = [item.id for item in order]
         report = order.aggregate(Sum('total_balance'), Sum('discount'))
         report['total_order'] = order.count()
@@ -715,9 +760,9 @@ class ReportAllProduct (APIView):
     parser_classes = [FormParser, MultiPartParser]
 
     def get(self, request):
-        now = datetime.datetime.now()
+        now = datetime.now()
         # order = Order.objects.filter(
-        #     create_at__gte=datetime.datetime(now.year,now.month,1))
+        #     create_at__gte=datetime(now.year,now.month,1))
         order = Order.objects.all()
         order_id_list = [item.id for item in order]
         report = {}
@@ -771,7 +816,7 @@ class ReportAllProduct (APIView):
 class GetOrderNumber(APIView):
     def get(self, request):
         order = Order.objects.filter(
-            create_at__gte=datetime.datetime.now().date())
+            create_at__gte=datetime.now().date())
         amount_order = len(order)
         print(amount_order+1)
         return Response({'order_number': amount_order+1})

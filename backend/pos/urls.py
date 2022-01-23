@@ -3,8 +3,9 @@ from pos import views
 
 urlpatterns = [
     path('payment/', views.PaymentList.as_view()),
-    path('payment/<int:pk>', views.PaymentDetial.as_view()),
+    path('payment/<int:pk>', views.PaymentDetail.as_view()),
     path('order/', views.OrderList.as_view()),
+    path('kitchen-info/today', views.GetKitchenInfo.as_view()),
     path('order/cancel/<int:pk>/', views.cancel_order.as_view()),
     path('order/payment-channel/<int:order_id>/<int:payment_id>', views.SelectPaymentOrder.as_view()),
     path('order/accept/food/<int:pk>', views.AcceptFoodOrder.as_view()),

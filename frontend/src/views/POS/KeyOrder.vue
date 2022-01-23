@@ -75,7 +75,7 @@
           v-for="category in categories"
           :key="category.id"
           class="btn-gray category me-1"
-          style="min-width: 165px; white-space: nowrap; padding: 0px"
+          style="min-width: fit-content; white-space: nowrap; padding: 0px 5px;"
           :class="{
             active: select_category == category.id,
             'text-active': select_category == category.id,

@@ -13,8 +13,42 @@
           font-weight: bold;
         "
       >
-        <div style="text-align: left; width: 320px">Finished Order</div>
-        <div style="text-align: right; width: 320px">Remain Order</div>
+        <div style="text-align: left; width: 320px">
+          Finished Order : {{ finished_order }}
+        </div>
+        <div style="text-align: right; width: 320px">
+          Remain Order : {{ remain_order }}
+        </div>
+      </div>
+      <div class="col-12 mt-2 w-100 p-0" style="display: flex">
+        <div
+          @click="get_order_by_type('on-going')"
+          class="btn-gray me-2"
+          style="width: 24%"
+        >
+          On going
+        </div>
+        <div
+          @click="get_order_by_type('on-going')"
+          class="btn-gray me-2"
+          style="width: 24%"
+        >
+          Cancel
+        </div>
+        <div
+          @click="get_order_by_type('on-going')"
+          class="btn-gray me-2"
+          style="width: 24%"
+        >
+          Completed
+        </div>
+        <div
+          @click="get_order_by_type('on-going')"
+          class="btn-gray me-2"
+          style="width: 24%"
+        >
+          all
+        </div>
       </div>
       <div class="col-12 mt-3" style="padding: 0px">
         <div style="height: 715px; overflow-y: auto">
@@ -167,10 +201,10 @@ export default {
   components: { NavApp },
   mounted() {
     this.get_order();
-    this.loader
+    this.loader;
   },
   unmounted() {
-    clearInterval(this.loader)
+    clearInterval(this.loader);
   },
   data() {
     return {
@@ -178,7 +212,8 @@ export default {
       loader: window.setInterval(() => {
         this.get_order();
       }, 5000),
-
+      remain_order: 0,
+      finished_order: 0,
     };
   },
   methods: {
@@ -192,6 +227,10 @@ export default {
       }
     },
     get_order() {
+      api_pos.get("kitchen-info/today").then((data) => {
+        this.remain = data.data.remain;
+        this.finished_order = data.data.finish_order;
+      });
       api_pos
         .get("order/today/on-going/food")
         .then((response) => {
@@ -231,11 +270,11 @@ export default {
       var description = "";
       if (p.topping == null) {
         description = p.product_set.name;
-        if (p.flavour_level == 4) {
+        if (p.flavour_level == 3) {
           description += "(S+)";
-        } else if (p.flavour_level == 2) {
-          description += "(S-)";
         } else if (p.flavour_level == 1) {
+          description += "(S-)";
+        } else if (p.flavour_level == 0) {
           description += "(Sx)";
         }
         if (p.size == "L") {
@@ -316,6 +355,9 @@ export default {
         );
       }
     },
+    get_order_by_type(type){
+      
+    }
   },
 };
 </script>
@@ -342,6 +384,9 @@ export default {
   color: #252836;
   border-radius: 10px;
   height: 30px;
+}
+.btn-gray {
+  line-height: 56px;
 }
 .sub-header {
   font-weight: bold;
