@@ -1,3 +1,4 @@
+from turtle import st
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -5,6 +6,7 @@ from customer.serializers import CustomerSerializer, CustomerImageSerializer
 from customer.models import Customer, AddressCustomer
 import datetime
 from rest_framework.parsers import FormParser, MultiPartParser
+from pos.models import Order
 
 # Create your views here.
 
@@ -15,6 +17,17 @@ class GetCustomerByPhoneNumbe(APIView):
         serializer = CustomerSerializer(customer, many=True)
         return Response(serializer.data, status=200)
 
+class CheckPhoneNumber(APIView):
+    def get(self, request, phone_number):
+        if Customer.objects.filter(phone_number=phone_number).exists():
+            return Response('Phone number ' + phone_number + ' is already in use',status=400)
+        return Response('don`t have a valid phone number',status=200)
+
+class CheckPhoneNumberEdit(APIView):
+    def get(self, request, phone_number,pk):
+        if Customer.objects.filter(phone_number=phone_number).exclude(pk=pk).exists():
+            return Response('Phone number ' + phone_number + ' is already in use',status=400)
+        return Response('don`t have a valid phone number',status=200)
 
 class CustomerList (APIView):
 
@@ -27,7 +40,11 @@ class CustomerList (APIView):
     def post(self, request):
         if not request.data['invited_by'] == None:
             request.data['invited_by'] = int(request.data['invited_by'])
-        serializer = CustomerSerializer(data=request.data)
+        if Customer.objects.filter(phone_number=request.data['phone_number']):
+            return Response('Phone number is already taken.', status=400)
+        else:      
+            serializer = CustomerSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             print(serializer.data['id'])
@@ -59,6 +76,7 @@ class CustomerImage(APIView):
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
 
+from django.db.models import Avg, Count, Min, Sum
 
 class GetCustomer(APIView):
 
@@ -71,9 +89,11 @@ class GetCustomer(APIView):
             raise 404
 
     def get(self, request, pk):
+        data = {}
         customer = self.get_object(pk)
-        serializer = CustomerSerializer(customer, context={"request": request})
-        return Response(serializer.data, status=200)
+        data['customer'] = CustomerSerializer(customer, context={"request": request}).data
+        data['total_price'] = Order.objects.filter(customer_id=pk).aggregate(Sum('total_balance'))['total_balance__sum']
+        return Response(data, status=200)
 
 
 class CustomerDetail(APIView):

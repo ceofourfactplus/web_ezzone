@@ -119,6 +119,8 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
   update_by_id = serializers.IntegerField()
   description = serializers.CharField(required=False, allow_blank=True)
   packageitem_set = PackageItemSerializer(many=True)
+  img = serializers.ImageField(read_only=True)
+
   class Meta:
     model = PromotionPackage
     fields = [
@@ -136,6 +138,7 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
       'create_at',
       'update_at',
       'packageitem_set',
+      'img'
     ]
     
   def create(self, validated_data):

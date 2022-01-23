@@ -87,7 +87,7 @@
       </div>
 
       <!-- select product -->
-      <div class="frame-1">
+      <div class="frame-1" style="overflow-y: auto;">
         <div class="row w-100" style="margin: 0px">
           <div
             v-for="product in products"
@@ -155,6 +155,7 @@
 
 <script>
 import { api_product } from "../../api/api_product";
+import { api_promotion } from "../../api/api_promotion";
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
   components: { NavApp },
@@ -197,8 +198,12 @@ export default {
         this.products = [];
       } else if (newType == 4) {
         this.header = "Promotion";
-        this.categories = []
-        this.products = [];
+        this.categories = [
+          {
+            id: 1,
+            category: "Package",
+          },]
+        this.select_category = 10
       } else {
         api_product.get("category-by-type/" + newType).then((response) => {
           this.categories = response.data;
@@ -231,7 +236,9 @@ export default {
       } else if (this.select_type_product == 5) {
         this.products = [];
       } else if (this.select_type_product == 4) {
-        this.products = [];
+        api_promotion.get('package-pos/').then((response) => {
+          this.products = response.data;
+        })
       } else {
         api_product
           .get(

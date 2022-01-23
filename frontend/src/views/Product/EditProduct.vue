@@ -71,7 +71,7 @@
             </div>
             <div class="col-12 h-20">
               <label for="">Active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label>
-              <div class="switch"><Switch @switch="switch_active" /></div>
+              <div class="switch"><Switch @switch="product.is_active = !product.is_active" :value="product.is_active" /></div>
             </div>
             <div class="col-12 h-20">
               <label for="">Price&nbsp;&nbsp;:</label
@@ -144,7 +144,7 @@
           </div>
           <div class="col-5 label-input m-15">
             <label for="">Flavour Level&nbsp;&nbsp;:</label
-            ><Switch @switch="switch_flavour_level" />
+            ><Switch @switch="product.flavour_level = !product.flavour_level" :value="product.flavour_level" />
           </div>
           <div class="col-7 label-input m-15">
             <label for="type_topping">Type Topping:</label

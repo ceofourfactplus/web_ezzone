@@ -27,4 +27,6 @@ urlpatterns = [
     path('po/',views.POList.as_view()),
     path('po/update/',views.POList.as_view()),
     path('po/calc/',views.CalcPOAvg.as_view()),
+    path('check-phone-number/<str:phone_number>',views.CheckPhoneNumber.as_view()),
+    path('check-phone-number/<str:phone_number>/<int:pk>', views.CheckPhoneNumberEdit.as_view())
 ]

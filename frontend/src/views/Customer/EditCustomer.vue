@@ -125,7 +125,7 @@
                 FOD&#160;12/12/64
               </h2>
               <div class="btn w-100">
-                <h2><span>123,456</span></h2>
+                <h2><span>{{total_price}}</span></h2>
               </div>
               <h2>LOD&#160;12/12/64</h2>
             </div>
@@ -152,7 +152,7 @@
         <div class="col-12">
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="first_name">First Name</label>
+              <label for="first_name" class="i">First Name</label>
             </div>
             <div class="col-9 w-100">
               <input
@@ -164,7 +164,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="last_name">Last Name</label>
+              <label for="last_name" class="i">Last Name</label>
             </div>
             <div class="col-9 w-100">
               <input type="text" v-model="customer.last_name" id="last_name" />
@@ -172,7 +172,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="nick_name">Nick Name</label>
+              <label for="nick_name" class="i">Nick Name</label>
             </div>
             <div class="col-9 w-100">
               <input
@@ -185,7 +185,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="birth_date">Birth Date</label>
+              <label for="birth_date" class="i">Birth Date</label>
             </div>
             <div class="col-9 w-100">
               <input
@@ -199,7 +199,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="phone_number">Phone No.</label>
+              <label for="phone_number" class="i">Phone No.</label>
             </div>
             <div class="col-9 w-100">
               <input
@@ -212,7 +212,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="email" style="margin-left: -25px">Email</label>
+              <label for="email" class="i">Email</label>
             </div>
             <div class="col-9 w-100">
               <input type="email" v-model="customer.email" id="email" />
@@ -220,7 +220,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="address">Address</label>
+              <label for="address" class="i">Address</label>
             </div>
             <div class="col-9 w-100">
               <textarea
@@ -237,7 +237,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="line_id">Line ID</label>
+              <label for="line_id" class="i">Line ID</label>
             </div>
             <div class="col-9 w-100">
               <input
@@ -249,7 +249,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-3 w-100">
-              <label for="invite_by">Invite By </label>
+              <label for="invite_by" class="i">Invite By </label>
             </div>
             <div class="col-9 w-100">
               <select v-model="customer['invited_by']">
@@ -280,6 +280,7 @@ export default {
       customer: {
         addresscustomer_set: [],
       },
+      total_price: 0,
       show_img: null,
       favorite_menu: [],
       new_img: false,
@@ -289,9 +290,10 @@ export default {
         customer_id: "",
       },
       error: {
-        nick_name: false,
-        phone_number: false,
+        nick_name: true,
+        phone_number: true,
       },
+      check_number: false,
     };
   },
   methods: {
@@ -310,19 +312,7 @@ export default {
           this.customer[item] = "";
         }
       }
-      var err = false;
-      if (this.customer.nick_name == "") {
-        err = true;
-        this.error.nick_name = true;
-      }
-      var check_number = [...this.customer.phone_number].some((number) => {
-        return isNaN(parseInt(number));
-      });
-      if (this.customer.phone_number.length != 10 || check_number) {
-        err = true;
-        this.error.phone_number = true;
-      }
-      if (!err) {
+      if (!this.error.phone_number && !this.error.nick_name) {
         api_customer
           .put("customer/" + this.$route.params.id, this.customer)
           .then(() => {
@@ -371,24 +361,52 @@ export default {
     api_customer
       .get("get-customer/" + this.$route.params.id)
       .then((reponse) => {
-        this.customer = reponse.data;
+        this.customer = reponse.data.customer;
         if (this.customer.img != null) {
           this.show_img = this.customer.img;
         }
+        this.total_price = reponse.data.total_price
+        this.addresscustomer.customer_id = reponse.data.customer.id
       });
   },
   watch: {
-    "customer.nick_name"() {
-      this.error.nick_name = false;
+    "customer.phone_number"(number) {
+      this.error.status = false;
+      var phone = ![...number].some((numbers) => {
+        return isNaN(parseInt(numbers));
+      });
+      if ((number.length == 9 || number.length == 10) && phone) {
+        api_customer
+          .get("check-phone-number/" + number+'/'+ this.$route.params.id)
+          .then((result) => {
+            console.log(result);
+            this.error.phone_number = false;
+          })
+          .catch((err) => {
+            console.log(err);
+            this.error.phone_number = true;
+          });
+      } else {
+        this.error.phone_number = true;
+      }
     },
-    "customer.phone_number"() {
-      this.error.phone_number = false;
+    "customer.nick_name"(nick) {
+      this.error.nick_name = false;
+      this.error.status = false;
+      if (nick == "") {
+        this.error.nick_name = true;
+      }
     },
   },
 };
 </script>
 
 <style scoped>
+.i{
+  width: 100%;
+  padding-left:30px;
+  text-align: left;
+}
 #alert {
   font-weight: 600;
   height: 45px;

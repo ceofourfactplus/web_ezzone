@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'RawMaterials'" save="true" @save="create_sup()"
+    <nav-app :url_name="'Supplier'" save="true" @save="create_sup()"
       >Create&#160;Supplier</nav-app
     >
     <div class="container">
@@ -56,22 +56,27 @@
         id=""
         placeholder="Address"
       ></textarea>
-      <input type="url" v-model="google_map" placeholder="Google Map" />
+      <input
+        type="url"
+        v-model="google_map"
+        placeholder="Google Map"
+        @click="open_map()"
+      />
     </div>
     <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
-import SavePopup from "../../components/main_component/SavePopup.vue"
-import { api_raw_material } from '../../api/api_raw_material';
+import SavePopup from "../../components/main_component/SavePopup.vue";
+import { api_raw_material } from "../../api/api_raw_material";
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
   components: { NavApp, SavePopup },
   data() {
     return {
       alert: false,
-      img: "",
+      img: null,
       show_img: null,
       supplier_name: "",
       google_map: "",
@@ -80,10 +85,10 @@ export default {
       email: "",
       address: "",
       error: {
-        contact: false,
-        phone_number: false,
-        address: false,
-        supplier_name: false,
+        contact: true,
+        phone_number: true,
+        address: true,
+        supplier_name: true,
       },
     };
   },
@@ -97,23 +102,12 @@ export default {
       }
     },
     create_sup() {
-      var err = false;
-      for (const item of ["contact", "address", "supplier_name"]) {
-        console.log(item);
-        if (this[item] == "") {
-          console.log("in i");
-          err = true;
-          this.error[item] = true;
-        }
-      }
-      var check_number = [...this.phone_number].some((number) => {
-        return isNaN(parseInt(number));
-      });
-      if (this.phone_number.length != 10 || check_number) {
-        err = true;
-        this.error.phone_number = true;
-      }
-      if (!err) {
+      if (
+        !this.error.contact &&
+        !this.error.phone_number &&
+        !this.error.address &&
+        !this.error.supplier_name
+      ) {
         const user = new FormData();
         user.append("company_name", this.supplier_name);
         user.append("contact", this.contact);
@@ -125,27 +119,60 @@ export default {
           user.append("img", this.img, this.img.name);
         }
         user.append("create_by", 1);
-        api_raw_material.post("/supplier/", user).then(() => {this.alert = true
-        setTimeout(() => {
-          this.alert = false;
-          this.$router.push({name:'Supplier'})
-        }, 1000)
+        api_raw_material.post("/supplier/", user).then(() => {
+          this.alert = true;
+          setTimeout(() => {
+            this.alert = false;
+            this.$router.push({ name: "Supplier" });
+          }, 1000);
         });
       }
     },
+    open_map() {
+      window.open("https://www.google.co.th/maps?hl=en&tab=rl");
+    },
   },
   watch: {
-    supplier_name() {
+    supplier_name(nick) {
       this.error.supplier_name = false;
+      this.error.status = false;
+      if (nick == "") {
+        this.error.supplier_name = true;
+      }
     },
-    contact() {
+    contact(contact) {
       this.error.contact = false;
+      this.error.status = false;
+      if (contact == "") {
+        this.error.contact = true;
+      }
     },
-    phone_number() {
-      this.error.phone_number = false;
+    phone_number(number) {
+      this.error.status = false;
+      var phone = ![...number].some((numbers) => {
+        return isNaN(parseInt(numbers));
+      });
+      if ((number.length == 9 || number.length == 10) && phone) {
+        api_raw_material
+          .get("check-phone-number/" + number)
+          .then((result) => {
+            console.log(result);
+            this.error.phone_number = false;
+          })
+          .catch((err) => {
+            console.log(err);
+            this.error.phone_number = true;
+          });
+      } else {
+        this.error.phone_number = true;
+      }
     },
-    address() {
+    address(address) {
       this.error.address = false;
+      this.error.status = false;
+      if (address == "") {
+        this.error.address = true;
+      }
     },
   },
 };

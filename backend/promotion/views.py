@@ -5,6 +5,7 @@ import ast
 from .models import PointPromotion, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint, ExchangeHistory
 from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer, ExchangeHistorySerializer, PromotionPackageImage
 
+from rest_framework.parsers import FormParser, MultiPartParser
 
 class PointPromotionAPI(APIView):
     def get_object(self, pk):
@@ -59,6 +60,7 @@ class Point(APIView):
         return Response(serializer.data)
         
 class VoucherAPI(APIView):
+    parser_classes=[FormParser, MultiPartParser]
     def get_object(self, pk):
         try:
             return Voucher.objects.get(id=pk)
@@ -67,7 +69,7 @@ class VoucherAPI(APIView):
         
     def get(self, request):
         voucher = Voucher.objects.all()
-        serializer = VoucherSerializer(voucher, many=True)
+        serializer = VoucherSerializer(voucher,context={'request':request}, many=True)
         return Response(serializer.data)
     
     def put(self, request):
@@ -92,7 +94,7 @@ class VoucherGET(APIView):
         except Voucher.DoesNotExist:
             raise 404
         
-    def get(self, request, pk):
+    def get(self, request, pk):               
         voucher = self.get_object(pk)
         serializer = VoucherSerializer(voucher)
         return Response(serializer.data)
@@ -104,6 +106,13 @@ class VoucherGET(APIView):
         serializer = VoucherSerializer(voucher)
         return Response(serializer.data)
         
+class PackagePOS(APIView):
+    parser_classes=[FormParser, MultiPartParser]
+        
+    def get(self,request):
+        package = PromotionPackage.objects.filter(status=True)
+        serializer = PromotionPackageSerializer(package,context={'request':request}, many=True)
+        return Response(serializer.data)
     
 class PackageAPI(APIView):
     def get_object(self, pk):

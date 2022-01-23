@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-app :url_name="'DashBoard'">Order Detail</nav-app>
-    <div class="row" style="width: 90%; margin: auto;">
+    <div class="row" style="width: 90%; margin: auto">
       <div class="col-9 w-100" style="padding: 0px">
         <search-bar></search-bar>
       </div>
@@ -24,7 +24,7 @@
         "
       >
         <button
-          style="width: 19%; padding: 0px;"
+          style="width: 19%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '1' }"
           @click="select_status('on_going')"
@@ -40,7 +40,7 @@
           Unpaid
         </button>
         <button
-          style="width: 19%; padding: 0px;"
+          style="width: 19%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '3' }"
           @click="select_status('completed')"
@@ -48,7 +48,7 @@
           Completed
         </button>
         <button
-          style="width: 19%; padding: 0px;"
+          style="width: 19%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '4' }"
           @click="select_status('void')"
@@ -56,9 +56,9 @@
           Cancel
         </button>
         <button
-          style="width: 19%; padding: 0px;"
+          style="width: 19%; padding: 0px"
           class="btn-gray"
-          :class="{ 'g-act': selected_status == '5' }"
+          :class="{ 'g-act': selected_status == 'all' }"
           @click="select_status('all')"
         >
           All
@@ -117,7 +117,8 @@
                 class="status me-1"
                 :class="{
                   cooking: order.status_food == 1,
-                  paid: order.status_food == 2,
+                  serve: order.status_food == 2,
+                  paid: order.status_food == 3,
                   none: order.status_food == null,
                 }"
               >
@@ -127,7 +128,8 @@
                 class="status"
                 :class="{
                   cooking: order.status_drink == 1,
-                  paid: order.status_drink == 2,
+                  serve: order.status_drink == 2,
+                  paid: order.status_drink == 3,
                   none: order.status_drink == null,
                 }"
               >
@@ -152,7 +154,7 @@
               <div
                 v-else-if="order.payment_status < 3"
                 class="payment"
-                @click="select_pay(order)"
+                @click="$store.dispatch('pos/re_order', order)"
               >
                 {{ payment(order) }}
               </div>
@@ -160,7 +162,10 @@
                 {{ payment(order) }}
               </div>
             </div>
-            <div class="col-1" v-if="order.payment_status < 3">
+            <div
+              class="col-1"
+              v-if="order.payment_status < 3 && order.status_order != 4"
+            >
               <img
                 @click="selected_cancel = order"
                 src="../.././assets/icon/bin.png"
@@ -248,14 +253,11 @@ export default {
     payment(order) {
       if (order.payment_status == 1) {
         return "COD";
-      }
-      if (order.payment_status == 2) {
-        return "CREDIT";
-      }
-      if (order.payment_status == 3) {
-        return "CASH";
-      }
-      if (order.payment_status == 4) {
+      } else if (order.payment_status == 2) {
+        return "Credit";
+      } else if (order.payment_status == 3) {
+        return "Cash";
+      } else if (order.payment_status == 4) {
         return order.payment_set.payment;
       }
     },
@@ -315,7 +317,7 @@ export default {
         });
       }
       if (status == "all") {
-        this.selected_status = "5";
+        this.selected_status = "all";
         api_pos.get("order/today/").then((response) => {
           this.all_order = response.data;
         });
@@ -433,5 +435,8 @@ div {
 }
 .none {
   background-color: #717171 !important;
+}
+.serve {
+  background-color: #FFB572 !important;
 }
 </style>

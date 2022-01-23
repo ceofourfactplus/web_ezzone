@@ -48,7 +48,7 @@
               "
               @click="SeeData(customer.id)"
             >
-              <span>
+              <div style="display: flex">
                 <img
                   v-if="customer.img != null"
                   :src="customer.img"
@@ -58,8 +58,10 @@
                   src="../../assets/icon/blank-user.png"
                   class="img-user-status me-1"
                 />
-                {{ customer.nick_name }}
-              </span>
+                <div style="width: 100%; text-align: left; overflow-x: auto">
+                  {{ customer.nick_name }}
+                </div>
+              </div>
             </div>
             <div class="col-3 w-100" style="margin: auto; text-align: center">
               {{ BirthDate(customer.birth_date) }}
@@ -165,7 +167,7 @@ export default {
       all_customer: [],
       blur: false,
       select_customer: {},
-      address:''
+      address: "",
     };
   },
   mounted() {
@@ -230,18 +232,29 @@ export default {
     select(customer) {
       this.blur = true;
       this.select_customer = customer;
-      this.address = ''
+      this.address = "";
     },
     PhoneNumber(number) {
       if (number != "") {
         var phone = String(number);
-        return (
-          phone.substr(0, 3) +
-          "-" +
-          phone.substr(3, 3) +
-          "-" +
-          phone.substr(6, 4)
-        );
+        if (phone.length == 10) {
+          return (
+            phone.substr(0, 3) +
+            "-" +
+            phone.substr(3, 3) +
+            "-" +
+            phone.substr(6, 4)
+          );
+        }
+        if (phone.length == 9) {
+          return (
+            phone.substr(0, 2) +
+            "-" +
+            phone.substr(2, 3) +
+            "-" +
+            phone.substr(6, 4)
+          );
+        }
       }
       return "-";
     },
