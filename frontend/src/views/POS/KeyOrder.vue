@@ -116,6 +116,23 @@
               "
             />
             <img
+              v-if="!('type_topping' in product)"
+              :class="{
+                'img-s': product.type_product != 3,
+                'img-l': product.type_product == 3,
+              }"
+              :src="product.img"
+              alt=""
+              @click="
+                $router.push({
+                  name: 'KeyProductDetail',
+                  params: {
+                    product_id: product.id,
+                  },
+                })
+              "
+            />
+            <img
               v-else-if="is_topping(product)"
               class="img-s"
               :src="product.img"
