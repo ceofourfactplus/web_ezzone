@@ -33,6 +33,7 @@
         margin: auto;
         width: 90%;
         overflow-y: hidden;
+        
       "
       class="mt-2"
     >
@@ -40,7 +41,7 @@
         v-for="category in categories"
         :key="category.id"
         class="btn-gray category me-1"
-        style="min-width: 165px; white-space: nowrap; padding: 0px;opacity:0.6;"
+        style="min-width:265px; white-space: nowrap; padding: 0px;opacity:0.6;"
         :class="{
           active: select_category == category.id,
           'text-active': select_category == category.id,
