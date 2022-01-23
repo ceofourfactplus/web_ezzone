@@ -214,7 +214,7 @@
           <div class="row" style="color: #fff">
             <div class="col-6 w-100" style="display: flex; margin-bottom: 20px">
               <div class="event-text">Vouncher&#160; :</div>
-              <div class="select-event">-</div>
+              <div class="select-event" @click="VouncherPopup = true">-</div>
             </div>
             <div class="col-1"></div>
             <div class="col-5 w-100">
@@ -244,6 +244,26 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup Vouncher -->
+    <div class="AreaPopup" v-if="VouncherPopup">
+
+      <div class="dark" @click="VouncherPopup=false">
+        <div class="AreaRowVouncher">
+          <div class="RowPopupVouncher">
+
+            <div class="PopupVouncher" v-for="voucher in vouchers" :key="voucher" >
+                  <img :src="voucher.img" style="width:200px;height:200px;border-radius: 10%;object-fit:cover;">
+            </div>          
+          
+          </div>
+        </div>
+      </div>
+      
+
+    </div>
+      
+      
     <calculator
       :show_cal="show_cal"
       @hide_cal="show_cal = false"
@@ -272,6 +292,7 @@ import { api_customer } from "../../api/api_customer";
 import InputTel from "../../components/main_component/InputTel.vue";
 import SelectTable from "../../components/main_component/SelectTable.vue";
 import SelectPayment from "../../components/payment/SelectPayment.vue";
+import { api_promotion } from "../../api/api_promotion";
 export default {
   components: {
     NavApp,
@@ -291,6 +312,8 @@ export default {
       select_address: false,
       select_payment: false,
       selected_payment: {},
+      vouchers: [],
+      VouncherPopup: false,
     };
   },
   methods: {
@@ -380,6 +403,12 @@ export default {
       } else {
         return "";
       }
+    },
+    fetchVoucher() {
+      api_promotion.get("voucher/").then((response) => {
+        this.vouchers = response.data;
+        console.log(response.data, "voucher");
+      });
     },
   },
   computed: {
@@ -495,32 +524,44 @@ div {
   font-size: 24px;
   text-align: left;
 }
+
 .balance {
   color: #50d1aa;
   font-weight: bold;
   font-size: 24px;
   text-align: left;
 }
-.address {
-  position: absolute;
-  left: 120px;
-  list-style: none;
-  background-color: #717171;
-  width: 82%;
-  padding: 10px;
-  border-radius: 0px 0px 10px 10px;
+
+/* Popup Vouncher */
+.AreaRowVouncher {
+
+  width: 100%;
+  height: 100%;
+  top: 0%;
+  position: fixed;
+  
 }
-.address li {
-  background-color: #717171;
-  min-height: 40px;
-  color: #fff;
-  font-size: 24px;
-  white-space: break-spaces;
-  text-align: left;
-  border-radius: 0px 0px 10px 10px;
-  border-top: 2px solid black;
+
+.RowPopupVouncher {
+  width: 100%;
+  height: 10%;
+  padding:0%;
+  padding-left:7%;
+  padding-right:7%;
+  margin: 0%;
+  margin-top:20%;
+  display:grid;
+  justify-content: center;
+  grid-gap: 40% 10%;
+  grid-template-columns: auto auto auto;
+
 }
-.none-border{
-  border-top:0px !important;
+
+.PopupVouncher {
+  border-radius: 20%;
+  width: 100%;
+  height: 80%;
+  padding:0%;
+
 }
 </style>
