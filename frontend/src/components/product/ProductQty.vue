@@ -3,7 +3,7 @@
         <div class="AreaPopup">
         <!-- Head Name Page -->
             <div class="row Header">
-                <div class="col-1 w-100" style="padding-left:10%;"><img src="../../assets/icon/save.png" style="height:60%"></div>
+                <div class="col-1 w-100" style="padding-left:10%;"></div>
                 <div class="col-10 w-100" style="line-height: 160%;"><b>Add Consignment</b></div>
                 <div class="col-1 w-100" style="padding-left:10%;"><img src="../../assets/img/btn-close.png" style="height:60%"></div>
             </div>
@@ -23,6 +23,13 @@
                     <div class="col-7 AreaRowInput">
                         <!-- Qty Input -->
                         <div class="row RowBlockInput" style="margin-top:0%;">
+                            <div class="col-3 BlockDetail">Name</div>
+                            <div class="col-1 BlockColon">:</div>
+                            <div class="col-8 BlockInput" style="text-align:left;">ทาร์ตไข่</div>
+                            
+                        </div>
+                        <!-- Qty Input -->
+                        <div class="row RowBlockInput">
                             <div class="col-3 BlockDetail">+ QTY</div>
                             <div class="col-1 BlockColon">:</div>
                             <div class="col-5 BlockInput">
@@ -50,35 +57,15 @@
                             </div>
                         </div>
                         
-                        <!-- From -->
-                        <div class="row RowBlockInput">
-                            <div class="col-3 BlockDetail">From</div>
-                            <div class="col-1 BlockColon">:</div>
-                            <div class="col-8 BlockInput">
-                                <input type="text" v-model="input_customer" 
-                                style="background: #717171;
-                                border-radius: 10px;
-                                width: 100%;
-                                height: 100%;
-                                font-size: 100%;"/>
-                            </div>
-                        </div>
-
-                        <!-- Sign Here -->
-                        <div class="row RowBlockSignHere">
-                            <div class="col-12 BlockSignHere">
-                                <input type="text" v-model="input_customer" 
-                                style="background: #717171;
-                                border-radius: 10px;
-                                width: 100%;
-                                height: 100%;
-                                font-size: 100%;"/>
-                            </div>
-                        </div>
 
                     </div>
 
                 </div>
+                <!-- Confirm Button -->
+                <div>
+
+                </div>
+
             </div>
             
 
@@ -89,7 +76,7 @@
 
 <script>
 export default {  
-  name: "AddConsignment",
+  name: "ProductQty",
   components : {
      
 
@@ -143,7 +130,7 @@ export default {
     width: 96%;
     margin-left: 2%;
     margin-right: 2%;
-    margin-top: 3%;
+    margin-top: 5%;
     padding-top: 0.5%;
     border-radius: 20px;
     background-color: #303344;
@@ -212,27 +199,11 @@ export default {
     height: 20%;
     width: 100%;
     margin: 0%;
-    margin-top: 5%;
+    margin-top: 10%;
+    margin-bottom: 5%;
     color:#fff;
     font-size: 200%;
      
-}
-
-.RowBlockSignHere {
-    height: 50%;
-    width: 100%;
-    margin: 0%;
-    margin-top: 3.5%;
-    color:#fff;
-    font-size: 200%;
-     
-}
-
-.BlockSignHere {
-    padding:0%;
-    width:100%;
-    height: 100%;
-
 }
 
 .BlockInput {

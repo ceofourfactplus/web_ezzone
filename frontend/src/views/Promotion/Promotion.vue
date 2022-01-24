@@ -10,7 +10,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right:0%;text-align:center;"
           @click="$router.push({ name: 'NewPoint' })"
         >
           + Point
@@ -18,7 +18,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Voucher'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right:0%;text-align:center;"
           @click="$router.push({ name: 'NewVoucher' })"
         >
           + Voucher
@@ -26,7 +26,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Package'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right:0%;text-align:center;"
           @click="$router.push({ name: 'NewPackage' })"
         >
           + Package
@@ -34,7 +34,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Rewards'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right:0%;text-align:center;"
           @click="$router.push({ name: 'NewReward' })"
         >
           + Reward
