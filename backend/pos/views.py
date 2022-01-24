@@ -27,11 +27,128 @@ def check_is_finish(order_id):
     except Order.DoesNotExist:
         raise 404
 
-    if (order.payment_status == 3 or order.payment_status == 4) and (order.status_food == 2 or order.status_food == None) and (order.status_drink == 2 or order.status_drink == None):
+    print('status food:', order.status_food)
+    print('status drink:', order.status_drink)
+    print('status order:', order.status_order)
+
+    # for food
+    product_food = Product.objects.filter(type_product__in=[1, 3])
+    product_food_id = [p.id for p in product_food]
+    order_food_item = OrderItem.objects.filter(
+        product_id__in=product_food_id, order_id=order_id)
+    arr_status_food = [s.status_order for s in order_food_item]
+    no_none_status_food_list = [s for s in arr_status_food if s != None]
+
+    topping_food = Topping.objects.filter(type_topping__in=[1, 3])
+    topping_food_id = [p.id for p in topping_food]
+    order_food_topping = OrderItem.objects.filter(
+        topping_id__in=topping_food_id, order_id=order_id)
+    arr_status_top_food = [s.status_order for s in order_food_topping]
+    no_none_status_top_food_list = [
+        s for s in arr_status_top_food if s != None]
+
+    if not (no_none_status_food_list + no_none_status_top_food_list) == []:
+        order.status_food = min(
+            no_none_status_food_list + no_none_status_top_food_list)
+    else:
+        order.status_food = None
+
+    # for drink
+    product_drink = Product.objects.filter(type_product__in=[2])
+    product_drink_id = [p.id for p in product_drink]
+    order_drink_item = OrderItem.objects.filter(
+        product_id__in=product_drink_id, order_id=order_id)
+    arr_status_drink = [s.status_order for s in order_drink_item]
+    no_none_status_drink_list = [s for s in arr_status_drink if s != None]
+
+    topping_drink = Topping.objects.filter(type_topping__in=[2])
+    topping_drink_id = [p.id for p in topping_drink]
+    order_drink_topping = OrderItem.objects.filter(
+        topping_id__in=topping_drink_id, order_id=order_id)
+    arr_status_top_drink = [s.status_order for s in order_drink_topping]
+    no_none_status_top_drink_list = [
+        s for s in arr_status_top_drink if s != None]
+
+    if not (no_none_status_drink_list + no_none_status_top_drink_list) == []:
+        order.status_drink = min(
+            no_none_status_drink_list + no_none_status_top_drink_list)
+    else:
+        order.status_drink = None
+
+    if not order.status_drink == None and not order.status_food == None:
+        if order.status_drink > order.status_food:
+            order.status_order = order.status_food
+        if order.status_drink < order.status_food:
+            order.status_order = order.status_drink
+
+    if (order.status_drink == 1) and (order.status_food == 1 or order.status_food == None):
+        order.status_order = 1
+    if (order.status_drink == 2 or order.status_drink == None) and (order.status_food == 2 or order.status_food == None):
+        order.status_order = 2
+    if (order.status_drink == 3 or order.status_drink == None) and (order.status_food == 3 or order.status_food == None):
         order.status_order = 3
-        order.spen_time = str(
-            datetime.now() - order.create_at.replace(tzinfo=None))
-        order.save()
+    if (order.status_drink == 4 or order.status_drink == None) and (order.status_food == 4 or order.status_food == None)and (order.payment_status == 3 or order.payment_status == 4):
+        order.status_order = 4
+    # if order.status_drink > order.status_food:
+    #     order.status_order = order.status_food
+    # else: order.status_order = order.status_drink
+
+    order.spen_time = str(
+        datetime.now() - order.create_at.replace(tzinfo=None))
+    order.save()
+
+
+class ChangeStatusOrder(APIView):
+    def put(self,  request, where, all_order, status, pk):
+        # get type
+        if where == 'kitchen':
+            type_item = [1, 3]
+            order_status = 'order_food'
+        elif where == 'counter':
+            order_status = 'order_drink'
+            type_item = [2]
+
+        # get table
+        if all_order:
+            print('1')
+            order = Order.objects.get(pk=pk)
+            if where == 'kitchen':
+                order.status_food = status
+            elif where == 'counter':
+                order.status_drink = status
+            order.save()
+
+            product = [p.id for p in Product.objects.filter(
+                type_product__in=type_item)]
+            orderitem = OrderItem.objects.filter(
+                order_id=pk, product_id__in=product)
+            for item in orderitem:
+                item.status_order = status
+                item.save()
+
+            topping = [p.id for p in Topping.objects.filter(
+                type_topping__in=type_item)]
+            orderitem = OrderItem.objects.filter(
+                order_id=pk, topping_id__in=topping)
+            for item in orderitem:
+                item.status = status
+                item.save()
+
+            check_is_finish(pk)
+        else:
+            orderitem = OrderItem.objects.get(pk=pk)
+            orderitem.status_order = status
+            orderitem.save()
+
+            check_is_finish(orderitem.order_id)
+        return Response('ok')
+
+
+class ServeOrderItem(APIView):
+    def put(self, request, pk):
+        orderitem = OrderItem.objects.get(pk=pk)
+        orderitem.status_order = 3
+        orderitem.save()
 
 
 class SelectPaymentOrder(APIView):
@@ -116,148 +233,65 @@ class DrinkOrderOnGoing(APIView):
         return Response(serializer.data)
 
 
-class AcceptDrinkOrder(APIView):
-    def put(self, request, pk):
-        orders = Order.objects.get(pk=pk)
-        if not orders.status_food == 0:
-            orders.status_order = 1
-        orders.status_drink = 1
-        orders.save()
-        product = [p.id for p in Product.objects.filter(type_product=2)]
-        orderitem = OrderItem.objects.filter(
-            order_id=pk, product_id__in=product)
-        for item in orderitem:
-            item.status_order = 1
-            item.save()
-
-        # accept topping_food and topping_dessert
-        topping = [p.id for p in Topping.objects.filter(type_topping__in=[1])]
-        orderitem_topping = OrderItem.objects.filter(
-            order_id=pk, topping_id__in=topping)
-        for item in orderitem_topping:
-            item.status_order = 1
-            item.save()
-        return Response('ok')
-
-
-class FinishDrinkOrderItem(APIView):
-    def put(self, request, pk):
-        orders = OrderItem.objects.get(pk=pk)
-        orders.status_order = 2
-        orders.save()
-
-        product = [p.id for p in Product.objects.filter(type_product=2)]
-        o = Order.objects.get(pk=orders.order_id)
-        if not OrderItem.objects.filter(order_id=o.id, status_order=1, product_id__in=product).exists():
-            topping = [p.id for p in Topping.objects.filter(type_topping=2)]
-            if not OrderItem.objects.filter(order_id=o.id, status_order=1, topping_id__in=topping).exists():
-                o.status_drink = 2
-                o.save()
-                check_is_finish(o.id)
-
-        return Response('ok')
-
-
-class FinishDrinkOrder(APIView):
-    def put(self, request, pk):
-        orders = Order.objects.get(pk=pk)
-        orders.status_drink = 2
-        orders.save()
-        check_is_finish(pk)
-        product = [p.id for p in Product.objects.filter(type_product=2)]
-        for o in OrderItem.objects.filter(order_id=orders.id, product_id__in=product):
-            o.status_order = 2
-            o.save()
-
-        topping = [p.id for p in Topping.objects.filter(type_topping=2)]
-        for o in OrderItem.objects.filter(order_id=orders.id, topping_id__in=topping):
-            o.status_order = 2
-            o.save()
-        return Response('ok')
-
-
-class FoodOrderOnGoing(APIView):
-    def get(self, request):
-        Orders = Order.objects.filter(
-            create_at__gte=datetime.now().date(), status_food__in=[0, 1]).exclude(status_food=None)
-        serializer = OrderSerializer(
-            Orders, many=True)
-        return Response(serializer.data)
-
-
-class AcceptFoodOrder(APIView):
-    def put(self, request, pk):
-        orders = Order.objects.get(pk=pk)
-        if not orders.status_drink == 0:
-            orders.status_order = 1
-        orders.status_food = 1
-        orders.save()
-
-        # accept food and dessert
-        product = [p.id for p in Product.objects.filter(
-            type_product__in=[1, 3])]
-        orderitem = OrderItem.objects.filter(
-            order_id=pk, product_id__in=product)
-        for item in orderitem:
-            item.status_order = 1
-            item.save()
-
-        # accept topping_food and topping_dessert
-        topping = [p.id for p in Topping.objects.filter(
-            type_topping__in=[1, 3])]
-        orderitem_topping = OrderItem.objects.filter(
-            order_id=pk, topping_id__in=topping)
-        for item in orderitem_topping:
-            item.status_order = 1
-            item.save()
-        return Response('ok')
-
-
-class FinishFoodOrderItem(APIView):
-    def put(self, request, pk):
-        orders = OrderItem.objects.get(pk=pk)
-        orders.status_order = 2
-        orders.save()
-        o = Order.objects.get(pk=orders.order_id)
-        product = [p.id for p in Product.objects.filter(
-            type_product__in=[3, 1])]
-        if not OrderItem.objects.filter(order_id=o.id, status_order=1, product_id__in=product).exists():
-            topping = [p.id for p in Topping.objects.filter(
-                type_topping__in=[3, 1])]
-            if not OrderItem.objects.filter(order_id=o.id, status_order=1, topping_id__in=topping).exists():
-                o.status_food = 2
-                o.save()
-                check_is_finish(o.id)
-        return Response('ok')
-
-
-class FinishFoodOrder(APIView):
-    def put(self, request, pk):
-        orders = Order.objects.get(pk=pk)
-        orders.status_food = 2
-        orders.save()
-        check_is_finish(pk)
-        product = [p.id for p in Product.objects.filter(
-            type_product__in=[1, 3])]
-        for o in OrderItem.objects.filter(order_id=orders.id, product_id__in=product):
-            o.status_order = 2
-            o.save()
-
-        topping = [p.id for p in Topping.objects.filter(
-            type_topping__in=[1, 3])]
-        for t in OrderItem.objects.filter(order_id=orders.id, topping_id__in=topping):
-            t.status_order = 2
-            t.save()
-        return Response('ok')
-
 # read order
 
+class CounterOrderType(APIView):
+    def get(self, request, type):
+        if type == 5:
+            order_food = Order.objects.filter(
+                create_at__gte=datetime.now().date()).exclude(status_drink=None).order_by('-create_at')
+        elif type == 4:
+            order_food = Order.objects.filter(create_at__gte=datetime.now().date(
+            ), status_order=type).exclude(status_drink=None).order_by('-create_at')
+        elif type == 3:
+            order_food = Order.objects.filter(create_at__gte=datetime.now().date(
+            ), status_drink=type).exclude(status_order=4).order_by('-create_at')
+        serializer = OrderSerializer(
+            order_food, context={'request': request}, many=True)
+        return Response(serializer.data, status=200)
 
-class GetKitchenInfo(APIView):
+
+class CounterOrderToday(APIView):
     def get(self, request):
         data = {}
-        data['finish_order'] = Order.objects.filter(create_at__gte=datetime.now().date(), status_food=2).count()
-        data['remain_order'] = Order.objects.filter(create_at__gte=datetime.now().date(), status_food=1).count()
+        data['finish_order'] = Order.objects.filter(
+            create_at__gte=datetime.now().date(), status_drink=2).exclude(status_order=4).count()
+        data['remain_order'] = Order.objects.filter(
+            create_at__gte=datetime.now().date(), status_drink=1).exclude(status_order=4).count()
+        Orders = Order.objects.filter(
+            create_at__gte=datetime.now().date(), status_drink__in=[0, 1, 2]).exclude(status_order=4)
+        data['order'] = OrderSerializer(Orders, many=True).data
+        return Response(data, status=200)
+
+
+class KitchenOrderType(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    def get(self, request, type):
+        if type == 5:
+            order_food = Order.objects.filter(
+                create_at__gte=datetime.now().date()).exclude(status_food=None).order_by('-create_at')
+        elif type == 4:
+            order_food = Order.objects.filter(create_at__gte=datetime.now().date(
+            ), status_order=type).exclude(status_food=None).order_by('-create_at')
+        elif type == 3:
+            order_food = Order.objects.filter(create_at__gte=datetime.now().date(
+            ), status_food=type).exclude(status_order=4).order_by('-create_at')
+        serializer = OrderSerializer(
+            order_food, context={'request': request}, many=True)
+        return Response(serializer.data, status=200)
+
+
+class KitchenOrderToday(APIView):
+    def get(self, request):
+        data = {}
+        data['finish_order'] = Order.objects.filter(
+            create_at__gte=datetime.now().date(), status_food=2).count()
+        data['remain_order'] = Order.objects.filter(
+            create_at__gte=datetime.now().date(), status_food=1).count()
+        Orders = Order.objects.filter(
+            create_at__gte=datetime.now().date(), status_food__in=[0, 1, 2])
+        data['order'] = OrderSerializer(Orders, many=True).data
         return Response(data, status=200)
 
 
@@ -288,7 +322,7 @@ class TodayOrderOnGoing(APIView):
 
     def get(self, request):
         Orders = Order.objects.filter(
-            create_at__gte=datetime.now().date(), status_order__in=[0, 1])
+            create_at__gte=datetime.now().date(), status_order__in=[0, 1, 2])
         serializer = OrderSerializer(
             Orders, context={'request': request}, many=True)
         return Response(serializer.data)
@@ -319,31 +353,31 @@ class OrderList(APIView):
         request.data['order_number'] = amount_order
 
         # check customer
-        if not 'phone_number' in request.data['customer_set']:
+        if request.data['phone_number'] == "":
             request.data['customer_id'] = None
             request.data['address_id'] = None
-
-        # check is has customer in data
-        elif Customer.objects.filter(nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).exists():
-            request.data['customer_id'] = Customer.objects.get(
-                nick_name=request.data['customer_set']['nick_name'], phone_number=request.data['customer_set']['phone_number']).id
-            if not request.data['address_set'] == {}:
-                if AddressCustomer.objects.filter(customer_id=request.data['customer_id'], address=request.data['address_set']['address']).exists():
-                    request.data['address_id'] = AddressCustomer.objects.get(
-                        customer_id=request.data['customer_id'], address=request.data['address_set']['address']).id
+        else:  # check is has customer in data
+            if Customer.objects.filter(phone_number=request.data['phone_number']).exists():
+                request.data['customer_id'] = Customer.objects.get(
+                    phone_number=request.data['phone_number']).id
+                # check address
+                if not request.data['address'] == "":
+                    if AddressCustomer.objects.filter(customer_id=request.data['customer_id'], address=request.data['address']).exists():
+                        request.data['address_id'] = AddressCustomer.objects.get(
+                            address=request.data['address'], customer_id=request.data['customer_id']).id
+                    else:
+                        request.data['address_id'] = AddressCustomer.objects.create(
+                            address=request.data['address'], customer_id=request.data['customer_id']).id
                 else:
+                    request.data['address_id'] = None
+            else:
+                request.data['customer_id'] = Customer.objects.create(
+                    phone_number=request.data['phone_number'], nick_name=request.data['nick_name']).id
+                if not request.data['address'] == "":
                     request.data['address_id'] = AddressCustomer.objects.create(
-                        address=request.data['customer_set']['address_customer'], customer_id=request.data['customer_id'], status_address=3).id
-            else:
-                request.data['address_id'] = None
-        else:
-            request.data['customer_id'] = Customer.objects.create(
-                phone_number=request.data['customer_set']['phone_number'], nick_name=request.data['customer_set']['nick_name']).id
-            if not request.data['address_set'] == {}:
-                request.data['address_id'] = AddressCustomer.objects.create(
-                    address=request.data['address_set']['address'], customer_id=request.data['customer_id'], status_address=3).id
-            else:
-                request.data['address_id'] = None
+                        address=request.data['address'], customer_id=request.data['customer_id']).id
+                else:
+                    request.data['address_id'] = None
 
         # check status order
         request.data['status_food'] = None
@@ -820,3 +854,10 @@ class GetOrderNumber(APIView):
         amount_order = len(order)
         print(amount_order+1)
         return Response({'order_number': amount_order+1})
+
+
+class delete_all_order(APIView):
+    def delete(self, request):
+        Order.objects.all().delete()
+        Customer.objects.all().delete()
+        return Response('oj')

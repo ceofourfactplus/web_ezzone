@@ -17,12 +17,12 @@
               font-size: 20px;
               margin: 0px 10px;
             "
-            ># {{ $store.state.pos.order.order_number}}</span
+            ># {{ $store.state.pos.order.order_number }}</span
           >
           <label for="tel">Tel.</label>
           <div
             style="
-              width: 172px;
+              width: 195px;
               background-color: #303344;
               height: 40px;
               border-radius: 5px;
@@ -41,6 +41,7 @@
             src="../../assets/icon/promotion_no_case.png"
             style="
               width: 50px;
+              height: 50px;
               top: -5px;
               position: relative;
               margin-right: 15px;
@@ -54,7 +55,7 @@
             type="text"
             id="name"
             style="margin-right: 15px; width: 241px"
-            v-model="cus_name"
+            v-model="$store.state.pos.order.nick_name"
           />
           <img
             v-if="
@@ -103,15 +104,39 @@
           <label for="address" style="margin-right: 13px">Address :</label>
           <textarea
             id="address"
-            v-model="address"
+            v-model="$store.state.pos.order.address"
             @click="select_address = true"
           ></textarea>
         </div>
+        <ul
+          class="address"
+          v-if="
+            $store.state.pos.customer_set.addresscustomer_set.length != 0 &&
+            select_address
+          "
+        >
+          <li
+            v-for="(a,index) in $store.state.pos.customer_set.addresscustomer_set"
+            :key="a.id"
+            :class="{'none-border':index == 0}"
+            @click="
+              $store.state.pos.order.address = a.address;
+              select_address = false;
+            "
+          >
+            {{ a.address }}
+          </li>
+        </ul>
       </div>
       <div class="col-12 mt-2">
         <div style="display: flex">
           <label for="note" class="note">Note &#160; &#160; &#160;:</label>
-          <input type="text" v-model="note" class="note-input" id="note" />
+          <input
+            type="text"
+            v-model="$store.state.pos.order.description"
+            class="note-input"
+            id="note"
+          />
         </div>
       </div>
       <div class="col-12 mt-3">
@@ -189,7 +214,7 @@
           <div class="row" style="color: #fff">
             <div class="col-6 w-100" style="display: flex; margin-bottom: 20px">
               <div class="event-text">Vouncher&#160; :</div>
-              <div class="select-event">-</div>
+              <div class="select-event" @click="VouncherPopup = true">-</div>
             </div>
             <div class="col-1"></div>
             <div class="col-5 w-100">
@@ -219,6 +244,26 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup Vouncher -->
+    <div class="AreaPopup" v-if="VouncherPopup">
+
+      <div class="dark" @click="VouncherPopup=false">
+        <div class="AreaRowVouncher">
+          <div class="RowPopupVouncher">
+
+            <div class="PopupVouncher" v-for="voucher in vouchers" :key="voucher" >
+                  <img :src="voucher.img" style="width:200px;height:200px;border-radius: 10%;object-fit:cover;">
+            </div>          
+          
+          </div>
+        </div>
+      </div>
+      
+
+    </div>
+      
+      
     <calculator
       :show_cal="show_cal"
       @hide_cal="show_cal = false"
@@ -230,12 +275,6 @@
       :show="select_table_s"
       @select_table="select_table"
       @hide="select_table_s = false"
-    />
-    <select-address
-      :show="select_address"
-      :customer="customer_set"
-      @hide="select_address = false"
-      @save="address_save"
     />
     <select-payment
       :show="select_payment"
@@ -252,19 +291,15 @@ import Calculator from "../../components/main_component/Calculator.vue";
 import { api_customer } from "../../api/api_customer";
 import InputTel from "../../components/main_component/InputTel.vue";
 import SelectTable from "../../components/main_component/SelectTable.vue";
-import SelectAddress from "../../components/main_component/SelectAddress.vue";
 import SelectPayment from "../../components/payment/SelectPayment.vue";
+import { api_promotion } from "../../api/api_promotion";
 export default {
   components: {
     NavApp,
     Calculator,
     InputTel,
     SelectTable,
-    SelectAddress,
     SelectPayment,
-  },
-  mounted() {
-    this.note = this.description;
   },
   data() {
     return {
@@ -273,11 +308,12 @@ export default {
       select_cal: "",
       selected_customer: {},
       input_tel: false,
-      cus_name: "",
       select_table_s: false,
       select_address: false,
       select_payment: false,
       selected_payment: {},
+      vouchers: [],
+      VouncherPopup: false,
     };
   },
   methods: {
@@ -291,10 +327,6 @@ export default {
     payment(payment) {
       this.selected_payment = payment;
       this.select_payment = false;
-    },
-    address_save(address_t) {
-      this.$store.commit("pos/address_customer", address_t);
-      this.select_address = false;
     },
     select_table(i) {
       if (i == "-") {
@@ -314,16 +346,8 @@ export default {
     },
     submit_tel({ tel, customer }) {
       if (customer != null) {
-        this.$store.commit("pos/phone_number", customer.phone_number);
         this.$store.commit("pos/customer_set", customer);
-        this.$store.commit("pos/customer_name", customer.first_name);
         this.input_tel = false;
-        if (customer.addresscustomer_set.legnth != 0) {
-          this.$store.commit(
-            "pos/address_customer",
-            customer.addresscustomer_set[0].address
-          );
-        }
       } else {
         this.$store.commit("pos/phone_number", tel);
       }
@@ -368,7 +392,7 @@ export default {
       this.input_tel = false;
     },
     phone_number_layout(phone) {
-      if (phone != null) {
+      if (phone != "") {
         return (
           phone.substr(0, 3) +
           "-" +
@@ -379,6 +403,12 @@ export default {
       } else {
         return "";
       }
+    },
+    fetchVoucher() {
+      api_promotion.get("voucher/").then((response) => {
+        this.vouchers = response.data;
+        console.log(response.data, "voucher");
+      });
     },
   },
   computed: {
@@ -391,7 +421,6 @@ export default {
       total_balance: "pos/total_balance",
       delivery_price: "pos/delivery_price",
       table: "pos/table",
-      description: "pos/description",
       address: "pos/address",
       phone_number: "pos/phone_number",
       customer_name: "pos/customer_name",
@@ -399,9 +428,6 @@ export default {
     }),
   },
   watch: {
-    customer_name(new_name){
-      this.cus_name = new_name    
-    },
     note(newData) {
       this.$store.commit("pos/note_input", newData);
     },
@@ -413,9 +439,6 @@ export default {
             this.selector_customer = response.data;
           });
       }
-    },
-    cus_name(new_name) {
-      this.$store.state.pos.order.customer_set.nick_name = new_name
     },
   },
 };
@@ -501,10 +524,44 @@ div {
   font-size: 24px;
   text-align: left;
 }
+
 .balance {
   color: #50d1aa;
   font-weight: bold;
   font-size: 24px;
   text-align: left;
+}
+
+/* Popup Vouncher */
+.AreaRowVouncher {
+
+  width: 100%;
+  height: 100%;
+  top: 0%;
+  position: fixed;
+  
+}
+
+.RowPopupVouncher {
+  width: 100%;
+  height: 10%;
+  padding:0%;
+  padding-left:7%;
+  padding-right:7%;
+  margin: 0%;
+  margin-top:20%;
+  display:grid;
+  justify-content: center;
+  grid-gap: 40% 10%;
+  grid-template-columns: auto auto auto;
+
+}
+
+.PopupVouncher {
+  border-radius: 20%;
+  width: 100%;
+  height: 80%;
+  padding:0%;
+
 }
 </style>

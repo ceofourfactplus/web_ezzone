@@ -44,6 +44,7 @@ export default {
   methods: {
     select_channel(channel) {
       this.$store.state.pos.order.sale_channel_id = channel.id
+      console.log(channel)
       this.$store.state.pos.order.sale_channel_set = channel
       api_pos.get('order-number').then((response) => {
         this.$store.state.pos.order.order_number = response.data.order_number

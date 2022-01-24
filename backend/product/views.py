@@ -1,3 +1,5 @@
+from pos.models import Order
+from django.db.models import F,OuterRef,Exists,Count
 import os
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
@@ -22,7 +24,7 @@ class GetProductByChannelAndCategory(APIView):
         price = PriceProduct.objects.filter(sale_channel_id=channel_id)
         serializer = PriceProductSerializer(price, many=True)
         list = [p['product_set']['id'] for p in serializer.data]
-        product = Product.objects.filter(pk__in=list, category_id=category)
+        product = Product.objects.filter(pk__in=list, category_id=category,is_active=True)
         product_s = ProductSerializer(
             product, context={"request": request}, many=True)
         return Response(product_s.data, status=200)
@@ -36,7 +38,7 @@ class GetToppingByChannelAndCategory(APIView):
     def get(self, request, channel_id, category):
         price = PriceTopping.objects.filter(sale_channel_id=channel_id)
         list = [p.topping_id for p in price]
-        topping = Topping.objects.filter(pk__in=list, type_topping=category)
+        topping = Topping.objects.filter(pk__in=list, type_topping=category,is_active=True)
         ser = ToppingSerializer(
             topping, context={"request": request}, many=True)
         return Response(ser.data, status=200)
@@ -63,6 +65,10 @@ class ProductCategoryStatus(APIView):
         sale_channel.save()
         serializer = ProductCategorySerializer(sale_channel)
         return Response(serializer.data)
+
+    def delete(self, request, pk):
+        ProductCategory.objects.get(id=pk).delete()
+        return Response(status=204)
 
 
 class ToppingByType(APIView):
@@ -130,6 +136,10 @@ class ProductCategoryDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+
+    def delete(self, request, pk):
+        ProductCategory.objects.get(id=pk).delete()
+        return Response(status=204)
 
 
 class ToppingCategoryList(APIView):
@@ -305,9 +315,14 @@ class SalechannelList(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def get(self, request):
-        sale_channel = SaleChannel.objects.all()
+        order_exists = Order.objects.filter(sale_channel_id=OuterRef(('pk')))
+        sale_channel = SaleChannel.objects.annotate(
+            can_delete=Exists(order_exists)
+            )
         serializer = SaleChannelSerializer(
             sale_channel, context={"request": request}, many=True)
+        for s in serializer.data:
+            s['qty'] = PriceTopping.objects.filter(sale_channel_id=s['id']).count()+PriceProduct.objects.filter(sale_channel_id=s['id']).count()
         return Response(serializer.data)
 
 
@@ -438,7 +453,7 @@ class ToppingStatus(APIView):
         topping.update_by_id = request.data['update_by']
         topping.save()
         print(topping.status)
-        return Response({'status':topping.status})
+        return Response({'status': topping.status})
 
 
 class UpdateImageProduct(APIView):
@@ -600,8 +615,8 @@ class ProductByTypeAndSearch(APIView):
 
 
 class DeleteSaleChannel(APIView):
+    
     def put(self, request):
         SaleChannel.objects.filter(pk__in=request.data['list']).delete()
         sale_chanenl = SaleChannel.objects.all()
-        serializer = SaleChannelSerializer(sale_chanenl, many=True)
-        return Response(serializer.data, status=200)
+        return Response('ok', status=200)

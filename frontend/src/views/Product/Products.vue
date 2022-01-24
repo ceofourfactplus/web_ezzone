@@ -74,7 +74,7 @@
             </div>
             <div
               class="col-4 w-100"
-              style="margin: auto; text-align: center"
+              style="margin: auto; text-align: left"
               @click="
                 $router.push({
                   name: 'EditProduct',
@@ -89,7 +89,7 @@
             </div>
             <div
               class="col-2 w-100"
-              style="margin: auto; width: 175px; text-align: left"
+              style="margin: auto; width: 175px; text-align: right"
             >
               {{ get_price(product.priceproduct_set) }}
             </div>
@@ -98,6 +98,7 @@
               style="margin: auto; text-align: center; padding: 0px"
             >
               <button
+                v-if="product.warehouse != 0"
                 class="btn-ghost-b"
                 style="font-size: 20px; line-height: 29px; height: 35px"
               >

@@ -16,7 +16,9 @@
         </button>
       </div>
       <div class="col-2 w-100">
-        <button class="btn-ghost" @click="addPO()">+ PO</button>
+        <button class="btn-ghost" style="white-space: nowrap" @click="addPO()">
+          + PO
+        </button>
       </div>
     </div>
 
@@ -73,24 +75,30 @@ export default {
       search_item: null,
       categories: [],
       units: [],
-      nearly_items: [],
-      temp_items: [],
+      nearly_items: [
+        {
+          unit_set: { unit: "" },
+          supplier_set: { company_name: "hrllo" },
+          raw_material_set: { remain: 0, name: "",img:'',status:'1' },
+        },
+      ],
+      temp_items: [
+        {
+          unit_set: { unit: "" },
+          supplier_set: { company_name: "" },
+          raw_material_set: { remain: 0, name: "" },
+        },],
       selected_items: [],
     };
   },
   methods: {
     fetchNearlySOItems() {
-      api_raw_material.get("/get-nearly-sold-out/").then((response) => {
+      api_raw_material.get("get-nearly-sold-out/").then((response) => {
         console.log(response.data, "nearly data");
         this.nearly_items = response.data;
         this.temp_items = response.data;
       });
     },
-    // fetchPriceRM() {
-    //   api_raw_material.get("/price-raw-material/").then((response) => {
-    //     console.log(response.data, "price-raw-material data");
-    //   });
-    // },
     addPO() {
       this.selected_items.forEach((item) => {
         console.log(item, "unit id");
@@ -149,10 +157,13 @@ export default {
       this.total_price = this.remain * this.avg_price;
     },
   },
-  mounted() {},
-  beforeMount() {
-    this.fetchNearlySOItems()
-  }
+  mounted() {
+    this.is_staff = this.$store.state.auth.userInfo["is_staff"];
+    api_raw_material.get("get-nearly-sold-out/").then((response) => {
+      this.nearly_items = response.data;
+      this.temp_items = response.data;
+    });
+  },
 };
 </script>
 

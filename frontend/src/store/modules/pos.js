@@ -4,19 +4,15 @@ export default {
   namespaced: true,
   state: {
     order: {
-      order_number:0,
-      address_id: null,
-      address_set: {},
+      order_number: 0,
+      address: "",
+      nick_name: "",
+      phone_number: "",
       status_delivery: 1,
       total_price: 0,
       total_amount: 0,
       sale_channel_id: null,
       sale_channel_set: {},
-      customer_id: 1,
-      customer_set: {
-        nick_name: "",
-        addresscusstomer_set:'',
-      },
       description: "",
       status_order: 0,
       payment_status: 1,
@@ -32,12 +28,16 @@ export default {
       cash: null,
       change: null,
     },
+    customer_set: {
+      addresscustomer_set: [],
+    },
     category: 1,
     type_product: 2,
     select_product_index: null,
     select_topping_index: null,
     is_edit_product: false,
     is_edit_toppig: false,
+    is_edit:false,
   },
   mutations: {
     note_input(state, input) {
@@ -111,41 +111,27 @@ export default {
       state.order.table = table;
     },
     address_customer(state, address) {
-      if (state.order.address_set == null) {
-        state.order.address_set = {};
-        state.order.address_set.address = address;
-      } else {
-        state.order.address_set.address = address;
-      }
+      state.order.address = address;
     },
     phone_number(state, phone) {
-      if (state.order.customer_set == null) {
-        state.order.customer_set = {};
-        state.order.customer_set.phone_number = phone;
-      } else {
-        state.order.customer_set.phone_number = phone;
-      }
-    },
-    customer_name(state, name) {
-      state.order.customer_set.nick_name = name;
+      state.order.phone_number = phone;
     },
     customer_set(state, customer) {
-      state.order.customer_set = customer;
-      state.order.customer_id = customer.id;
+      state.customer_set = customer;
+      state.order.nick_name = customer.nick_name;
+      state.order.phone_number = customer.phone_number;
     },
     clear_order(state) {
       state.order = {
-        address_id: null,
-        address_set: {},
+        order_number: 0,
+        address: "",
+        nick_name: "",
+        phone_number: "",
         status_delivery: 1,
         total_price: 0,
         total_amount: 0,
         sale_channel_id: null,
         sale_channel_set: {},
-        customer_id: 1,
-        customer_set: {
-          nick_name: "",
-        },
         description: "",
         status_order: 0,
         payment_status: 1,
@@ -161,6 +147,7 @@ export default {
         cash: null,
         change: null,
       };
+      state.is_edit = false
     },
     cash(state, cash) {
       state.order.cash = cash;
@@ -217,7 +204,7 @@ export default {
     },
     clear_order(context) {
       context.commit("clear_order");
-      // router.push({ name: "SelectSaleChannel" });
+      router.push({ name: "SelectSaleChannel" });
     },
     create_order(context) {
       if (context.state.is_edit) {
@@ -248,6 +235,21 @@ export default {
     re_order(context, order) {
       context.state.order = order;
       context.state.is_edit = true;
+      if (order.customer_set != null) {
+        context.state.order["nick_name"] =
+          context.state.order.customer_set.nick_name;
+        context.state.order["phone_number"] =
+          context.state.order.customer_set.phone_number;
+        if (order.address_id != null) {
+          context.state.order["address"] = order.address_set.address;
+        } else {
+          context.state.order["address"] = "";
+        }
+      } else {
+        context.state.order["nick_name"] = "";
+        context.state.order["phone_number"] = "";
+        context.state.order["address"] = "";
+      }
       router.push({ name: "OrderReceipt" });
     },
   },
@@ -339,24 +341,15 @@ export default {
       return "";
     },
     phone_number: (state) => {
-      if (state.order.customer_set != null) {
-        return state.order.customer_set.phone_number;
-      } else {
-        return "";
-      }
+      return state.order.phone_number;
     },
     customer_name: (state) => {
-      if (state.order.customer_set != null) {
-        return state.order.customer_set.nick_name;
-      } else {
-        return "";
-      }
+      return state.order.nick_name;
     },
     customer_set: (state) => {
-      return state.order.customer_set;
+      return state.customer_set;
     },
     get_data: (state) => {
-      state.order.sale_channel_set = {}
       return state.order;
     },
   },

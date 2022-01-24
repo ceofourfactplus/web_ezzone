@@ -7,7 +7,7 @@
         <SearchBar @search="search_by_typing" />
       </div>
       <div style="padding-left: 0px">
-        <button class="btn-ghost" @click="add_category_status = true">
+        <button class="btn-ghost" style="white-space: nowrap" @click="add_category_status = true">
           + New
         </button>
       </div>
@@ -46,9 +46,9 @@
             <div class="col-6" style="text-align: left; width: 100%; position: relative; bottom: 8px;">
               {{ item.name }}
             </div>
-            <div class="col-2" style="margin-left: -20px; position: relative; bottom: 8px;">100</div>
-            <div class="col-2" style="margin-left: 30px; position: relative; bottom: 8px;">1000</div>
-            <div class="col-1" style="position: relative; bottom: 8px;">
+            <div class="col-2" style="margin-left: -20px; position: relative; bottom: 8px;">{{item.product}}</div>
+            <div class="col-2" style="margin-left: 30px; position: relative; bottom: 8px;">{{item.amount}}</div>
+            <div class="col-2 w-100" style="position: relative; bottom: 8px;">
               <img
                 @click="SelectCategory(item)"
                 src="../../assets/icon/edit.png"

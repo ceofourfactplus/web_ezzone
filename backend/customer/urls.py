@@ -10,4 +10,6 @@ urlpatterns = [
     path('create-address', views.CreateAddress.as_view()),
     path('search-name/<str:text>',views.SearchName.as_view()),
     path('get-customer-by-phone-number/<str:phone_number>',views.GetCustomerByPhoneNumbe.as_view()),
+    path('check-phone-number/<str:phone_number>',views.CheckPhoneNumber.as_view()),
+    path('check-phone-number/<str:phone_number>/<int:pk>', views.CheckPhoneNumberEdit.as_view())
 ]

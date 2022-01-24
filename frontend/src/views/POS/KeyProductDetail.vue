@@ -145,7 +145,7 @@
         </div>
         <!-- select flavour level -->
         <div class="col-3 w-100" style="height: 200px">
-          <div class="btn-group-vertical" role="group">
+          <div class="btn-group-vertical" role="group" v-if="product.product_set.flavour_level">
             <button
               class="btn btn-ghost"
               @click="product.flavour_level = 3"

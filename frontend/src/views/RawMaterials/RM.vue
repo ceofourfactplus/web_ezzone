@@ -9,7 +9,7 @@
       <div class="col-2 w-100" style="padding: 0px">
         <button
           class="btn-ghost w-100 p-0"
-          style="height: 45px; white-space: nowrap;"
+          style="height: 45px; white-space: nowrap"
           @click="$router.push({ name: 'CreateRM' })"
         >
           + New
@@ -33,14 +33,31 @@
         margin: auto;
         width: 90%;
         overflow-y: hidden;
+        
       "
       class="mt-2"
     >
       <button
+        class="btn-gray category me-1"
+        style="
+          min-width: 100px;
+          white-space: nowrap;
+          padding: 0px;
+          opacity: 0.6;
+        "
+        :class="{
+          active: select_category == 'all',
+          'text-active': select_category == 'all',
+        }"
+        @click="select_category = 'all'"
+      >
+        all
+      </button>
+      <button
         v-for="category in categories"
         :key="category.id"
         class="btn-gray category me-1"
-        style="min-width: 165px; white-space: nowrap; padding: 0px;opacity:0.6;"
+        style="min-width:265px; white-space: nowrap; padding: 0px;opacity:0.6;"
         :class="{
           active: select_category == category.id,
           'text-active': select_category == category.id,
@@ -152,7 +169,7 @@ export default {
   },
   data() {
     return {
-      category: "",
+      category: "all",
       image: "",
       show_img: null,
       show_pickup_status: false,
@@ -297,6 +314,17 @@ export default {
       this.$router.push({ name: "EditRM", params: { id: item.id } });
     },
   },
+  watch: {
+    select_category(category) {
+      if (category == "all") {
+        this.temp_rm = this.raw_materials;
+      } else {
+        this.temp_rm = this.raw_materials.filter((m) => {
+          return m.category_id == category;
+        });
+      }
+    },
+  },
 };
 </script>
 
@@ -331,7 +359,7 @@ input::-webkit-calendar-picker-indicator {
   opacity: 0;
 }
 .active {
-  color:#fff;
+  color: #fff;
   opacity: 1 !important;
 }
 .edit-block {

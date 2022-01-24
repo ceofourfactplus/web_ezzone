@@ -130,7 +130,7 @@
             />
           </div>
           <div class="col-7 label-input m-15">
-            <label for="type_topping">Type Topping:</label
+            <label for="type_topping">Topping Cate:</label
             ><select
               id="type_topping"
               style="width: 165px"

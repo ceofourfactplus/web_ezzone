@@ -46,10 +46,12 @@ class Order(models.Model):
 
     WAITING_ORDER = 0
     ON_COOKING_ORDER = 1
-    FINISH_ORDER = 2
+    ON_SERVE = 2
+    FINISH_ORDER = 3
     STATUS_ORDER_DETAIL = (
         (WAITING_ORDER, 'waiting'),
         (ON_COOKING_ORDER, 'on cooking'),
+        (ON_SERVE, 'on serve'),
         (FINISH_ORDER, 'finish'),
     )
 
@@ -127,10 +129,12 @@ class OrderItem(models.Model):
 
     WAITING_ORDER = 0
     ON_COOKING_ORDER = 1
-    FINISH_ORDER = 2
+    ON_SERVE = 2
+    FINISH_ORDER = 3
     STATUS_ORDER = (
         (WAITING_ORDER, 'waiting'),
         (ON_COOKING_ORDER, 'on cooking'),
+        (ON_SERVE, 'on serve'),
         (FINISH_ORDER, 'finish'),
     )
     status_order = models.IntegerField(
