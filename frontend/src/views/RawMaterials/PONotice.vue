@@ -86,11 +86,11 @@ export default {
         this.temp_items = response.data;
       });
     },
-    fetchPriceRM() {
-      api_raw_material.get("/price-raw-material/").then((response) => {
-        console.log(response.data, "price-raw-material data");
-      });
-    },
+    // fetchPriceRM() {
+    //   api_raw_material.get("/price-raw-material/").then((response) => {
+    //     console.log(response.data, "price-raw-material data");
+    //   });
+    // },
     addPO() {
       this.selected_items.forEach((item) => {
         console.log(item, "unit id");
@@ -149,11 +149,10 @@ export default {
       this.total_price = this.remain * this.avg_price;
     },
   },
-  mounted() {
-    this.is_staff = this.$store.state.auth.userInfo["is_staff"];
-    this.fetchNearlySOItems();
-    this.fetchPriceRM();
-  },
+  mounted() {},
+  beforeMount() {
+    this.fetchNearlySOItems()
+  }
 };
 </script>
 
@@ -178,6 +177,7 @@ export default {
   width: 180px;
 }
 .btn-ghost {
+  white-space: nowrap;
   width: 100px;
   height: 50px;
   border: 1px solid #65b0f6;

@@ -51,29 +51,59 @@
       </button>
     </div>
 
-    <!-- Table for admin -->
-    <Table
-      v-if="is_staff"
-      :head1="'Item'"
-      :head2="'Qty'"
-      :head3="'Unit'"
-      :head4="'Status'"
-      :head5="'Pickup'"
-      :elements="raw_materials"
-      :category="'raw_material'"
-      @show_pickup="showPickup"
-      @show_rm_detail="editRM"
-    />
-
-    <!-- for user -->
-    <Table
-      v-else
-      :head1="'Item'"
-      :head2="'Qty'"
-      :head3="'Unit'"
-      :head4="'Status'"
-      :elements="raw_materials"
-    />
+    <!-- Table -->
+    <div class="table">
+      <div class="table-header">
+        <div class="row" style="padding-right: 0px;">
+          <div class="col-6 w-100">Item</div>
+          <div class="col-2 w-100">Qty</div>
+          <div class="col-2 w-100">Unit</div>
+          <div class="col-1 w-100">Status</div>
+          <div class="col-1 w-100" style="margin-right: 20px;">Pickup</div>
+        </div>
+      </div>
+      <div class="row table-item" v-for="item in raw_materials" :key="item.id" style="padding-right: 0px; background-color: #303344; border-radius: 10px; margin: 0px; margin-top: 5px; line-height: 40px;">
+          <div
+              class="col-6 w-100"
+              @click="editRM(item)"
+              style="text-align: left;"
+            >
+              {{ item.name }}
+            </div>
+            <div
+              class="col-2 w-100"
+              style="margin-left: 16px;"
+            >
+              {{ item.remain }}
+            </div>
+            <div
+              class="col-2 w-100"
+              style="margin-left: 23px;"
+            >
+              {{ item.unit_set.unit }}
+            </div>
+            <div
+              class="col-1 w-100"
+              style="margin-right: 70px;"
+            >
+              <img
+                :src="
+                  $store.state.raw_material.status_image[item.status]['img']
+                "
+                style="position: relative; bottom: 3px; margin-right: -30px;"
+                :style="$store.state.raw_material.status_image[item.status]['style']"
+                alt="img"
+              />
+            </div>
+            <div
+              class="col-1 w-100"
+              @click="showPickup(item)"
+              style="margin-right: 20px;"
+            >
+              <img style="width: 52px; height: 50px; position: relative; bottom: 3px;" src="../../assets/icon/pickup.png" alt="img" />
+            </div>
+      </div>
+    </div>
 
     <!-- Card Popup -->
     <div class="card" :class="{ 'card-active': alert }">
@@ -92,7 +122,6 @@
       />
     </div>
 
-    <!-- RM Detail -->
   </div>
 </template>
 
@@ -116,6 +145,7 @@ export default {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     console.log(this.$route.name, "query page");
     this.fetchRMCategories();
+    this.fetchRMUnit()
   },
   beforeMount() {
     this.fetchRawMaterials();
@@ -150,6 +180,7 @@ export default {
       img: require("../../assets/icon/frame.png"),
       raw_materials: [],
       temp_rm: [],
+      units: [],
     };
   },
   methods: {
@@ -163,6 +194,11 @@ export default {
         console.log(response.data, "response");
         this.raw_materials = response.data;
         this.temp_rm = response.data;
+      });
+    },
+    fetchRMUnit() {
+      api_raw_material.get("/unit/").then((response) => {
+        this.units = response.data;
       });
     },
     saveChange() {
@@ -230,23 +266,28 @@ export default {
       }
     },
     pickup(pickup_val, item) {
-      console.log(pickup_val, item, "pickup_val");
-      console.log(item.unit_s_id, "id");
-      var data = {
-        raw_material_id: item.id,
-        amount: pickup_val,
-        unit_id: item.unit_s_id,
-        create_by_id: this.$store.state.auth.userInfo.id,
-      };
-      api_raw_material
-        .put(`raw-material/`, data)
-        .then((response) => {
-          console.log(response.data.id, "data");
-          this.fetchRawMaterials();
+      item.remain -= pickup_val
+      item.pricerawmaterial_set.forEach(el => {
+        el.unit_name = item.unit_set.unit
+      })
+      var id_list = [{unit: '', id:item.unit_s_id}, {unit: '', id:item.unit_m_id}, {unit: '', id:item.unit_l_id}]
+      id_list.forEach(el => {
+        this.units.forEach(unit => {
+          if(unit.id == el.id) {
+            el.unit = unit.unit
+          }
         })
-        .catch((err) => {
-          console.log(err, "err");
-        });
+      })
+      item.unit_s_name = id_list[0].unit
+      item.unit_m_name = id_list[1].unit
+      item.unit_l_name = id_list[2].unit
+      var idx = this.raw_materials.indexOf(item)
+      this.raw_materials[idx] = item
+      api_raw_material
+          .put(`edit-rm/${item.id}`, item)
+          .then((response) => {
+            console.log(response.data)
+          });
       this.show_pickup_status = false;
     },
     hideShowPickup() {

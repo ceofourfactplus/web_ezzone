@@ -560,6 +560,7 @@ export default {
   width: 133px;
   height: 45px;
   margin: 0px 35px 0px 0px;
+  white-space: nowrap;
 }
 .wrap-search {
   min-width: 610px;
