@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from customer.models import Customer
 from backend.settings import AUTH_USER_MODEL
-from product.models import Product, Topping
+from product.models import Product, Topping, SaleChannel
 
 def upload_to_promotion(instance,filename):
     return 'promotion/{filename}'.format(filename=filename)
@@ -95,13 +95,12 @@ class Redemption(models.Model):
   description = models.TextField(null=True,blank=True)
   img = models.ImageField(_("Image"), upload_to=upload_to_redemption, null=True, blank=True)
 
+
 class PromotionPackage(models.Model):
   promotion = models.CharField(max_length=100)
   start_date = models.DateField()
   img = models.ImageField(_("Image"), upload_to=upload_to_package, null=True, blank=True)
   amount_day = models.IntegerField()
-  discount_price = models.DecimalField(max_digits=6,decimal_places=2)
-  normal_price = models.DecimalField(max_digits=6,decimal_places=2)
   status = models.BooleanField(default=True)
   total_amount = models.IntegerField()
   description = models.TextField(null=True,blank=True)
@@ -126,6 +125,11 @@ class ItemTopping(models.Model):
   total_price = models.DecimalField(max_digits=4,decimal_places=2)
 #   description = models.TextField(null=True,blank=True)
 
+class PricePackage(models.Model):
+	sale_channel = models.ForeignKey(SaleChannel,on_delete=models.CASCADE)
+	normal_price = models.DecimalField(max_digits=6,decimal_places=2)
+	discount_price = models.DecimalField(max_digits=6,decimal_places=2)
+	package = models.ForeignKey(PromotionPackage,on_delete=models.CASCADE)
 
 class CustomerPoint(models.Model):
   customer = models.ForeignKey(Customer,on_delete=models.PROTECT)

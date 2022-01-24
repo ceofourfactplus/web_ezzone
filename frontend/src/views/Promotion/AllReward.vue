@@ -3,7 +3,7 @@
         <nav-app :url_name="'Redemption'" :reward_menu="true">All Reward</nav-app>
 
         <!-- Search Bar -->
-        <div class="row" style="max-width:672px;margin:0px;">
+        <div class="row" style="max-width:772px; margin:0px;">
             <div class="col-7 w-100 BlockSearch">
                 <SearchBar @search="serchByTyping"/> 
             </div>
@@ -12,7 +12,8 @@
                     <div class="col-2 w-100" style="margin-left:-15px;margin-top:-2px;"><img src="../../assets/icon/user-icon.png" alt=""></div>
                     <div class="col-5 w-100 ItmeUserPoints">{{ $store.state.promotion.customer.nick_name }}</div>
                     <div class="col-1 w-100" style="max-width:2px;">:</div>
-                    <div class="col-2 w-100 ItmeUserPoints" style="left:-20px;">{{ $store.state.promotion.customer_point[0].point }}</div>
+                    <div class="col-2 w-100 ItmeUserPoints" style="left:-20px;" v-if="$store.state.promotion.customer_point.length != 0">{{ $store.state.promotion.customer_point[0].point }}</div>
+                    <div class="col-2 w-100 ItmeUserPoints" style="left:-20px;" v-else>0</div>
                     <div class="col-2 w-100 ItmeUserPoints">Point</div>
 
                 </div>
@@ -119,7 +120,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
     margin-top: 10px;
     margin-bottom: 20px;
     padding: 0px;
-    border: 4px solid #EA7C69;
+    border: 2px solid #EA7C69;
     border-radius: 20px;
 
 
@@ -133,6 +134,7 @@ import SearchBar from "../../components/materials/SearchBar.vue"
 }
 
 .BlockItem {
+    padding-top: 10px;
     width: 90%;
     height: 240px;
     border-radius: 10px;

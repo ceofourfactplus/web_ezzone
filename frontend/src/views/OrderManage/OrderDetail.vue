@@ -24,7 +24,7 @@
         "
       >
         <button
-          style="width: 19%; padding: 0px"
+          style="width: 24%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '1' }"
           @click="select_status('on_going')"
@@ -32,15 +32,7 @@
           On going
         </button>
         <button
-          style="width: 19%; padding: 0px"
-          class="btn-gray"
-          :class="{ 'g-act': selected_status == '2' }"
-          @click="select_status('unpaid')"
-        >
-          Unpaid
-        </button>
-        <button
-          style="width: 19%; padding: 0px"
+          style="width: 24%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '3' }"
           @click="select_status('completed')"
@@ -48,7 +40,7 @@
           Completed
         </button>
         <button
-          style="width: 19%; padding: 0px"
+          style="width: 24%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == '4' }"
           @click="select_status('void')"
@@ -56,7 +48,7 @@
           Cancel
         </button>
         <button
-          style="width: 19%; padding: 0px"
+          style="width: 24%; padding: 0px"
           class="btn-gray"
           :class="{ 'g-act': selected_status == 'all' }"
           @click="select_status('all')"

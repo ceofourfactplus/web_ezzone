@@ -120,6 +120,7 @@ export default {
     height: 319px
 }
 .btn-confirm {
+  white-space: nowrap;
   width: 167px;
   height: 45px;
   margin-top: 15px;

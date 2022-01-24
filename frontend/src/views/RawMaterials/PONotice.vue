@@ -22,21 +22,93 @@
       </div>
     </div>
 
-    <!-- Table for admin -->
-    <Table
-      v-if="is_staff"
-      :head1="'Item'"
-      :head2="'Qty'"
-      :head3="'Unit'"
-      :head4="'Min Sup'"
-      :head5="'Status'"
-      :elements="nearly_items"
-      :category="'po_notice'"
-      @show_pickup="showPickup"
-      @show_rm_detail="editRM"
-      @po_detail="po_detail"
-      @selected_items="selected_item_vals"
-    />
+    <!-- Table -->
+    <div class="table">
+      <div class="table-header">
+        <div class="row" style="padding-right: 0px;">
+          <div class="col-1"></div>
+          <div class="col-4 w-100" style="text-align: right; margin-left: -100px;">Item</div>
+          <div class="col-1 w-100" style="margin-left: 14px;">Qty</div>
+          <div class="col-2 w-100">Unit</div>
+          <div class="col-3 w-100" style="margin-left: -35px;">Min Sup</div>
+          <div class="col-1 w-100" style="margin-left: -35px;">Status</div>
+        </div>
+      </div>
+      <div
+            class="row table-item ps-0"
+            v-for="(item, idx) in nearly_items"
+            :key="idx"
+            style="
+              padding-right: 0px;
+              background-color: #303344;
+              border-radius: 10px;
+              margin: 0px;
+              margin-top: 5px;
+              line-height: 20px;
+            "
+          >
+            <div class="col-1">
+              <div
+                class="checkbox-orange"
+                style="position: relative; bottom: 6px"
+              >
+                <input
+                  type="checkbox"
+                  class="me-3 mt-2"
+                  :value="item"
+                  @input="selected_item_vals(item)"
+                />
+              </div>
+            </div>
+            <div
+              class="col-4 w-100"
+              @click="po_detail(item)"
+              style="
+                text-align: left;
+                font-size: 24px;
+                overflow-x: auto;
+                white-space: nowrap;
+                line-height: 40px;
+                margin-left: -20px;
+              "
+            >
+              {{ item.raw_material_set.name }}
+            </div>
+            <div
+              class="col-1 w-100"
+              style="text-align: right; line-height: 40px;"
+            >
+              {{ item.raw_material_set.remain }}
+            </div>
+            <div class="col-2 w-100">
+              <p>{{ item.unit_set.unit }}</p>
+            </div>
+            <div
+              class="col-3 w-100"
+              style="text-align: left; overflow-x: auto; white-space: nowrap; line-height: 40px;"
+            >
+              {{ item.supplier_set.company_name }}
+            </div>
+            <div class="col-1">
+              <img
+                style="
+                  margin-right: 5px;
+                  position: relative;
+                  bottom: 3px;
+                  height: 45px;
+                  width: 45px;
+                  transform: rotate(180deg)
+                "
+                :src="
+                  $store.state.raw_material.status_image[
+                    item.raw_material_set.status
+                  ]['img']
+                "
+                alt="img"
+              />
+            </div>
+          </div>
+    </div>
     <!-- Dropdown List -->
     <div class="dropdown-list" v-if="dropdown_status">
       <div class="row">
@@ -75,13 +147,7 @@ export default {
       search_item: null,
       categories: [],
       units: [],
-      nearly_items: [
-        {
-          unit_set: { unit: "" },
-          supplier_set: { company_name: "hrllo" },
-          raw_material_set: { remain: 0, name: "",img:'',status:'1' },
-        },
-      ],
+      nearly_items: [],
       temp_items: [
         {
           unit_set: { unit: "" },
@@ -160,6 +226,14 @@ export default {
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     api_raw_material.get("get-nearly-sold-out/").then((response) => {
+      console.log(response.data, 'data')
+      response.data.forEach((el, idx) => {
+        if(el.supplier_set == undefined) {
+          var idx = response.data.indexOf(el)
+          response.data.splice(idx, 1)
+          console.log(el.raw_material_set.name, 'id')
+        }
+      })
       this.nearly_items = response.data;
       this.temp_items = response.data;
     });
@@ -188,6 +262,7 @@ export default {
   width: 180px;
 }
 .btn-ghost {
+  white-space: nowrap;
   width: 100px;
   height: 50px;
   border: 1px solid #65b0f6;

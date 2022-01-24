@@ -46,11 +46,10 @@
     <div class="table mt-2">
       <div class="table-header" style="line-height: 100%; font-size: 24px">
         <div class="row">
-          <div class="col-2 w-100" style="margin: auto">Code</div>
+          <div class="col-3 w-100" style="margin: auto">Code</div>
           <div class="col-5 w-100" style="margin: auto">Name</div>
           <div class="col-2 w-100" style="margin: auto">Price</div>
-          <div class="col-2 w-100" style="margin: auto">status</div>
-          <div class="col-1 w-100"></div>
+          <div class="col-2 w-100" style="margin: auto">Status</div>
         </div>
       </div>
 
@@ -69,12 +68,12 @@
               padding: 3px;
             "
           >
-            <div class="col-2 w-100" style="margin: auto; margin-left: 0px">
+            <div class="col-3 w-100" style="margin: auto; margin-left: 0px">
               {{ product.code }}
             </div>
             <div
               class="col-5 w-100"
-              style="margin: auto"
+              style="margin: auto; text-align: left;"
               @click="
                 $router.push({
                   name: 'EditTopping',

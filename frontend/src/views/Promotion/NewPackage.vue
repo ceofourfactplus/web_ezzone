@@ -174,7 +174,7 @@
               {{ item.product.name }}
             </div>
             <div class="col-1 w-100">{{ item.qty }}</div>
-            <div class="col-3 w-100">{{ parseInt(item.price) * parseInt(item.qty) }}</div>
+            <div class="col-3 w-100">{{ (parseInt(item.price) * parseInt(item.qty)).toFixed(2) }}</div>
           </div>
         </div>
 
@@ -292,7 +292,7 @@
                 calc_total_price();
               "
             >
-              <div class="row" style="padding-top: 0px">
+              <div class="row" style="padding-top: 0px; margin-top: -10px;">
                 <div class="col-1 w-100">Topping</div>
                 <div
                   class="col-6 w-100"
@@ -313,9 +313,7 @@
                       :key="top.id"
                       @click="package_items[idx].topping[top_idx] = top"
                     >
-                      <p
-                        class="w-100"
-                      >
+                      <p class="w-100">
                         {{ top.name }}
                       </p>
                     </li>
@@ -695,6 +693,7 @@ export default {
       add_menu: false,
       select_all: false,
       topping_items: [],
+      update_status: [],
       package_items: [],
       selected_item_toppings: [],
       selected_items: [],
@@ -772,11 +771,16 @@ export default {
         promotion: this.promotion,
         start_date: this.start_date,
         amount_day: this.amount_day,
-        discount_price: this.discount_price,
+        pricepackage_set: [
+          {
+            normal_price: this.total_price,
+            discount_price: this.discount_price,
+            sale_channel: this.$store.state.ezzone_id,
+          },
+        ],
         description: this.description,
         total_amount: this.package_items.length,
         status: this.status,
-        normal_price: this.total_price,
         update_by_id: this.$store.state.auth.userInfo.id,
         create_by_id: this.$store.state.auth.userInfo.id,
         packageitem_set: packageitem,
@@ -805,14 +809,7 @@ export default {
     select_update_product(item, idx) {
       this.total_price = 0;
       this.package_items[idx].product = { ...item };
-      this.package_items.forEach((el) => {
-        this.total_price += parseInt(el.product.priceproduct_set[0].price);
-        el.itemtopping_set.forEach((topping) => {
-          this.total_price += parseInt(
-            topping.topping.pricetopping_set[0].price
-          );
-        });
-      });
+      this.calc_total_price()
       setTimeout(() => {
         this.products = [];
       }, 100);
@@ -927,6 +924,7 @@ export default {
           this.total_price += parseInt(topping.pricetopping_set[0].price);
         });
       });
+      this.calc_total_price()
       this.add_menu = false;
       this.add_topping_to = false;
       this.product_item = {};

@@ -88,7 +88,6 @@ class RawMaterialSerializer(serializers.ModelSerializer):
     unit_s_id = serializers.IntegerField(required=False, allow_null=True)
     m_to_l = serializers.IntegerField(default=0)
     s_to_m = serializers.IntegerField(default=0)
-
     remain = serializers.IntegerField(default=0, required=False)
     pricerawmaterial_set = PriceRawMaterialListSeriallizer(many=True)
     img = serializers.ImageField(read_only=True)
@@ -121,7 +120,7 @@ class RawMaterialSerializer(serializers.ModelSerializer):
             'update_by_set',
             'create_by_set',
             'unit_set',
-            'pricerawmaterial_set'
+            'pricerawmaterial_set',
         ]
 
     def create(self, validated_data):
@@ -133,6 +132,13 @@ class RawMaterialSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         pprint(validated_data)
+        if instance.remain - validated_data['remain']  > 0:
+            PickUpRawMaterial.objects.create(
+                raw_material_id=instance.id, 
+                amount=instance.remain - validated_data['remain'],
+                unit_id=instance.unit_s_id, 
+                create_by_id=validated_data['create_by_id']
+                )
         instance.category_id = validated_data['category_id']
         instance.status = validated_data['status']
         instance.name = validated_data['name']
