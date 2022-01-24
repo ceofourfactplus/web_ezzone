@@ -67,16 +67,18 @@
 </template>
 
 <script>
-import SavePopup from "../../components/main_component/SavePopup.vue"
-import { api_raw_material } from '../../api/api_raw_material';
+import SavePopup from "../../components/main_component/SavePopup.vue";
+import { api_raw_material } from "../../api/api_raw_material";
 import NavApp from "../../components/main_component/NavApp.vue";
 export default {
   components: { NavApp, SavePopup },
-  mounted(){
-    api_raw_material.get('supplier/'+this.$route.params.id).then((response)=>{
-      this.supplier = response.data
-      this.show_img = response.data.img
-    })
+  mounted() {
+    api_raw_material
+      .get("supplier/" + this.$route.params.id)
+      .then((response) => {
+        this.supplier = response.data;
+        this.show_img = response.data.img;
+      });
   },
   data() {
     return {
@@ -102,23 +104,12 @@ export default {
       }
     },
     create_sup() {
-      var err = false;
-      for (const item of ["contact", "address", "supplier_name"]) {
-        console.log(item);
-        if (this[item] == "") {
-          console.log("in i");
-          err = true;
-          this.error[item] = true;
-        }
-      }
-      var check_number = [...this.supplier.phone].some((number) => {
-        return isNaN(parseInt(number));
-      });
-      if (this.supplier.phone.length != 10 || check_number) {
-        err = true;
-        this.error.phone_number = true;
-      }
-      if (!err) {
+      if (
+        !this.error.contact &&
+        !this.error.phone_number &&
+        !this.error.address &&
+        !this.error.supplier_name
+      ) {
         const user = new FormData();
         user.append("company_name", this.supplier.company_name);
         user.append("contact", this.supplier.contact);
@@ -135,6 +126,49 @@ export default {
           .then(() => {
             this.$router.push({ name: "Supplier" });
           });
+      }
+    },
+  },
+  watch: {
+    "supplier.phone"(number) {
+      this.error.status = false;
+      var phone = ![...number].some((numbers) => {
+        return isNaN(parseInt(numbers));
+      });
+      if ((number.length == 9 || number.length == 10) && phone) {
+        api_raw_material
+          .get("check-phone-number/" + number + "/" + this.$route.params.id)
+          .then((result) => {
+            console.log(result);
+            this.error.phone_number = false;
+          })
+          .catch((err) => {
+            console.log(err);
+            this.error.phone_number = true;
+          });
+      } else {
+        this.error.phone_number = true;
+      }
+    },
+    "supplier.nick_name"(nick) {
+      this.error.nick_name = false;
+      this.error.status = false;
+      if (nick == "") {
+        this.error.nick_name = true;
+      }
+    },
+    "supplier.nick_name"(nick) {
+      this.error.nick_name = false;
+      this.error.status = false;
+      if (nick == "") {
+        this.error.nick_name = true;
+      }
+    },
+    "supplier.nick_name"(nick) {
+      this.error.nick_name = false;
+      this.error.status = false;
+      if (nick == "") {
+        this.error.nick_name = true;
       }
     },
   },

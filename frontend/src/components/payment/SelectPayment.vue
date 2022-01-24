@@ -16,12 +16,12 @@
         <div class="col-3 w-100" style="height: 150px">
           <button
             class="btn-ghost-y"
-            style="width: 126.25px; height: 133.52px"
+            style="width: 126.25px;hieght:80px; height: 133.52px"
             @click="select_payment({ payment: 'cod' })"
           >
             <img
               src="../../assets/icon/pod.png"
-              style="width: 80px; margin-top: 10px"
+              style="width: 80px;height:80px; margin-top: 10px;object-fit: contain"
             />
             <p style="font-size: 24px; margin-bottom: 5px">COD</p>
           </button>
@@ -34,9 +34,9 @@
           >
             <img
               src="../../assets/icon/credit.png"
-              style="width: 80px; margin-top: 10px"
+              style="width: 80px;hieght:80px; margin-top: 10px;object-fit: cover"
             />
-            <p style="font-size: 24px; margin-bottom: 5px">CREDIT</p>
+            <p style="font-size: 24px; margin-bottom: 5px">Credit</p>
           </button>
         </div>
         <div
@@ -50,7 +50,7 @@
             style="width: 126.25px; height: 133.52px"
             @click="select_payment(channel)"
           >
-            <img :src="channel.img" style="width: 80px; margin-top: 10px" />
+            <img :src="channel.img" style="width: 80px;hieght:80px; margin-top: 10px;object-fit: cover" />
             <p style="font-size: 24px; margin-bottom: 5px">
               {{ channel.payment }}
             </p>
@@ -65,13 +65,13 @@
       <div class="transfer">
         <div class="row w-100" style="margin: 0px; line-height: 100px">
           <div class="col-12 w-100" style="height: 100px; text-align: center">
-            Transfer
+            {{selected_payment.payment }}
           </div>
           <div
             class="col-12 w-100"
             style="font-weight: normal; font-size: 72px; height: 105px"
           >
-            {{ total_price }}
+            {{ total_balance }}
           </div>
           <div class="col-12 line"></div>
           <div class="col-4 w-100" style="height: 110px">
@@ -334,6 +334,7 @@ export default {
   },
   methods: {
     select_payment(payment) {
+      this.selected_payment = payment;
       if (payment.id == undefined) {
         this.$store.commit("pos/payment", null);
       } else {
@@ -352,7 +353,6 @@ export default {
         this.$store.state.pos.order.payment_status = 4;
         this.transfer = true
       }
-      this.seleted_payment = payment;
     },
     cash_c(cash) {
       this.$store.commit("pos/cash", parseInt(cash));

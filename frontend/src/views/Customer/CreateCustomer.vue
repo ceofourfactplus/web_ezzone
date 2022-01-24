@@ -169,7 +169,7 @@
               <option v-for="user in all_cus" :key="user.id" :value="user.id">
                 {{ user.nick_name }} {{ user.first_name }}
               </option>
-              <option value="null">None</option>
+              <option value="null">Invite by</option>
             </select>
           </div>
 
@@ -202,7 +202,7 @@
 <script>
 import { api_customer } from "../../api/api_customer";
 import NavApp from "../../components/main_component/NavApp.vue";
-import SavePopup from "../../components/main_component/SavePopup.vue"
+import SavePopup from "../../components/main_component/SavePopup.vue";
 // import CheckBoxWhite from '../../components/main_component/CheckBoxWhite.vue';
 export default {
   components: { NavApp, SavePopup },
@@ -229,9 +229,9 @@ export default {
       error: {
         data: "",
         status: false,
-        nick_name: false,
-        phone_number: false,
-      }, 
+        nick_name: true,
+        phone_number: true,
+      },
       show_img: null,
       alert: false,
       all_cus: [],
@@ -239,19 +239,7 @@ export default {
   },
   methods: {
     create_customer() {
-      var err = false;
-      if (this.nick_name == "") {
-        err = true;
-        this.error.nick_name = true;
-      }
-      var check_number = [...this.phone_number].some((number) => {
-        return isNaN(parseInt(number));
-      });
-      if (this.phone_number.length != 10 || check_number) {
-        err = true;
-        this.error.phone_number = true;
-      }
-      if (!err) {
+      if (!this.error.phone_number && !this.error.nick_name) {
         const data = {
           nick_name: this.nick_name,
           first_name: this.first_name,
@@ -262,9 +250,9 @@ export default {
           birth_date: this.birth_date,
           line_customer_id: this.line_customer_id,
           invited_by: this.invited_by,
-          addresscustomer_set:{
-            address:this.address,
-          }
+          addresscustomer_set: {
+            address: this.address,
+          },
         };
         api_customer
           .post("customer", data)
@@ -304,9 +292,12 @@ export default {
     },
   },
   watch: {
-    nick_name() {
-      this.error.status = false;
+    nick_name(nick) {
       this.error.nick_name = false;
+      this.error.status = false;
+      if (nick == "") {
+        this.error.nick_name = true;
+      }
     },
     first_name() {
       this.error.status = false;
@@ -320,9 +311,25 @@ export default {
     birth_date() {
       this.error.status = false;
     },
-    phone_number() {
+    phone_number(number) {
       this.error.status = false;
-      this.error.phone_number = false;
+      var phone = ![...number].some((numbers) => {
+        return isNaN(parseInt(numbers));
+      });
+      if ((number.length == 9 || number.length == 10) && phone) {
+        api_customer
+          .get("check-phone-number/" + number)
+          .then((result) => {
+            console.log(result);
+            this.error.phone_number = false;
+          })
+          .catch((err) => {
+            console.log(err);
+            this.error.phone_number = true;
+          });
+      } else {
+        this.error.phone_number = true;
+      }
     },
     email() {
       this.error.status = false;

@@ -16,7 +16,7 @@
           class="row"
           style="padding-right: 0px"
         >
-          <div class="col-6 w-100">
+          <div class="col-6 w-100" style="white-space: nowrap">
             {{ head1 }}
           </div>
           <div class="col-2 w-100">
@@ -28,7 +28,7 @@
           <div class="col-1 w-100">
             {{ head4 }}
           </div>
-          <div class="col-1 w-100" style="margin-right: 20px;">
+          <div class="col-1 w-100" style="margin-right: 20px">
             {{ head5 }}
           </div>
         </div>
@@ -39,19 +39,22 @@
           class="row"
           style="padding-right: 0px"
         >
-          <div class="col-4 w-100" style="margin-left: ; text-align: right; margin-left: 50px;">
+          <div
+            class="col-4 w-100"
+            style="margin-left: ; text-align: right; margin-left: 50px"
+          >
             {{ head1 }}
           </div>
-          <div class="col-1 w-100" style="margin-left: 100px;">
+          <div class="col-1 w-100" style="margin-left: 100px">
             {{ head2 }}
           </div>
-          <div class="col-2 w-100" style="margin-left: 50px;">
+          <div class="col-2 w-100" style="margin-left: 50px">
             {{ head3 }}
           </div>
-          <div class="col-4 w-100" style="margin-left: 25px;">
+          <div class="col-4 w-100" style="margin-left: 25px">
             {{ head4 }}
           </div>
-          <div class="col-1 w-100" style="margin-right: 30px;">
+          <div class="col-1 w-100" style="margin-right: 30px">
             {{ head5 }}
           </div>
         </div>
@@ -97,7 +100,10 @@
               border-radius: 10px;
             "
           >
-            <div class="col-6" style="text-align: left; width: 100%">
+            <div
+              class="col-6"
+              style="text-align: left; width: 100%; white-space: nowrap"
+            >
               {{ item.name }}
             </div>
             <div class="col-2">{{ item.qty }}</div>
@@ -119,7 +125,7 @@
         </div>
         <div v-else-if="category == 'po_notice'">
           <div
-            class="row table-item"
+            class="row table-item ps-0"
             v-for="(item, idx) in elements"
             :key="idx"
             style="
@@ -132,7 +138,10 @@
             "
           >
             <div class="col-1">
-              <div class="checkbox-orange" style="position: relative; bottom: 6px;">
+              <div
+                class="checkbox-orange"
+                style="position: relative; bottom: 6px"
+              >
                 <input
                   type="checkbox"
                   class="me-3 mt-2"
@@ -142,46 +151,48 @@
               </div>
             </div>
             <div
-              class="col-3 w-100"
+              class="col-4 w-100"
               @click="po_detail(item)"
-              style="text-align: left; font-size: 24px"
+              style="
+                text-align: left;
+                font-size: 24px;
+                overflow-x: auto;
+                white-space: nowrap;
+              "
             >
               {{ item.raw_material_set.name }}
             </div>
             <div
-              class="col-2 w-100"
-              style="margin-left: 50px"
+              class="col-1 w-100"
               @click="po_detail(item)"
+              style="text-align: right"
             >
               {{ item.raw_material_set.remain }}
             </div>
-            <div
-              class="col-2 w-100"
-              style="margin-left: 15px"
-              @click="po_detail(item)"
-            >
+            <div class="col-2 w-100" @click="po_detail(item)">
               <p>{{ item.unit_set.unit }}</p>
             </div>
             <div
               class="col-3 w-100"
-              style="margin-left: -22px"
+              style="text-align: left; overflow-x: auto; white-space: nowrap;"
               @click="po_detail(item)"
             >
               {{ item.supplier_set.company_name }}
             </div>
-            <div
-              class="col-1"
-              style="margin-right: 10px; margin-left: -10px"
-              @click="po_detail(item)"
-            >
+            <div class="col-1" @click="po_detail(item)">
               <img
-                style="margin-right: 5px; position: relative; bottom: 3px;"
+                style="
+                  margin-right: 5px;
+                  position: relative;
+                  bottom: 3px;
+                  height: 30px;
+                  width: 30px;
+                "
                 :src="
                   $store.state.raw_material.status_image[
                     item.raw_material_set.status
                   ]['img']
                 "
-                :style="$store.state.raw_material.status_image[item.raw_material_set.status]['style']"
                 alt="img"
               />
             </div>
@@ -197,27 +208,28 @@
               background-color: #303344;
               border-radius: 10px;
               margin: 0px;
-              margin-top: 5px; line-height: 25px;
+              margin-top: 5px;
+              line-height: 25px;
             "
           >
             <div
               class="col-6 w-100"
               @click="showRmDetial(item)"
-              style="text-align: left;"
+              style="text-align: left; white-space: nowrap"
             >
               {{ item.name }}
             </div>
             <div
               class="col-2 w-100"
               @click="showRmDetial(item)"
-              style="margin-left: 7px;"
+              style="margin-left: 7px"
             >
               {{ item.remain }}
             </div>
             <div
               class="col-2 w-100"
               @click="showRmDetial(item)"
-              style="margin-left: 15px;"
+              style="margin-left: 15px"
             >
               {{ item.unit_set.unit }}
             </div>
@@ -227,23 +239,38 @@
             <div
               class="col-1 w-100"
               @click="showRmDetial(item)"
-              style="margin-right: 70px;"
+              style="margin-right: 70px"
             >
               <img
                 :src="
                   $store.state.raw_material.status_image[item.status]['img']
                 "
-                style="position: relative; bottom: 3px;"
-                :style="$store.state.raw_material.status_image[item.status]['style']"
+                style="
+                  position: relative;
+                  bottom: 3px;
+                  transform: rotate(180deg);
+                "
+                :style="
+                  $store.state.raw_material.status_image[item.status]['style']
+                "
                 alt="img"
               />
             </div>
             <div
               class="col-1 w-100"
               @click="show_pickup(item)"
-              style="margin-right: 20px;"
+              style="margin-right: 20px"
             >
-              <img style="width: 32px; height: 30px; position: relative; bottom: 3px;" src="../../assets/icon/pickup.png" alt="img" />
+              <img
+                style="
+                  width: 32px;
+                  height: 30px;
+                  position: relative;
+                  bottom: 3px;
+                "
+                src="../../assets/icon/pickup.png"
+                alt="img"
+              />
             </div>
           </div>
         </div>
@@ -263,7 +290,12 @@
           >
             <div
               class="col-6"
-              style="text-align: left; width: 100%; font-size: 24px"
+              style="
+                text-align: left;
+                width: 100%;
+                font-size: 24px;
+                white-space: nowrap;
+              "
             >
               {{ item.name }}
             </div>
@@ -335,7 +367,7 @@ export default {
   },
   methods: {
     po_detail(item) {
-      this.$emit('po_detail', item)
+      this.$emit("po_detail", item);
     },
     show_pickup(item) {
       this.$emit("show_pickup", item);

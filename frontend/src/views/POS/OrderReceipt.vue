@@ -17,12 +17,12 @@
               font-size: 20px;
               margin: 0px 10px;
             "
-            ># {{ $store.state.pos.order.order_number}}</span
+            ># {{ $store.state.pos.order.order_number }}</span
           >
           <label for="tel">Tel.</label>
           <div
             style="
-              width: 172px;
+              width: 195px;
               background-color: #303344;
               height: 40px;
               border-radius: 5px;
@@ -41,6 +41,7 @@
             src="../../assets/icon/promotion_no_case.png"
             style="
               width: 50px;
+              height: 50px;
               top: -5px;
               position: relative;
               margin-right: 15px;
@@ -54,7 +55,7 @@
             type="text"
             id="name"
             style="margin-right: 15px; width: 241px"
-            v-model="cus_name"
+            v-model="$store.state.pos.order.nick_name"
           />
           <img
             v-if="
@@ -103,15 +104,39 @@
           <label for="address" style="margin-right: 13px">Address :</label>
           <textarea
             id="address"
-            v-model="address"
+            v-model="$store.state.pos.order.address"
             @click="select_address = true"
           ></textarea>
         </div>
+        <ul
+          class="address"
+          v-if="
+            $store.state.pos.customer_set.addresscustomer_set.length != 0 &&
+            select_address
+          "
+        >
+          <li
+            v-for="(a,index) in $store.state.pos.customer_set.addresscustomer_set"
+            :key="a.id"
+            :class="{'none-border':index == 0}"
+            @click="
+              $store.state.pos.order.address = a.address;
+              select_address = false;
+            "
+          >
+            {{ a.address }}
+          </li>
+        </ul>
       </div>
       <div class="col-12 mt-2">
         <div style="display: flex">
           <label for="note" class="note">Note &#160; &#160; &#160;:</label>
-          <input type="text" v-model="note" class="note-input" id="note" />
+          <input
+            type="text"
+            v-model="$store.state.pos.order.description"
+            class="note-input"
+            id="note"
+          />
         </div>
       </div>
       <div class="col-12 mt-3">
@@ -251,12 +276,6 @@
       @select_table="select_table"
       @hide="select_table_s = false"
     />
-    <select-address
-      :show="select_address"
-      :customer="customer_set"
-      @hide="select_address = false"
-      @save="address_save"
-    />
     <select-payment
       :show="select_payment"
       @hide="select_payment = false"
@@ -272,7 +291,6 @@ import Calculator from "../../components/main_component/Calculator.vue";
 import { api_customer } from "../../api/api_customer";
 import InputTel from "../../components/main_component/InputTel.vue";
 import SelectTable from "../../components/main_component/SelectTable.vue";
-import SelectAddress from "../../components/main_component/SelectAddress.vue";
 import SelectPayment from "../../components/payment/SelectPayment.vue";
 import { api_promotion } from "../../api/api_promotion";
 export default {
@@ -281,12 +299,7 @@ export default {
     Calculator,
     InputTel,
     SelectTable,
-    SelectAddress,
     SelectPayment,
-  },
-  mounted() {
-    this.note = this.description;
-    this.fetchVoucher();
   },
   data() {
     return {
@@ -295,7 +308,6 @@ export default {
       select_cal: "",
       selected_customer: {},
       input_tel: false,
-      cus_name: "",
       select_table_s: false,
       select_address: false,
       select_payment: false,
@@ -316,10 +328,6 @@ export default {
       this.selected_payment = payment;
       this.select_payment = false;
     },
-    address_save(address_t) {
-      this.$store.commit("pos/address_customer", address_t);
-      this.select_address = false;
-    },
     select_table(i) {
       if (i == "-") {
         this.$store.commit("pos/table", null);
@@ -338,16 +346,8 @@ export default {
     },
     submit_tel({ tel, customer }) {
       if (customer != null) {
-        this.$store.commit("pos/phone_number", customer.phone_number);
         this.$store.commit("pos/customer_set", customer);
-        this.$store.commit("pos/customer_name", customer.first_name);
         this.input_tel = false;
-        if (customer.addresscustomer_set.legnth != 0) {
-          this.$store.commit(
-            "pos/address_customer",
-            customer.addresscustomer_set[0].address
-          );
-        }
       } else {
         this.$store.commit("pos/phone_number", tel);
       }
@@ -392,7 +392,7 @@ export default {
       this.input_tel = false;
     },
     phone_number_layout(phone) {
-      if (phone != null) {
+      if (phone != "") {
         return (
           phone.substr(0, 3) +
           "-" +
@@ -421,7 +421,6 @@ export default {
       total_balance: "pos/total_balance",
       delivery_price: "pos/delivery_price",
       table: "pos/table",
-      description: "pos/description",
       address: "pos/address",
       phone_number: "pos/phone_number",
       customer_name: "pos/customer_name",
@@ -429,9 +428,6 @@ export default {
     }),
   },
   watch: {
-    customer_name(new_name){
-      this.cus_name = new_name    
-    },
     note(newData) {
       this.$store.commit("pos/note_input", newData);
     },
@@ -444,10 +440,6 @@ export default {
           });
       }
     },
-    cus_name(new_name) {
-      this.$store.state.pos.order.customer_set.nick_name = new_name
-    },
-    
   },
 };
 </script>

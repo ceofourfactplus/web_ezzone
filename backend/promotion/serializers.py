@@ -137,6 +137,7 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
       'create_at',
       'update_at',
       'packageitem_set',
+      'img'
     ]
     
   def create(self, validated_data):

@@ -60,7 +60,7 @@
             <img
               src="../../assets/icon/cart-g.png"
               @click="$router.push({ name: 'OrderReceipt' })"
-              style="width: 35px; display: inline"
+              style="width: 35px;height: 35px; display: inline"
             />
           </div>
         </div>

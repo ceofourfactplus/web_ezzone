@@ -57,6 +57,7 @@
             </div>
           </div>
         </div>
+
         <div
           class="col-10 w-100"
           style="hieght: 45px !important; line-height: 45px"
@@ -77,6 +78,36 @@
           >
             <div
               class="col-10 w-100"
+              v-if="item.status_order < 2"
+              style="text-align: left; line-height: 45px"
+              :class="{
+                odd: (index + 1) % 2 != 0,
+                'last-l': last_f(index),
+              }"
+            >
+              {{ index + 1 }}. {{ get_code(item) }}
+              <span style="color: #ff7ca3" v-if="item.description != ''">
+                / {{ item.description }}</span
+              >
+            </div>
+            <div
+              class="col-10 w-100 red"
+              v-else-if="(item.status_order == 2)"
+              style="text-align: left; line-height: 45px"
+              @click="serve_order(item.id)"
+              :class="{
+                odd: (index + 1) % 2 != 0,
+                'last-l': last_f(index),
+              }"
+            >
+              {{ index + 1 }}. {{ get_code(item) }}
+              <span style="color: #ff7ca3" v-if="item.description != ''">
+                / {{ item.description }}</span
+              >
+            </div>
+            <div
+              class="col-10 w-100 green"
+              v-else-if="(item.status_order == 3)"
               style="text-align: left; line-height: 45px"
               :class="{
                 odd: (index + 1) % 2 != 0,
@@ -90,6 +121,29 @@
             </div>
             <div
               class="col-2 w-100"
+              style="text-align: center; line-height: 45px"
+              v-if="item.status_order < 2"
+              :class="{
+                odd: (index + 1) % 2 != 0,
+                'last-r': last_f(index),
+              }"
+            >
+              {{ item.amount }}
+            </div>
+            <div
+              class="col-2 w-100 red"
+              v-else-if="(item.status_order == 2)"
+              style="text-align: center; line-height: 45px"
+              :class="{
+                odd: (index + 1) % 2 != 0,
+                'last-r': last_f(index),
+              }"
+            >
+              {{ item.amount }}
+            </div>
+            <div
+              class="col-2 w-100 green"
+              v-else-if="(item.status_order == 3)"
               style="text-align: center; line-height: 45px"
               :class="{
                 odd: (index + 1) % 2 != 0,
@@ -107,6 +161,7 @@
 
 <script>
 import moment from "moment";
+import { api_pos } from "../../api/api_pos";
 export default {
   props: ["order"],
   data() {
@@ -131,7 +186,9 @@ export default {
       if (status == 1) {
         return { text: "On Cooking", color: "#FF7CA3" };
       }
-
+      if (status == 2) {
+        return { text: "On Serve", color: "#FFB572" };
+      }
       if (status == 3) {
         return { text: "Finished", color: "#50D1AA" };
       }
@@ -141,7 +198,7 @@ export default {
     },
     get_code(p) {
       var description = "";
-      console.log(p)
+      console.log(p);
       if (p.topping == null) {
         description = p.product_set.name;
         if (p.flavour_level == 3) {
@@ -162,8 +219,8 @@ export default {
             description += " + " + topping.topping_set.name;
           }
         }
-      }else{
-        description = p.topping_set.name
+      } else {
+        description = p.topping_set.name;
       }
 
       return description;
@@ -174,6 +231,14 @@ export default {
       } else {
         return false;
       }
+    },
+    serve_order(id) {
+      this.order.orderitem_set.forEach((item) => {
+        if (item.id == id) {
+          item.status_order = 3;
+        }
+      });
+      api_pos.put("change-status-order/order/0/3/" + id);
     },
   },
 };
@@ -191,6 +256,12 @@ export default {
 div .col-10,
 .col-2 {
   height: 45px;
+}
+.red {
+  background-color: #FFB57280 !important;
+}
+.green {
+  background-color: #50d1aa80 !important;
 }
 .dark {
   background-color: #000000c9;

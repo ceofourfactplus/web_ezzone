@@ -31,7 +31,7 @@
         >
           <img
             src="../../assets/icon/delete_icon.png"
-            style="object-fit: cover; width: 20px; height: 25px"
+            style="width: 19px; height: 26px; object-fit: cover"
           />&#160;Delete
         </button>
         <button
@@ -67,6 +67,17 @@
           class="table-item"
         >
           <div class="row" style="width: 100%; padding: 0px">
+            <div class="col-1" 
+              v-if="delete_status">
+              
+              <div class="checkbox-orange" v-if="!channel.can_delete">
+                <input
+                  type="checkbox"
+                  :value="channel.id"
+                  v-model="delete_list"
+                />
+              </div>
+              </div>
             <div
               class="col-1 w-100"
               style="margin: auto; margin-left: 0px; text-align: right"
@@ -99,7 +110,7 @@
               class="col-1 w-100"
               style="padding: 0px; text-align: right; margin: auto"
             >
-              {{ count_product(channel.id) }}
+              {{ channel.qty }}
             </div>
             <div class="col-2 w-100" style="margin: auto">
               
@@ -197,7 +208,7 @@ export default {
             list: this.delete_list,
           })
           .then((response) => {
-            this.sale_channels = response.data;
+            this.get_sale_channel();
           });
       }
       this.delete_status = false;
@@ -244,5 +255,11 @@ pre {
 img {
   height: 30px;
   margin-bottom: 4px;
+}
+input[type='checkbox'] {
+  top:10px;
+}
+input:checked::after {
+  top: -8px !important;
 }
 </style>

@@ -7,9 +7,31 @@ from rest_framework.views import APIView
 from .models import RawMaterial, RawMaterialCategory, Unit, Supplier, PO, PriceRawMaterial, PickUpRawMaterial
 from .serializers import RawMaterialCategorySerializer, UnitSerializer, RawMaterialSerializer, SupplierSerializer, PickUpRawMaterialSerializer, POSerializer, PriceRawMaterialSerializer, ReceiptRawMaterialSerializer, ReceiptRawMaterialDetailSerializer, RMimg
 
-from django.db.models import F
+from django.db.models import F,Sum,OuterRef,Count
 from rest_framework.parsers import FormParser, MultiPartParser
 
+def change_status_raw():
+    raw_material = RawMaterial.objects.all()
+    for r in raw_material:
+        if r.remain == 0:
+            r.status = 3
+        elif r.remain < r.minimum:
+            r.status = 2
+        elif r.remain > r.minimum:
+            r.status = 1
+        r.save()
+
+class CheckPhoneNumber(APIView):
+    def get(self, request, phone_number):
+        if Supplier.objects.filter(phone=phone_number).exists():
+            return Response('Phone number ' + phone_number + ' is already in use',status=400)
+        return Response('don`t have a valid phone number',status=200)
+
+class CheckPhoneNumberEdit(APIView):
+    def get(self, request, phone_number,pk):
+        if Supplier.objects.filter(phone=phone_number).exclude(pk=pk).exists():
+            return Response('Phone number ' + phone_number + ' is already in use',status=400)
+        return Response('don`t have a valid phone number',status=200)
 
 class UpdateRmImg(APIView):
     def put(self, request, pk):
@@ -125,17 +147,12 @@ class EditRM(APIView):
         serializer = RawMaterialSerializer(RawMaterials, request.data)
         if serializer.is_valid():
             serializer.save()
+            change_status_raw()
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
 
 
 class RawMaterialListAPIView(APIView):
-    def get_object(self, pk):
-        try:
-            return RawMaterial.objects.get(pk=pk)
-        except RawMaterial.DoesNotExist:
-            raise 404
-
     def get(self, request):
         RawMaterials = RawMaterial.objects.all()
         serializer = RawMaterialSerializer(RawMaterials,context={'request': request}, many=True)
@@ -154,7 +171,6 @@ class RawMaterialListAPIView(APIView):
             request.data['unit_s_id'] = Unit.objects.get(
                 unit=request.data['unit_s_name']).id
         else:
-            print(2)
             request.data['unit_s_id'
                          ] = Unit.objects.create(
                 unit=request.data['unit_s_name']).id
@@ -162,14 +178,12 @@ class RawMaterialListAPIView(APIView):
             request.data['unit_m_id'] = Unit.objects.get(
                 unit=request.data['unit_m_name']).id
         elif not request.data['unit_m_name'] == '':
-            print(3)
             request.data['unit_m_id'] = Unit.objects.create(
                 unit=request.data['unit_m_name']).id
         if Unit.objects.filter(unit=request.data['unit_l_name']).exists():
             request.data['unit_l_id'] = Unit.objects.get(
                 unit=request.data['unit_l_name']).id
         elif not request.data['unit_l_name'] == '':
-            print(4)
             request.data['unit_l_id'] = Unit.objects.create(
                 unit=request.data['unit_l_name']).id
             # else:
@@ -178,6 +192,7 @@ class RawMaterialListAPIView(APIView):
         serializer = RawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            change_status_raw()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
         # return Response('ok')
@@ -354,7 +369,8 @@ class UnitDetailAPIView(APIView):
 
 class CategoryAPIView(APIView):
     def get(self, request):
-        category = RawMaterialCategory.objects.all()
+        
+        category = RawMaterialCategory.objects.annotate(product= Count('rawmaterial'),amount=Sum('rawmaterial__remain'))
         serializer = RawMaterialCategorySerializer(category, many=True)
         return Response(serializer.data)
 

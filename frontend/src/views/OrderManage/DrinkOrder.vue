@@ -13,8 +13,55 @@
           font-weight: bold;
         "
       >
-        <div style="text-align: left; width: 320px">Finished Order</div>
-        <div style="text-align: right; width: 320px">Remain Order</div>
+        <div style="text-align: left; width: 320px">
+          Finished Order : {{ finished_order }}
+        </div>
+        <div style="text-align: right; width: 320px">
+          Remain Order : {{ remain_order }}
+        </div>
+      </div>
+      <!-- tab -->
+      <div class="col-12 mt-2 w-100 p-0" style="display: flex">
+        <div
+          @click="get_order_by_type('1')"
+          class="btn-gray me-2"
+          style="width: 24%; opacity: 0.6"
+          :class="{
+            active: type_order == '1',
+          }"
+        >
+          On going
+        </div>
+        <div
+          @click="get_order_by_type('4')"
+          class="btn-gray me-2"
+          style="width: 24%; opacity: 0.6"
+          :class="{
+            active: type_order == '4',
+          }"
+        >
+          Cancel
+        </div>
+        <div
+          @click="get_order_by_type('3')"
+          class="btn-gray me-2"
+          style="width: 24%; opacity: 0.6"
+          :class="{
+            active: type_order == '3',
+          }"
+        >
+          Completed
+        </div>
+        <div
+          @click="get_order_by_type('5')"
+          class="btn-gray me-2"
+          style="width: 24%; opacity: 0.6"
+          :class="{
+            active: type_order == '5',
+          }"
+        >
+          all
+        </div>
       </div>
       <div class="col-12 mt-3" style="padding: 0px">
         <div style="height: 715px; overflow-y: auto">
@@ -59,19 +106,33 @@
               </div>
               <div style="line-height: 32px" class="col-4 w-100">
                 <button
-                  v-if="order.status_drink == 0"
+                  v-if="order.status_order == 4"
+                  class="btn btn-y"
+                  style="background-color: #717171 !important;border:0px;"
+                >
+                  Cancel
+                </button>
+                <button
+                  v-else-if="order.status_drink == 0"
                   @click="accept(order)"
-                  class="btn"
-                  style="background-color: #fff500"
+                  class="btn-y btn"
                 >
                   Waiting</button
                 ><button
-                  v-else
+                  v-else-if="order.status_drink == 1"
                   @click="finish_order(order.id)"
-                  class="btn"
-                  style="background-color: #ff7ca3"
+                  class="btn-r btn"
                 >
                   On Cooking
+                </button><button
+                  v-else-if="order.status_drink == 2"
+                  @click="finish_order(order.id)"
+                  class="btn-y btn"
+                >
+                  On Serve
+                </button>
+                <button v-else-if="order.status_drink == 3" class="btn-g btn">
+                  Completed
                 </button>
               </div>
             </div>
@@ -98,8 +159,9 @@
                   }"
                 >
                   <div
-                    v-if="item.status_order != 1"
+                    v-if="item.status_order == 1"
                     class="col-9 w-100"
+                    @click="finish_item(item.id, order.id)"
                     style="overflow-x: auto; white-space: nowrap"
                     :class="{
                       odd: (index + 1) % 2 != 0,
@@ -112,8 +174,7 @@
                     >
                   </div>
                   <div
-                    v-else
-                    @click="finish_item(item.id, order.id)"
+                    v-else-if="item.status_order == 2"
                     class="col-9 w-100 red"
                     style="overflow-x: auto; white-space: nowrap"
                     :class="{
@@ -127,8 +188,23 @@
                     >
                   </div>
                   <div
+                    v-else-if="item.status_order == 3"
+                    @click="finish_item(item.id, order.id)"
+                    class="col-9 w-100 green"
+                    style="overflow-x: auto; white-space: nowrap"
+                    :class="{
+                      odd: (index + 1) % 2 != 0,
+                      'last-l': last_f(index, order.orderitem_set),
+                    }"
+                  >
+                    {{ index + 1 }}. {{ get_code(item) }}
+                    <span style="color: #ff7ca3" v-if="item.description != ''">
+                      / {{ item.description }}</span
+                    >
+                  </div>
+                  <div
                     class="col-3 w-100"
-                    v-if="item.status_order != 1"
+                    v-if="item.status_order == 1"
                     :class="{
                       odd: (index + 1) % 2 != 0,
                       'last-r': last_f(index, order.orderitem_set),
@@ -140,7 +216,18 @@
                   <div
                     class="col-3 w-100 red"
                     @click="finish_item(item.id, order.id)"
-                    v-else
+                    v-if="item.status_order == 2"
+                    :class="{
+                      odd: (index + 1) % 2 != 0,
+                      'last-r': last_f(index, order.orderitem_set),
+                    }"
+                  >
+                    {{ item.amount }}
+                  </div>
+                  <div
+                    class="col-3 w-100 green"
+                    @click="finish_item(item.id, order.id)"
+                    v-if="item.status_order == 3"
                     :class="{
                       odd: (index + 1) % 2 != 0,
                       'last-r': last_f(index, order.orderitem_set),
@@ -178,11 +265,14 @@ export default {
       loader: window.setInterval(() => {
         this.get_order();
       }, 5000),
+      remain_order: 0,
+      finished_order: 0,
+      type_order: 1,
     };
   },
   methods: {
-    find_waiting_order() {
-      var wait = this.all_order.filter((item) => {
+    find_waiting_order(order_list) {
+      var wait = order_list.filter((item) => {
         return item.status_drink == 0;
       });
       console.log(wait.length);
@@ -191,14 +281,14 @@ export default {
       }
     },
     get_order() {
-      api_pos
-        .get("order/today/on-going/drink")
-        .then((response) => {
-          this.all_order = response.data;
-        })
-        .then(() => {
-          this.find_waiting_order();
-        });
+      api_pos.get("counter/today").then((response) => {
+        if (this.type_order == 1) {
+          this.all_order = response.data.order;
+        }
+        this.remain_order = response.data.remain_order;
+        this.finished_order = response.data.finish_order;
+        this.find_waiting_order(response.data.order);
+      });
     },
     get_date(data) {
       var date = moment(data);
@@ -218,7 +308,9 @@ export default {
       if (status == 1) {
         return { text: "On Cooking", color: "#FF7CA3" };
       }
-
+      if (status == 4) {
+        return { text: "On Serve", color: "#717171" };
+      }
       if (status == 3) {
         return { text: "Finished", color: "#50D1AA" };
       }
@@ -261,44 +353,29 @@ export default {
       }
     },
     accept(order) {
-      api_pos.put("order/accept/drink/" + order.id).then(() => {
+      api_pos.put("change-status-order/counter/1/1/" + order.id).then(() => {
         this.get_order();
       });
     },
     finish_order(order_id) {
-      this.all_order = this.all_order.filter((order) => {
+      this.all_order.forEach((order) => {
         if (order.id == order_id) {
-          return false;
-        } else {
-          return true;
+          order.status_drink = 2;
         }
       });
-      api_pos.put("order/finish/drink-order/" + order_id);
+      api_pos.put("change-status-order/counter/1/2/" + order_id);
     },
     finish_item(item_id, order_id) {
-      var clear_order = true;
       this.all_order.forEach((order) => {
         if (order.id == order_id) {
           order.orderitem_set.forEach((item) => {
             if (item.id == item_id) {
               item.status_order = 2;
             }
-            if (item.status_order == 1) {
-              clear_order = false;
-            }
           });
         }
       });
-      if (clear_order) {
-        this.all_order = this.all_order.filter((order) => {
-          if (order.id == order_id) {
-            return false;
-          } else {
-            return true;
-          }
-        });
-      }
-      api_pos.put("order/finish/drink-item/" + item_id);
+      api_pos.put("change-status-order/counter/0/2/" + item_id);
     },
     is_drink(item) {
       if (item.topping_set != null) {
@@ -306,6 +383,16 @@ export default {
       }
       if (item.product_set != null) {
         return item.product_set.type_product == 2;
+      }
+    },
+    get_order_by_type(type) {
+      this.type_order = type;
+      if (type == 1) {
+        this.get_order();
+      } else {
+        api_pos.get("counter/" + type).then((response) => {
+          this.all_order = response.data;
+        });
       }
     },
   },
@@ -325,7 +412,10 @@ export default {
   color: #fff;
 }
 .red {
-  background-color: #ff7ca380 !important;
+  background-color: #FFB57280 !important;
+}
+.green {
+  background-color: #50d1aa80 !important;
 }
 .btn {
   font-size: 20px;
@@ -334,6 +424,10 @@ export default {
   color: #252836;
   border-radius: 10px;
   height: 30px;
+}
+.active {
+  color: #fff;
+  opacity: 1 !important;
 }
 .sub-header {
   font-weight: bold;
@@ -366,5 +460,8 @@ export default {
 }
 .last-b {
   border-radius: 0px 0px 15px 15px;
+}
+.btn-gray {
+  line-height: 56px;
 }
 </style>

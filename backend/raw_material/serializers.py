@@ -22,6 +22,8 @@ class PriceRawMaterialListSeriallizer(serializers.ModelSerializer):
 
 
 class RawMaterialCategorySerializer(serializers.ModelSerializer):
+    product = serializers.IntegerField(required=False,read_only=True)
+    amount = serializers.IntegerField(required=False,read_only=True)
     class Meta:
         model = RawMaterialCategory
         fields = '__all__'
