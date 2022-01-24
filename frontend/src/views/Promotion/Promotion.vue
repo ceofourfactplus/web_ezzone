@@ -2,14 +2,15 @@
   <div>
     <nav-app :url_name="'DashBoard'">{{ $store.state.promotion.tab }}</nav-app>
     <!-- Head -->
-    <div class="row">
+    <div class="row" style="width96%;margin-left:3%;margin-right:3%;">
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px;">
+      <div style="padding: 0px;">
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"
+          style="margin-right:0%;"
           @click="$router.push({ name: 'NewPoint' })"
         >
           + Point
@@ -38,13 +39,13 @@
       </div>
     </div>
     <!-- Tabs -->
-    <div style="margin: auto; width: 95%; height: 50px" class="row mt-2">
-      <div class="col-12" style="padding: 0px">
+    <div style="width96%;margin-left:3%;margin-right:3%;height: 50px;" class="row mt-2">
+      <div class="col-12" style="padding: 0%;">
         <button
           v-for="(item, idx) in ['Point', 'Voucher', 'Package', 'Rewards']"
           :key="idx"
           @click="select_item(item)"
-          style="width: 24%; height: 100%"
+          style="width: 24.45%; height: 100%;"
           class="btn-gray me-1"
           :class="{ 'tab-selected': item == $store.state.promotion.tab }"
         >
@@ -564,8 +565,9 @@ export default {
 .wrap-search {
   min-width: 610px;
   width: fit-content;
-  padding: 0px;
-  margin-left: 35px;
+  padding: 0%;
+  margin: 0%;
+  
 }
 .tab {
   width: 100%;
