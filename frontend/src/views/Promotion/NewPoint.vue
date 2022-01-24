@@ -15,6 +15,7 @@
           <div class="col-12 w-100 txt-promotion">End Date</div>
           <div class="col-12 w-100 txt-promotion">End Redeem</div>
           <div class="col-12 w-100 txt-promotion">Price / Point</div>
+          <div class="col-12 w-100 txt-promotion">Point</div>
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->
@@ -25,6 +26,7 @@
           >
             :
           </div>
+          <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
@@ -75,6 +77,14 @@
               class="input-promotion"
               style="width: 82px;"
               v-model="price_per_point"
+            />
+          </div>
+          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+            <input
+              type="text"
+              class="input-promotion"
+              style="width: 82px;"
+              v-model="point"
             />
           </div>
           <div class="col-12 w-100 txt-promotion" id="txt-right-side">
@@ -152,7 +162,7 @@ export default {
         end_promotion_date: this.end_promotion_date,
         end_reward_redemption: this.end_reward_redemption,
         price_per_point: this.price_per_point,
-        point: 1,
+        point: this.point,
         status: this.status,
         description: this.description,
         create_by_id: this.$store.state.auth.userInfo.id,
@@ -214,7 +224,7 @@ export default {
 }
 .card-content {
   width: 765px;
-  height: 367px;
+  height: 427px;
   background: #303344;
   border-radius: 20px;
   margin: 15px 0px 0px 27px;

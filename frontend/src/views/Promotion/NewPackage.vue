@@ -174,7 +174,7 @@
               {{ item.product.name }}
             </div>
             <div class="col-1 w-100">{{ item.qty }}</div>
-            <div class="col-3 w-100">{{ parseInt(item.price) * parseInt(item.qty) }}</div>
+            <div class="col-3 w-100">{{ (parseInt(item.price) * parseInt(item.qty)).toFixed(2) }}</div>
           </div>
         </div>
 
@@ -292,7 +292,7 @@
                 calc_total_price();
               "
             >
-              <div class="row" style="padding-top: 0px">
+              <div class="row" style="padding-top: 0px; margin-top: -10px;">
                 <div class="col-1 w-100">Topping</div>
                 <div
                   class="col-6 w-100"
@@ -695,6 +695,7 @@ export default {
       add_menu: false,
       select_all: false,
       topping_items: [],
+      update_status: [],
       package_items: [],
       selected_item_toppings: [],
       selected_items: [],
@@ -920,6 +921,7 @@ export default {
           this.total_price += parseInt(topping.pricetopping_set[0].price);
         });
       });
+      this.calc_total_price()
       this.add_menu = false;
       this.add_topping_to = false;
       this.product_item = {};
