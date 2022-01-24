@@ -99,24 +99,21 @@
             }"
           >
             <img
-              v-if="!('type_topping' in product)"
-              :class="{
-                'img-s': product.type_product != 3,
-                'img-l': product.type_product == 3,
-              }"
+              v-if="'promotion' in product"
               :src="product.img"
               alt=""
+              class="img-s"
               @click="
                 $router.push({
-                  name: 'KeyProductDetail',
+                  name: 'KeyPromotionDetail',
                   params: {
-                    product_id: product.id,
+                    package_id: product.id,
                   },
                 })
               "
             />
             <img
-              v-if="!('type_topping' in product)"
+              v-else-if="!('type_topping' in product)"
               :class="{
                 'img-s': product.type_product != 3,
                 'img-l': product.type_product == 3,
@@ -162,7 +159,8 @@
               }"
               style="background-color: #c4c4c4"
             ></div>
-            <p>{{ product.name }}</p>
+            <p v-if="('promotion' in product)">{{ product.promotion }}</p>
+            <p v-else>{{ product.name }}</p>
           </div>
         </div>
       </div>

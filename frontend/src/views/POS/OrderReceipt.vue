@@ -116,9 +116,10 @@
           "
         >
           <li
-            v-for="(a,index) in $store.state.pos.customer_set.addresscustomer_set"
+            v-for="(a, index) in $store.state.pos.customer_set
+              .addresscustomer_set"
             :key="a.id"
-            :class="{'none-border':index == 0}"
+            :class="{ 'none-border': index == 0 }"
             @click="
               $store.state.pos.order.address = a.address;
               select_address = false;
@@ -159,7 +160,15 @@
             style="margin: 0px; color: #fff; font-size: 20px"
           >
             <div
-              v-if="is_topping(item)"
+              v-if="'package' in item"
+              class="col-6 w-100"
+              style="text-align: left; overflow-x: auto"
+              @click="$store.dispatch('pos/edit_package', index)"
+            >
+              {{ item.code }}
+            </div>
+            <div
+              v-else-if="is_topping(item)"
               class="col-6 w-100"
               style="text-align: left; overflow-x: auto"
               @click="$store.dispatch('pos/edit_topping', index)"
@@ -247,23 +256,29 @@
 
     <!-- Popup Vouncher -->
     <div class="AreaPopup" v-if="VouncherPopup">
-
-      <div class="dark" @click="VouncherPopup=false">
+      <div class="dark" @click="VouncherPopup = false">
         <div class="AreaRowVouncher">
           <div class="RowPopupVouncher">
-
-            <div class="PopupVouncher" v-for="voucher in vouchers" :key="voucher" >
-                  <img :src="voucher.img" style="width:200px;height:200px;border-radius: 10%;object-fit:cover;">
-            </div>          
-          
+            <div
+              class="PopupVouncher"
+              v-for="voucher in vouchers"
+              :key="voucher"
+            >
+              <img
+                :src="voucher.img"
+                style="
+                  width: 200px;
+                  height: 200px;
+                  border-radius: 10%;
+                  object-fit: cover;
+                "
+              />
+            </div>
           </div>
         </div>
       </div>
-      
-
     </div>
-      
-      
+
     <calculator
       :show_cal="show_cal"
       @hide_cal="show_cal = false"
@@ -362,29 +377,38 @@ export default {
     },
     cal_code(p) {
       var description = "";
-      description = p.product_set.name;
-      if (p.flavour_level == 3) {
-        description += "(S+)";
-      } else if (p.flavour_level == 1) {
-        description += "(S-)";
-      } else if (p.flavour_level == 0) {
-        description += "(Sx)";
-      }
-      if (p.size == "L") {
-        description = description + "(L)";
-      }
-      for (var topping of p.orderitemtopping_set) {
-        if (topping.amount > 1) {
-          description +=
-            " + " + topping.topping_set.name + "(" + topping.amount + ")";
-        } else {
-          description += " + " + topping.topping_set.name;
+      if ("product_set" in p) {
+        description = p.product_set.name;
+        if (p.flavour_level == 3) {
+          description += "(S+)";
+        } else if (p.flavour_level == 1) {
+          description += "(S-)";
+        } else if (p.flavour_level == 0) {
+          description += "(Sx)";
+        }
+        if (p.size == "L") {
+          description = description + "(L)";
+        }
+        for (var topping of p.orderitemtopping_set) {
+          if (topping.amount > 1) {
+            description +=
+              " + " + topping.topping_set.name + "(" + topping.amount + ")";
+          } else {
+            description += " + " + topping.topping_set.name;
+          }
+        }
+        if (p.description != "") {
+          description += " + " + "(" + p.description + ")";
         }
       }
-      if (p.description != "") {
-        description += " + " + "(" + p.description + ")";
+      else if ('package_set' in p){
+        description = p.package_set.promotion;
+
+        if (p.description != "") {
+          description += " + " + "(" + p.description + ")";
+        }
       }
-      return description;
+      return description
     },
     hide_tel(tel) {
       this.phone_number = tel;
@@ -534,34 +558,30 @@ div {
 
 /* Popup Vouncher */
 .AreaRowVouncher {
-
   width: 100%;
   height: 100%;
   top: 0%;
   position: fixed;
-  
 }
 
 .RowPopupVouncher {
   width: 100%;
   height: 10%;
-  padding:0%;
-  padding-left:7%;
-  padding-right:7%;
+  padding: 0%;
+  padding-left: 7%;
+  padding-right: 7%;
   margin: 0%;
-  margin-top:20%;
-  display:grid;
+  margin-top: 20%;
+  display: grid;
   justify-content: center;
   grid-gap: 40% 10%;
   grid-template-columns: auto auto auto;
-
 }
 
 .PopupVouncher {
   border-radius: 20%;
   width: 100%;
   height: 80%;
-  padding:0%;
-
+  padding: 0%;
 }
 </style>

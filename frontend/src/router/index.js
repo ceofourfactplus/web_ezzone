@@ -58,6 +58,7 @@ import SelectSaleChannel from "../views/POS/SelectSaleChannel.vue";
 import KeyOrder from "../views/POS/KeyOrder.vue";
 import KeyProductDetail from "../views/POS/KeyProductDetail.vue";
 import KeyToppingDetail from "../views/POS/KeyToppingDetail.vue";
+import KeyPromotionDetail from "../views/POS/KeyPromotionDetail.vue";
 import OrderReceipt from "../views/POS/OrderReceipt.vue";
 
 // database settings
@@ -85,15 +86,15 @@ import RewardDetail from "../views/Promotion/RewardDetail.vue";
 import RewardName from "../views/Promotion/RewardName.vue";
 
 // Consignment
-import Consigner from "../views/Consignment/Consigner.vue"
-import ConsignerProduct from "../views/Consignment/ConsignerProduct.vue"
-import RecordProduct from "../views/Consignment/RecordProduct.vue"
-import NewConsignment from "../views/Consignment/NewConsignment.vue"
-import NewConsigner from "../views/Consignment/NewConsigner.vue"
-import PayShare from "../views/Consignment/PayShare.vue"
-import SharePayment from "../components/consignment/SharePayment.vue"
-import OutConsignment from "../components/consignment/OutConsignment.vue"
-import AddConsignment from "../components/consignment/AddConsignment.vue"
+import Consigner from "../views/Consignment/Consigner.vue";
+import ConsignerProduct from "../views/Consignment/ConsignerProduct.vue";
+import RecordProduct from "../views/Consignment/RecordProduct.vue";
+import NewConsignment from "../views/Consignment/NewConsignment.vue";
+import NewConsigner from "../views/Consignment/NewConsigner.vue";
+import PayShare from "../views/Consignment/PayShare.vue";
+import SharePayment from "../components/consignment/SharePayment.vue";
+import OutConsignment from "../components/consignment/OutConsignment.vue";
+import AddConsignment from "../components/consignment/AddConsignment.vue";
 
 // Home
 import Home from "../views/Test.vue";
@@ -110,487 +111,575 @@ import Payment from "../views/Payment/Payment.vue";
 
 const routes = [
   {
-    path: "/admin",
-    name: "Home",
-    component: Home,
-    beforeEnter: (to, from, next) => {
-      if (store.state.auth.userInfo.is_staff) {
-        next();
-      } else {
-        next("/");
-      }
-    },
-    children: [
-      {
-        path: "/face-login/",
-        name: "FaceLogin",
-        component: FaceLogin,
-      },
-      {
-        path: "/chart",
-        name: "Chart1",
-        component: Chart1,
-      },
-      // Report
-      {
-        path: "/report/:type",
-        props: true,
-        name: "MainReport",
-        component: MainReport,
-      },
-      {
-        path: "/select-report",
-        name: "SelectReport",
-        component: SelectReport,
-      },
-      {
-        path: "/product-report",
-        name: "ProductReport",
-        component: ProductReport,
-      },
-      {
-        path: "/report/product/:type",
-        props: true,
-        name: "ProductReportDetail",
-        component: ProductReportDetail,
-      },
-      // Order manage
-
-      {
-        path: "/order-manage/order-detail",
-        name: "OrderDetail",
-        component: OrderDetail,
-      },
-      {
-        path: "/order-manage/food-order",
-        name: "FoodOrder",
-        component: FoodOrder,
-      },
-      {
-        path: "/order-manage/drink-order",
-        name: "DrinkOrder",
-        component: DrinkOrder,
-      },
-
-      // promotion
-      {
-        path: "/promotion",
-        name: "Promotion",
-        component: Promotion,
-      },
-      {
-        path: "/promotion/redemption",
-        name: "Redemption",
-        component: Redemption,
-      },
-      {
-        path: "/promotion/reward-detail/:id",
-        name: "RewardDetail",
-        component: RewardDetail,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/package-detail/:id",
-        name: "PackageDetail",
-        component: PackageDetail,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/voucher-detail/:id",
-        name: "VoucherDetail",
-        component: VoucherDetail,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/point-detail/:id",
-        name: "PointDetail",
-        component: PointDetail,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-
-      {
-        path: "/promotion/new-promotion",
-        name: "NewPoint",
-        component: NewPoint,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/new-voucher",
-        name: "NewVoucher",
-        component: NewVoucher,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/new-package",
-        name: "NewPackage",
-        component: NewPackage,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/new-reward",
-        name: "NewReward",
-        component: NewReward,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/redemption",
-        name: "Redemption",
-        component: Redemption,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/redemption/history",
-        name: "History",
-        component: History,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/redemption/allreward",
-        name: "AllReward",
-        component: AllReward,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/redemption/preorderreward",
-        name: "PreOrderReward",
-        component: PreOrderReward,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/promotion/redemption/rewardname",
-        name: "RewardName",
-        component: RewardName,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-
-      // database settings
-      {
-        path: "/dbs/dbs",
-        name: "DataBaseSettings",
-        component: DataBaseSettings,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-
-      // pos
-      {
-        path: "/pos/select-sale-channel",
-        name: "SelectSaleChannel",
-        component: SelectSaleChannel,
-      },
-      {
-        path: "/pos/key-order",
-        name: "KeyOrder",
-        component: KeyOrder,
-      },
-      {
-        path: "/pos/key-order/:product_id/key-product-detail",
-        name: "KeyProductDetail",
-        component: KeyProductDetail,
-        props: true,
-      },
-      {
-        path: "/pos/key-order/:topping_id/key-topping-detail",
-        name: "KeyToppingDetail",
-        component: KeyToppingDetail,
-        props: true,
-      },
-      {
-        path: "/pos/order-receipt",
-        name: "OrderReceipt",
-        component: OrderReceipt,
-      },
-
-      // product
-      {
-        path: "/product/category",
-        name: "ProductCategory",
-        component: ProductCategory,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/product/create-product",
-        name: "CreateProduct",
-        component: CreateProduct,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/product/edit-product/:id",
-        props: true,
-        name: "EditProduct",
-        component: EditProduct,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/product",
-        name: "Product",
-        component: Product,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-
-      // topping
-      {
-        path: "/topping/category",
-        name: "ToppingCategory",
-        component: ToppingCategory,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/topping/category/create",
-        name: "CreateCategoryTopping",
-        component: CreateCategoryTopping,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/topping/category/edit/:id",
-        props: true,
-        name: "EditCategoryTopping",
-        component: EditCategoryTopping,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/topping/create",
-        name: "CreateTopping",
-        component: CreateTopping,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/topping/edit/:id",
-        props: true,
-        name: "EditTopping",
-        component: EditTopping,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/topping",
-        name: "Topping",
-        component: Topping,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-
-      // dash board
-      {
-        path: "/dash-board",
-        name: "DashBoard",
-        component: DashBoard,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-
-      // user
-      {
-        path: "/user/login",
-        name: "Login",
-        component: Login,
-      },
-      {
-        path: "/user/forgot-password",
-        name: "ForgotPassword",
-        component: ForgotPassword,
-      },
-      {
-        path: "/user/register",
-        name: "Register",
-        component: Register,
-      },
-      {
-        path: "/user/status",
-        name: "UserStatus",
-        component: UserStatus,
-      },
-      {
-        path: "/user/edit/:id",
-        props: true,
-        component: EditUser,
-        name: "EditUser",
-      },
-
-      // customer
-      {
-        path: "/customer",
-        props: true,
-        component: Customer,
-        name: "Customer",
-      },
-      {
-        path: "/customer/create",
-        props: true,
-        component: CreateCustomer,
-        name: "CreateCustomer",
-      },
-      {
-        path: "/customer/edit/:id",
-        props: true,
-        component: EditCustomer,
-        name: "EditCustomer",
-      },
-
-      // raw material
-      {
-        path: "/rm/unit",
-        component: RMUnit,
-        name: "RMUnit",
-      },
-      {
-        path: "/rm/pickup-list",
-        name: "PickupList",
-        component: PickupList,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/rm/edit/:id",
-        name: "EditRM",
-        component: EditRM,
-        props: true,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/rm/category",
-        name: "RawMaterialCategory",
-        component: RawMaterialCategory,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/rm/create-rm",
-        name: "CreateRM",
-        component: CreateRM,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/rm/raw-materials",
-        name: "RawMaterials",
-        component: RawMaterials,
-      },
-
-      // supplier
-      {
-        path: "/rm/supplier",
-        name: "Supplier",
-        component: Supplier,
-      },
-      {
-        path: "/rm/supplier/create",
-        name: "CreateSupplier",
-        component: CreateSupplier,
-      },
-      {
-        path: "/rm/supplier/edit/:id",
-        props: true,
-        name: "EditSupplier",
-        component: EditSupplier,
-      },
-
-      // po
-      {
-        path: "/rm/po-notice",
-        name: "PONotice",
-        component: PONotice,
-        meta: {
-          requiresLogin: false,
-        },
-      },
-      {
-        path: "/rm/po",
-        name: "PO",
-        component: PO,
-      },
-      {
-        path: "/rm/confirm-po",
-        name: "ConfirmPO",
-        component: ConfirmPO,
-      },
-
-      // sale channel
-      {
-        path: "/sale-channel",
-        name: "SaleChannel",
-        component: SaleChannel,
-      },
-      {
-        path: "/sale-channel/create",
-        name: "CreateSaleChannel",
-        component: CreateSaleChannel,
-      },
-      {
-        path: "/sale-channel/edit/:id",
-        name: "EditSaleChannel",
-        props: true,
-        component: EditSaleChannel,
-      },
-    ],
+    path: "/face-login/",
+    name: "FaceLogin",
+    component: FaceLogin,
   },
+  {
+    path: "/chart",
+    name: "Chart1",
+    component: Chart1,
+  },
+  // Report
+  {
+    path: "/report/:type",
+    props: true,
+    name: "MainReport",
+    component: MainReport,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/select-report",
+    name: "SelectReport",
+    component: SelectReport,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/product-report",
+    name: "ProductReport",
+    component: ProductReport,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/report/product/:type",
+    props: true,
+    name: "ProductReportDetail",
+    component: ProductReportDetail,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  // Order manage
+
+  {
+    path: "/order-manage/order-detail",
+    name: "OrderDetail",
+    component: OrderDetail,
+  },
+  {
+    path: "/order-manage/food-order",
+    name: "FoodOrder",
+    component: FoodOrder,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/order-manage/drink-order",
+    name: "DrinkOrder",
+    component: DrinkOrder,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // promotion
+  {
+    path: "/promotion",
+    name: "Promotion",
+    component: Promotion,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/redemption",
+    name: "Redemption",
+    component: Redemption,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/reward-detail/:id",
+    name: "RewardDetail",
+    component: RewardDetail,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/package-detail/:id",
+    name: "PackageDetail",
+    component: PackageDetail,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/voucher-detail/:id",
+    name: "VoucherDetail",
+    component: VoucherDetail,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/point-detail/:id",
+    name: "PointDetail",
+    component: PointDetail,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  {
+    path: "/promotion/new-promotion",
+    name: "NewPoint",
+    component: NewPoint,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/new-voucher",
+    name: "NewVoucher",
+    component: NewVoucher,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/new-package",
+    name: "NewPackage",
+    component: NewPackage,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/new-reward",
+    name: "NewReward",
+    component: NewReward,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/redemption",
+    name: "Redemption",
+    component: Redemption,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/redemption/history",
+    name: "History",
+    component: History,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/redemption/allreward",
+    name: "AllReward",
+    component: AllReward,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/redemption/preorderreward",
+    name: "PreOrderReward",
+    component: PreOrderReward,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/promotion/redemption/rewardname",
+    name: "RewardName",
+    component: RewardName,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // database settings
+  {
+    path: "/dbs/dbs",
+    name: "DataBaseSettings",
+    component: DataBaseSettings,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // pos
+  {
+    path: "/pos/select-sale-channel",
+    name: "SelectSaleChannel",
+    component: SelectSaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/pos/key-order",
+    name: "KeyOrder",
+    component: KeyOrder,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/pos/key-order/:product_id/key-product-detail",
+    name: "KeyProductDetail",
+    component: KeyProductDetail,
+    props: true,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/pos/key-order/:package_id/key-promotion-detail",
+    name: "KeyPromotionDetail",
+    component: KeyPromotionDetail,
+    props: true,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/pos/key-order/:topping_id/key-topping-detail",
+    name: "KeyToppingDetail",
+    component: KeyToppingDetail,
+    props: true,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/pos/order-receipt",
+    name: "OrderReceipt",
+    component: OrderReceipt,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // product
+  {
+    path: "/product/category",
+    name: "ProductCategory",
+    component: ProductCategory,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/product/create-product",
+    name: "CreateProduct",
+    component: CreateProduct,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/product/edit-product/:id",
+    props: true,
+    name: "EditProduct",
+    component: EditProduct,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/product",
+    name: "Product",
+    component: Product,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // topping
+  {
+    path: "/topping/category",
+    name: "ToppingCategory",
+    component: ToppingCategory,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/topping/category/create",
+    name: "CreateCategoryTopping",
+    component: CreateCategoryTopping,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/topping/category/edit/:id",
+    props: true,
+    name: "EditCategoryTopping",
+    component: EditCategoryTopping,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/topping/create",
+    name: "CreateTopping",
+    component: CreateTopping,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/topping/edit/:id",
+    props: true,
+    name: "EditTopping",
+    component: EditTopping,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/topping",
+    name: "Topping",
+    component: Topping,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // dash board
+  {
+    path: "/dash-board",
+    name: "DashBoard",
+    component: DashBoard,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // user
+  {
+    path: "/user/login",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/user/forgot-password",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+  },
+  {
+    path: "/user/register",
+    name: "Register",
+    component: Register,
+  },
+  {
+    path: "/user/status",
+    name: "UserStatus",
+    component: UserStatus,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/user/edit/:id",
+    props: true,
+    component: EditUser,
+    name: "EditUser",
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // customer
+  {
+    path: "/customer",
+    props: true,
+    component: Customer,
+    name: "Customer",
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/customer/create",
+    props: true,
+    component: CreateCustomer,
+    name: "CreateCustomer",
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/customer/edit/:id",
+    props: true,
+    component: EditCustomer,
+    name: "EditCustomer",
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // raw material
+  {
+    path: "/rm/unit",
+    component: RMUnit,
+    name: "RMUnit",
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/pickup-list",
+    name: "PickupList",
+    component: PickupList,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/edit/:id",
+    name: "EditRM",
+    component: EditRM,
+    props: true,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/category",
+    name: "RawMaterialCategory",
+    component: RawMaterialCategory,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/create-rm",
+    name: "CreateRM",
+    component: CreateRM,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/raw-materials",
+    name: "RawMaterials",
+    component: RawMaterials,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // supplier
+  {
+    path: "/rm/supplier",
+    name: "Supplier",
+    component: Supplier,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/supplier/create",
+    name: "CreateSupplier",
+    component: CreateSupplier,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/supplier/edit/:id",
+    props: true,
+    name: "EditSupplier",
+    component: EditSupplier,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
+  // po
+  {
+    path: "/rm/po-notice",
+    name: "PONotice",
+    component: PONotice,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/po",
+    name: "PO",
+    component: PO,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/rm/confirm-po",
+    name: "ConfirmPO",
+    component: ConfirmPO,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+
   // sale channel
   {
     path: "/sale-channel",
     name: "SaleChannel",
     component: SaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/sale-channel/create",
     name: "CreateSaleChannel",
     component: CreateSaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/sale-channel/edit/:id",
     name: "EditSaleChannel",
     props: true,
     component: EditSaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  // sale channel
+  {
+    path: "/sale-channel",
+    name: "SaleChannel",
+    component: SaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/sale-channel/create",
+    name: "CreateSaleChannel",
+    component: CreateSaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/sale-channel/edit/:id",
+    name: "EditSaleChannel",
+    props: true,
+    component: EditSaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
   },
 
   // Consingment
@@ -599,528 +688,114 @@ const routes = [
     name: "Consigner",
     props: true,
     component: Consigner,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/consignerproduct",
     name: "ConsignerProduct",
     props: true,
     component: ConsignerProduct,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/recordproduct",
     name: "RecordProduct",
     props: true,
     component: RecordProduct,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/newconsignment",
     name: "NewConsignment",
     props: true,
     component: NewConsignment,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/payments",
     name: "Payments",
     component: Payment,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/newconsigner",
     name: "NewConsigner",
     props: true,
     component: NewConsigner,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/payshare",
     name: "PayShare",
     props: true,
     component: PayShare,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/sharepayment",
     name: "SharePayment",
     props: true,
     component: SharePayment,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/outconsignment",
     name: "OutConsignment",
     props: true,
     component: OutConsignment,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/addconsignment",
     name: "AddConsignment",
     props: true,
     component: AddConsignment,
+    meta: {
+      requiresLogin: true,
+    },
   },
-  // {
-  //   path: "/face-login/",
-  //   name: "FaceLogin",
-  //   component: FaceLogin,
-  // },
-  // {
-  //   path: "/chart",
-  //   name: "Chart1",
-  //   component: Chart1,
-  // },
-  // // Report
-  // {
-  //   path: "/report/:type",
-  //   props: true,
-  //   name: "MainReport",
-  //   component: MainReport
-  // },
-  // {
-  //   path: "/select-report",
-  //   name: "SelectReport",
-  //   component: SelectReport
-  // },
-  // {
-  //   path: "/product-report",
-  //   name: "ProductReport",
-  //   component: ProductReport
-  // },
-  // {
-  //   path: '/report/product/:type',
-  //   props: true,
-  //   name: 'ProductReportDetail',
-  //   component: ProductReportDetail
-  // },
-  // // Order manage
-
-  // {
-  //   path: "/order-manage/order-detail",
-  //   name: "OrderDetail",
-  //   component: OrderDetail,
-  // },
-  // {
-  //   path: "/order-manage/food-order",
-  //   name: "FoodOrder",
-  //   component: FoodOrder,
-  // },
-  // {
-  //   path: "/order-manage/drink-order",
-  //   name: "DrinkOrder",
-  //   component: DrinkOrder,
-  // },
-
-  // // promotion
-  // {
-  //   path: "/promotion",
-  //   name: "Promotion",
-  //   component: Promotion,
-  // },
-  // {
-  //   path: "/promotion/redemption",
-  //   name: "Redemption",
-  //   component: Redemption,
-  // },
-  // {
-  //   path: "/promotion/reward-detail/:id",
-  //   name: "RewardDetail",
-  //   component: RewardDetail,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/package-detail/:id",
-  //   name: "PackageDetail",
-  //   component: PackageDetail,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/voucher-detail/:id",
-  //   name: "VoucherDetail",
-  //   component: VoucherDetail,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/point-detail/:id",
-  //   name: "PointDetail",
-  //   component: PointDetail,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-
-  // {
-  //   path: "/promotion/new-promotion",
-  //   name: "NewPoint",
-  //   component: NewPoint,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/new-voucher",
-  //   name: "NewVoucher",
-  //   component: NewVoucher,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/new-package",
-  //   name: "NewPackage",
-  //   component: NewPackage,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/new-reward",
-  //   name: "NewReward",
-  //   component: NewReward,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/redemption",
-  //   name: "Redemption",
-  //   component: Redemption,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/redemption/history",
-  //   name: "History",
-  //   component: History,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/redemption/allreward",
-  //   name: "AllReward",
-  //   component: AllReward,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/redemption/preorderreward",
-  //   name: "PreOrderReward",
-  //   component: PreOrderReward,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/promotion/redemption/rewardname",
-  //   name: "RewardName",
-  //   component: RewardName,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-
-  // // database settings
-  // {
-  //   path: "/dbs/dbs",
-  //   name: "DataBaseSettings",
-  //   component: DataBaseSettings,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-
-  // // pos
-  // {
-  //   path: "/pos/select-sale-channel",
-  //   name: "SelectSaleChannel",
-  //   component: SelectSaleChannel,
-  // },
-  // {
-  //   path: "/pos/key-order",
-  //   name: "KeyOrder",
-  //   component: KeyOrder,
-  // },
-  // {
-  //   path: "/pos/key-order/:product_id/key-product-detail",
-  //   name: "KeyProductDetail",
-  //   component: KeyProductDetail,
-  //   props: true,
-  // },
-  // {
-  //   path: "/pos/key-order/:topping_id/key-topping-detail",
-  //   name: "KeyToppingDetail",
-  //   component: KeyToppingDetail,
-  //   props: true,
-  // },
-  // {
-  //   path: "/pos/order-receipt",
-  //   name: "OrderReceipt",
-  //   component: OrderReceipt,
-  // },
-
-  // // product
-  // {
-  //   path: "/product/category",
-  //   name: "ProductCategory",
-  //   component: ProductCategory,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/product/create-product",
-  //   name: "CreateProduct",
-  //   component: CreateProduct,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/product/edit-product/:id",
-  //   props: true,
-  //   name: "EditProduct",
-  //   component: EditProduct,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/product",
-  //   name: "Product",
-  //   component: Product,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-
-  // // topping
-  // {
-  //   path: "/topping/category",
-  //   name: "ToppingCategory",
-  //   component: ToppingCategory,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/topping/category/create",
-  //   name: "CreateCategoryTopping",
-  //   component: CreateCategoryTopping,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/topping/category/edit/:id",
-  //   props: true,
-  //   name: "EditCategoryTopping",
-  //   component: EditCategoryTopping,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/topping/create",
-  //   name: "CreateTopping",
-  //   component: CreateTopping,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/topping/edit/:id",
-  //   props: true,
-  //   name: "EditTopping",
-  //   component: EditTopping,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/topping",
-  //   name: "Topping",
-  //   component: Topping,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-
-  // // dash board
-  // {
-  //   path: "/dash-board",
-  //   name: "DashBoard",
-  //   component: DashBoard,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-
-  // // user
-  // {
-  //   path: "/user/login",
-  //   name: "Login",
-  //   component: Login,
-  // },
-  // {
-  //   path: "/user/forgot-password",
-  //   name: "ForgotPassword",
-  //   component: ForgotPassword,
-  // },
-  // {
-  //   path: "/user/register",
-  //   name: "Register",
-  //   component: Register,
-  // },
-  // {
-  //   path: "/user/status",
-  //   name: "UserStatus",
-  //   component: UserStatus,
-  // },
-  // {
-  //   path: "/user/edit/:id",
-  //   props: true,
-  //   component: EditUser,
-  //   name: "EditUser",
-  // },
-
-  // // customer
-  // {
-  //   path: "/customer",
-  //   props: true,
-  //   component: Customer,
-  //   name: "Customer",
-  // },
-  // {
-  //   path: "/customer/create",
-  //   props: true,
-  //   component: CreateCustomer,
-  //   name: "CreateCustomer",
-  // },
-  // {
-  //   path: "/customer/edit/:id",
-  //   props: true,
-  //   component: EditCustomer,
-  //   name: "EditCustomer",
-  // },
-
-  // // raw material
-  // {
-  //   path: "/rm/unit",
-  //   component: RMUnit,
-  //   name: "RMUnit",
-  // },
-  // {
-  //   path: "/rm/pickup-list",
-  //   name: "PickupList",
-  //   component: PickupList,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/rm/edit/:id",
-  //   name: "EditRM",
-  //   component: EditRM,
-  //   props: true,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/rm/category",
-  //   name: "RawMaterialCategory",
-  //   component: RawMaterialCategory,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/rm/create-rm",
-  //   name: "CreateRM",
-  //   component: CreateRM,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/rm/raw-materials",
-  //   name: "RawMaterials",
-  //   component: RawMaterials,
-  // },
-
-  // // supplier
-  // {
-  //   path: "/rm/supplier",
-  //   name: "Supplier",
-  //   component: Supplier,
-  // },
-  // {
-  //   path: "/rm/supplier/create",
-  //   name: "CreateSupplier",
-  //   component: CreateSupplier,
-  // },
-  // {
-  //   path: "/rm/supplier/edit/:id",
-  //   props: true,
-  //   name: "EditSupplier",
-  //   component: EditSupplier,
-  // },
-
-  // // po
-  // {
-  //   path: "/rm/po-notice",
-  //   name: "PONotice",
-  //   component: PONotice,
-  //   meta: {
-  //     requiresLogin: false,
-  //   },
-  // },
-  // {
-  //   path: "/rm/po",
-  //   name: "PO",
-  //   component: PO,
-  // },
-  // {
-  //   path: "/rm/confirm-po",
-  //   name: "ConfirmPO",
-  //   component: ConfirmPO,
-  // },
-
-  // // sale channel
-  // {
-  //   path: "/sale-channel",
-  //   name: "SaleChannel",
-  //   component: SaleChannel,
-  // },
-  // {
-  //   path: "/sale-channel/create",
-  //   name: "CreateSaleChannel",
-  //   component: CreateSaleChannel,
-  // },
-  // {
-  //   path: "/sale-channel/edit/:id",
-  //   name: "EditSaleChannel",
-  //   props: true,
-  //   component: EditSaleChannel,
-  // },
-  // sale channel
   {
     path: "/sale-channel",
     name: "SaleChannel",
     component: SaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/sale-channel/create",
     name: "CreateSaleChannel",
     component: CreateSaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/sale-channel/edit/:id",
     name: "EditSaleChannel",
     props: true,
     component: EditSaleChannel,
+    meta: {
+      requiresLogin: true,
+    },
   },
 
   // Consingment
@@ -1129,18 +804,27 @@ const routes = [
     name: "Consigner",
     props: true,
     component: Consigner,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/consignerproduct",
     name: "ConsignerProduct",
     props: true,
     component: ConsignerProduct,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/consignment/newconsignment",
     name: "NewConsignment",
     props: true,
     component: NewConsignment,
+    meta: {
+      requiresLogin: true,
+    },
   },
 ];
 

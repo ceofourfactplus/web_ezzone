@@ -3,6 +3,7 @@ from pos.models import Order, OrderItem, OrderItemTopping, Payment
 from rest_framework import serializers
 from customer.serializers import CustomerSerializer, AddressCustomerSerializer
 from product.serializers import ProductSerializer, ToppingSerializer, GetterSaleChannel
+from promotion.serializers import PromotionPackageSerializer
 from pprint import pprint
 
 
@@ -35,12 +36,13 @@ class OrderItemToppingSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     product_set = ProductSerializer(read_only=True, source='product')
     topping_set = ToppingSerializer(read_only=True, source="topping")
+    package_set = PromotionPackageSerializer(read_only=True, source="package")
     id = serializers.IntegerField(required=False)
     orderitemtopping_set = OrderItemToppingSerializer(
         many=True, required=False, allow_null=True)
     description = serializers.CharField(allow_blank=True, required=False)
     status_order = serializers.IntegerField(required=False, allow_null=True)
-
+    item_in_package = serializers.BooleanField(required=False)
     class Meta:
         model = OrderItem
         fields = [
@@ -48,6 +50,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             "flavour_level",
             "product",
             "topping",
+            "package",
             "consignment",
             'package',
             "size",
@@ -57,10 +60,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
             "amount",
             "product_set",
             "topping_set",
+            "package_set",
             "orderitemtopping_set",
             "order",
             "code",
             'status_order',
+            'item_in_package'
         ]
         read_only_fields = ('order',)
 

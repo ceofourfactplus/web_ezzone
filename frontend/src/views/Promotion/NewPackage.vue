@@ -313,9 +313,7 @@
                       :key="top.id"
                       @click="package_items[idx].topping[top_idx] = top"
                     >
-                      <p
-                        class="w-100"
-                      >
+                      <p class="w-100">
                         {{ top.name }}
                       </p>
                     </li>
@@ -773,11 +771,16 @@ export default {
         promotion: this.promotion,
         start_date: this.start_date,
         amount_day: this.amount_day,
-        discount_price: this.discount_price,
+        pricepackage_set: [
+          {
+            normal_price: this.total_price,
+            discount_price: this.discount_price,
+            sale_channel: this.$store.state.ezzone_id,
+          },
+        ],
         description: this.description,
         total_amount: this.package_items.length,
         status: this.status,
-        normal_price: this.total_price,
         update_by_id: this.$store.state.auth.userInfo.id,
         create_by_id: this.$store.state.auth.userInfo.id,
         packageitem_set: packageitem,

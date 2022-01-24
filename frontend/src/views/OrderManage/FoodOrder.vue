@@ -67,9 +67,9 @@
       <!-- order -->
       <div class="col-12 mt-3" style="padding: 0px">
         <div style="height: 715px; overflow-y: auto">
-          <div v-for="order in all_order" :key="order.id" class="mb-2">
+          <div v-for="order in all_order" :key="order.id">
             <!-- head order -->
-            <div class="row w-100 header" style="padding: 0px; margin: 0px">
+            <div class="row w-100 header mb-2" style="padding: 0px; margin: 0px">
               <div class="col-2 w-100" style="font-size: 30px">
                 #{{ order.order_number }}
               </div>
@@ -230,7 +230,6 @@
                   </div>
                   <div
                     class="col-3 w-100 green"
-                    @click="finish_item(item.id, order.id)"
                     v-else-if="item.status_order == 3"
                     :class="{
                       odd: (index + 1) % 2 != 0,

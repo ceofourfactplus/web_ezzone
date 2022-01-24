@@ -113,6 +113,14 @@ class PackagePOS(APIView):
         package = PromotionPackage.objects.filter(status=True)
         serializer = PromotionPackageSerializer(package,context={'request':request}, many=True)
         return Response(serializer.data)
+
+class getPackagePOS(APIView):
+    parser_classes=[FormParser, MultiPartParser]
+        
+    def get(self,request,pk):
+        package = PromotionPackage.objects.get(pk=pk)
+        serializer = PromotionPackageSerializer(package,context={'request':request})
+        return Response(serializer.data)
     
 class PackageAPI(APIView):
     def get_object(self, pk):
