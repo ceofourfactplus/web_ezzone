@@ -6,7 +6,7 @@
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px;">
+      <div style="padding-left: 0px">
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"
@@ -70,7 +70,7 @@
             {{ item.promotion }}&nbsp;&nbsp;&nbsp;
           </div>
           <div class="col-4 w-100">
-            <label class="switch" style="margin: 24px 0px 0px 90px;">
+            <label class="switch" style="margin: 24px 0px 0px 90px">
               <input
                 type="checkbox"
                 v-model="item.status"
@@ -103,7 +103,12 @@
           <div class="col-4 w-100"></div>
           <div
             class="col-3 w-100"
-            style="font-size: 100px; font-weight: bold; color: white; text-align: right;"
+            style="
+              font-size: 100px;
+              font-weight: bold;
+              color: white;
+              text-align: right;
+            "
           >
             {{ item.price_per_point }}
           </div>
@@ -232,7 +237,9 @@
             {{ voucher.voucher }}
           </div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
-          <div class="col-2 w-100" v-if="voucher.is_percent">{{ format_percent(voucher.discount) }}</div>
+          <div class="col-2 w-100" v-if="voucher.is_percent">
+            {{ format_percent(voucher.discount) }}
+          </div>
           <div class="col-2 w-100" v-else>{{ voucher.discount }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
@@ -288,8 +295,13 @@
           <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
             {{ item.promotion }}
           </div>
-          <div class="col-2 w-100">{{ item.normal_price }}</div>
-          <div class="col-2 w-100">{{ item.discount_price }}</div>
+          <div class="col-2 w-100">
+            {{ get_price(item).normal_price }}
+          </div>
+          <div class="col-2 w-100">
+            {{ get_price(item).discount_price }}
+          </div>
+
           <div class="col-2 w-100">
             <label class="switch">
               <input
@@ -369,7 +381,7 @@
 </template>
 
 <script>
-import SavePopup from "../../components/main_component/SavePopup.vue"
+import SavePopup from "../../components/main_component/SavePopup.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
@@ -406,6 +418,15 @@ export default {
   methods: {
     select_item(item) {
       this.$store.state.promotion.tab = item;
+    },
+    get_price(item) {
+      if (item.pricepackage_set.length > 0) {
+        return item.pricepackage_set.filter((i) => {
+          return i.sale_channel == this.$store.state.ezzone_id;
+        })[0];
+      } else {
+        return { discount_price: 0, normal_price: 0 };
+      }
     },
     search_by_typing(txt) {
       var temp = [];
@@ -491,7 +512,7 @@ export default {
     },
     format_percent(discount) {
       var temp = discount.split(".");
-      return `${temp[0]}%`
+      return `${temp[0]}%`;
     },
     delete_confirm(item) {
       console.log(item, "item");

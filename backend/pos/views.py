@@ -11,6 +11,7 @@ from pprint import pprint
 from product.models import Product, SaleChannel, Topping
 from product.serializers import ProductReportSerialiser, ChannelReportSerializer
 from datetime import datetime
+from promotion.models import PackageItem, PromotionPackage
 
 
 class cancel_order(APIView):
@@ -30,7 +31,6 @@ def check_is_finish(order_id):
     print('status food:', order.status_food)
     print('status drink:', order.status_drink)
     print('status order:', order.status_order)
-
     # for food
     product_food = Product.objects.filter(type_product__in=[1, 3])
     product_food_id = [p.id for p in product_food]
@@ -43,6 +43,7 @@ def check_is_finish(order_id):
     topping_food_id = [p.id for p in topping_food]
     order_food_topping = OrderItem.objects.filter(
         topping_id__in=topping_food_id, order_id=order_id)
+    print([i.status_order for i in order_food_topping])
     arr_status_top_food = [s.status_order for s in order_food_topping]
     no_none_status_top_food_list = [
         s for s in arr_status_top_food if s != None]
@@ -69,6 +70,7 @@ def check_is_finish(order_id):
     no_none_status_top_drink_list = [
         s for s in arr_status_top_drink if s != None]
 
+    
     if not (no_none_status_drink_list + no_none_status_top_drink_list) == []:
         order.status_drink = min(
             no_none_status_drink_list + no_none_status_top_drink_list)
@@ -87,7 +89,7 @@ def check_is_finish(order_id):
         order.status_order = 2
     if (order.status_drink == 3 or order.status_drink == None) and (order.status_food == 3 or order.status_food == None):
         order.status_order = 3
-    if (order.status_drink == 4 or order.status_drink == None) and (order.status_food == 4 or order.status_food == None)and (order.payment_status == 3 or order.payment_status == 4):
+    if (order.status_drink == 4 or order.status_drink == None) and (order.status_food == 4 or order.status_food == None) and (order.payment_status == 3 or order.payment_status == 4):
         order.status_order = 4
     # if order.status_drink > order.status_food:
     #     order.status_order = order.status_food
@@ -95,6 +97,7 @@ def check_is_finish(order_id):
 
     order.spen_time = str(
         datetime.now() - order.create_at.replace(tzinfo=None))
+
     order.save()
 
 
@@ -128,11 +131,15 @@ class ChangeStatusOrder(APIView):
 
             topping = [p.id for p in Topping.objects.filter(
                 type_topping__in=type_item)]
-            orderitem = OrderItem.objects.filter(
+            print(topping)
+            orderitem_top = OrderItem.objects.filter(
                 order_id=pk, topping_id__in=topping)
-            for item in orderitem:
-                item.status = status
+        
+            print([i.id for i in orderitem_top])
+            for item in orderitem_top:
+                item.status_order = status
                 item.save()
+                print(item.status_order)
 
             check_is_finish(pk)
         else:
@@ -286,11 +293,11 @@ class KitchenOrderToday(APIView):
     def get(self, request):
         data = {}
         data['finish_order'] = Order.objects.filter(
-            create_at__gte=datetime.now().date(), status_food=2).count()
+            create_at__gte=datetime.now().date(), status_food=3).count()
         data['remain_order'] = Order.objects.filter(
             create_at__gte=datetime.now().date(), status_food=1).count()
         Orders = Order.objects.filter(
-            create_at__gte=datetime.now().date(), status_food__in=[0, 1, 2])
+            create_at__gte=datetime.now().date(), status_food__in=[0, 1, 2]).exclude(status_order=4)
         data['order'] = OrderSerializer(Orders, many=True).data
         return Response(data, status=200)
 
@@ -384,9 +391,19 @@ class OrderList(APIView):
         request.data['status_drink'] = None
 
         product = [item['product_set']['type_product']
-                   for item in request.data['orderitem_set'] if not 'topping' in item]
+                   for item in request.data['orderitem_set'] if 'product_set' in item]
         topping = [item['topping_set']['type_topping']
                    for item in request.data['orderitem_set'] if 'topping' in item]
+        package = [item['package']
+                   for item in request.data['orderitem_set'] if 'package' in item]
+
+        food = [p.id for p in Product.objects.filter(type_product__in=[1, 3])]
+        drink = [p.id for p in Product.objects.filter(type_product__in=[2])]
+        for p in package:
+            if PackageItem.objects.filter(package=p, product__in=food).exists():
+                request.data['status_food'] = 0
+            if PackageItem.objects.filter(package=p, product__in=drink).exists():
+                request.data['status_drink'] = 0
         for n in product:
             if n == 3 or n == 1:
                 request.data['status_food'] = 0
@@ -398,6 +415,32 @@ class OrderList(APIView):
                 request.data['status_food'] = 0
             if n == 2:
                 request.data['status_drink'] = 0
+
+        for item in request.data['orderitem_set']:
+            if 'package' in item:
+                for i in item['package_set']['packageitem_set']:
+                    
+                    data = {
+                        "code": i['product_set']['name'],
+                        "flavour_level": 2,
+                        "product": i['product_id'],
+                        "price_item": 0,
+                        "total_price": 0,
+                        "size": "M",
+                        "description": "",
+                        "amount": i['qty'],
+                        'item_in_package':True,
+                        'orderitemtopping_set':[]
+                        } 
+                    for t in i['itemtopping_set']:
+                        data['orderitemtopping_set'].append({
+                            'topping':t['topping_id'],    
+                            'price_topping':0,
+                            "total_price":0,
+                            "amount":t['qty']
+                        })
+                    request.data['orderitem_set'].append(data)
+                print(request.data['orderitem_set'])
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

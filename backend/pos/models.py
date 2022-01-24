@@ -155,6 +155,7 @@ class OrderItem(models.Model):
     total_price = models.DecimalField(max_digits=7, decimal_places=2)
     description = models.TextField(null=True)
     amount = models.IntegerField()
+    item_in_package = models.BooleanField(default=False)
 
 
 class OrderItemTopping(models.Model):

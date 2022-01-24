@@ -24,7 +24,7 @@ export default {
       total_balance: 0,
       discount: 0,
       discount_percent: false,
-      select_product_index: null,
+      select_index: null,
       cash: null,
       change: null,
     },
@@ -33,9 +33,9 @@ export default {
     },
     category: 1,
     type_product: 2,
-    select_product_index: null,
-    select_topping_index: null,
+    select_index: null,
     is_edit_product: false,
+    is_edit_promotion: false,
     is_edit_toppig: false,
     is_edit:false,
   },
@@ -86,25 +86,29 @@ export default {
       state.order.orderitem_set.splice(index, 1);
     },
     select_product(state, index) {
-      state.select_product_index = index;
+      state.select_index = index;
       state.is_edit_product = true;
     },
     select_topping(state, index) {
-      state.select_topping_index = index;
+      state.select_index = index;
       state.is_edit_topping = true;
     },
+    select_package(state, index) {
+      state.select_index = index;
+      state.is_edit_package = true;
+    },
     confirm_product(state, product) {
-      state.order.orderitem_set[state.select_product_index] = JSON.parse(
+      state.order.orderitem_set[state.select_index] = JSON.parse(
         JSON.stringify(product)
       );
-      state.select_product_index = null;
+      state.select_index = null;
       state.is_edit_product = false;
     },
     confirm_topping(state, product) {
-      state.order.orderitem_set[state.select_product_index] = JSON.parse(
+      state.order.orderitem_set[state.select_index] = JSON.parse(
         JSON.stringify(product)
       );
-      state.select_topping_index = null;
+      state.select_index = null;
       state.is_edit_topping = false;
     },
     table(state, table) {
@@ -143,7 +147,7 @@ export default {
         total_balance: 0,
         discount: 0,
         discount_percent: false,
-        select_product_index: null,
+        select_index: null,
         cash: null,
         change: null,
       };
@@ -191,6 +195,15 @@ export default {
         name: "KeyToppingDetail",
         params: {
           topping_id: context.state.order.orderitem_set[index].topping,
+        },
+      });
+    },
+    edit_package(context, index) {
+      context.commit("select_package", index);
+      router.push({
+        name: "KeyPromotionDetail",
+        params: {
+          package_id: context.state.order.orderitem_set[index].package,
         },
       });
     },
@@ -317,16 +330,22 @@ export default {
       }
     },
     edit_product: (state) => {
-      return state.order.orderitem_set[state.select_product_index];
+      return state.order.orderitem_set[state.select_index];
     },
     is_edit_product: (state) => {
       return state.is_edit_product;
     },
     edit_topping: (state) => {
-      return state.order.orderitem_set[state.select_topping_index];
+      return state.order.orderitem_set[state.select_index];
     },
     is_edit_topping: (state) => {
       return state.is_edit_topping;
+    },
+    edit_package: (state) => {
+      return state.order.orderitem_set[state.select_index];
+    },
+    is_edit_package: (state) => {
+      return state.is_edit_promotion;
     },
     table: (state) => {
       return state.order.table;
@@ -350,6 +369,7 @@ export default {
       return state.customer_set;
     },
     get_data: (state) => {
+      state.order.sale_channel_set = {}
       return state.order;
     },
   },
