@@ -8,17 +8,17 @@
     <div
       class="table-item"
       style="
-        margin-left: 24px;
+        margin-left: 27px;
         margin-right: 24px;
         margin-top: 20px;
         margin-bottom: 20px;
         border-radius: 20px;
         height: 820px;
-        width: 672px;
+        width: 762px;
       "
     >
       <!-- Select Bar -->
-      <div class="row BlockItem">
+      <div class="row BlockItem" style="margin-left: 16px;">
         <div class="col-6 w-100">
           <input
             type="text"
@@ -51,7 +51,7 @@
           <div class="RedeemItem" @click="popup_status = true"><b>Redeem</b></div>
         </div>
       </div>
-      <div class="row BlockImg">
+      <div class="row BlockImg" style="margin-left: 16px;">
         <div class="col-6 w-100">
           <img
             :src="
@@ -86,7 +86,7 @@
         </div>
       </div>
       <div class="row AreaDescription">
-        <div class="col-12 w-100" style="height: 50px">
+        <div class="col-12 w-100" style="height: 50px; margin-left: 27px;">
           <b>Description :</b>
         </div>
         <div class="col-12 w-100 BlockDescription">
@@ -160,7 +160,6 @@ img {
 }
 
 .BlockItem {
-  width: 672px;
   position: relative;
   font-size: 23px;
   text-align: center;
@@ -183,7 +182,6 @@ img {
 }
 
 .BlockImg {
-  width: 672px;
   position: relative;
   font-size: 23px;
   text-align: center;
@@ -227,14 +225,13 @@ img {
 }
 
 .BlockDescription {
-  width: 100%;
   height: 305px;
   border-radius: 20px;
   position: relative;
   font-size: 24px;
   text-align: left;
   padding: 0px;
-  margin-left: 14px;
+  margin-left: 55px;
 }
 
 .AreaPopup {

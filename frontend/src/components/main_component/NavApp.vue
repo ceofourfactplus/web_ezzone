@@ -2,14 +2,14 @@
   <div>
     <nav class="nav">
       <div class="row w-100">
-        <div class="col-2">
+        <div class="col-1">
           <img
             src="../../assets/icon/btn-back.png"
             class="back inline ms-4"
             @click="$router.push({ name: url_name })"
           />
         </div>
-        <div class="col-9 w-100">
+        <div class="col-10 w-100">
           <h1 id="login" class="header-text"><slot></slot></h1>
         </div>
         <div class="col-1" v-if="save">

@@ -23,7 +23,7 @@
       </div>
       <div class="input col-8">
 
-        <input type="text" v-model="input_customer" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px;" />
+        <input type="text" v-model="input_customer" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px; line-height: 50px;" />
         <!-- <input type="text" @input="find_customer($event)" :value="phone_number_layout($store.state.promotion.customer.phone_number)" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px;" /> -->
         <ul class="selector" v-if="selector_status">
           <li v-for="cus in selector_customer" :key="cus.id">
@@ -55,24 +55,23 @@
         class="col-4"
         style="
           background-color: #ffffff;
-          border: 10px solid black;
           border-radius: 10px;
           height: 200px;
           width: 200px;
-          margin: 10px;
+          margin: 20px 10px 10px 20px;
           position: relative;
         "
       >
-        <img
+        <!-- <img
             :src="require(`../../../../backend${$store.state.promotion.customer.img}`)"
             style="
-                height: 184px;
-                width: 184px;
+                height: 200px;
+                width: 200px;
                 left: -14px;
                 top: -2px;
                 position: relative;
             "
-        />
+        /> -->
       </div>
       <!-- Description Block -->
       <div class="col-8 w-100" style="font-size: 30px; color: #ffffff">
@@ -93,6 +92,7 @@
               line-height: 75px;
               padding-left: 10px;
               text-align: left;
+              margin-left: 14px;
             "
           >
             {{ $store.state.promotion.customer_point[0].point }}
@@ -108,6 +108,7 @@
               line-height: 75px;
               padding-left: 10px;
               text-align: left;
+              margin-left: 14px;
             "
           >
             0
@@ -130,7 +131,7 @@
             Name
           </div>
           <div class="col-1 w-100" id="DotName">:</div>
-          <div class="col-8 w-100" id="DetailName">
+          <div class="col-8 w-100" id="DetailName" style="margin-left: 14px;">
             {{ $store.state.promotion.customer.nick_name }}
           </div>
         </div>
@@ -139,7 +140,8 @@
           class="row"
           style="height: 53px; margin-top: 10px; line-height: 50px"
         >
-          <div class="col-4 w-100" id="ColBirthdate">Birthdate :</div>
+          <div class="col-3 w-100" style="padding-left: 14px;" id="ColBirthdate">Birthdate </div>
+          <div class="col-1 w-100" style="padding-left: 43px;">:</div>
           <div class="col-8 w-100" id="DetailName">{{ format_date_show($store.state.promotion.customer.birth_date) }}</div>
         </div>
       </div>
@@ -156,7 +158,7 @@
         margin-bottom: 20px;
         border-radius: 10px;
         height: 455px;
-        width: 772px;">
+        width: 762px;">
         <!-- header Reward -->
             <div class="col-12 w-100" id="ColHeaderReward">
                 <div class="row" 

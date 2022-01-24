@@ -810,14 +810,7 @@ export default {
     select_update_product(item, idx) {
       this.total_price = 0;
       this.package_items[idx].product = { ...item };
-      this.package_items.forEach((el) => {
-        this.total_price += parseInt(el.product.priceproduct_set[0].price);
-        el.itemtopping_set.forEach((topping) => {
-          this.total_price += parseInt(
-            topping.topping.pricetopping_set[0].price
-          );
-        });
-      });
+      this.calc_total_price()
       setTimeout(() => {
         this.products = [];
       }, 100);

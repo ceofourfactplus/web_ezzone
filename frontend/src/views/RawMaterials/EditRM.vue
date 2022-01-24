@@ -1,11 +1,20 @@
 <template>
   <div>
     <nav-app
+      v-if="raw_material.name.length > 23"
       :url_name="'RawMaterials'"
       save="true"
       @save="create_raw_material()"
-      >{{ raw_material.name }}</nav-app
-    >
+      >{{ raw_material.name.slice(0, 22) }}...
+    </nav-app>
+    <nav-app
+      v-else
+      :url_name="'RawMaterials'"
+      save="true"
+      @save="create_raw_material()"
+      >{{ raw_material.name }}
+    </nav-app>
+
     <div style="width: 95%; margin: auto">
       <div class="frame row mb-2 w-100 m-0" style=":padding: 20px">
         <div class="col-5 w-100" style="height: 235px">
@@ -99,29 +108,29 @@
       <!-- qty -->
       <div class="frame mb-2" style="padding: 20px">
         <h2>Smallest Unit Detail</h2>
-        <div class="row w-100 mt-4" id="qty">
-          <div class="col-4">
+        <div class="row w-100" id="qty">
+          <div class="col-4 w-100">
             Qty :
             <input
               v-model="raw_material.remain"
               type="number"
-              style="width: 100px"
+              style="width: 86px"
             />
           </div>
-          <div class="col-4">
+          <div class="col-4 w-100">
             Min Qty:
             <input
               v-model="raw_material.minimum"
               type="number"
-              style="width: 100px"
+              style="width: 86px"
             />
           </div>
-          <div class="col-4 pe-0">
+          <div class="col-4 w-100">
             Max Qty:
             <input
               v-model="raw_material.maximum"
               type="number"
-              style="width: 100px"
+              style="width: 86px"
             />
           </div>
         </div>

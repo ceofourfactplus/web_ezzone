@@ -188,6 +188,7 @@ export default {
   width: 180px;
 }
 .btn-ghost {
+  white-space: nowrap;
   width: 100px;
   height: 50px;
   border: 1px solid #65b0f6;
