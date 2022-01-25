@@ -87,8 +87,11 @@
               v-model="point"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div v-if="!point_promotions.some(x => x.status == true)" class="col-12 w-100 txt-promotion" id="txt-right-side">
             <Switch @switch="switch_active" style="margin-top: 7px" />
+          </div>
+          <div v-else class="col-12 w-100 txt-promotion" id="txt-right-side">
+            .....
           </div>
         </div>
       </div>
@@ -135,7 +138,7 @@ export default {
     Switch,
   },
   mounted() {
-    this.is_staff = this.$store.state.auth.userInfo["is_staff"];
+    this.fetchPointPromotion()
   },
   data() {
     return {
@@ -152,6 +155,7 @@ export default {
       point: 1,
       status: true,
       description: null,
+      point_promotions: [],
     };
   },
   methods: {
@@ -197,6 +201,12 @@ export default {
     },
     switch_active(val) {
       this.status = val
+    },
+    fetchPointPromotion() {
+      api_promotion.get("point/").then((response) => {
+        console.log(response.data, "res");
+        this.point_promotions = response.data;
+      });
     },
   },
 };

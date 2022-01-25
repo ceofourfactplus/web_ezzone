@@ -55,7 +55,7 @@
         <div class="col-6 w-100">
           <img
             :src="
-              require(`../../../../backend${$store.state.promotion.reward_detail.img}`)
+              $store.state.promotion.reward_detail.img
             "
             alt=""
             style="width: 282px; height: 298px; border-radius: 20px; border: 1px; solid"

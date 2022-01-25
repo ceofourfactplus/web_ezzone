@@ -29,7 +29,7 @@ class PointPromotion(models.Model):
   end_reward_redemption = models.DateField()
   price_per_point = models.IntegerField()
   point = models.IntegerField(default=1)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=False)
   description = models.TextField(null=True,blank=True)
   create_by = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="promotion_point_create_by")

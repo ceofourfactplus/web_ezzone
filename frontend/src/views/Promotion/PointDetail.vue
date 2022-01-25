@@ -135,16 +135,23 @@ export default {
     Switch,
   },
   mounted() {
-    this.is_staff = this.$store.state.auth.userInfo["is_staff"];
+    this.fetchPointPromotions()
   },
   data() {
     return {
       is_staff: false,
       alert: false,
       point_item: null,
+      point_promotions: [],
     };
   },
   methods: {
+    fetchPointPromotions() {
+      api_promotion.get("point/").then((response) => {
+        console.log(response.data, "res");
+        this.point_promotions = response.data;
+      });
+    },
     fetchPointPromotion() {
         api_promotion.get(`point/${this.$route.params.id}`).then((response) => {
             console.log(response.data)
