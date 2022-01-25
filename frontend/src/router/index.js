@@ -33,6 +33,7 @@ import EditCustomer from "../views/Customer/EditCustomer.vue";
 
 // product
 import Product from "../views/Product/Products.vue";
+import ProductQty from "../components/product/ProductQty.vue";
 import CreateProduct from "../views/Product/CreateProduct.vue";
 import EditProduct from "../views/Product/EditProduct.vue";
 import ProductCategory from "../views/Product/ProductCategory.vue";
