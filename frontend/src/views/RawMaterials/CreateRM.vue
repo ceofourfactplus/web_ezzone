@@ -8,14 +8,14 @@
     >
     <div style="width: 95%; margin: auto">
       <div class="frame row mb-2 w-100 m-0" style=":padding: 20px">
-        <div class="col-5 w-100" style="height: 235px">
+        <div class="col-5 w-100" style="height: 230px">
           <label
             id="select_img"
             for="file"
             style="margin-top: 0px; margin-left: -25px"
           >
             <img :src="show_img" class="image" v-if="show_img != null" />
-            <div class="image" style="background-color: #717171" v-else></div>
+            <div class="image" style="margin-top:-1%;background-color: #717171" v-else></div>
             <div class="edit-block">Edit</div>
           </label>
           <input
@@ -81,7 +81,7 @@
             <input
               :value="remain"
               type="number"
-              style="width: 100px"
+              style="width: 97px"
               readonly
             />
           </div>
@@ -90,7 +90,7 @@
             <input
               v-model="raw_material.minimum"
               type="number"
-              style="width: 100px"
+              style="width: 97px"
             />
           </div>
           <div class="col-4 pe-0">
@@ -98,7 +98,7 @@
             <input
               v-model="raw_material.maximum"
               type="number"
-              style="width: 100px"
+              style="width: 97px"
             />
           </div>
         </div>
@@ -529,11 +529,11 @@ SELECT {
   text-indent: 10px;
 }
 .image {
-  width: 220px;
-  height: 220px;
+  width: 230px;
+  height: 230px;
   border-radius: 25px;
   object-fit: cover;
-  left: 80px;
+  left: 75px;
   position: absolute;
   top: 118px;
 }

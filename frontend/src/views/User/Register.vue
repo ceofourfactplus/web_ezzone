@@ -119,14 +119,14 @@
             />
           </div>
           <!-- birth date -->
-          <div class="row">
+          <div class="row" style="text-align:left">
             <input
               type="text"
               v-model="birth_date"
               placeholder="Birth Date"
               onfocus="(this.type='date')"
               aria-label=".form-control-lg example"
-              style="width: 400px;text-align:left;padding:3%;"
+              style="width: 400px;text-align:left;padding-left:2%;"
             />
           </div>
           <!-- phone number -->
