@@ -6,15 +6,11 @@
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
-<<<<<<< HEAD
       <div style="padding-left: 0px">
-=======
-      <div style="padding: 0px;">
->>>>>>> 7f00518cd0b1d9d519633b485bb388fe4edcb321
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right: 0%"
           @click="$router.push({ name: 'NewPoint' })"
         >
           + Point
@@ -22,7 +18,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Voucher'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right: 0%"
           @click="$router.push({ name: 'NewVoucher' })"
         >
           + Voucher
@@ -30,7 +26,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Package'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right: 0%"
           @click="$router.push({ name: 'NewPackage' })"
         >
           + Package
@@ -38,7 +34,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Rewards'"
           class="btn-ghost"
-          style="margin-right:0%;"
+          style="margin-right: 0%"
           @click="$router.push({ name: 'NewReward' })"
         >
           + Reward
@@ -46,13 +42,16 @@
       </div>
     </div>
     <!-- Tabs -->
-    <div style="width94%;margin-left:3%;margin-right:3%;height: 50px;" class="row mt-2">
-      <div class="col-12" style="padding: 0%;">
+    <div
+      style="width94%;margin-left:3%;margin-right:3%;height: 50px;"
+      class="row mt-2"
+    >
+      <div class="col-12" style="padding: 0%">
         <button
           v-for="(item, idx) in ['Point', 'Voucher', 'Package', 'Rewards']"
           :key="idx"
           @click="select_item(item)"
-          style="width: 24.45%; height: 100%;"
+          style="width: 24.45%; height: 100%"
           class="btn-gray me-1"
           :class="{ 'tab-selected': item == $store.state.promotion.tab }"
         >
@@ -61,9 +60,17 @@
       </div>
     </div>
     <!-- Point Promotion -->
-    <div style="width:94%;margin-left:3%;margin-right:3%;" v-if="$store.state.promotion.tab == 'Point'">
+    <div
+      style="width: 94%; margin-left: 3%; margin-right: 3%"
+      v-if="$store.state.promotion.tab == 'Point'"
+    >
       <!-- Card Content -->
-      <div class="card-content" style="width100%;margin-left:0%;margin-right:0%;" v-for="item in point_promotions" :key="item.id">
+      <div
+        class="card-content"
+        style="width100%;margin-left:0%;margin-right:0%;"
+        v-for="item in point_promotions"
+        :key="item.id"
+      >
         <div class="row" style="width100%;margin:0%">
           <div
             class="col-8 w-100"
@@ -81,8 +88,8 @@
             <label class="switch" style="margin: 24px 0px 0px 90px">
               <input
                 type="checkbox"
-                v-model="item.status"
                 @input="change_status(item)"
+                v-model="item.status"
               />
               <span class="slider round"></span>
             </label>
@@ -218,54 +225,49 @@
     <!-- Voucher -->
     <div
       class="table"
-      style="margin-top: 10px;width:100%;"
+      style="margin-top: 10px; width: 100%"
       v-else-if="$store.state.promotion.tab == 'Voucher'"
     >
-      <div class="table-header row" 
-      style="width:94%;
-      margin-left:3%;
-      margin-right:3%;
-      font-size: 24px;
-      font-weight: bold;
-      color: white;
-      line-height:150%;
-      ">
-        
+      <div
+        class="table-header row"
+        style="
+          width: 94%;
+          margin-left: 3%;
+          margin-right: 3%;
+          font-size: 24px;
+          font-weight: bold;
+          color: white;
+          line-height: 150%;
+        "
+      >
         <div class="col-4 w-100">Name</div>
         <div class="col-1 w-100">Qty</div>
         <div class="col-2 w-100">Discount</div>
         <div class="col-2 w-100">End</div>
         <div class="col-2 w-100">Status</div>
         <div class="col-1 w-100"></div>
-
       </div>
       <div
         class="table-item"
-        style="width:94%;margin-left:3%;margin-right:3%;"
+        style="width: 94%; margin-left: 3%; margin-right: 3%"
         v-for="voucher in vouchers"
         :key="voucher.id"
       >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-4 w-100" style="padding-left: 10%;text-align:left;">
+          <div class="col-4 w-100" style="padding-left: 10%; text-align: left">
             {{ voucher.voucher }}
           </div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
-<<<<<<< HEAD
           <div class="col-2 w-100" v-if="voucher.is_percent">
             {{ format_percent(voucher.discount) }}
           </div>
-          <div class="col-2 w-100" v-else>{{ voucher.discount }}</div>
-=======
-          <div class="col-2 w-100" v-if="voucher.is_percent">{{ format_percent(voucher.discount) }}</div>
           <div class="col-2 w-100" v-else>{{ parseInt(voucher.discount) }}</div>
->>>>>>> 7f00518cd0b1d9d519633b485bb388fe4edcb321
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
             <label class="switch">
               <input
                 type="checkbox"
                 v-model="voucher.status"
-                @input="change_status(voucher, 'voucher')"
               />
               <span class="slider round"></span>
             </label>
@@ -288,25 +290,26 @@
     <!-- Package -->
     <div
       class="table"
-      style="margin-top: 10px;width:100%;"
+      style="margin-top: 10px; width: 100%"
       v-else-if="$store.state.promotion.tab == 'Package'"
     >
-      <div class="table-header row" 
-      style="font-size: 24px;
-      font-weight: bold;
-      color: white;
-      width:94%;
-      margin-left:3%;
-      margin-right:3%;
-      line-height:150%;
-      ">
-        
+      <div
+        class="table-header row"
+        style="
+          font-size: 24px;
+          font-weight: bold;
+          color: white;
+          width: 94%;
+          margin-left: 3%;
+          margin-right: 3%;
+          line-height: 150%;
+        "
+      >
         <div class="col-5 w-100">Name</div>
         <div class="col-2 w-100">Norm.P.</div>
         <div class="col-2 w-100">Disc.P.</div>
         <div class="col-2 w-100">Status</div>
         <div class="col-1 w-100"></div>
-
       </div>
       <div
         class="table-item"
@@ -330,7 +333,6 @@
               <input
                 type="checkbox"
                 v-model="item.status"
-                @input="change_status(item, 'package')"
               />
               <span class="slider round"></span>
             </label>
@@ -343,52 +345,44 @@
               src="../../assets/icon/edit.png"
               style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
             />
-            <span class="slider round"></span>
-          </label>
+          </div>
         </div>
-        <div class="col-1 w-100">
-          <img
-            @click="
-              $router.push({ name: 'PackageDetail', params: { id: item.id } })
-            "
-            src="../../assets/icon/edit.png"
-            style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
-          />
-        </div>
-
       </div>
     </div>
     <!-- Reward -->
-    <div class="table" style="margin-top: 10px;width:100%;" v-else>
-      <div class="table-header row" 
-      style="font-size: 24px;
-      font-weight: bold;
-      color: white;
-      width:94%;
-      margin-left:3%;
-      margin-right:3%;
-      line-height:150%;
-      ">
-        
+    <div class="table" style="margin-top: 10px; width: 100%" v-else>
+      <div
+        class="table-header row"
+        style="
+          font-size: 24px;
+          font-weight: bold;
+          color: white;
+          width: 94%;
+          margin-left: 3%;
+          margin-right: 3%;
+          line-height: 150%;
+        "
+      >
         <div class="col-5 w-100">Name</div>
         <div class="col-2 w-100">Point</div>
         <div class="col-2 w-100">Qty</div>
         <div class="col-2 w-100">Status</div>
         <div class="col-1 w-100"></div>
-        
       </div>
 
-      <div class="table-item row"
-      style="width:94%;
-      margin-left:3%;
-      margin-right:3%;
-      font-size: 20px;
-      color: white;
-      line-height: 90%"
-      v-for="reward in rewards"
-      :key="reward.id"
+      <div
+        class="table-item row"
+        style="
+          width: 94%;
+          margin-left: 3%;
+          margin-right: 3%;
+          font-size: 20px;
+          color: white;
+          line-height: 90%;
+        "
+        v-for="reward in rewards"
+        :key="reward.id"
       >
-        
         <div class="col-5 w-100" style="margin-left: 10px; text-align: left">
           {{ reward.reward }}
         </div>
@@ -399,7 +393,6 @@
             <input
               type="checkbox"
               v-model="reward.status"
-              @input="change_status(reward, 'reward')"
             />
             <span class="slider round"></span>
           </label>
@@ -416,7 +409,6 @@
             style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
           />
         </div>
-        
       </div>
     </div>
 
@@ -460,6 +452,16 @@ export default {
     };
   },
   methods: {
+    change_status(item) {
+      if(item.status) {
+        item.status = false
+      } else {
+        if(!this.point_promotions.some(x => x.status == true)) {
+          item.status = true
+        }
+      }
+      
+    },
     select_item(item) {
       this.$store.state.promotion.tab = item;
     },
@@ -632,7 +634,6 @@ export default {
   width: fit-content;
   padding: 0%;
   margin: 0%;
-  
 }
 .tab {
   width: 100%;

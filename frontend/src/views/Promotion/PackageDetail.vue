@@ -153,7 +153,7 @@
         <div
           class="table-item"
           style="width: 104%; margin-left: -11px"
-          v-if="!item.update_status"
+          v-if="!update_status.includes(item)"
         >
           <div
             class="row"
@@ -172,7 +172,7 @@
             <div
               class="col-6 w-100"
               style="margin-left: 10px; text-align: left"
-              @click="item.update_status = true"
+              @click="update_status[0] = item"
             >
               {{ item.product_set.name }}
             </div>
@@ -186,10 +186,10 @@
         <!-- Update Item -->
         <div
           class="table-item"
-          v-else-if="item.update_status"
+          v-else
           style="width: 104%; margin-left: -11px"
         >
-          <form style="padding: 3px" @submit="item.update_status = false">
+          <form style="padding: 3px" @submit="update_status = []; calc_total_price();">
             <div class="row" style="padding-top: 0px">
               <div class="col-7 w-100" style="margin: auto; line-height: 100%">
                 <input
@@ -245,7 +245,7 @@
                   src="../../assets/icon/incorrect.png"
                   style="width: 30px"
                   alt=""
-                  @click="item.update_status = false"
+                  @click="update_status = []; calc_total_price();"
                 />
               </div>
             </div>
@@ -257,7 +257,7 @@
           <div
             class="table-item"
             style="width: 104%; margin-left: -11px"
-            v-if="!topping.update_status"
+            v-if="!update_status.includes(topping)"
           >
             <div
               class="row"
@@ -277,7 +277,7 @@
               <div
                 class="col-5 w-100"
                 style="margin-left: 10px; text-align: left"
-                @click="topping.update_status = true"
+                @click="update_status[0] = topping"
               >
                 {{ topping.topping_set.name }}
               </div>
@@ -294,7 +294,7 @@
             v-else
             style="width: 104%; margin-left: -11px"
           >
-            <form style="padding: 3px" @submit="topping.update_status = false; calc_total_price();">
+            <form style="padding: 3px" @submit="update_status = []; calc_total_price();">
               <div class="row" style="padding-top: 0px">
                 <div class="col-1 w-100">Topping</div>
                 <div
@@ -360,7 +360,7 @@
                   <img
                     src="../../assets/icon/incorrect.png"
                     style="width: 30px"
-                    @click="topping.update_status = false"
+                    @click="update_status = []; calc_total_price();"
                   />
                 </div>
               </div>
@@ -702,6 +702,7 @@ export default {
       add_menu: false,
       update_menu: false,
       select_all: false,
+      update_status: [],
       topping_items: [],
       package_items: [],
       package_items: [],
