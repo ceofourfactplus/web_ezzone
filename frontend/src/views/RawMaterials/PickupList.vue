@@ -29,7 +29,7 @@
         <div class="col-3 w-100">
           {{ item.create_at.slice(0, 10).replace(/-/g, "/") }}
         </div>
-        <div class="col-4 w-100" style="text-align: left; padding-left: 20px">
+        <div class="col-4 w-100" style="text-align: left; padding-left: 20px; white-space: nowrap; overflow-x: auto;">
           {{ item.raw_material_set.name }}
         </div>
         <div class="col-1 w-100" style="margin-left: 5px">

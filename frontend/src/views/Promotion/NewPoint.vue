@@ -91,13 +91,12 @@
               v-model="point"
             />
           </div>
-          <div class="col-12 w-100" id="txt-right-side">
-          <!-- <div v-if="!point_promotions.some(x => x.status == true)" class="col-12 w-100" id="txt-right-side"> -->
+          <div v-if="!point_promotions.some(x => x.status == true)" class="col-12 w-100" id="txt-right-side">
             <Switch @switch="switch_active" style="margin-top: 10px" />
           </div>
-          <!-- <div v-else class="col-12 w-100" id="txt-right-side">
+          <div v-else class="col-12 w-100" id="txt-right-side">
             .....
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -218,6 +217,46 @@ export default {
 </script>
 
 <style scoped>
+.false-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.false-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.false-slider.false-round {
+  border-radius: 34px;
+}
+
+.false-slider.false-round:before {
+  top: 1px;
+  border-radius: 50%;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+  margin-top: 8px;
+}
+
 .colon {
   height: 55px;
   font-size: 30px;

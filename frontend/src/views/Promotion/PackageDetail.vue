@@ -78,7 +78,7 @@
             <!-- Image -->
             <label id="select_img" for="file" style="margin-top: 0px">
               <img
-                :src="require(`../../../../backend${package_item.img}`)"
+                :src="package_item.img"
                 class="image"
               />
             </label>

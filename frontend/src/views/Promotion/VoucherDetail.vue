@@ -16,7 +16,7 @@
         <div class="col-12 w-100" style="padding: 0px; margin-top: 40px;">
           <label id="select_img" for="file" style="margin-top: 0px">
             <img :src="show_img" class="image" v-if="show_img != null" />
-            <img :src="require(`../../../../backend${voucher_item.img}`)" class="image" v-else />
+            <img :src="voucher_item.img" class="image" v-else />
           </label>
           <input
             type="file"
@@ -104,7 +104,7 @@ export default {
     fetchVoucher() {
         api_promotion.get(`voucher/${this.$route.params.id}`).then((response) => {
             console.log(response.data, 'voucher')
-            this.voucher_item = response.data
+            this.voucher_item = response.data[0]
         })
     },
     edit() {
@@ -117,14 +117,14 @@ export default {
       data.append("start_date", this.voucher_item.start_date);
       data.append("end_date", this.voucher_item.end_date);
       data.append("description", this.voucher_item.description);
-      data.append("amount", this.voucher_item.amount);
+      data.append("qty", this.voucher_item.qty);
       data.append("status", this.voucher_item.status);
       data.append("update_by_id", this.$store.state.auth.userInfo.id);
       data.append("create_by_id", this.$store.state.auth.userInfo.id);
       if (this.new_img) {
         data.append("img", this.img, this.img.name);
       }
-
+      console.log(data, 'data')
       api_promotion.put('voucher/', data).then((response) => {
         console.log(response.data)
         this.alert = true;
