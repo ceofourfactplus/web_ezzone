@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('point/', views.PointPromotionAPI().as_view()),
+    path('point-pos/', views.PointPOS().as_view()),
     path('point/<int:pk>', views.Point().as_view()),
     path('voucher/', views.VoucherAPI().as_view()),
     path('voucher/<int:pk>', views.VoucherGET().as_view()),

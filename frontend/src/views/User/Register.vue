@@ -132,7 +132,7 @@
           <!-- phone number -->
           <div class="row">
             <input
-              type="number"
+              type="text"
               v-model="phone_number"
               placeholder="Phone Number"
               aria-label=".form-control-lg example"

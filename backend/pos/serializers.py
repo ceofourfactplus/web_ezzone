@@ -76,6 +76,8 @@ class OrderSerializer(serializers.ModelSerializer):
     address_id = serializers.IntegerField(required=True, allow_null=True)
     customer_id = serializers.IntegerField(required=False, allow_null=True)
     sale_channel_id = serializers.IntegerField(required=False, allow_null=True)
+    voucher_id = serializers.IntegerField(required=False, allow_null=True)
+    point_promotion_id = serializers.IntegerField(required=False, allow_null=True)
 
     sale_channel_set = GetterSaleChannel(
         read_only=True, source="sale_channel")
@@ -88,8 +90,6 @@ class OrderSerializer(serializers.ModelSerializer):
     status_food = serializers.IntegerField(required=False, allow_null=True)
     status_drink = serializers.IntegerField(required=False, allow_null=True)
     create_at = serializers.DateTimeField(required=False, allow_null=True) 
-    voucher = serializers.IntegerField(required=False, allow_null=True)
-    point_promotion = serializers.IntegerField(required=False, allow_null=True)
     point = serializers.IntegerField(required=False, allow_null=True)
     change = serializers.IntegerField(required=False, allow_null=True)
     cash = serializers.IntegerField(required=False, allow_null=True)
@@ -128,8 +128,8 @@ class OrderSerializer(serializers.ModelSerializer):
             'delivery_price',
             "create_at",
             "update_at",
-            "voucher",
-            "point_promotion",
+            "voucher_id",
+            "point_promotion_id",
             "point",
             "cash",
             "change",

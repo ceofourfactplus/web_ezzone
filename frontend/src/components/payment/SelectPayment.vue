@@ -270,7 +270,7 @@
             style="white-space: normal; width: 75%; margin: 20px auto"
           >
             <img
-              src="../../assets/icon/Credit.png"
+              src="../../assets/icon/credit.png"
               style="width: 50px"
               class="me-2"
             />

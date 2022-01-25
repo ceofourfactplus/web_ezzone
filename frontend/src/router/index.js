@@ -161,6 +161,9 @@ const routes = [
     path: "/order-manage/order-detail",
     name: "OrderDetail",
     component: OrderDetail,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/order-manage/food-order",
