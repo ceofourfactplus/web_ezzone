@@ -66,9 +66,8 @@ export default {
 
       if (state.voucher_set != null) {
         if (state.voucher_set.is_percent) {
-          state.order.total_balance =
-            (state.order.total_balance *
-              (100 - parseInt(state.voucher_set.discount))) /
+          state.order.total_balance -=
+            (state.order.total_price * parseInt(state.voucher_set.discount)) /
             100;
         } else {
           state.order.total_balance =
@@ -76,7 +75,7 @@ export default {
         }
       }
 
-      if (state.order.phone_number != '' && state.point_promotion != null) {
+      if (state.order.phone_number != "" && state.point_promotion != null) {
         state.order.point =
           Math.floor(
             (state.order.total_balance - state.order.delivery_price) /
@@ -146,26 +145,26 @@ export default {
     phone_number(state, phone) {
       state.order.phone_number = phone;
 
-      if (state.order.phone_number != '' && state.point_promotion != null) {
+      if (state.order.phone_number != "" && state.point_promotion != null) {
         state.order.point =
           Math.floor(
             (state.order.total_balance - state.order.delivery_price) /
               parseInt(state.point_promotion.price_per_point)
           ) * parseInt(state.point_promotion.point);
-          state.order.point_promotion_id = state.point_promotion.id;
+        state.order.point_promotion_id = state.point_promotion.id;
       }
     },
     customer_set(state, customer) {
       state.customer_set = customer;
       state.order.nick_name = customer.nick_name;
       state.order.phone_number = customer.phone_number;
-      if (state.order.phone_number != '' && state.point_promotion != null) {
+      if (state.order.phone_number != "" && state.point_promotion != null) {
         state.order.point =
           Math.floor(
             (state.order.total_balance - state.order.delivery_price) /
               parseInt(state.point_promotion.price_per_point)
           ) * parseInt(state.point_promotion.point);
-          state.order.point_promotion_id = state.point_promotion.id;
+        state.order.point_promotion_id = state.point_promotion.id;
       }
     },
     clear_order(state) {
@@ -206,6 +205,9 @@ export default {
     },
     payment(state, data) {
       state.order.payment_id = data;
+    },
+    clear_voucher(state) {
+      state.voucher_set = null;
     },
   },
   actions: {
@@ -292,6 +294,10 @@ export default {
         });
       }
     },
+    clear_voucher(context) {
+      context.commit("clear_voucher");
+      context.commit("cal_total_price");
+    },
     re_order(context, order) {
       context.state.order = order;
       context.state.is_edit = true;
@@ -352,12 +358,8 @@ export default {
     },
     discount_price: (state) => {
       var discount = "";
-      if (state.order.discount_percent) {
-        discount = parseInt(
-          Math.round((state.order.discount / 100) * state.order.total_price)
-        );
-      } else if (state.order.discount != 0) {
-        discount = state.order.discount;
+      if (state.order.total_balance - state.order.total_price != 0) {
+        discount = state.order.total_price - state.order.total_balance;
       } else {
         discount = "-";
       }

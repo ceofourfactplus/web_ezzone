@@ -8,7 +8,7 @@
     >
     <div class="row" style="width: 96%; margin: auto; margin-top: 15px">
       <div class="col-9 w-100">
-        <div style="display: flex;margin-bottom: 10px">
+        <div style="display: flex; margin-bottom: 10px">
           <img :src="img_channel" class="sale-channel-img" alt="" />
           <span
             style="
@@ -22,7 +22,7 @@
           <label for="tel">Tel.</label>
           <div
             style="
-              width: 195px;
+              width: 185px;
               background-color: #303344;
               height: 40px;
               border-radius: 5px;
@@ -48,8 +48,11 @@
             "
             v-if="'id' in $store.state.pos.customer_set"
           />
-          <span style="font-size: 24px; color: #ea7c69"
-            v-if="'id' in $store.state.pos.customer_set">{{$store.state.pos.order.point}}</span>
+          <span
+            style="font-size: 24px; color: #ea7c69"
+            v-if="'id' in $store.state.pos.customer_set"
+            >{{ $store.state.pos.order.point }}</span
+          >
         </div>
         <div style="display: flex">
           <label for="name">Name&#160;&#160;&#160; :</label>
@@ -225,7 +228,9 @@
           <div class="row" style="color: #fff">
             <div class="col-6 w-100" style="display: flex; margin-bottom: 20px">
               <div class="event-text">Vouncher&#160; :</div>
-              <div class="select-event" @click="VouncherPopup = true">{{voucher}}</div>
+              <div class="select-event" @click="VouncherPopup = true">
+                {{ voucher }}
+              </div>
             </div>
             <div class="col-1"></div>
             <div class="col-5 w-100">
@@ -268,17 +273,6 @@
             @click="select_voucher(voucher)"
           >
             <img
-              src="../../assets/icon/cancel-v.png"
-              style="
-                width: 200px;
-                height: 200px;
-                border-radius: 10%;
-                object-fit: cover;
-                border: 5px;
-                border-style: solid;
-                border-color: #ea7c69;
-              "
-            /> <img
               :src="voucher.img"
               style="
                 width: 200px;
@@ -291,6 +285,22 @@
               "
             />
           </div>
+          <img
+            @click="
+              $store.dispatch('pos/clear_voucher');
+              VouncherPopup = false;
+            "
+            src="../../assets/icon/cancel-v.png"
+            style="
+              width: 200px;
+              height: 200px;
+              border-radius: 10%;
+              object-fit: cover;
+              border: 5px;
+              border-style: solid;
+              border-color: #ea7c69;
+            "
+          />
         </div>
       </div>
     </div>
@@ -452,13 +462,13 @@ export default {
         console.log(response.data, "voucher");
       });
     },
-    select_voucher(voucher){
-      console.log(voucher)
+    select_voucher(voucher) {
+      console.log(voucher);
       this.$store.state.pos.order.voucher_id = voucher.id;
-      this.$store.state.pos.voucher_set = voucher
-      this.$store.commit("pos/cal_total_price")
-      this.VouncherPopup = false
-    }
+      this.$store.state.pos.voucher_set = voucher;
+      this.$store.commit("pos/cal_total_price");
+      this.VouncherPopup = false;
+    },
   },
   computed: {
     ...mapGetters({
@@ -474,7 +484,7 @@ export default {
       phone_number: "pos/phone_number",
       customer_name: "pos/customer_name",
       customer_set: "pos/customer_set",
-      voucher:'pos/voucher'
+      voucher: "pos/voucher",
     }),
   },
   watch: {
@@ -622,8 +632,7 @@ div {
   border-radius: 0px 0px 10px 10px;
   border-top: 2px solid black;
 }
-.none-border{
-  border-top:0px !important;
+.none-border {
+  border-top: 0px !important;
 }
-
 </style>
