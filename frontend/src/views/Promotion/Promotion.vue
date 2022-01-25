@@ -6,7 +6,7 @@
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px">
+      <div style="padding: 0px;">
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"
@@ -18,7 +18,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Voucher'"
           class="btn-ghost"
-          style="margin-right:0%;text-align:center;"
+          style="margin-right:0%;text-align:left;padding-left:8%;"
           @click="$router.push({ name: 'NewVoucher' })"
         >
           + Voucher
@@ -26,7 +26,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Package'"
           class="btn-ghost"
-          style="margin-right:0%;text-align:center;"
+          style="margin-right:0%;text-align:left;padding-left:8%;"
           @click="$router.push({ name: 'NewPackage' })"
         >
           + Package
@@ -34,7 +34,7 @@
         <button
           v-if="$store.state.promotion.tab == 'Rewards'"
           class="btn-ghost"
-          style="margin-right:0%;text-align:center;"
+          style="margin-right:0%;text-align:left;padding-left:10%;"
           @click="$router.push({ name: 'NewReward' })"
         >
           + Reward
@@ -361,7 +361,7 @@
           margin-right: 3%;
           font-size: 20px;
           color: white;
-          line-height: 90%;
+          line-height: 180%;
         "
         v-for="reward in rewards"
         :key="reward.id"
@@ -383,7 +383,7 @@
               })
             "
             src="../../assets/icon/edit.png"
-            style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
+            style="width:95%; height:80%; margin-top:-5%;"
           />
         </div>
       </div>

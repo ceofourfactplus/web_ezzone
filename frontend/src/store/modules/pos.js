@@ -27,17 +27,22 @@ export default {
       select_index: null,
       cash: null,
       change: null,
+      voucher_id: null,
+      point_promotion_id: null,
+      point: null,
     },
     customer_set: {
       addresscustomer_set: [],
     },
+    voucher_set: null,
+    point_promotion: {},
     category: 1,
     type_product: 2,
     select_index: null,
     is_edit_product: false,
     is_edit_promotion: false,
     is_edit_toppig: false,
-    is_edit:false,
+    is_edit: false,
   },
   mutations: {
     note_input(state, input) {
@@ -57,6 +62,27 @@ export default {
       } else {
         state.order.total_balance =
           state.order.total_price - state.order.discount;
+      }
+
+      if (state.voucher_set != null) {
+        if (state.voucher_set.is_percent) {
+          state.order.total_balance =
+            (state.order.total_balance *
+              (100 - parseInt(state.voucher_set.discount))) /
+            100;
+        } else {
+          state.order.total_balance =
+            state.order.total_balance - parseInt(state.voucher_set.discount);
+        }
+      }
+
+      if (state.order.phone_number != '' && state.point_promotion != null) {
+        state.order.point =
+          Math.floor(
+            (state.order.total_balance - state.order.delivery_price) /
+              parseInt(state.point_promotion.price_per_point)
+          ) * parseInt(state.point_promotion.point);
+        state.order.point_promotion_id = state.point_promotion.id;
       }
       state.order.total_balance += parseInt(state.order.delivery_price);
       state.order.total_balance = Math.round(state.order.total_balance);
@@ -119,11 +145,28 @@ export default {
     },
     phone_number(state, phone) {
       state.order.phone_number = phone;
+
+      if (state.order.phone_number != '' && state.point_promotion != null) {
+        state.order.point =
+          Math.floor(
+            (state.order.total_balance - state.order.delivery_price) /
+              parseInt(state.point_promotion.price_per_point)
+          ) * parseInt(state.point_promotion.point);
+          state.order.point_promotion_id = state.point_promotion.id;
+      }
     },
     customer_set(state, customer) {
       state.customer_set = customer;
       state.order.nick_name = customer.nick_name;
       state.order.phone_number = customer.phone_number;
+      if (state.order.phone_number != '' && state.point_promotion != null) {
+        state.order.point =
+          Math.floor(
+            (state.order.total_balance - state.order.delivery_price) /
+              parseInt(state.point_promotion.price_per_point)
+          ) * parseInt(state.point_promotion.point);
+          state.order.point_promotion_id = state.point_promotion.id;
+      }
     },
     clear_order(state) {
       state.order = {
@@ -150,8 +193,12 @@ export default {
         select_index: null,
         cash: null,
         change: null,
+        voucher_id: null,
+        point_promotion_id: null,
+        point: null,
       };
-      state.is_edit = false
+      state.is_edit = false;
+      state.voucher_set = null;
     },
     cash(state, cash) {
       state.order.cash = cash;
@@ -369,8 +416,17 @@ export default {
       return state.customer_set;
     },
     get_data: (state) => {
-      state.order.sale_channel_set = {}
       return state.order;
+    },
+    voucher: (state) => {
+      if (state.voucher_set != null) {
+        if (state.voucher_set.is_percent) {
+          return parseInt(state.voucher_set.discount).toString() + "%";
+        } else {
+          return parseInt(state.voucher_set.discount);
+        }
+      }
+      return "-";
     },
   },
 };

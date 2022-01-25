@@ -162,6 +162,9 @@ const routes = [
     path: "/order-manage/order-detail",
     name: "OrderDetail",
     component: OrderDetail,
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/order-manage/food-order",
@@ -388,6 +391,14 @@ const routes = [
     props: true,
     name: "EditProduct",
     component: EditProduct,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
+    path: "/product/product-qty",
+    name: "ProductQty",
+    component: ProductQty,
     meta: {
       requiresLogin: true,
     },

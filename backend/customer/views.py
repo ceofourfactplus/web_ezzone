@@ -77,6 +77,7 @@ class CustomerImage(APIView):
         return Response(serializer.errors, status=400)
 
 from django.db.models import Avg, Count, Min, Sum
+from promotion.models import CustomerPoint,PointPromotion
 
 class GetCustomer(APIView):
 
@@ -90,6 +91,15 @@ class GetCustomer(APIView):
 
     def get(self, request, pk):
         data = {}
+        if PointPromotion.objects.filter(status=True).exists():
+            if CustomerPoint.objects.filter(customer_id=pk,point_promotion_id=PointPromotion.objects.get(status=True)).exists():
+                data['point'] = CustomerPoint.objects.get(customer_id=pk,point_promotion_id=PointPromotion.objects.get(status=True)).point
+            else:
+                data['point'] = 0   
+            data['total_promotion'] = Order.objects.filter(customer_id=pk,point_promotion_id=PointPromotion.objects.get(status=True)).aggregate(Sum('total_balance'))['total_balance__sum']
+        else:
+            data['point'] = 0
+            data['total_promotion'] = 0 
         customer = self.get_object(pk)
         data['customer'] = CustomerSerializer(customer, context={"request": request}).data
         data['total_price'] = Order.objects.filter(customer_id=pk).aggregate(Sum('total_balance'))['total_balance__sum']

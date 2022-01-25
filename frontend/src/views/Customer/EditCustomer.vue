@@ -95,7 +95,9 @@
                 >(Promotion)
               </h2>
               <div class="btn w-100">
-                <h2><span>123,456</span></h2>
+                <h2>
+                  <span>{{ (point).toLocaleString() }}</span>
+                </h2>
               </div>
             </div>
             <div class="col-4 w-100">
@@ -110,7 +112,9 @@
                 (Promotion)
               </h2>
               <div class="btn w-100">
-                <h2><span>123,456</span></h2>
+                <h2>
+                  <span>{{ (total_promotion).toLocaleString() }}</span>
+                </h2>
               </div>
             </div>
             <div class="col-4 w-100">
@@ -122,12 +126,14 @@
                   src="../../assets/icon/Bath.png"
                   alt=""
                 />
-                FOD&#160;12/12/64
+                FOD&#160;{{ getDate(customer.date_joined) }}
               </h2>
               <div class="btn w-100">
-                <h2><span>{{total_price}}</span></h2>
+                <h2>
+                  <span>{{(total_price).toLocaleString() }}</span>
+                </h2>
               </div>
-              <h2>LOD&#160;12/12/64</h2>
+              <h2>LOD&#160;{{ getDate(customer.last_joined) }}</h2>
             </div>
           </div>
           <div class="row">
@@ -281,6 +287,8 @@ export default {
         addresscustomer_set: [],
       },
       total_price: 0,
+      total_promotion: 0,
+      point: 0,
       show_img: null,
       favorite_menu: [],
       new_img: false,
@@ -297,6 +305,12 @@ export default {
     };
   },
   methods: {
+    getDate(date) {
+      console.log(date);
+      return new Date(date).toLocaleString("th-TH", {
+        dateStyle: "short",
+      });
+    },
     onFileChange(e) {
       this.customer.img = e.target.files[0];
       this.new_img = true;
@@ -332,8 +346,7 @@ export default {
                       this.$router.go(-1);
                     }, 2000);
                   });
-              } 
-              else {
+              } else {
                 api_customer
                   .put(
                     "save-address/" + this.customer.addresscustomer_set[0].id,
@@ -346,7 +359,7 @@ export default {
             } else {
               this.$router.push({ name: "Customer" });
             }
-        });
+          });
       }
     },
     Menu(menu) {
@@ -355,9 +368,6 @@ export default {
   },
 
   beforeCreate() {
-    api_customer.get("customer").then((response) => {
-      this.all_cus = response.data;
-    });
     api_customer
       .get("get-customer/" + this.$route.params.id)
       .then((reponse) => {
@@ -365,9 +375,14 @@ export default {
         if (this.customer.img != null) {
           this.show_img = this.customer.img;
         }
-        this.total_price = reponse.data.total_price
-        this.addresscustomer.customer_id = reponse.data.customer.id
+        this.total_price = reponse.data.total_price;
+        this.point = reponse.data.point;
+        this.total_promotion = reponse.data.total_promotion;
+        this.addresscustomer.customer_id = reponse.data.customer.id;
       });
+    api_customer.get("customer").then((response) => {
+      this.all_cus = response.data;
+    });
   },
   watch: {
     "customer.phone_number"(number) {
@@ -377,7 +392,7 @@ export default {
       });
       if ((number.length == 9 || number.length == 10) && phone) {
         api_customer
-          .get("check-phone-number/" + number+'/'+ this.$route.params.id)
+          .get("check-phone-number/" + number + "/" + this.$route.params.id)
           .then((result) => {
             console.log(result);
             this.error.phone_number = false;
@@ -402,9 +417,9 @@ export default {
 </script>
 
 <style scoped>
-.i{
+.i {
   width: 100%;
-  padding-left:30px;
+  padding-left: 30px;
   text-align: left;
 }
 #alert {

@@ -29,7 +29,7 @@
                             
                         </div>
                         <!-- Qty Input -->
-                        <div class="row RowBlockInput">
+                        <div class="row RowBlockInput" style="line-height:100%;">
                             <div class="col-3 BlockDetail">+ QTY</div>
                             <div class="col-1 BlockColon">:</div>
                             <div class="col-5 BlockInput">
@@ -44,10 +44,10 @@
                         </div>
 
                         <!-- EXP -->
-                        <div class="row RowBlockInput">
+                        <div class="row RowBlockInput" style="margin-top:15%;line-height:100%;">
                             <div class="col-3 BlockDetail">EXP</div>
                             <div class="col-1 BlockColon">:</div>
-                            <div class="col-8 BlockInput">
+                            <div class="col-7 BlockInput">
                                 <input type="date" v-model="input_customer" 
                                 style="background: #717171;
                                 border-radius: 10px;
@@ -62,8 +62,8 @@
 
                 </div>
                 <!-- Confirm Button -->
-                <div>
-
+                <div class="AreaConfirmButton">
+                    <div class="ConfirmButton">Confirm</div>
                 </div>
 
             </div>
@@ -100,7 +100,7 @@ export default {
 
 /* AreaPopup */
 .AreaPopup {
-    height: 540px;
+    height: 590px;
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
@@ -126,7 +126,7 @@ export default {
 
 /* MainArea */
 .MainArea {
-    height: 420px;
+    height: 460px;
     width: 96%;
     margin-left: 2%;
     margin-right: 2%;
@@ -138,7 +138,7 @@ export default {
 
 /* AreaImg */
 .AreaImg {
-    height: 71.4%;
+    height: 68%;
     width: 96%;
     margin-top: 3%;
     margin-left: 2%;
@@ -199,8 +199,7 @@ export default {
     height: 20%;
     width: 100%;
     margin: 0%;
-    margin-top: 10%;
-    margin-bottom: 5%;
+    margin-top: 12%;
     color:#fff;
     font-size: 200%;
      
@@ -227,4 +226,25 @@ export default {
     
 }
 
+.AreaConfirmButton {
+    height: 18%;
+    width: 96%;
+    margin-top: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+    padding-top: 2%;
+    padding: 0%;
+
+}
+
+.ConfirmButton {
+    height: 80%;
+    width: 30%;
+    margin-left:  35%;
+    margin-right: 35%;
+    border: 2px solid #50D1AA;
+    border-radius: 10px;
+    color: #50D1AA;
+    font-size: 200%;
+}
 </style>

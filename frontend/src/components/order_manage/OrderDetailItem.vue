@@ -71,29 +71,14 @@
           จำนวน
         </div>
         <div class="col-12">
-          <div 
+          <div
             class="row"
             v-for="(item, index) in order.orderitem_set"
             :key="item.id"
           >
             <div
               class="col-10 w-100"
-              v-if="item.package != null"
-              style="text-align: left; line-height: 45px"
-              :class="{
-                odd: (index + 1) % 2 != 0,
-                'last-l': last_f(index),
-              }"
-            >
-              {{ index + 1 }}. {{ item.package_set.promotion }}
-              <span style="color: #ff7ca3" v-if="item.description != ''">
-                / {{ item.description }}</span
-              >
-            </div>
-
-            <div
-              class="col-10 w-100"
-              v-else-if="(item.status_order < 2)"
+              v-if="item.status_order < 2 && item.package == null"
               style="text-align: left; line-height: 45px"
               :class="{
                 odd: (index + 1) % 2 != 0,
@@ -108,7 +93,7 @@
 
             <div
               class="col-10 w-100 red"
-              v-else-if="(item.status_order == 2)"
+              v-else-if="item.status_order == 2 && item.package == null"
               style="text-align: left; line-height: 45px"
               @click="serve_order(item.id)"
               :class="{
@@ -124,7 +109,7 @@
 
             <div
               class="col-10 w-100 green"
-              v-else-if="(item.status_order == 3)||(!item.item_in_package)"
+              v-else-if="(item.status_order == 3 || !item.item_in_package)&&(item.package == null)"
               style="text-align: left; line-height: 45px"
               :class="{
                 odd: (index + 1) % 2 != 0,
@@ -139,7 +124,7 @@
             <div
               class="col-2 w-100"
               style="text-align: center; line-height: 45px"
-              v-if="item.status_order < 2"
+              v-if="item.status_order < 2 && item.package == null"
               :class="{
                 odd: (index + 1) % 2 != 0,
                 'last-r': last_f(index),
@@ -149,7 +134,7 @@
             </div>
             <div
               class="col-2 w-100 red"
-              v-else-if="(item.status_order == 2)"
+              v-else-if="item.status_order == 2 && item.package == null"
               style="text-align: center; line-height: 45px"
               :class="{
                 odd: (index + 1) % 2 != 0,
@@ -160,7 +145,7 @@
             </div>
             <div
               class="col-2 w-100 green"
-              v-else-if="(item.status_order == 3)"
+              v-else-if="item.status_order == 3 && item.package == null"
               style="text-align: center; line-height: 45px"
               :class="{
                 odd: (index + 1) % 2 != 0,
@@ -169,7 +154,7 @@
             >
               {{ item.amount }}
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -275,7 +260,7 @@ div .col-10,
   height: 45px;
 }
 .red {
-  background-color: #FFB57280 !important;
+  background-color: #ffb57280 !important;
 }
 .green {
   background-color: #50d1aa80 !important;

@@ -15,12 +15,12 @@
 
         <div class="col-3 w-100" style="height: 150px">
           <button
-            class="btn-ghost-y"
+            class="btn-ghost-g"
             style="width: 126.25px;hieght:80px; height: 133.52px"
             @click="select_payment({ payment: 'cod' })"
           >
             <img
-              src="../../assets/icon/pod.png"
+              src="../../assets/icon/give-money.png"
               style="width: 80px;height:80px; margin-top: 10px;object-fit: contain"
             />
             <p style="font-size: 24px; margin-bottom: 5px">COD</p>
@@ -28,12 +28,12 @@
         </div>
         <div class="col-3 w-100" style="height: 150px">
           <button
-            class="btn-ghost-r"
+            class="btn-ghost-g"
             style="width: 126.25px; height: 133.52px"
             @click="select_payment({ payment: 'credit' })"
           >
             <img
-              src="../../assets/icon/Credit.png"
+              src="../../assets/icon/time-is-money.png"
               style="width: 80px;hieght:80px; margin-top: 10px;object-fit: cover"
             />
             <p style="font-size: 24px; margin-bottom: 5px">Credit</p>
@@ -270,7 +270,7 @@
             style="white-space: normal; width: 75%; margin: 20px auto"
           >
             <img
-              src="../../assets/icon/Credit.png"
+              src="../../assets/icon/credit.png"
               style="width: 50px"
               class="me-2"
             />

@@ -8,7 +8,7 @@
     >
     <div class="row" style="width: 96%; margin: auto; margin-top: 15px">
       <div class="col-9 w-100">
-        <div style="display: flex">
+        <div style="display: flex;margin-bottom: 10px">
           <img :src="img_channel" class="sale-channel-img" alt="" />
           <span
             style="
@@ -31,7 +31,7 @@
               text-align: left;
               padding-left: 5px;
               font-size: 20px;
-              margin-right: 10px;
+              margin-right: 17px;
             "
             @click="input_tel = true"
           >
@@ -40,14 +40,16 @@
           <img
             src="../../assets/icon/promotion_no_case.png"
             style="
-              width: 50px;
-              height: 50px;
+              width: 45px;
+              height: 45px;
               top: -5px;
               position: relative;
-              margin-right: 15px;
+              margin-right: 18px;
             "
+            v-if="'id' in $store.state.pos.customer_set"
           />
-          <span style="font-size: 24px; color: #ea7c69">999</span>
+          <span style="font-size: 24px; color: #ea7c69"
+            v-if="'id' in $store.state.pos.customer_set">{{$store.state.pos.order.point}}</span>
         </div>
         <div style="display: flex">
           <label for="name">Name&#160;&#160;&#160; :</label>
@@ -223,7 +225,7 @@
           <div class="row" style="color: #fff">
             <div class="col-6 w-100" style="display: flex; margin-bottom: 20px">
               <div class="event-text">Vouncher&#160; :</div>
-              <div class="select-event" @click="VouncherPopup = true">-</div>
+              <div class="select-event" @click="VouncherPopup = true">{{voucher}}</div>
             </div>
             <div class="col-1"></div>
             <div class="col-5 w-100">
@@ -256,24 +258,38 @@
 
     <!-- Popup Vouncher -->
     <div class="AreaPopup" v-if="VouncherPopup">
-      <div class="dark" @click="VouncherPopup = false">
-        <div class="AreaRowVouncher">
-          <div class="RowPopupVouncher">
-            <div
-              class="PopupVouncher"
-              v-for="voucher in vouchers"
-              :key="voucher"
-            >
-              <img
-                :src="voucher.img"
-                style="
-                  width: 200px;
-                  height: 200px;
-                  border-radius: 10%;
-                  object-fit: cover;
-                "
-              />
-            </div>
+      <div class="dark" @click="VouncherPopup = false"></div>
+      <div class="AreaRowVouncher">
+        <div class="RowPopupVouncher">
+          <div
+            class="PopupVouncher"
+            v-for="voucher in vouchers"
+            :key="voucher"
+            @click="select_voucher(voucher)"
+          >
+            <img
+              src="../../assets/icon/cancel-v.png"
+              style="
+                width: 200px;
+                height: 200px;
+                border-radius: 10%;
+                object-fit: cover;
+                border: 5px;
+                border-style: solid;
+                border-color: #ea7c69;
+              "
+            /> <img
+              :src="voucher.img"
+              style="
+                width: 200px;
+                height: 200px;
+                border-radius: 10%;
+                object-fit: cover;
+                border: 5px;
+                border-style: solid;
+                border-color: #ea7c69;
+              "
+            />
           </div>
         </div>
       </div>
@@ -330,6 +346,9 @@ export default {
       vouchers: [],
       VouncherPopup: false,
     };
+  },
+  mounted() {
+    this.fetchVoucher();
   },
   methods: {
     is_topping(product) {
@@ -400,15 +419,14 @@ export default {
         if (p.description != "") {
           description += " + " + "(" + p.description + ")";
         }
-      }
-      else if ('package_set' in p){
+      } else if ("package_set" in p) {
         description = p.package_set.promotion;
 
         if (p.description != "") {
           description += " + " + "(" + p.description + ")";
         }
       }
-      return description
+      return description;
     },
     hide_tel(tel) {
       this.phone_number = tel;
@@ -434,6 +452,13 @@ export default {
         console.log(response.data, "voucher");
       });
     },
+    select_voucher(voucher){
+      console.log(voucher)
+      this.$store.state.pos.order.voucher_id = voucher.id;
+      this.$store.state.pos.voucher_set = voucher
+      this.$store.commit("pos/cal_total_price")
+      this.VouncherPopup = false
+    }
   },
   computed: {
     ...mapGetters({
@@ -449,6 +474,7 @@ export default {
       phone_number: "pos/phone_number",
       customer_name: "pos/customer_name",
       customer_set: "pos/customer_set",
+      voucher:'pos/voucher'
     }),
   },
   watch: {
@@ -558,30 +584,46 @@ div {
 
 /* Popup Vouncher */
 .AreaRowVouncher {
-  width: 100%;
-  height: 100%;
-  top: 0%;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   position: fixed;
 }
 
 .RowPopupVouncher {
-  width: 100%;
-  height: 10%;
-  padding: 0%;
-  padding-left: 7%;
-  padding-right: 7%;
-  margin: 0%;
-  margin-top: 20%;
   display: grid;
   justify-content: center;
-  grid-gap: 40% 10%;
-  grid-template-columns: auto auto auto;
+  grid-gap: 50px;
+  grid-template-columns: auto auto;
+}
+/* 
+.PopupVouncher {
+  width: 190px;
+  height: 190px;
+  padding: 0%;
+} */
+.address {
+  position: absolute;
+  left: 120px;
+  list-style: none;
+  background-color: #717171;
+  width: 82%;
+  padding: 10px;
+  border-radius: 0px 0px 10px 10px;
+}
+.address li {
+  background-color: #717171;
+  min-height: 40px;
+  color: #fff;
+  font-size: 24px;
+  white-space: break-spaces;
+  text-align: left;
+  border-radius: 0px 0px 10px 10px;
+  border-top: 2px solid black;
+}
+.none-border{
+  border-top:0px !important;
 }
 
-.PopupVouncher {
-  border-radius: 20%;
-  width: 100%;
-  height: 80%;
-  padding: 0%;
-}
 </style>
