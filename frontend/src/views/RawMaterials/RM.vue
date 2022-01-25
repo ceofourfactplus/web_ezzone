@@ -83,7 +83,7 @@
           <div
               class="col-6 w-100"
               @click="editRM(item)"
-              style="text-align: left;"
+              style="text-align: left; white-space:nowrap;overflow-x:auto;"
             >
               {{ item.name }}
             </div>
@@ -107,7 +107,7 @@
                 :src="
                   $store.state.raw_material.status_image[item.status]['img']
                 "
-                style="position: relative; bottom: 3px; margin-right: -30px;"
+                style="position: relative; bottom: 3px; margin-right: -30px;transform:rotate(180deg);"
                 :style="$store.state.raw_material.status_image[item.status]['style']"
                 alt="img"
               />

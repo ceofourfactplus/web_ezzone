@@ -15,11 +15,11 @@
           +&#160;PO
         </button>
       </div>
-      <div class="col-2 w-100" style="padding-left: 0px; text-align: left">
+      <div class="col-2 w-100">
         <button
           @click="confirm"
           class="btn-ghost-b"
-          style="width: 120px; height: 50px"
+          style="width: 120px; height: 50px;padding-left: 16%; text-align: left;"
         >
           Confirm
         </button>
