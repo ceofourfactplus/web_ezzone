@@ -126,7 +126,7 @@
               placeholder="Birth Date"
               onfocus="(this.type='date')"
               aria-label=".form-control-lg example"
-              style="width: 400px"
+              style="width: 400px;text-align:left;padding:3%;"
             />
           </div>
           <!-- phone number -->
