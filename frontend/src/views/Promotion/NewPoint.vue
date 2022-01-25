@@ -15,6 +15,7 @@
           <div class="col-12 w-100 txt-promotion">End Date</div>
           <div class="col-12 w-100 txt-promotion">End Redeem</div>
           <div class="col-12 w-100 txt-promotion">Price / Point</div>
+          <div class="col-12 w-100 txt-promotion">Point</div>
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->
@@ -25,6 +26,7 @@
           >
             :
           </div>
+          <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
@@ -78,7 +80,18 @@
             />
           </div>
           <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+            <input
+              type="text"
+              class="input-promotion"
+              style="width: 82px;"
+              v-model="point"
+            />
+          </div>
+          <div v-if="!point_promotions.some(x => x.status == true)" class="col-12 w-100 txt-promotion" id="txt-right-side">
             <Switch @switch="switch_active" style="margin-top: 7px" />
+          </div>
+          <div v-else class="col-12 w-100 txt-promotion" id="txt-right-side">
+            .....
           </div>
         </div>
       </div>
@@ -125,7 +138,7 @@ export default {
     Switch,
   },
   mounted() {
-    this.is_staff = this.$store.state.auth.userInfo["is_staff"];
+    this.fetchPointPromotion()
   },
   data() {
     return {
@@ -142,6 +155,7 @@ export default {
       point: 1,
       status: true,
       description: null,
+      point_promotions: [],
     };
   },
   methods: {
@@ -152,7 +166,7 @@ export default {
         end_promotion_date: this.end_promotion_date,
         end_reward_redemption: this.end_reward_redemption,
         price_per_point: this.price_per_point,
-        point: 1,
+        point: this.point,
         status: this.status,
         description: this.description,
         create_by_id: this.$store.state.auth.userInfo.id,
@@ -188,6 +202,12 @@ export default {
     switch_active(val) {
       this.status = val
     },
+    fetchPointPromotion() {
+      api_promotion.get("point/").then((response) => {
+        console.log(response.data, "res");
+        this.point_promotions = response.data;
+      });
+    },
   },
 };
 </script>
@@ -214,7 +234,7 @@ export default {
 }
 .card-content {
   width: 765px;
-  height: 367px;
+  height: 427px;
   background: #303344;
   border-radius: 20px;
   margin: 15px 0px 0px 27px;

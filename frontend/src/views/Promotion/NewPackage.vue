@@ -150,7 +150,7 @@
         <div
           class="table-item"
           style="width: 104%; margin-left: -11px"
-          v-if="!item.update_status"
+          v-if="!update_status.includes(item)"
         >
           <div
             class="row"
@@ -169,20 +169,18 @@
             <div
               class="col-6 w-100"
               style="margin-left: 10px; text-align: left"
-              @click="item.update_status = true"
+              @click="update_status[0] = item"
             >
               {{ item.product.name }}
             </div>
             <div class="col-1 w-100">{{ item.qty }}</div>
-            <div class="col-3 w-100">
-              {{ parseInt(item.price) * parseInt(item.qty) }}
-            </div>
+            <div class="col-3 w-100">{{ (parseInt(item.product.priceproduct_set[0].price) * parseInt(item.qty)).toFixed(2) }}</div>
           </div>
         </div>
 
         <!-- Update Item -->
         <div class="table-item" v-else style="width: 104%; margin-left: -11px">
-          <form style="padding: 3px" @submit="item.update_status = false">
+          <form style="padding: 3px" @submit="update_status = []; calc_total_price();">
             <div class="row" style="padding-top: 0px">
               <div class="col-7 w-100" style="margin: auto; line-height: 100%">
                 <input
@@ -228,7 +226,7 @@
                 <input
                   type="number"
                   class="input-add-package"
-                  :value="item.price * item.qty"
+                  :value="parseInt(item.product.priceproduct_set[0].price) * parseInt(item.qty)"
                   required
                 />
                 <input type="submit" style="display: none" />
@@ -238,7 +236,7 @@
                   src="../../assets/icon/incorrect.png"
                   style="width: 30px"
                   alt=""
-                  @click="item.update_status = false"
+                  @click="update_status = []; calc_total_price();"
                 />
               </div>
             </div>
@@ -250,7 +248,7 @@
           <div
             class="table-item"
             style="width: 104%; margin-left: -11px"
-            v-if="!topping.update_status"
+            v-if="!update_status.includes(topping)"
           >
             <div
               class="row"
@@ -270,7 +268,7 @@
               <div
                 class="col-5 w-100"
                 style="margin-left: 10px; text-align: left"
-                @click="topping.update_status = true"
+                @click="update_status[0] = topping; calc_total_price();"
               >
                 {{ topping.name }}
               </div>
@@ -290,11 +288,11 @@
             <form
               style="padding: 3px"
               @submit="
-                topping.update_status = false;
+                update_status = [];
                 calc_total_price();
               "
             >
-              <div class="row" style="padding-top: 0px">
+              <div class="row" style="padding-top: 0px; margin-top: -10px;">
                 <div class="col-1 w-100">Topping</div>
                 <div
                   class="col-6 w-100"
@@ -313,7 +311,7 @@
                     <li
                       v-for="top in toppings"
                       :key="top.id"
-                      @click="package_items[idx].topping[top_idx] = top"
+                      @click="package_items[idx].topping[top_idx] = top; package_items[idx].topping[top_idx].remain = 1; calc_total_price();"
                     >
                       <p class="w-100">
                         {{ top.name }}
@@ -333,7 +331,7 @@
                   <input
                     type="number"
                     class="input-add-package"
-                    v-model="topping.qty"
+                    v-model="topping.remain"
                     required
                   />
                 </div>
@@ -353,7 +351,7 @@
                   <img
                     src="../../assets/icon/incorrect.png"
                     style="width: 30px"
-                    @click="topping.update_status = false"
+                    @click="update_status = []; calc_total_price();"
                   />
                 </div>
               </div>
@@ -695,6 +693,7 @@ export default {
       add_menu: false,
       select_all: false,
       topping_items: [],
+      update_status: [],
       package_items: [],
       selected_item_toppings: [],
       selected_items: [],
@@ -800,6 +799,9 @@ export default {
           this.alert = false;
         }, 2000);
       });
+    },
+    add_update_status(item) {
+      this.update_status[0] = item
     },
     select_topping(item) {
       console.log(item, "item");
@@ -925,6 +927,7 @@ export default {
           this.total_price += parseInt(topping.pricetopping_set[0].price);
         });
       });
+      this.calc_total_price()
       this.add_menu = false;
       this.add_topping_to = false;
       this.product_item = {};

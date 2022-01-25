@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app :url_name="'Point'" :save="true" @save="edit">Reward Detail</nav-app>
+    <nav-app :url_name="'Promotion'" :save="true" @save="edit">Reward Detail</nav-app>
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
@@ -92,7 +92,7 @@
             <!-- Image -->
             <label id="select_img" for="file" style="margin-top: 0px">
               <img :src="show_img" class="image" v-if="show_img != null" />
-              <img :src="require(`../../../../backend${reward_item.img}`)" class="image" v-else />
+              <img :src="reward_item.img" class="image" v-else />
             </label>
             <input
               type="file"

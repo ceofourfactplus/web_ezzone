@@ -297,6 +297,8 @@ class ItemToppingGET(APIView):
         return Response(data)   
     
 class RewardAPI(APIView):
+    parser_classes=[FormParser, MultiPartParser]
+    
     def get_object(self, pk):
         try:
             return Rewards.objects.get(id=pk)
@@ -305,7 +307,7 @@ class RewardAPI(APIView):
         
     def get(self, request):
         reward = Rewards.objects.all()
-        serializer = RewardsSerializer(reward, many=True)
+        serializer = RewardsSerializer(reward,context={'request':request}, many=True)
         return Response(serializer.data)
     
     def put(self, request):
@@ -324,6 +326,8 @@ class RewardAPI(APIView):
         return Response(serializer.errors, status=400)
     
 class RewardGET(APIView):
+    parser_classes=[FormParser, MultiPartParser]
+    
     def get_object(self, pk):
         data = []
         try:
@@ -333,7 +337,7 @@ class RewardGET(APIView):
         
     def get(self, request, pk):
         reward = self.get_object(pk)
-        serializer = RewardsSerializer(reward)
+        serializer = RewardsSerializer(reward,context={'request':request})
         return Response(serializer.data)   
     
     def put(self, request, pk):

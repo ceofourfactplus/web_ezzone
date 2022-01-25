@@ -15,6 +15,7 @@
           <div class="col-12 w-100 txt-promotion">End Date</div>
           <div class="col-12 w-100 txt-promotion">End Redeem</div>
           <div class="col-12 w-100 txt-promotion">Price / Point</div>
+          <div class="col-12 w-100 txt-promotion">Point</div>
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->
@@ -25,6 +26,7 @@
           >
             :
           </div>
+          <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
           <div class="col-12 w-100 colon">:</div>
@@ -78,6 +80,14 @@
             />
           </div>
           <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+            <input
+              type="text"
+              class="input-promotion"
+              style="width: 82px;"
+              v-model="point_item.point"
+            />
+          </div>
+          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
             <Switch :value="point_item.status" style="margin-top: 7px" />
           </div>
         </div>
@@ -125,16 +135,23 @@ export default {
     Switch,
   },
   mounted() {
-    this.is_staff = this.$store.state.auth.userInfo["is_staff"];
+    this.fetchPointPromotions()
   },
   data() {
     return {
       is_staff: false,
       alert: false,
       point_item: null,
+      point_promotions: [],
     };
   },
   methods: {
+    fetchPointPromotions() {
+      api_promotion.get("point/").then((response) => {
+        console.log(response.data, "res");
+        this.point_promotions = response.data;
+      });
+    },
     fetchPointPromotion() {
         api_promotion.get(`point/${this.$route.params.id}`).then((response) => {
             console.log(response.data)
@@ -214,7 +231,7 @@ export default {
 }
 .card-content {
   width: 765px;
-  height: 367px;
+  height: 427px;
   background: #303344;
   border-radius: 20px;
   margin: 15px 0px 0px 27px;

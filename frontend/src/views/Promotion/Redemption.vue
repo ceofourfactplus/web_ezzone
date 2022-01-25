@@ -174,7 +174,7 @@
             
             <div id="ColItemReward">
                 <div class="column" v-for="reward in rewards" :key="reward.id">
-                  <img @click="see_detail(reward)" :src="require(`../../../../backend${reward.img}`)" style="width: 100%; height: 100%; border-radius: 10px;">
+                  <img @click="see_detail(reward)" :src="reward.img" style="width: 100%; height: 100%; border-radius: 10px;">
                 </div>
             </div>            
       </div>

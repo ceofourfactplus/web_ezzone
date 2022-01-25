@@ -3,7 +3,7 @@
         <div class="AreaPopup">
         <!-- Head Name Page -->
             <div class="row Header">
-                <div class="col-1 w-100" style="padding-left:10%;"><img src="../../assets/icon/save.png" style="height:60%"></div>
+                <div class="col-1 w-100" style="padding-left:10%;"></div>
                 <div class="col-10 w-100" style="line-height: 160%;"><b>Add Consignment</b></div>
                 <div class="col-1 w-100" style="padding-left:10%;"><img src="../../assets/img/btn-close.png" style="height:60%"></div>
             </div>
@@ -23,6 +23,13 @@
                     <div class="col-7 AreaRowInput">
                         <!-- Qty Input -->
                         <div class="row RowBlockInput" style="margin-top:0%;">
+                            <div class="col-3 BlockDetail">Name</div>
+                            <div class="col-1 BlockColon">:</div>
+                            <div class="col-8 BlockInput" style="text-align:left;">ทาร์ตไข่</div>
+                            
+                        </div>
+                        <!-- Qty Input -->
+                        <div class="row RowBlockInput" style="line-height:100%;">
                             <div class="col-3 BlockDetail">+ QTY</div>
                             <div class="col-1 BlockColon">:</div>
                             <div class="col-5 BlockInput">
@@ -37,10 +44,10 @@
                         </div>
 
                         <!-- EXP -->
-                        <div class="row RowBlockInput">
+                        <div class="row RowBlockInput" style="margin-top:15%;line-height:100%;">
                             <div class="col-3 BlockDetail">EXP</div>
                             <div class="col-1 BlockColon">:</div>
-                            <div class="col-8 BlockInput">
+                            <div class="col-7 BlockInput">
                                 <input type="date" v-model="input_customer" 
                                 style="background: #717171;
                                 border-radius: 10px;
@@ -50,35 +57,15 @@
                             </div>
                         </div>
                         
-                        <!-- From -->
-                        <div class="row RowBlockInput">
-                            <div class="col-3 BlockDetail">From</div>
-                            <div class="col-1 BlockColon">:</div>
-                            <div class="col-8 BlockInput">
-                                <input type="text" v-model="input_customer" 
-                                style="background: #717171;
-                                border-radius: 10px;
-                                width: 100%;
-                                height: 100%;
-                                font-size: 100%;"/>
-                            </div>
-                        </div>
-
-                        <!-- Sign Here -->
-                        <div class="row RowBlockSignHere">
-                            <div class="col-12 BlockSignHere">
-                                <input type="text" v-model="input_customer" 
-                                style="background: #717171;
-                                border-radius: 10px;
-                                width: 100%;
-                                height: 100%;
-                                font-size: 100%;"/>
-                            </div>
-                        </div>
 
                     </div>
 
                 </div>
+                <!-- Confirm Button -->
+                <div class="AreaConfirmButton">
+                    <div class="ConfirmButton">Confirm</div>
+                </div>
+
             </div>
             
 
@@ -89,7 +76,7 @@
 
 <script>
 export default {  
-  name: "AddConsignment",
+  name: "ProductQty",
   components : {
      
 
@@ -113,7 +100,7 @@ export default {
 
 /* AreaPopup */
 .AreaPopup {
-    height: 540px;
+    height: 590px;
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
@@ -139,11 +126,11 @@ export default {
 
 /* MainArea */
 .MainArea {
-    height: 420px;
+    height: 460px;
     width: 96%;
     margin-left: 2%;
     margin-right: 2%;
-    margin-top: 3%;
+    margin-top: 5%;
     padding-top: 0.5%;
     border-radius: 20px;
     background-color: #303344;
@@ -151,7 +138,7 @@ export default {
 
 /* AreaImg */
 .AreaImg {
-    height: 71.4%;
+    height: 68%;
     width: 96%;
     margin-top: 3%;
     margin-left: 2%;
@@ -212,27 +199,10 @@ export default {
     height: 20%;
     width: 100%;
     margin: 0%;
-    margin-top: 5%;
+    margin-top: 12%;
     color:#fff;
     font-size: 200%;
      
-}
-
-.RowBlockSignHere {
-    height: 50%;
-    width: 100%;
-    margin: 0%;
-    margin-top: 3.5%;
-    color:#fff;
-    font-size: 200%;
-     
-}
-
-.BlockSignHere {
-    padding:0%;
-    width:100%;
-    height: 100%;
-
 }
 
 .BlockInput {
@@ -256,4 +226,25 @@ export default {
     
 }
 
+.AreaConfirmButton {
+    height: 18%;
+    width: 96%;
+    margin-top: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+    padding-top: 2%;
+    padding: 0%;
+
+}
+
+.ConfirmButton {
+    height: 80%;
+    width: 30%;
+    margin-left:  35%;
+    margin-right: 35%;
+    border: 2px solid #50D1AA;
+    border-radius: 10px;
+    color: #50D1AA;
+    font-size: 200%;
+}
 </style>

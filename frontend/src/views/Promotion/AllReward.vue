@@ -35,7 +35,7 @@
             <div class="row" style="width: 97%; margin-left: 20px;">
                 <div class="col-3 BlockItem" v-for="reward in rewards" :key="reward.id">
                     <div class="PictureItem">
-                        <img :src="require(`../../../../backend${reward.img}`)" alt="" style="height: 120px;width: 120px;">
+                        <img :src="reward.img" alt="" style="height: 120px;width: 120px;">
                     </div>
                     <div class="FontItem">{{ reward.reward }}</div>
                     <div class="FontItem">{{ reward.point }} Points</div>
