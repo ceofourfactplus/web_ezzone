@@ -301,10 +301,10 @@ export default {
       topping: null,
       blur: false,
       description_list: [
-        "ไม่ไส่น้ำแข็ง",
-        "ไม่โรยหน้า",
-        "ไม่ไส่ถุง",
         "แยกน้ำแข็ง",
+        "ไม่โรยน้ำตาล",
+        "ข้าวน้อย",
+        "ขอช้อนส้อม",
       ],
       select_description: [],
       dessert: [],

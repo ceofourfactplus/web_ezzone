@@ -393,6 +393,14 @@ const routes = [
     },
   },
   {
+    path: "/product/product-qty",
+    name: "ProductQty",
+    component: ProductQty,
+    meta: {
+      requiresLogin: true,
+    },
+  },
+  {
     path: "/product",
     name: "Product",
     component: Product,

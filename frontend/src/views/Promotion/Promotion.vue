@@ -6,11 +6,7 @@
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
-<<<<<<< HEAD
       <div style="padding-left: 0px">
-=======
-      <div style="padding: 0px;">
->>>>>>> 7f00518cd0b1d9d519633b485bb388fe4edcb321
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"
@@ -250,15 +246,10 @@
             {{ voucher.voucher }}
           </div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
-<<<<<<< HEAD
           <div class="col-2 w-100" v-if="voucher.is_percent">
             {{ format_percent(voucher.discount) }}
           </div>
           <div class="col-2 w-100" v-else>{{ voucher.discount }}</div>
-=======
-          <div class="col-2 w-100" v-if="voucher.is_percent">{{ format_percent(voucher.discount) }}</div>
-          <div class="col-2 w-100" v-else>{{ parseInt(voucher.discount) }}</div>
->>>>>>> 7f00518cd0b1d9d519633b485bb388fe4edcb321
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
             <label class="switch">
@@ -344,7 +335,7 @@
               style="width: 23px; height: 30px; margin: -3px 10px 20px 0px"
             />
             <span class="slider round"></span>
-          </label>
+          </div>
         </div>
         <div class="col-1 w-100">
           <img
