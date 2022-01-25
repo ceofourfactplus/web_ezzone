@@ -11,7 +11,7 @@ from pprint import pprint
 from product.models import Product, SaleChannel, Topping
 from product.serializers import ProductReportSerialiser, ChannelReportSerializer
 from datetime import datetime
-from promotion.models import PackageItem, PromotionPackage
+from promotion.models import PackageItem, PromotionPackage,CustomerPoint
 
 
 class cancel_order(APIView):
@@ -87,9 +87,11 @@ def check_is_finish(order_id):
         order.status_order = 1
     if (order.status_drink == 2 or order.status_drink == None) and (order.status_food == 2 or order.status_food == None):
         order.status_order = 2
-    if (order.status_drink == 3 or order.status_drink == None) and (order.status_food == 3 or order.status_food == None):
+    print('payment status is :',order.payment_status)
+    print('check is :',(order.status_drink == 3 or order.status_drink == None) and (order.status_food == 3 or order.status_food == None) and (order.payment_status == 3 or order.payment_status == 4))
+    if (order.status_drink == 3 or order.status_drink == None) and (order.status_food == 3 or order.status_food == None) and (order.payment_status == 3 or order.payment_status == 4):
         order.status_order = 3
-    if (order.status_drink == 4 or order.status_drink == None) and (order.status_food == 4 or order.status_food == None) and (order.payment_status == 3 or order.payment_status == 4):
+    if (order.status_drink == 4 or order.status_drink == None) and (order.status_food == 4 or order.status_food == None):
         order.status_order = 4
     # if order.status_drink > order.status_food:
     #     order.status_order = order.status_food
@@ -113,7 +115,6 @@ class ChangeStatusOrder(APIView):
 
         # get table
         if all_order:
-            print('1')
             order = Order.objects.get(pk=pk)
             if where == 'kitchen':
                 order.status_food = status
@@ -131,15 +132,12 @@ class ChangeStatusOrder(APIView):
 
             topping = [p.id for p in Topping.objects.filter(
                 type_topping__in=type_item)]
-            print(topping)
             orderitem_top = OrderItem.objects.filter(
                 order_id=pk, topping_id__in=topping)
         
-            print([i.id for i in orderitem_top])
             for item in orderitem_top:
                 item.status_order = status
                 item.save()
-                print(item.status_order)
 
             check_is_finish(pk)
         else:
@@ -367,6 +365,16 @@ class OrderList(APIView):
             if Customer.objects.filter(phone_number=request.data['phone_number']).exists():
                 request.data['customer_id'] = Customer.objects.get(
                     phone_number=request.data['phone_number']).id
+                if not(request.data['point_promotion_id'] == None ):
+                    if CustomerPoint.objects.filter(customer_id=request.data['customer_id'],point_promotion_id=request.data['point_promotion_id']).exists():
+                        cus_point = CustomerPoint.objects.get(customer_id=request.data['customer_id'],point_promotion_id=request.data['point_promotion_id'])
+                        cus_point.point += request.data['point']
+                        print('customer point 666')
+                        cus_point.save()
+                    else:
+                        print('customer point')
+                        CustomerPoint.objects.create(customer_id=request.data['customer_id'],point_promotion_id=request.data['point_promotion_id'],point = request.data['point'])
+                        
                 # check address
                 if not request.data['address'] == "":
                     if AddressCustomer.objects.filter(customer_id=request.data['customer_id'], address=request.data['address']).exists():
@@ -380,6 +388,9 @@ class OrderList(APIView):
             else:
                 request.data['customer_id'] = Customer.objects.create(
                     phone_number=request.data['phone_number'], nick_name=request.data['nick_name']).id
+                
+                if not(request.data['point_promotion_id'] == None ):
+                    CustomerPoint.objects.create(customer_id=request.data['customer_id'],point_promotion_id=request.data['point_promotion_id'],point = request.data['point'])
                 if not request.data['address'] == "":
                     request.data['address_id'] = AddressCustomer.objects.create(
                         address=request.data['address'], customer_id=request.data['customer_id']).id
@@ -465,6 +476,8 @@ class OrderDetail(APIView):
         serializer = OrderSerializer(order, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print(';ldkfja;lkfjas;dfknaz;ldkna;dlvn;j n.dkhfljdlrlvj')
+            check_is_finish(pk)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 

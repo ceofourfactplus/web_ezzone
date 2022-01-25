@@ -7,6 +7,14 @@ from .serializers import PointSerializer, VoucherSerializer, PromotionPackageSer
 
 from rest_framework.parsers import FormParser, MultiPartParser
 
+class PointPOS(APIView):
+    def get(sel,request):
+        if PointPromotion.objects.filter(status=True).exists():
+            p = PointPromotion.objects.get(status=True)
+            ser = PointSerializer(p)
+            return Response(ser.data,status=200)
+        return Response(None,status=200)
+
 class PointPromotionAPI(APIView):
     def get_object(self, pk):
         try:

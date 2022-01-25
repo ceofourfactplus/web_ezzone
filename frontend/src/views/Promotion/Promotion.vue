@@ -6,7 +6,7 @@
       <div class="col-11 wrap-search">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding-left: 0px">
+      <div style="padding: 0px;">
         <button
           v-if="$store.state.promotion.tab == 'Point'"
           class="btn-ghost"

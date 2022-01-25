@@ -69,7 +69,10 @@
         <div style="height: 715px; overflow-y: auto">
           <div v-for="order in all_order" :key="order.id">
             <!-- head order -->
-            <div class="row w-100 header mb-2" style="padding: 0px; margin: 0px">
+            <div
+              class="row w-100 header mb-2"
+              style="padding: 0px; margin: 0px"
+            >
               <div class="col-2 w-100" style="font-size: 30px">
                 #{{ order.order_number }}
               </div>
@@ -92,16 +95,18 @@
               </div>
               <div class="col-3 w-100" v-else>
                 <img
-                  :scr="order.sale_channel_set.img"
+                  :src="order.sale_channel_set.img"
                   style="
                     width: 34px;
-                    height: 30px;
+                    height: 34px;
                     object-fit: cover;
-                    line-height: 30px;
+                    position: absolute;
+                    margin-top: 6px;
+                    border-radius: 5px;
                   "
                 />
               </div>
-              <div class="col-4 w-100" style="display: flex">
+              <div class="col-3 w-100" style="display: flex">
                 <div style="font-size: 24px; line-height: 40px">
                   <img
                     src="../../assets/icon/clock.png"
@@ -161,7 +166,7 @@
                     'last-b': last_f(index, order.orderitem_set),
                   }"
                 >
-                <!-- orderitem -->
+                  <!-- orderitem -->
                   <div
                     v-if="item.status_order == 1"
                     class="col-9 w-100"
@@ -361,8 +366,8 @@ export default {
     finish_order(order_id) {
       this.all_order.forEach((order) => {
         if (order.id == order_id) {
-          order.status_food = 2
-        } 
+          order.status_food = 2;
+        }
       });
       api_pos.put("change-status-order/kitchen/1/2/" + order_id);
     },
@@ -394,9 +399,10 @@ export default {
     },
     get_order_by_type(type) {
       this.type_order = type;
-      if(type==1){
-        this.get_order()
-3    } else {
+      if (type == 1) {
+        this.get_order();
+        3;
+      } else {
         api_pos.get("kitchen/" + type).then((response) => {
           this.all_order = response.data;
         });
@@ -419,7 +425,7 @@ export default {
   color: #fff;
 }
 .red {
-  background-color: #FFB57280 !important;
+  background-color: #ffb57280 !important;
 }
 .green {
   background-color: #50d1aa80 !important;
