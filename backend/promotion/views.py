@@ -82,6 +82,7 @@ class VoucherAPI(APIView):
     
     def put(self, request):
         voucher = Voucher.objects.get(id=request.data['id'])
+        print(voucher, 'voucher')
         serializer = VoucherSerializer(voucher, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -96,15 +97,17 @@ class VoucherAPI(APIView):
         return Response(serializer.errors, status=400)
     
 class VoucherGET(APIView):
+    parser_classes=[FormParser, MultiPartParser]
+    
     def get_object(self, pk):
         try:
-            return Voucher.objects.get(id=pk)
+            return Voucher.objects.filter(id=pk)
         except Voucher.DoesNotExist:
             raise 404
         
     def get(self, request, pk):               
         voucher = self.get_object(pk)
-        serializer = VoucherSerializer(voucher)
+        serializer = VoucherSerializer(voucher,context={'request':request}, many=True)
         return Response(serializer.data)
     
     def put(self, request, pk):
@@ -342,11 +345,10 @@ class RewardGET(APIView):
     
     def put(self, request, pk):
         reward = self.get_object(pk)
-        reward.status = request.data['status']
+        reward.status = bool(request.data['status'])
         reward.save()
         serializer = RewardsSerializer(reward)
         return Response(serializer.data)
-    
 class ConditionRewardAPI(APIView):
     def get_object(self, pk):
         try:
