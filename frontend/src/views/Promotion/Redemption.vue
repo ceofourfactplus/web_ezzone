@@ -25,7 +25,7 @@
 
         <input type="text" v-model="input_customer" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px; line-height: 50px;" />
         <!-- <input type="text" @input="find_customer($event)" :value="phone_number_layout($store.state.promotion.customer.phone_number)" style="background: #717171; border-radius: 10px; width: 408px; height: 50px; margin-top: 10px;" /> -->
-        <ul class="selector" v-if="selector_status">
+        <ul class="selector" :class="{'d-none': selector_customer.length == 0}" v-if="selector_status">
           <li v-for="cus in selector_customer" :key="cus.id">
             <p style="font-size: 24px;" @click="select_customer(cus)"
               >{{ phone_number_layout(cus.phone_number) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{{cus.nick_name}}</p
@@ -283,6 +283,9 @@ export default {
 </script>
 
 <style scoped>
+.d-none {
+  display: none;
+}
 .column {
   float: left;
   width: 100px;

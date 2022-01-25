@@ -88,7 +88,10 @@
             />
           </div>
           <div class="col-12 w-100 txt-promotion" id="txt-right-side">
-            <Switch :value="point_item.status" style="margin-top: 7px" />
+            <Switch v-if="point_item.status || !point_promotions.some(x => x.status == true)" :value="point_item.status" @switch="change_status(point_item)" style="margin-top: 7px" />
+            <label class="switch" v-else>
+              <span class="false-slider false-round"></span>
+            </label>
           </div>
         </div>
       </div>
@@ -169,6 +172,15 @@ export default {
       })
       
     },
+    change_status(item) {
+      if(item.status) {
+        item.status = false
+      } else {
+        if(!this.point_promotions.some(x => x.status == true)) {
+          item.status = true
+        }
+      }
+    },
     format_date(e, name) {
       if (name == "start") {
         this.point_item.start_promotion_date = e.target.value
@@ -213,6 +225,46 @@ export default {
   margin-top: 12px;
   color: white;
 }
+.false-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.false-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.false-slider.false-round {
+  border-radius: 34px;
+}
+
+.false-slider.false-round:before {
+  top: 1px;
+  border-radius: 50%;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+  margin-top: 8px;
+}
+
 .input-right-side {
   width: 82px;
   height: 39px;

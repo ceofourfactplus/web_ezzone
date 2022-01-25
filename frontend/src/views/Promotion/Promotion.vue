@@ -85,14 +85,7 @@
             {{ item.promotion }}&nbsp;&nbsp;&nbsp;
           </div>
           <div class="col-4 w-100">
-            <label class="switch" style="margin: 24px 0px 0px 90px">
-              <input
-                type="checkbox"
-                @input="change_status(item)"
-                v-model="item.status"
-              />
-              <span class="slider round"></span>
-            </label>
+            <SmallSwitch :value="item.status" @switch="change_status(item)" style="margin: 25px 0px 0px 80px;" />
           </div>
         </div>
         <div class="row" style="line-height: 110px;width100%;margin:0%;">
@@ -123,6 +116,7 @@
               font-weight: bold;
               color: white;
               text-align: right;
+              margin-left: -20px;
             "
           >
             {{ item.price_per_point }}
@@ -130,6 +124,7 @@
           <div
             class="col-2 w-100"
             style="
+              min-width: 126px;
               font-size: 30px;
               font-weight: bold;
               color: #ffb572;
@@ -139,7 +134,7 @@
             "
           >
             Baht <br />
-            /Point
+            /&nbsp;{{ item.point }} <img src="../../assets/icon/point_star.png" style="width: 40px; height: 40px; margin-bottom: 5px;">
           </div>
         </div>
         <div class="row" style="margin-top: 10px">
@@ -254,7 +249,7 @@
         :key="voucher.id"
       >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-4 w-100" style="padding-left: 10%; text-align: left">
+          <div class="col-4 w-100" style="padding-left: 10%; text-align: left; white-space: nowrap; overflow-x: auto;">
             {{ voucher.voucher }}
           </div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
@@ -264,13 +259,7 @@
           <div class="col-2 w-100" v-else>{{ parseInt(voucher.discount) }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
-            <label class="switch">
-              <input
-                type="checkbox"
-                v-model="voucher.status"
-              />
-              <span class="slider round"></span>
-            </label>
+            <SmallSwitch :value="voucher.status" @switch="switch_active(voucher, 'voucher')" />
           </div>
           <div class="col-1 w-100">
             <img
@@ -313,7 +302,7 @@
       </div>
       <div
         class="table-item"
-        style="width: 760px; margin-left: -10px"
+        style="width: 760px; margin-left: 3%;"
         v-for="item in packages"
         :key="item.id"
       >
@@ -329,13 +318,7 @@
           </div>
 
           <div class="col-2 w-100">
-            <label class="switch">
-              <input
-                type="checkbox"
-                v-model="item.status"
-              />
-              <span class="slider round"></span>
-            </label>
+            <SmallSwitch :value="item.status" @switch="switch_active(item, 'package')" />
           </div>
           <div class="col-1 w-100">
             <img
@@ -389,13 +372,7 @@
         <div class="col-2 w-100">{{ reward.point }}</div>
         <div class="col-2 w-100">{{ reward.qty }}</div>
         <div class="col-2 w-100">
-          <label class="switch">
-            <input
-              type="checkbox"
-              v-model="reward.status"
-            />
-            <span class="slider round"></span>
-          </label>
+          <SmallSwitch :value="reward.status" @switch="switch_active(reward, 'reward')" />
         </div>
         <div class="col-1 w-100">
           <img
@@ -421,6 +398,7 @@ import SavePopup from "../../components/main_component/SavePopup.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
+import SmallSwitch from "../../components/main_component/SmallSwitch.vue";
 import { api_promotion } from "../../api/api_promotion";
 
 export default {
@@ -430,6 +408,7 @@ export default {
     NavApp,
     Switch,
     SavePopup,
+    SmallSwitch,
   },
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
@@ -453,14 +432,24 @@ export default {
   },
   methods: {
     change_status(item) {
+      console.log(item, "item")
       if(item.status) {
         item.status = false
+        const data = {status: item.status}
+        api_promotion.put(`point/${item.id}`, data).then(() => {})
       } else {
         if(!this.point_promotions.some(x => x.status == true)) {
           item.status = true
+          const data = {status: item.status}
+          api_promotion.put(`point/${item.id}`, data).then(() => {})
         }
       }
-      
+    },
+    switch_active(item, promotion) {
+      item.status = !item.status
+      const data = new FormData();
+      data.append("status", item.status)
+      api_promotion.put(`${promotion}/${item.id}`, data).then(() => {})
     },
     select_item(item) {
       this.$store.state.promotion.tab = item;
@@ -659,67 +648,5 @@ export default {
   block-size: fit-content;
   text-decoration: none;
   line-height: 31px;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 28px;
-  margin-top: -3px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #fff;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 1px;
-  background-color: #ccc;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
-
-input:checked + .slider {
-  background-color: #c5ffed;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #c5ffed;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-  background-color: #50d1aa;
-}
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
 }
 </style>

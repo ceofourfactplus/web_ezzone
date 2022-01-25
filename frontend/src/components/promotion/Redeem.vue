@@ -62,7 +62,7 @@
                 v-model="$store.state.promotion.reward_detail.is_pre_order"
                 style="background: #717171; height: 50px; width: 233px"
               >
-                <option :value="false">รับสินค้าเลย</option>
+                <option :value="false">Received @ Counter</option>
                 <option :value="true">Pre-order</option>
               </select>
             </div>

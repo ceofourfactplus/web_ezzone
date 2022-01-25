@@ -43,7 +43,7 @@
               text-align: center;
             "
             readonly
-            value="รับสินค้าเลย"
+            value="Received @ Counter"
             v-else
           />
         </div>
