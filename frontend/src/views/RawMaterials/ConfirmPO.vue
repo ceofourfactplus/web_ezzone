@@ -68,7 +68,7 @@
         >
           <div
             class="col-6 w-100 line-item"
-            style="padding-left: 30px; text-align: left"
+            style="padding-left: 30px; text-align: left; white-space: nowrap; overflow-x:auto;"
           >
             {{ recept_detail.raw_material_set.name }}
           </div>
@@ -107,11 +107,13 @@
       </div>
       <hr style="background-color: white; height: 5px" />
     </div>
+    <SavePopup :alert="alert" />
   </div>
 </template>
 
 <script>
 import { api_raw_material } from "../../api/api_raw_material";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
@@ -119,6 +121,7 @@ import CheckBoxWhite from "../../components/main_component/CheckBoxWhite.vue";
 
 export default {
   components: {
+    SavePopup,
     SearchBar,
     NavApp,
     Table,
@@ -148,6 +151,7 @@ export default {
 
   data() {
     return {
+      alert: false,
       all_raw_material: [],
       all_unit: [],
       categories: [],
@@ -175,24 +179,32 @@ export default {
       console.log(item);
     },
     async save() {
-      console.log(this.$store.state.raw_material.all_receipt, "1");
-      console.log(this.$store.state.raw_material.all_receipt_detail, "2");
-      this.$store.state.raw_material.all_receipt.forEach((receipt) => {
-        api_raw_material.post("/receipt/", receipt).then((res) => {
-          console.log(res.data, "receipt data");
-          this.$store.state.raw_material.all_receipt_detail.forEach((receipt_detail) => {
-              if (res.data.supplier_id == receipt_detail.supplier_id) {
-                receipt_detail.receipt_raw_material_id = res.data.id;
-                setTimeout(() => {
-                  api_raw_material.post("/receipt-detail/", receipt_detail).then((res) => {
-                    console.log(res.data, 'receipt_detail');
-                  });
-                }, 1000)
+      if (this.$store.state.raw_material.all_receipt.some(item => item.payment != null)) {
+        this.$store.state.raw_material.all_receipt.forEach((receipt) => {
+          api_raw_material.post("/receipt/", receipt).then((res) => {
+            console.log(res.data, "receipt data");
+            this.$store.state.raw_material.all_receipt_detail.forEach((receipt_detail) => {
+                if (res.data.supplier_id == receipt_detail.supplier_id) {
+                  receipt_detail.receipt_raw_material_id = res.data.id;
+                  setTimeout(() => {
+                    api_raw_material.post("/receipt-detail/", receipt_detail).then((res) => {
+                      this.alert = true
+                      setTimeout(() => {
+                        this.alert = false
+                        this.$router.push({ name: "Promotion"})
+                      }, 2000)
+                      console.log(res.data, 'receipt_detail');
+                    });
+                  }, 1000)
+                }
               }
-            }
-          );
+            );
+          });
         });
-      });
+      } else {
+        alert('Warning')
+      }
+      
     },
   },
   computed: {},

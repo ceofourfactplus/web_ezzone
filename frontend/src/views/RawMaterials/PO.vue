@@ -572,10 +572,11 @@ export default {
       });
     },
     calc_price_unit(unit_id){
-      console.log(unit_id)
-      // this.po_popup_item.raw_material_set.pricerawmaterial_set.forEach(prm => {
-
-      // })
+      this.po_popup_item.raw_material_set.pricerawmaterial_set.forEach(prm => {
+        if(prm.unit == unit_id) {
+          this.po_popup_item.last_price = prm.last_price
+        }
+      })
     },
     // get_min_sup(item) {
     //   api_raw_material.get("get-min-supplier/"+item.).then((response) => {
@@ -820,6 +821,7 @@ export default {
       console.log(this.data, "data");
     },
     async confirm() {
+      this.$store.state.raw_material.all_receipt = []
       await this.ConvertSlectedToReceptData();
       this.data.forEach((receipt) => {
         const receipt_raw_material = {
