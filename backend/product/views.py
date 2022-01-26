@@ -17,7 +17,6 @@ from product.serializers import (PriceProductSerializer,
 
 from .forms import *
 
-
 # product category
 class GetProductByChannelAndCategory(APIView):
     parser_classes = [MultiPartParser, FormParser]
