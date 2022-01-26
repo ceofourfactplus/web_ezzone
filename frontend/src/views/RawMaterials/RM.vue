@@ -107,7 +107,7 @@
                 :src="
                   $store.state.raw_material.status_image[item.status]['img']
                 "
-                style="position: relative; bottom: 3px; margin-right: -30px;transform:rotate(180deg);"
+                style="position: relative; bottom: 3px; margin-right: -30px;"
                 :style="$store.state.raw_material.status_image[item.status]['style']"
                 alt="img"
               />
@@ -131,7 +131,7 @@
     </div>
 
     <!-- Show Pickup Popup -->
-    <div class="blur" v-if="show_pickup_status" @click="sjot = false">
+    <div class="blur" style="height:100%;" v-if="show_pickup_status" @click="sjot = false">
       <PickupPopup
         :item="raw_material_item"
         @show_status="hideShowPickup"
