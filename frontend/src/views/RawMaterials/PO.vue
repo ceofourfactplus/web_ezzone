@@ -28,29 +28,29 @@
 
     <!-- table -->
     <div class="table mt-3" style="height: 100%">
-      <div class="table-header" style="line-height: 40px; font-size: 24px">
+      <div class="table-header" style="height:45px;line-height: 40px; font-size: 24px;padding-left: 8px;padding-right: 8px;">
         <!-- Table Head -->
-        <div class="row" style="position: relative; bottom: 9px;">
+        <div class="row" style="line-height:100%">
           <div class="col-1 w-100">
             <div class="checkbox-white">
               <input
                 type="checkbox"
                 :value="true"
-                style="margin-top: 12px; right: 0px; left: 23px; bottom: 3px"
+                style="left: 15px;"
                 @input="selectAllItem"
               />
             </div>
           </div>
           <div class="col-7 w-100">Item</div>
-          <div class="col-1 w-100" style="margin-right: 40px">Qty.</div>
-          <div class="col-1 w-100">Unit</div>
-          <div class="col-2 w-100">Price</div>
+          <div class="col-1 w-100">Qty.</div>
+          <div class="col-1 w-100" style="right:-10px;position:relative;">Unit</div>
+          <div class="col-2 w-100" style="right:-10px;position:relative;">Price</div>
         </div>
       </div>
       <div style="overflow-x: auto; height: 650px">
         <div v-for="recept in all_recept" :key="recept">
           <!-- Table Item Head -->
-          <div class="table-item">
+          <div class="table-item" style="height:45px;padding-top:0%; padding-bottom:0%;">
             <div
               class="row"
               style="
@@ -60,7 +60,7 @@
                 font-size: 28px;
                 font-weight: bold;
                 position: relative;
-                bottom: 9px;
+                line-height: 150%;
               "
             >
               <div class="col-1 w-100">
@@ -96,21 +96,21 @@ Total  {{ recept.total_price }}</p
           <div
             v-for="item in recept.recept_detail"
             :key="item.id"
-            class="table-item"
+            class="table-item" style="height:45px;padding-top:0%; padding-bottom:0%;"
           >
-            <div class="row" style="width: 100%; margin-left: 0px;position: relative; bottom: 9px;">
+            <div class="row" style="width: 100%; margin-left: 0px;position: relative; bottom: 9px;line-height:320%;">
               <div
                 class="col-8 w-100"
-                style="margin-left: 75px; text-align: left"
               >
                 <div class="row">
-                  <div class="col-8 w-100" style="text-align: left">
+                  <div class="col-2 w-100"></div>
+                  <div class="col-10 w-100" style="text-align: left;white-space:nowrap;overflow-x:auto;text-align: left">
                     <span>
                       <div class="checkbox-orange">
                         <input
                           type="checkbox"
                           :id="item.raw_material_set.name"
-                          style="display: inline-block; top: 5px"
+                          style="display: inline-block; top: 4px"
                           :value="item"
                           v-model="selected"
                           class="ms-2"
@@ -120,17 +120,16 @@ Total  {{ recept.total_price }}</p
                           class="ms-3"
                           @click="showPoPopup(item)"
                         >
-                          {{ item.raw_material_set.name }}</label
-                        >
+                          {{ item.raw_material_set.name }}
+                        </label>
                       </div>
                     </span>
                   </div>
-                  <div class="col-4 w-100" @click="showPoPopup(item)"></div>
                 </div>
               </div>
               <div
                 class="col-1 w-100"
-                style="margin: auto; text-align: left"
+                style="margin: auto; text-align: center"
                 @click="showPoPopup(item)"
               >
                 {{ item.raw_material_set.must_buy }}
@@ -301,28 +300,28 @@ Total  {{ recept.total_price }}</p
         <div
           class="card"
           :class="{ 'card-active': po_popup }"
-          style="background-color: #252836; height: 600px"
+          style="background-color: #252836; height: 690px"
         >
           <!-- Nav -->
-          <div class="row w-100" style="height: 80px">
+          <div class="row w-100" style="height: 100px;margin:0px;line-height:600%;">
             <div class="col-2 w-100" @click="edit()">
               <img
                 src="../../assets/icon/save.png"
-                style="margin: 17px 0px 0px 10px"
+                style="margin: 5px 0px 0px 10px"
               />
             </div>
-            <div class="col-8 w-100 nav-txt">
+            <div class="col-8 w-100 nav-txt" style="white-space:nowrap;overflow-x:auto;text-align: left">
               {{ po_popup_item.raw_material_set.name }}
             </div>
             <div class="col-2 w-100" @click="po_popup = false">
               <img
                 src="../../assets/icon/delete.png"
-                style="width: 29px; height: 32px; margin: 20px 0px 0px 50px"
+                style="width: 29px; height: 32px; margin: 5px 0px 0px 0px"
               />
             </div>
           </div>
           <!-- Over Wrapper -->
-          <div class="row">
+          <div class="row" style="height:38%;">
             <!-- Image -->
             <div class="col-4 w-100">
               <img
@@ -336,7 +335,7 @@ Total  {{ recept.total_price }}</p
             <div class="col-8 item-detail">
               <!-- Name --> 
               <div class="row">
-                <div class="col-12 line-col" style="margin-top: 10px">
+                <div class="col-12 line-col" style="margin-top: 10px;white-space:nowrap;overflow-x:auto;width:300px;">
                   {{ po_popup_item.raw_material_set.name }}
                 </div>
               </div>
@@ -900,7 +899,7 @@ export default {
 }
 .under-wrapper {
   width: 575px;
-  height: 242px;
+  height: 292px;
   background: #303344;
   border-radius: 28px;
   font-size: 30px;
@@ -909,11 +908,11 @@ export default {
 }
 .line-col {
   text-align: left;
-  margin: 15px 0px 0px 5px;
+  margin: 10px 0px 0px 10px;
 }
 .item-detail {
   width: 340px;
-  height: 241px;
+  height: 251px;
   background: #303344;
   border-radius: 24px;
   color: white;
@@ -976,16 +975,21 @@ export default {
   position: absolute;
   content: "\f00c";
   font-family: "FontAwesome";
-  color: #252836;
+  color: #fff;
   background-color: #ea7c69;
-  font-size: 14px;
-  top: 0px;
-  left: 0px;
+  border-radius: 10%;
+  font-size: 20px;
   display: flex;
+  height: 30px;
+  width: 30px;
+  padding-left: 9%;
+  line-height: 160%;
+
 }
 .checkbox-orange input:checked::after {
+  padding-left: 8%;
+  line-height: 140%;
   font-size: 20px;
-  top: -5px;
 }
 .checkbox-orange input::before {
   height: 30px;
@@ -998,9 +1002,10 @@ export default {
 .card {
   width: 600px;
   height: 498px;
-  top: 200px;
+  top: 150px;
   border-radius: 24px;
-  left: 10%;
+  left: 13%;
+  
 }
 .frame {
   border-radius: 24px;
