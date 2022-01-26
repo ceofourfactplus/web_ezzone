@@ -304,9 +304,8 @@ export default {
     },
     getDate(date) {
       console.log(date);
-      return new Date(date).toLocaleString("th-TH", {
-        dateStyle: "short",
-      });
+      var temp_date = date.slice(0, 10).split('-')
+      return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`
     },
     onFileChange(e) {
       this.customer.img = e.target.files[0];
@@ -360,8 +359,7 @@ export default {
       }
     },
   },
-
-  mounted() {
+  beforeMount() {
     api_customer
       .get("get-customer/" + this.$route.params.id)
       .then((response) => {
@@ -380,6 +378,7 @@ export default {
       this.all_cus = response.data;
     });
   },
+  mounted() {},
   watch: {
     "customer.phone_number"(number) {
       this.error.status = false;

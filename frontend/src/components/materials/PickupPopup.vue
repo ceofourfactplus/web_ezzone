@@ -2,8 +2,8 @@
   <div>
     <div class="show-pickup-popup">
       <!-- Nav -->
-      <div class="row" style="margin-top: 15px;">
-        <div class="col-11 txt-for-add">{{item.name}}</div>
+      <div class="row" style="margin-top: 10px;">
+        <div class="col-11 w-100 txt-for-add" style="width: 100%; white-space: nowrap; overflow-x: auto;">{{item.name}}</div>
         <div class="col-1 w-100">
           <img
             @click="$emit('show_status')"

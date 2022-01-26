@@ -92,7 +92,7 @@
             <div class="col-1 w-100" style="right: 10px">
               <img
                 v-if="!item.is_used"
-                @click="SelectUnit(item)"
+                @click="delete_unit(item)"
                 src="../../assets/icon/r-trash.png"
                 style="bottom: 3px; width: 20px; height: 25px"
               />
@@ -267,7 +267,7 @@ export default {
       create_img: null,
       create_status: true,
       show_img: null,
-      change_img:false
+      change_img: false,
     };
   },
   methods: {
@@ -345,8 +345,13 @@ export default {
     },
     select_sup(item) {
       this.selected_supplier = item;
-      this.show_img = item.img
+      this.show_img = item.img;
       this.edit_supplier_status = true;
+    },
+    delete_unit(item) {
+      api_pos.delete("payment/" + item.id).then(() => {
+        this.fetchRMUnit();
+      });
     },
   },
 };

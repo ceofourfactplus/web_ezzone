@@ -8,12 +8,10 @@
         <SearchBar style="width: 100%" @search="serchByTyping" />
       </div>
       <div class="col-2 w-100" style="padding: 0px">
-        <button
-          class="btn-dropdown w-100"
-          @click="dropdown_status = !dropdown_status"
-        >
-          Item<span class="icon-dropdown"></span>
-        </button>
+        <select v-model="search_type" style="width: 120px; height: 50px">
+          <option value="item" selected>Item</option>
+          <option value="supplier">Supplier</option>
+        </select>
       </div>
       <div class="col-2 w-100">
         <button class="btn-ghost" style="white-space: nowrap" @click="addPO()">
@@ -25,89 +23,93 @@
     <!-- Table -->
     <div class="table">
       <div class="table-header">
-        <div class="row" style="padding-right: 0px;">
+        <div class="row" style="padding-right: 0px">
           <div class="col-1"></div>
-          <div class="col-4 w-100" style="text-align: right; margin-left: -100px;">Item</div>
-          <div class="col-1 w-100" style="margin-left: 14px;">Qty</div>
+          <div
+            class="col-4 w-100"
+            style="text-align: right; margin-left: -100px"
+          >
+            Item
+          </div>
+          <div class="col-1 w-100" style="margin-left: 14px">Qty</div>
           <div class="col-2 w-100">Unit</div>
-          <div class="col-3 w-100" style="margin-left: -35px;">Min Sup</div>
-          <div class="col-1 w-100" style="margin-left: -35px;">Status</div>
+          <div class="col-3 w-100" style="margin-left: -35px">Min Sup</div>
+          <div class="col-1 w-100" style="margin-left: -35px">Status</div>
         </div>
       </div>
       <div
-            class="row table-item ps-0"
-            v-for="(item, idx) in nearly_items"
-            :key="idx"
-            style="
-              padding-right: 0px;
-              background-color: #303344;
-              border-radius: 10px;
-              margin: 0px;
-              margin-top: 5px;
-              line-height: 20px;
-            "
-          >
-            <div class="col-1">
-              <div
-                class="checkbox-orange"
-                style="position: relative; bottom: 6px"
-              >
-                <input
-                  type="checkbox"
-                  class="me-3 mt-2"
-                  :value="item"
-                  @input="selected_item_vals(item)"
-                />
-              </div>
-            </div>
-            <div
-              class="col-4 w-100"
-              @click="po_detail(item)"
-              style="
-                text-align: left;
-                font-size: 24px;
-                overflow-x: auto;
-                white-space: nowrap;
-                line-height: 40px;
-                margin-left: -20px;
-              "
-            >
-              {{ item.raw_material_set.name }}
-            </div>
-            <div
-              class="col-1 w-100"
-              style="text-align: right; line-height: 40px;"
-            >
-              {{ item.raw_material_set.remain }}
-            </div>
-            <div class="col-2 w-100">
-              <p>{{ item.unit_set.unit }}</p>
-            </div>
-            <div
-              class="col-3 w-100"
-              style="text-align: left; overflow-x: auto; white-space: nowrap; line-height: 40px;"
-            >
-              {{ item.supplier_set.company_name }}
-            </div>
-            <div class="col-1">
-              <img
-                style="
-                  margin-right: 5px;
-                  position: relative;
-                  bottom: 3px;
-                  height: 45px;
-                  width: 45px;
-                  transform: rotate(180deg)
-                "
-                :src="
-                  $store.state.raw_material.status_image[
-                    item.raw_material_set.status
-                  ]['img']
-                "
-                alt="img"
-              />
-            </div>
+        class="row table-item ps-0"
+        v-for="(item, idx) in nearly_items"
+        :key="idx"
+        style="
+          padding-right: 0px;
+          background-color: #303344;
+          border-radius: 10px;
+          margin: 0px;
+          margin-top: 5px;
+          line-height: 20px;
+        "
+      >
+        <div class="col-1">
+          <div class="checkbox-orange" style="position: relative; bottom: 6px">
+            <input
+              type="checkbox"
+              class="me-3 mt-2"
+              :value="item"
+              @input="selected_item_vals(item)"
+            />
           </div>
+        </div>
+        <div
+          class="col-4 w-100"
+          @click="po_detail(item)"
+          style="
+            text-align: left;
+            font-size: 24px;
+            overflow-x: auto;
+            white-space: nowrap;
+            line-height: 40px;
+            margin-left: -20px;
+          "
+        >
+          {{ item.raw_material_set.name }}
+        </div>
+        <div class="col-1 w-100" style="text-align: right; line-height: 40px">
+          {{ item.raw_material_set.remain }}
+        </div>
+        <div class="col-2 w-100">
+          <p>{{ item.unit_set.unit }}</p>
+        </div>
+        <div
+          class="col-3 w-100"
+          style="
+            text-align: left;
+            overflow-x: auto;
+            white-space: nowrap;
+            line-height: 40px;
+          "
+        >
+          {{ item.supplier_set.company_name }}
+        </div>
+        <div class="col-1">
+          <img
+            style="
+              margin-right: 5px;
+              position: relative;
+              bottom: 3px;
+              height: 45px;
+              width: 45px;
+              transform: rotate(180deg);
+            "
+            :src="
+              $store.state.raw_material.status_image[
+                item.raw_material_set.status
+              ]['img']
+            "
+            alt="img"
+          />
+        </div>
+      </div>
     </div>
     <!-- Dropdown List -->
     <div class="dropdown-list" v-if="dropdown_status">
@@ -140,6 +142,7 @@ export default {
   components: { NavApp, Switch, SearchBar, PODetail, Table },
   data() {
     return {
+      search_type: null,
       is_staff: false,
       dropdown_status: false,
       po_detail_status: false,
@@ -153,7 +156,8 @@ export default {
           unit_set: { unit: "" },
           supplier_set: { company_name: "" },
           raw_material_set: { remain: 0, name: "" },
-        },],
+        },
+      ],
       selected_items: [],
     };
   },
@@ -193,11 +197,19 @@ export default {
       if (val == "") {
         this.nearly_items = this.temp_items;
       } else {
-        this.temp_items.forEach((element) => {
-          if (element.raw_material_set.name.indexOf(val) + 1 != 0) {
-            temp.push(element);
-          }
-        });
+        if (this.search_type == "item") {
+          this.temp_items.forEach((element) => {
+            if (element.raw_material_set.name.indexOf(val) + 1 != 0) {
+              temp.push(element);
+            }
+          });
+        } else {
+          this.temp_items.forEach((element) => {
+            if (element.supplier_set.company_name.indexOf(val) + 1 != 0) {
+              temp.push(element);
+            }
+          });
+        }
         this.nearly_items = temp;
       }
     },
@@ -226,14 +238,14 @@ export default {
   mounted() {
     this.is_staff = this.$store.state.auth.userInfo["is_staff"];
     api_raw_material.get("get-nearly-sold-out/").then((response) => {
-      console.log(response.data, 'data')
+      console.log(response.data, "data");
       response.data.forEach((el, idx) => {
-        if(el.supplier_set == undefined) {
-          var idx = response.data.indexOf(el)
-          response.data.splice(idx, 1)
-          console.log(el.raw_material_set.name, 'id')
+        if (el.supplier_set == undefined) {
+          var idx = response.data.indexOf(el);
+          response.data.splice(idx, 1);
+          console.log(el.raw_material_set.name, "id");
         }
-      })
+      });
       this.nearly_items = response.data;
       this.temp_items = response.data;
     });

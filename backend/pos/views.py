@@ -179,12 +179,14 @@ class PaymentDetail(APIView):
     def delete(self, request, pk):
         payment = Payment.objects.get(pk=pk)
         if not payment.img == None:
-            os.remove(payment.img)
+            payment.img.delete(save=True)
         payment.delete()
         return Response('ok')
 
     def put(self, request, pk):
         payment = Payment.objects.get(pk=pk)
+        if not request.data['img'] == None:
+            payment.img.delete(save=True)
         serializer = PaymentSerializer(payment, request.data)
         if serializer.is_valid():
             serializer.save()

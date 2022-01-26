@@ -115,46 +115,57 @@
       </div>
 
       <!-- select product -->
-      <div class="col-12 mt-2" style="text-align: left; padding: 0px">
+      <div
+        class="col-12 mt-2"
+        style="text-align: left; padding: 0px; overflow-x: auto; display: flex"
+      >
         <button
           :class="{ 'btn-gray-active': type_item == 3 }"
           @click="type_item = 3"
+          style="width: fit-content; margin: auto"
           class="btn-gray me-2"
-          style="width: 16%; padding: 0px; margin: auto"
         >
           FOOD
         </button>
         <button
           :class="{ 'btn-gray-active': type_item == 2 }"
           @click="type_item = 2"
+          style="width: fit-content; margin: auto; white-space: nowrap"
           class="btn-gray me-2"
-          style="width: 18%; padding: 0px; margin: auto"
         >
           DRINK
         </button>
         <button
           :class="{ 'btn-gray-active': type_item == 1 }"
           @click="type_item = 1"
+          style="width: fit-content; margin: auto"
           class="btn-gray me-2"
-          style="width: 18%; padding: 0px; margin: auto"
         >
           DRESSERT
         </button>
         <button
           :class="{ 'btn-gray-active': type_item == 4 }"
           @click="type_item = 4"
+          style="width: fit-content; margin: auto"
           class="btn-gray me-2"
-          style="width: 18%; padding: 0px; margin: auto"
         >
           TOPPING
         </button>
         <button
           :class="{ 'btn-gray-active': type_item == 5 }"
           @click="type_item = 5"
-          class="btn-gray"
-          style="width: 24%; padding: 0px; margin: auto"
+          style="width: fit-content; margin: auto"
+          class="btn-gray me-2"
         >
           CONSIGNMENT
+        </button>
+        <button
+          :class="{ 'btn-gray-active': type_item == 6 }"
+          @click="type_item = 6"
+          style="width: fit-content; margin: auto"
+          class="btn-gray"
+        >
+          PACKAGE
         </button>
       </div>
     </div>
@@ -185,6 +196,7 @@
       </div>
       <div style="overflow-x: auto; height: 470px">
         <div class="table-item" v-for="item in items" :key="item.id">
+
           <!-- update -->
           <form
             style="padding: 3px"
@@ -207,6 +219,14 @@
                     @click="select_update(product)"
                   >
                     <p
+                      v-if="type_item == 6"
+                      class="w-100"
+                      :class="{ selected: selected_product.id == product.id }"
+                    >
+                      {{ product.promotion }}
+                    </p>
+                    <p
+                      v-else
                       class="w-100"
                       :class="{ selected: selected_product.id == product.id }"
                     >
@@ -225,6 +245,14 @@
                 "
               >
                 <input
+                  v-if="type_item == 6"
+                  type="number"
+                  class="input-product"
+                  v-model="item.discount_price"
+                  required
+                />
+                <input
+                  v-else
                   type="number"
                   class="input-product"
                   v-model="item.price"
@@ -232,6 +260,15 @@
                 />
               </div>
               <div
+                v-if="type_item == 6"
+                class="col-3 w-100"
+                style="line-height: 130%; font-size: 24px"
+              >
+                {{ net_price(item.discount_price) }}
+                <input type="submit" style="display: none" />
+              </div>
+              <div
+                v-else
                 class="col-3 w-100"
                 style="line-height: 130%; font-size: 24px"
               >
@@ -287,7 +324,7 @@
           <!-- product -->
           <div
             class="row"
-            v-else
+            v-else-if="item['product'] !== undefined"
             style="width: 100%; margin: auto; font-size: 24px"
           >
             <div class="col-1">
@@ -317,6 +354,40 @@
               {{ net_price(item.price) }}
             </div>
           </div>
+
+          <!-- package -->
+          <div
+            class="row"
+            v-if="item['package'] != undefined"
+            style="width: 100%; margin: auto; font-size: 24px"
+          >
+            <div class="col-1">
+              <div class="checkbox-orange" v-if="delete_status">
+                <input
+                  type="checkbox"
+                  :value="item.package"
+                  v-model="delete_list_package"
+                />
+              </div>
+            </div>
+            <div
+              class="col-4 w-100"
+              style="line-height: 100%; text-align: left"
+              @click="select_product_update(item)"
+            >
+              {{ item.package_set }}
+            </div>
+            <div
+              class="col-3 w-100"
+              style="margin: auto; line-height: 100%"
+              @click="select_product_update(item)"
+            >
+              {{ item.discount_price }}
+            </div>
+            <div class="col-4 w-100" style="margin: auto; line-height: 100%">
+              {{ net_price(item.discount_price) }}
+            </div>
+          </div>
         </div>
         <!-- to create product -->
         <div class="table-item" v-if="add_product_to_salechannel">
@@ -338,6 +409,14 @@
                     @click="select_product(product)"
                   >
                     <p
+                      v-if="type_item == 6"
+                      class="w-100"
+                      :class="{ selected: selected_product.id == product.id }"
+                    >
+                      {{ product.promotion }}
+                    </p>
+                    <p
+                      v-else
                       class="w-100"
                       :class="{ selected: selected_product.id == product.id }"
                     >
@@ -389,6 +468,7 @@
 <script>
 import SavePopup from "../../components/main_component/SavePopup.vue"
 import { api_product } from "../../api/api_product";
+import { api_promotion } from "../../api/api_promotion";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
@@ -405,6 +485,9 @@ export default {
       .then((response) => {
         this.show_img = response.data.img;
       });
+    api_promotion.get("package").then((response) => {
+      this.all_packages = response.data;
+    });
   },
   data() {
     return {
@@ -416,125 +499,9 @@ export default {
         gp: 0,
         status: true,
         create_by: 1,
-        price_product: [
-          {
-            price: "40.00",
-            product: 4,
-            sale_channel: 13,
-            status: true,
-            product_set: {
-              id: 4,
-              img: null,
-              code: "js",
-              name: "js",
-              is_active: true,
-              flavour_level: false,
-              status: 2,
-              remain: 0,
-              flavour: 2,
-              minimum: 0,
-              maximum: 0,
-              topping_category_id: 14,
-              warehouse: 1,
-              create_at: "2021-12-30T19:09:19.302528Z",
-              update_at: null,
-              type_product: 3,
-              old_product_id: null,
-              unit_id: 1,
-              category_id: 1,
-              create_by_id: 1,
-              update_by_id: null,
-            },
-          },
-          {
-            price: "50.00",
-            product: 3,
-            sale_channel: 13,
-            status: true,
-            product_set: {
-              id: 3,
-              img: null,
-              code: "js",
-              name: "js",
-              is_active: true,
-              flavour_level: false,
-              status: 2,
-              remain: 0,
-              flavour: 2,
-              minimum: 0,
-              maximum: 0,
-              topping_category_id: 14,
-              warehouse: 1,
-              create_at: "2021-12-30T19:08:48.824882Z",
-              update_at: null,
-              type_product: 3,
-              old_product_id: null,
-              unit_id: 1,
-              category_id: 1,
-              create_by_id: 1,
-              update_by_id: null,
-            },
-          },
-          {
-            price: "10.00",
-            product: 2,
-            sale_channel: 13,
-            status: true,
-            product_set: {
-              id: 2,
-              img: null,
-              code: "js",
-              name: "js",
-              is_active: true,
-              flavour_level: false,
-              status: 2,
-              remain: 0,
-              flavour: 2,
-              minimum: 0,
-              maximum: 0,
-              topping_category_id: 14,
-              warehouse: 1,
-              create_at: "2021-12-30T19:06:37.402368Z",
-              update_at: null,
-              type_product: 3,
-              old_product_id: null,
-              unit_id: 1,
-              category_id: 1,
-              create_by_id: 1,
-              update_by_id: null,
-            },
-          },
-          {
-            price: "60.00",
-            product: 1,
-            sale_channel: 13,
-            status: true,
-            product_set: {
-              id: 1,
-              img: null,
-              code: "dfg",
-              name: "fgl",
-              is_active: true,
-              flavour_level: false,
-              status: 2,
-              remain: 0,
-              flavour: 1,
-              minimum: 0,
-              maximum: 0,
-              topping_category_id: null,
-              warehouse: 0,
-              create_at: "2021-12-30T17:44:21.465812Z",
-              update_at: null,
-              type_product: 3,
-              old_product_id: null,
-              unit_id: 1,
-              category_id: 2,
-              create_by_id: 1,
-              update_by_id: null,
-            },
-          },
-        ],
+        price_product: [],
         price_topping: [],
+        price_package: [],
       },
       type_item: 1,
       items: [],
@@ -545,11 +512,13 @@ export default {
       search_product: [],
       create_input: false,
       delete_list_product: [],
+      delete_list_package: [],
       delete_list_topping: [],
       delete_status: false,
       select_product_update_id: 0,
       selected_product_update: {},
       update_product_name: "",
+      all_packages: [],
     };
   },
   methods: {
@@ -562,16 +531,26 @@ export default {
         this.sale_channel_set.price_topping.filter((item) => {
           return !this.delete_list_topping.includes(item.topping);
         });
+      this.sale_channel_set.price_package =
+        this.sale_channel_set.price_package.filter((item) => {
+          return !this.delete_list_package.includes(item.package);
+        });
       this.filter_product();
       this.delete_status = false;
       this.delete_list_product = [];
       this.delete_list_topping = [];
+      this.delete_list_package = [];
     },
     select_product(item) {
       this.selected_product = item;
-      this.product = item.name;
+      if (this.type_item == 6) {
+        this.product = item.promotion;
+      } else {
+        this.product = item.name;
+      }
       setTimeout(() => {
         this.search_product = [];
+        console.log(';akjsdlakjfl;akjsdflakndlkas;lkdfcadlskfja;lskdfj')
       }, 100);
     },
     onFileChange(e) {
@@ -634,6 +613,14 @@ export default {
             price: this.price,
             topping_set: this.selected_product,
           });
+        }else if (this.type_item == 6) {
+          this.sale_channel_set.price_package.push({
+            package: this.selected_product.id,
+            discount_price: this.price,
+            normal_price: 0,
+            package_set: this.selected_product,
+          });
+          this.filter_product();
         } else {
           this.sale_channel_set.price_product.push({
             product: this.selected_product.id,
@@ -645,7 +632,6 @@ export default {
         this.cancel_to_create();
         this.add_product_to_salechannel = false;
       } else {
-        console.log("logge");
         this.create_input = true;
       }
     },
@@ -668,6 +654,14 @@ export default {
       }
       return true;
     },
+    filter_same_package(data) {
+      for (var item of this.sale_channel_set.price_package) {
+        if (item.package == data.id) {
+          return false;
+        }
+      }
+      return true;
+    },
     search_all_product(val) {
       var temp = [];
       if (val == "") {
@@ -681,6 +675,10 @@ export default {
         });
         this.sale_channel_set.price_topping.forEach((element) => {
           if (element.topping_set.name.indexOf(val) + 1 != 0) {
+            temp.push(element);
+          }
+        });this.sale_channel_set.price_package.forEach((element) => {
+          if (element.topping_set.promotion.indexOf(val) + 1 != 0) {
             temp.push(element);
           }
         });
@@ -705,6 +703,8 @@ export default {
         this.items = this.sale_channel_set.price_topping;
       } else if (this.type_item == 5) {
         this.items = [];
+      } else if (this.type_item == 6) {
+        this.items = this.sale_channel_set.price_package;
       }
     },
     select_product_update(item) {
@@ -712,7 +712,11 @@ export default {
         this.select_product_update_id = item.topping;
         this.update_product_name = item.topping_set.name;
         this.selected_product_update = item.topping_set;
-      } else {
+      } else if (this.type_item == 6) {
+        this.select_product_update_id = item.package;
+        this.update_product_name = item.package_set.promotion;
+        this.selected_product_update = item.package_set;
+      }  else {
         this.select_product_update_id = item.product;
         this.update_product_name = item.product_set.name;
         this.selected_product_update = item.product_set;
@@ -723,6 +727,7 @@ export default {
       this.update_product_name = item.name;
       setTimeout(() => {
         this.search_product = [];
+        console.log('in 729 line')
       }, 100);
     },
     update_product(item) {
@@ -732,7 +737,13 @@ export default {
         );
         data.topping = this.selected_product_update.id;
         data.topping_set = this.selected_product_update;
-      } else {
+      }else if (this.type_item == 6) {
+        const data = this.sale_channel_set.price_package.find(
+          (x) => x.package === item.package
+        );
+        data.package = this.selected_product_update.id;
+        data.package_set = this.selected_product_update;
+      }  else {
         const data = this.sale_channel_set.price_product.find(
           (x) => x.product === item.product
         );
@@ -740,12 +751,15 @@ export default {
         data.product_set = this.selected_product_update;
       }
       this.search_product = [];
+      console.log('in 752 line')
       this.select_product_update_id = null;
     },
     check_type_update(item) {
       if (this.type_item == 4) {
         return item.topping == this.select_product_update_id;
-      } else {
+      } else if (this.type_item == 6) {
+        return item.package == this.select_product_update_id;
+      }  else {
         return item.product == this.select_product_update_id;
       }
     },
@@ -757,6 +771,7 @@ export default {
     },
     product(newProduct) {
       this.create_input = false;
+      console.log(this.type_item)
       if (newProduct != "") {
         if (this.type_item == 4) {
           api_product
@@ -771,7 +786,24 @@ export default {
               });
               this.search_product = arr;
             });
-        } else {
+        } else if (this.type_item == 6) {
+          console.log('type_four')
+          var temp = [];
+          this.all_packages.forEach((element) => {
+            if (
+              element.promotion
+                .toLowerCase()
+                .indexOf(newProduct.toLowerCase()) +
+                1 !=
+                0 &&
+              this.filter_same_package(element)
+            ) {
+              temp.push(element);
+            }
+          });
+          this.search_product = temp;
+          console.log(this.search_product);
+        }  else {
           api_product
             .get(
               "product-by-type-and-search/" +
@@ -793,8 +825,8 @@ export default {
         }
       } else {
         this.selected_product = {};
-      }
       this.search_product = [];
+      }
     },
     update_product_name(newProduct) {
       this.create_input = false;
@@ -887,6 +919,7 @@ button {
 
 .btn-gray {
   font-weight: 700;
+  padding: 0px 10px;
 }
 
 .input-product {

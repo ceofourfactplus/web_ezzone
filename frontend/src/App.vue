@@ -2,14 +2,10 @@
 
 <script>
 import { api_product } from './api/api_product';
-import { api_promotion } from './api/api_promotion';
 export default {
   mounted(){
     api_product.get('sale-channel/ezzone').then((response)=>{
       this.$store.state.ezzone_id = response.data.id;
-    })
-    api_promotion.get('point-pos/').then((response)=>{
-      this.$store.state.pos.point_promotion = response.data;
     })
   }
 }
