@@ -200,7 +200,7 @@ export default {
                 "is_barista",
                 "is_chef",
               ],
-              img: require("../../src/assets/icon/raw-material.png"),
+              img: require("../../src/assets/icon/raw-material-2.png"),
               txt: "Raw Material",
               link: "RawMaterials",
             },

@@ -26,45 +26,47 @@
           />
         </div>
       </div>
-      <div class="row">
-            <!-- Left -->
-            <div class="col-6 w-100" style="font-weight: bold;">
-                <div class="col-12 w-100 txt-promotion">Name</div>
-                <div class="col-12 w-100 txt-promotion">Start Date</div>
-                <div class="col-12 w-100 txt-promotion">End Date</div>
-                <div class="col-12 w-100 txt-promotion">Qty</div>
-                <div class="col-12 w-100 txt-promotion">Discount</div>
-            </div>
-            <!-- Middle -->
-            <div class="col-1 w-100" style="margin-top: -4px;">
-                <div class="col-12 w-100 colon">:</div>
-                <div class="col-12 w-100 colon">:</div>
-                <div class="col-12 w-100 colon">:</div>
-                <div class="col-12 w-100 colon">:</div>
-                <div class="col-12 w-100 colon">:</div>
-            </div>
-            <!-- Right -->
-            <div class="col-5 w-100">
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-promotion" style="width: 220px;" v-model="voucher"></div>
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ temp_start }}<input type="date" class="input-date" @change="format_date($event, 'start')" ></div>
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side">{{ temp_end }}<input type="date" class="input-date" @change="format_date($event, 'end')" ></div>
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-promotion" style="width: 220px;" v-model="qty"></div>
-                <div class="col-12 w-100 txt-promotion" id="txt-right-side"><input type="text" class="input-promotion" style="width: 220px;" v-model="discount"></div>
-            </div>
+      <div class="AreaRow">
+        <div class="row ">
+          <div class="col-5 w-100 txt-promotion">Name</div>
+          <div class="col-1 w-100 colon">:</div>
+          <div class="col-6 w-100 txt-promotion-right" id="txt-right-side"><input type="text" class="input-promotion" style="width: 99%;" v-model="voucher"></div>
         </div>
+        <div class="row">
+          <div class="col-5 w-100 txt-promotion">Start Date</div>
+          <div class="col-1 w-100 colon">:</div>
+          <div class="col-6 w-100 txt-promotion-right" id="txt-right-side">{{ temp_start }}<input type="date" class="input-date" style="position:relative;display:inline-block;margin-left:2%;top:5px;margin-top:11px;" @change="format_date($event, 'start')" ></div>
+        </div>
+        <div class="row">
+          <div class="col-5 w-100 txt-promotion">End Date</div>
+          <div class="col-1 w-100 colon">:</div>
+          <div class="col-6 w-100 txt-promotion-right" id="txt-right-side">{{ temp_end }}<input type="date" class="input-date" style="position:relative;display:inline-block;margin-left:2%;top:5px;margin-top:11px;" @change="format_date($event, 'end')" ></div>
+        </div>
+        <div class="row">
+          <div class="col-5 w-100 txt-promotion">Qty</div>
+          <div class="col-1 w-100 colon">:</div>
+          <div class="col-6 w-100 txt-promotion-right" id="txt-right-side"><input type="text" class="input-promotion" style="width: 99%;" v-model="qty"></div>
+        </div>
+        <div class="row">
+          <div class="col-5 w-100 txt-promotion">Discount</div>
+          <div class="col-1 w-100 colon">:</div>
+          <div class="col-6 w-100 txt-promotion-right" id="txt-right-side"><input type="text" class="input-promotion" style="width: 99%;" v-model="discount"></div>
+        </div>
+            
+      </div>
     </div>
     <div class="description-card">
       <div class="row">
         <div
           class="col-12 w-100"
-          style="color: white; font-size: 30px; text-align: left; margin-left: 34px;"
+          style="color: white; font-size: 30px; text-align: left; margin-left: 34px; margin-top:1%"
         >
           Description :
         </div>
       </div>
       <div class="row">
-          <div class="col-12">
-              <textarea style="width: 600px; height: 80px; background: #717171;" v-model="description"></textarea>
+          <div class="col-12" style="margin-top:2%">
+              <textarea style="width: 700px; height: 80px; background: #717171;" v-model="description"></textarea>
           </div>
       </div>
     </div>
@@ -185,19 +187,29 @@ export default {
   margin-top: 18px;
 }
 .colon {
-  font-size: 30px;
+  font-size: 32px;
   text-align: center;
-  margin: 20px 0px 0px -40px;
+  margin: 18px 0px 0px -40px;
   color: white;
+  
 }
 #txt-right-side {
   margin-left: -40px;
 }
 .txt-promotion {
+  font-size: 32px;
+  color: white;
+  text-align: left;
+  margin-top: 20px;
+  padding-left: 40%;
+  font-weight: bold;
+}
+.txt-promotion-right {
+  width: 100%;
   font-size: 30px;
   color: white;
   text-align: left;
-  margin: 20px 0px 0px 120px;
+  margin: 17px 0px 0px 0px;
 }
 .card-content {
   width: 765px;

@@ -4,7 +4,7 @@
     <div class="card-content">
       <div class="row">
         <!-- Left -->
-        <div class="col-6 w-100">
+        <div class="col-5 w-100">
           <div
             class="col-12 w-100 txt-promotion"
             style="font-size: 36px; font-weight: bold"
@@ -19,7 +19,7 @@
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->
-        <div class="col-1 w-100" style="margin-top: -4px; margin-left:-40px;">
+        <div class="col-1 w-100">
           <div
             class="col-12 w-100 colon"
             style="font-size: 36px; font-weight: bold"
@@ -34,20 +34,21 @@
           <div class="col-12 w-100 colon">:</div>
         </div>
         <!-- Right -->
-        <div class="col-5 w-100" style="margin-left:-40px;">
+        <div class="col-6 w-100">
           <div
-            class="col-12 w-100 txt-promotion"
-            style="font-size: 36px; font-weight: bold; margin-left: -20px"
+            class="col-12 w-100"
+            id="txt-right-side"
+            style="font-size: 36px; font-weight: bold;"
           >
             <input
               type="text"
-              style="width: 200px;"
+              style="width: 340px;"
               class="input-promotion"
               placeholder="Name"
               v-model="point_item.promotion"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side">
             {{ format_date_show(point_item.start_promotion_date) }}
             <input
               type="date"
@@ -55,7 +56,7 @@
               @change="format_date($event, 'start')"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side">
             {{ format_date_show(point_item.end_promotion_date) }}
             <input
               type="date"
@@ -63,7 +64,7 @@
               @change="format_date($event, 'end')"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side">
             {{ format_date_show(point_item.end_reward_redemption) }}
             <input
               type="date"
@@ -71,7 +72,7 @@
               @change="format_date($event, 'endredeem')"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side">
             <input
               type="text"
               class="input-promotion"
@@ -79,7 +80,7 @@
               v-model="point_item.price_per_point"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side">
             <input
               type="text"
               class="input-promotion"
@@ -87,11 +88,8 @@
               v-model="point_item.point"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
-            <Switch v-if="point_item.status || !point_promotions.some(x => x.status == true)" :value="point_item.status" @switch="change_status(point_item)" style="margin-top: 7px" />
-            <label class="switch" v-else>
-              <span class="false-slider false-round"></span>
-            </label>
+          <div class="col-12 w-100" id="txt-right-side">
+            <Switch :value="point_item.status" style="margin-top: 10px" />
           </div>
         </div>
       </div>
@@ -105,15 +103,16 @@
             font-size: 30px;
             text-align: left;
             margin-left: 34px;
+            margin-top: 5px;
           "
         >
           Description :
         </div>
       </div>
       <div class="row">
-        <div class="col-12">
+        <div class="col-12" style="margin-top:17px;">
           <textarea
-            style="width: 600px; height: 80px; background: #717171"
+            style="width: 700px; height: 80px; background: #717171"
             v-model="point_item.description"
           ></textarea>
         </div>
@@ -218,8 +217,12 @@ export default {
   background-size: 20px 20px;
   background-position: 50% 50%;
   background-repeat: no-repeat;
+  position:relative;
+  top: -10px;
+  margin-top:21px;
 }
 .colon {
+  height: 55px;
   font-size: 30px;
   text-align: center;
   margin-top: 12px;
@@ -273,17 +276,22 @@ export default {
   color: white;
 }
 #txt-right-side {
-  margin-left: -20px;
-}
-.txt-promotion {
+  height: 55px;
   font-size: 30px;
   color: white;
+  margin: 12px 0px 0px 0px;
   text-align: left;
-  margin: 12px 0px 0px 90px;
+}
+.txt-promotion {
+  height: 55px;
+  font-size: 30px;
+  color: white;
+  text-align: right;
+  margin: 12px 0px 0px 0px;
 }
 .card-content {
   width: 765px;
-  height: 427px;
+  height: 477px;
   background: #303344;
   border-radius: 20px;
   margin: 15px 0px 0px 27px;
