@@ -57,12 +57,10 @@ class ReceiptRawMaterial(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print(request.data, 'data')
+        print(request.data, 'receipt data')
         serializer = ReceiptRawMaterialSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            print('serializer', serializer.data['id'])
-            print('request', request.data)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
@@ -81,14 +79,11 @@ class ReceiptRawMaterialDetail(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print('jello')
         request.data['remain'] = 0
-        print(request.data, 'data')
+        print(request.data, 'receipt detail data')
         serializer = ReceiptRawMaterialDetailSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            print('serializer', serializer.data['id'])
-            print('request', request.data)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
