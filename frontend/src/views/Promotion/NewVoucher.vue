@@ -47,7 +47,7 @@
           <div class="col-1 w-100 colon">:</div>
           <div class="col-6 w-100 txt-promotion-right" id="txt-right-side"><input type="text" class="input-promotion" style="width: 99%;" v-model="qty"></div>
         </div>
-        <div class="row">
+        <div class="row" style="margin-top:5px">
           <div class="col-5 w-100 txt-promotion">Discount</div>
           <div class="col-1 w-100 colon">:</div>
           <div class="col-6 w-100 txt-promotion-right" id="txt-right-side"><input type="text" class="input-promotion" style="width: 99%;" v-model="discount"></div>
