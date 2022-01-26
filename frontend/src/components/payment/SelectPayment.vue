@@ -17,7 +17,7 @@
           <button
             class="btn-ghost-g"
             style="width: 126.25px;hieght:80px; height: 133.52px"
-            @click="select_payment({ payment: 'cod' })"
+            @click="select_payment({ payment: 'COD' })"
           >
             <img
               src="../../assets/icon/give-money.png"
@@ -30,7 +30,7 @@
           <button
             class="btn-ghost-g"
             style="width: 126.25px; height: 133.52px"
-            @click="select_payment({ payment: 'credit' })"
+            @click="select_payment({ payment: 'Credit' })"
           >
             <img
               src="../../assets/icon/time-is-money.png"
@@ -340,13 +340,13 @@ export default {
       } else {
         this.$store.commit("pos/payment", payment.id);
       }
-      if (payment.payment == "cash") {
+      if (payment.payment == "Cash") {
         this.$store.state.pos.order.payment_status = 3;
         this.calculate_cash = true;
-      } else if (payment.payment == "cod") {
+      } else if (payment.payment == "COD") {
         this.$store.state.pos.order.payment_status = 1;
         this.cod_summary = true;
-      } else if (payment.payment == "credit") {
+      } else if (payment.payment == "Credit") {
         this.$store.state.pos.order.payment_status = 2;
         this.credit = true;
       } else {

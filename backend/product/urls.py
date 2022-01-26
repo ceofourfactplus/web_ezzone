@@ -16,6 +16,7 @@ urlpatterns = [
     path('category/get-amount-product/<int:category_id>', views.AmountPorduct.as_view()),
     path('category/get-amount-topping/<int:category_id>', views.AmountTopping.as_view()),
     path('sale-channel/', views.SalechannelList.as_view()),
+    path('read-sale-channel/', views.ReadOnlySalesChannel.as_view()),
     path('sale-channel/create/', views.CreateSaleChannel.as_view()),
     path('sale-channel/ezzone', views.SaleChannelEzzone.as_view()),
     path('sale-channel/<int:pk>/', views.SaleChannelDetail.as_view()),

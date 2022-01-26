@@ -1,3 +1,4 @@
+from sqlite3 import apilevel
 from pos.models import Order
 from django.db.models import F,OuterRef,Exists,Count
 import os
@@ -11,6 +12,7 @@ from product.serializers import (PriceProductSerializer,
                                  PriceToppingSerializer,
                                  ProductCategorySerializer, ProductSerializer,
                                  SaleChannelSerializer,
+                                 SaleChannelS,
                                  ProductSerializer, ToppingSerializer, ToppingCategorySerializer, UpdateImageSaleS, ImageTopping, ImageProduct)
 
 from .forms import *
@@ -310,6 +312,13 @@ class SaleChannelEzzone(APIView):
         ezzone = SaleChannel.objects.get(sale_channel='EZ Zone')
         return Response({'id': ezzone.id}, status=200)
 
+class ReadOnlySalesChannel(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+    def get(self, request):
+        sale_channel = SaleChannel.objects.all()
+        serializer = SaleChannelS(sale_channel, context={"request": request}, many=True)
+        
+        return Response(serializer.data, status=200)
 
 class SalechannelList(APIView):
     parser_classes = [MultiPartParser, FormParser]
@@ -321,6 +330,7 @@ class SalechannelList(APIView):
             )
         serializer = SaleChannelSerializer(
             sale_channel, context={"request": request}, many=True)
+        print(serializer)
         for s in serializer.data:
             s['qty'] = PriceTopping.objects.filter(sale_channel_id=s['id']).count()+PriceProduct.objects.filter(sale_channel_id=s['id']).count()
         return Response(serializer.data)

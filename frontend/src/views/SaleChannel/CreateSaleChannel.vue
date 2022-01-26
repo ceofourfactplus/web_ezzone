@@ -9,7 +9,12 @@
         <label id="select_img" for="file" style="margin-top: 0px">
           <img
             :src="show_img"
-            style="border-radius: 10px; width: 150px; height: 132px;object-fit:cover;"
+            style="
+              border-radius: 10px;
+              width: 150px;
+              height: 132px;
+              object-fit: cover;
+            "
             class="image"
             v-if="show_img != null"
           />
@@ -63,7 +68,7 @@
             <div class="col-9">
               <button
                 class="btn-ghost-b me-3"
-                style="width: 202px; height: 50px;white-space:nowrap;"
+                style="width: 202px; height: 50px; white-space: nowrap"
                 @click="
                   add_product_to_salechannel = true;
                   select_product_update_id = null;
@@ -75,7 +80,7 @@
               <button
                 v-if="!delete_status"
                 class="btn-ghost-r"
-                style="width: 235px; height: 50px;white-space:nowrap;"
+                style="width: 235px; height: 50px; white-space: nowrap"
                 @click="
                   delete_status = true;
                   add_product_to_salechannel = false;
@@ -109,11 +114,14 @@
       </div>
 
       <!-- select product -->
-      <div class="col-12 mt-2" style="text-align: left; padding: 0px">
+      <div
+        class="col-12 mt-2"
+        style="text-align: left; padding: 0px; overflow-x: auto; display: flex"
+      >
         <button
           :class="{ 'btn-gray-active': type_item == 3 }"
           @click="type_item = 3"
-          style="width:16%;padding:0px;margin:auto;"
+          style="width: fit-content; margin: auto"
           class="btn-gray me-2"
         >
           FOOD
@@ -121,7 +129,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 2 }"
           @click="type_item = 2"
-          style="width:18%;padding:0px;margin:auto;"
+          style="width: fit-content; margin: auto; white-space: nowrap"
           class="btn-gray me-2"
         >
           DRINK
@@ -129,7 +137,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 1 }"
           @click="type_item = 1"
-          style="width:18%;padding:0px;margin:auto;"
+          style="width: fit-content; margin: auto"
           class="btn-gray me-2"
         >
           DRESSERT
@@ -137,7 +145,7 @@
         <button
           :class="{ 'btn-gray-active': type_item == 4 }"
           @click="type_item = 4"
-          style="width:18%;padding:0px;margin:auto;"
+          style="width: fit-content; margin: auto"
           class="btn-gray me-2"
         >
           TOPPING
@@ -145,10 +153,18 @@
         <button
           :class="{ 'btn-gray-active': type_item == 5 }"
           @click="type_item = 5"
-          style="width:24%;padding:0px;margin:auto;"
-          class="btn-gray"
+          style="width: fit-content; margin: auto"
+          class="btn-gray me-2"
         >
           CONSIGNMENT
+        </button>
+        <button
+          :class="{ 'btn-gray-active': type_item == 6 }"
+          @click="type_item = 6"
+          style="width: fit-content; margin: auto"
+          class="btn-gray"
+        >
+          PACKAGE
         </button>
       </div>
     </div>
@@ -186,7 +202,10 @@
             v-if="check_type_update(item)"
           >
             <div class="row">
-              <div class="col-5 w-100" style="width: 100%; margin: auto; line-height: 100%">
+              <div
+                class="col-5 w-100"
+                style="width: 100%; margin: auto; line-height: 100%"
+              >
                 <input
                   type="text"
                   class="input-product"
@@ -201,6 +220,14 @@
                     @click="select_update(product)"
                   >
                     <p
+                      v-if="type_item == 6"
+                      class="w-100"
+                      :class="{ selected: selected_product.id == product.id }"
+                    >
+                      {{ product.promotion }}
+                    </p>
+                    <p
+                      v-else
                       class="w-100"
                       :class="{ selected: selected_product.id == product.id }"
                     >
@@ -219,6 +246,14 @@
                 "
               >
                 <input
+                  v-if="type_item == 6"
+                  type="number"
+                  class="input-product"
+                  v-model="item.discount_price"
+                  required
+                />
+                <input
+                  v-else
                   type="number"
                   class="input-product"
                   v-model="item.price"
@@ -226,6 +261,15 @@
                 />
               </div>
               <div
+                v-if="type_item == 6"
+                class="col-3 w-100"
+                style="line-height: 130%; font-size: 24px"
+              >
+                {{ net_price(item.discount_price) }}
+                <input type="submit" style="display: none" />
+              </div>
+              <div
+                v-else
                 class="col-3 w-100"
                 style="line-height: 130%; font-size: 24px"
               >
@@ -280,7 +324,7 @@
           <!-- product -->
           <div
             class="row"
-            v-else
+            v-else-if="'product' in item"
             style="width: 100%; margin: auto; font-size: 24px"
           >
             <div class="col-1">
@@ -310,6 +354,39 @@
               {{ net_price(item.price) }}
             </div>
           </div>
+          <!-- package -->
+          <div
+            class="row"
+            v-else-if="'package' in item"
+            style="width: 100%; margin: auto; font-size: 24px"
+          >
+            <div class="col-1">
+              <div class="checkbox-orange" v-if="delete_status">
+                <input
+                  type="checkbox"
+                  :value="item.package"
+                  v-model="delete_list_package"
+                />
+              </div>
+            </div>
+            <div
+              class="col-4 w-100"
+              style="line-height: 100%; text-align: left"
+              @click="select_product_update(item)"
+            >
+              {{ item.package_set.promotion }}
+            </div>
+            <div
+              class="col-3 w-100"
+              style="margin: auto; line-height: 100%"
+              @click="select_product_update(item)"
+            >
+              {{ item.discount_price }}
+            </div>
+            <div class="col-4 w-100" style="margin: auto; line-height: 100%">
+              {{ net_price(item.discount_price) }}
+            </div>
+          </div>
         </div>
         <!-- to create product -->
         <div class="table-item" v-if="add_product_to_salechannel">
@@ -331,6 +408,14 @@
                     @click="select_product(product)"
                   >
                     <p
+                      v-if="type_item == 6"
+                      class="w-100"
+                      :class="{ selected: selected_product.id == product.id }"
+                    >
+                      {{ product.promotion }}
+                    </p>
+                    <p
+                      v-else
                       class="w-100"
                       :class="{ selected: selected_product.id == product.id }"
                     >
@@ -381,7 +466,8 @@
 
 <script>
 import { api_product } from "../../api/api_product";
-import SavePopup from "../../components/main_component/SavePopup.vue"
+import { api_promotion } from "../../api/api_promotion";
+import SavePopup from "../../components/main_component/SavePopup.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Switch from "../../components/main_component/Switch.vue";
 import SearchBar from "../../components/materials/SearchBar.vue";
@@ -389,6 +475,9 @@ export default {
   components: { NavApp, Switch, SearchBar, SavePopup },
   mounted() {
     this.get_duplicate();
+    api_promotion.get("package").then((response) => {
+      this.all_packages = response.data;
+    });
   },
   data() {
     return {
@@ -402,6 +491,7 @@ export default {
         create_by: 1,
         price_product: [],
         price_topping: [],
+        price_package: [],
       },
       type_item: 0,
       items: [],
@@ -413,10 +503,12 @@ export default {
       create_input: false,
       delete_list_product: [],
       delete_list_topping: [],
+      delete_list_package: [],
       delete_status: false,
       select_product_update_id: 0,
       selected_product_update: {},
       update_product_name: "",
+      all_packages: [],
     };
   },
   methods: {
@@ -429,14 +521,23 @@ export default {
         this.sale_channel_set.price_topping.filter((item) => {
           return !this.delete_list_topping.includes(item.topping);
         });
+      this.sale_channel_set.price_package =
+        this.sale_channel_set.price_package.filter((item) => {
+          return !this.delete_list_package.includes(item.package);
+        });
       this.filter_product();
       this.delete_status = false;
       this.delete_list_product = [];
       this.delete_list_topping = [];
+      this.delete_list_package = [];
     },
     select_product(item) {
       this.selected_product = item;
-      this.product = item.name;
+      if (this.type_item == 6) {
+        this.product = item.promotion;
+      } else {
+        this.product = item.name;
+      }
       setTimeout(() => {
         this.search_product = [];
       }, 100);
@@ -458,10 +559,10 @@ export default {
           api_product
             .put("sale-channel-update-img/" + response.data.id + "/", data)
             .then(() => {
-              this.alert = true
+              this.alert = true;
               setTimeout(() => {
-                this.alert = false
-              }, 2000)
+                this.alert = false;
+              }, 2000);
               this.$router.push({ name: "SaleChannel" });
             });
         });
@@ -490,6 +591,14 @@ export default {
             price: this.price,
             topping_set: this.selected_product,
           });
+        } else if (this.type_item == 6) {
+          this.sale_channel_set.price_package.push({
+            package: this.selected_product.id,
+            discount_price: this.price,
+            normal_price: 0,
+            package_set: this.selected_product,
+          });
+          this.filter_product();
         } else {
           this.sale_channel_set.price_product.push({
             product: this.selected_product.id,
@@ -501,11 +610,11 @@ export default {
         this.cancel_to_create();
         this.add_product_to_salechannel = false;
       } else {
-        console.log("logge");
         this.create_input = true;
       }
     },
     net_price(price) {
+      console.log(price);
       return (price * (100 - this.sale_channel_set.gp)) / 100;
     },
     filter_same_product(data) {
@@ -524,6 +633,14 @@ export default {
       }
       return true;
     },
+    filter_same_package(data) {
+      for (var item of this.sale_channel_set.price_package) {
+        if (item.package == data.id) {
+          return false;
+        }
+      }
+      return true;
+    },
     search_all_product(val) {
       var temp = [];
       if (val == "") {
@@ -537,6 +654,11 @@ export default {
         });
         this.sale_channel_set.price_topping.forEach((element) => {
           if (element.topping_set.name.indexOf(val) + 1 != 0) {
+            temp.push(element);
+          }
+        });
+        this.sale_channel_set.price_package.forEach((element) => {
+          if (element.topping_set.promotion.indexOf(val) + 1 != 0) {
             temp.push(element);
           }
         });
@@ -561,6 +683,8 @@ export default {
         this.items = this.sale_channel_set.price_topping;
       } else if (this.type_item == 5) {
         this.items = [];
+      } else if (this.type_item == 6) {
+        this.items = this.sale_channel_set.price_package;
       }
     },
     select_product_update(item) {
@@ -568,6 +692,10 @@ export default {
         this.select_product_update_id = item.topping;
         this.update_product_name = item.topping_set.name;
         this.selected_product_update = item.topping_set;
+      } else if (this.type_item == 6) {
+        this.select_product_update_id = item.package;
+        this.update_product_name = item.package_set.promotion;
+        this.selected_product_update = item.package_set;
       } else {
         this.select_product_update_id = item.product;
         this.update_product_name = item.product_set.name;
@@ -588,6 +716,12 @@ export default {
         );
         data.topping = this.selected_product_update.id;
         data.topping_set = this.selected_product_update;
+      } else if (this.type_item == 6) {
+        const data = this.sale_channel_set.price_package.find(
+          (x) => x.package === item.package
+        );
+        data.package = this.selected_product_update.id;
+        data.package_set = this.selected_product_update;
       } else {
         const data = this.sale_channel_set.price_product.find(
           (x) => x.product === item.product
@@ -601,6 +735,8 @@ export default {
     check_type_update(item) {
       if (this.type_item == 4) {
         return item.topping == this.select_product_update_id;
+      } else if (this.type_item == 6) {
+        return item.package == this.select_product_update_id;
       } else {
         return item.product == this.select_product_update_id;
       }
@@ -616,17 +752,22 @@ export default {
           .then((response) => {
             this.sale_channel_set = response.data;
             this.sale_channel_set.sale_channel = "";
-            delete this.sale_channel_set.id
-            this.sale_channel_set.create_by = this.$store.state.auth.userInfo.id
-            delete this.sale_channel_set.create_at
+            delete this.sale_channel_set.id;
+            this.sale_channel_set.create_by =
+              this.$store.state.auth.userInfo.id;
+            delete this.sale_channel_set.create_at;
             console.log(this.sale_channel_set.sale_channel);
-            for(const item of this.sale_channel_set.price_product){
-              delete item.id
-              delete item.sale_channel
+            for (const item of this.sale_channel_set.price_product) {
+              delete item.id;
+              delete item.sale_channel;
             }
-            for(const items of this.sale_channel_set.price_topping){
-              delete items.id
-              delete items.sale_channel
+            for (const items of this.sale_channel_set.price_topping) {
+              delete items.id;
+              delete items.sale_channel;
+            }
+            for (const items of this.sale_channel_set.price_package) {
+              delete items.id;
+              delete items.sale_channel;
             }
           });
       }
@@ -639,6 +780,7 @@ export default {
     },
     product(newProduct) {
       this.create_input = false;
+      console.log(newProduct);
       if (newProduct != "") {
         if (this.type_item == 4) {
           api_product
@@ -653,6 +795,22 @@ export default {
               });
               this.search_product = arr;
             });
+        } else if (this.type_item == 6) {
+          var temp = [];
+          this.all_packages.forEach((element) => {
+            if (
+              element.promotion
+                .toLowerCase()
+                .indexOf(newProduct.toLowerCase()) +
+                1 !=
+                0 &&
+              this.filter_same_package(element)
+            ) {
+              temp.push(element);
+            }
+          });
+          this.search_product = temp;
+          console.log(this.search_product);
         } else {
           api_product
             .get(
@@ -675,8 +833,8 @@ export default {
         }
       } else {
         this.selected_product = {};
+        this.search_product = [];
       }
-      this.search_product = [];
     },
     update_product_name(newProduct) {
       this.create_input = false;
@@ -769,6 +927,7 @@ button {
 
 .btn-gray {
   font-weight: 700;
+  padding: 0px 10px;
 }
 
 .input-product {
@@ -777,7 +936,7 @@ button {
   background-color: #717171;
 }
 ul {
-  background-color: #ea7c69;
+  background-color: #717171;
   margin-top: 10px;
   list-style-type: none;
   padding: 0px;

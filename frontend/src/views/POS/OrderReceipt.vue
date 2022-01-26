@@ -359,6 +359,9 @@ export default {
   },
   mounted() {
     this.fetchVoucher();
+    api_promotion.get('point-pos/').then((response)=>{
+      this.$store.state.pos.point_promotion = response.data;
+    })
   },
   methods: {
     is_topping(product) {
