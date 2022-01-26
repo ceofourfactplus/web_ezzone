@@ -121,8 +121,11 @@ class GetCustomer(APIView):
         else:
             data['point'] = 0
             data['total_promotion'] = 0 
+        orders = [order for order in Order.objects.filter(customer_id=pk)]
         customer = self.get_object(pk)
         data['customer'] = CustomerSerializer(customer, context={"request": request}).data
+        data['customer']['date_joined'] = orders[0].create_at
+        data['customer']['last_joined'] = orders[-1].create_at
         data['total_price'] = Order.objects.filter(customer_id=pk).aggregate(Sum('total_balance'))['total_balance__sum']
         data['top_products'] = self.get_favorite_menu(pk)
         return Response(data, status=200)
