@@ -315,7 +315,6 @@ export default {
   methods: {
     get_price_product(price_list) {
       if (price_list[0] != undefined) {
-        console.log("lkadjfkajhdsfnlk");
         const price = parseInt(
           price_list.filter((item) => {
             return (

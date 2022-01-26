@@ -3,7 +3,7 @@ from rest_framework import serializers
 from user.serializers import UserSerializer
 from product.models import Product, Topping
 from customer.serializers import CustomerSerializer, AddressCustomerSerializer
-from .models import PointPromotion, Voucher, PromotionPackage, PackageItem, ItemTopping, Rewards, ConditionRewards, Redemption, CustomerPoint, ExchangeHistory, PricePackage
+from .models import PointPromotion, Voucher,PricePackage, PromotionPackage, PackageItem, ItemTopping, Rewards, ConditionRewards, Redemption, CustomerPoint, ExchangeHistory
 from pprint import pprint
 
 

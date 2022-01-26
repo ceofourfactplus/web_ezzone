@@ -251,7 +251,7 @@ export default {
       } else if (this.select_type_product == 5) {
         this.products = [];
       } else if (this.select_type_product == 4) {
-        api_promotion.get('package-pos/').then((response) => {
+        api_promotion.get('package-by-sale-channel/'+this.$store.state.pos.order.sale_channel_id).then((response) => {
           this.products = response.data;
         })
       } else {
