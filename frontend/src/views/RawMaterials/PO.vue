@@ -84,10 +84,10 @@
               </div>
               <div class="col-1 w-100"></div>
               <div class="col-4 w-100">
-                <pre
+                <p
                   style="font-size: 28px; font-weight: 800"
                 >
-Total  {{ recept.total_price }}</pre
+Total  {{ recept.total_price }}</p
                 >
               </div>
             </div>
@@ -133,7 +133,7 @@ Total  {{ recept.total_price }}</pre
                 style="margin: auto; text-align: left"
                 @click="showPoPopup(item)"
               >
-                {{ item.raw_material_set.remain }}
+                {{ item.raw_material_set.must_buy }}
               </div>
               <div
                 class="col-1 w-100"
@@ -160,6 +160,8 @@ Total  {{ recept.total_price }}</pre
       </div>
     </div>
 
+    <!-- Save Popup -->
+    <SavePopup :alert="alert" />
     <!-- add PO -->
     <div class="blur" v-if="add_po">
       <div
@@ -380,17 +382,18 @@ Total  {{ recept.total_price }}</pre
               <input
                 type="text"
                 class="under-wrapper-input"
-                v-model="po_popup_item.raw_material_set.remain"
+                v-model="po_popup_item.raw_material_set.must_buy"
                 @input="calc_total_price(po_popup_item)"
               />
               <select
                 style="margin-left: 10px;"
                 class="under-wrapper-input"
                 v-model="po_popup_item.unit_set.id"
+                @change="calc_price_unit(po_popup_item.unit_set.id)"
               >
                 <option
                   style="background-color: black;"
-                  v-for="unit in all_unit"
+                  v-for="unit in show_units"
                   :key="unit.id"
                   :value="unit.id"
                 >
@@ -425,7 +428,7 @@ Total  {{ recept.total_price }}</pre
               <input
                 type="text"
                 class="under-wrapper-input"
-                :value="po_popup_item.raw_material_set.remain * po_popup_item.last_price"
+                :value="po_popup_item.raw_material_set.must_buy * po_popup_item.last_price"
               />
               บาท
             </div>
@@ -438,6 +441,7 @@ Total  {{ recept.total_price }}</pre
 
 <script>
 import { api_raw_material } from "../../api/api_raw_material";
+import SavePopup from "../../components/main_component/SavePopup.vue"
 import SearchBar from "../../components/materials/SearchBar.vue";
 import NavApp from "../../components/main_component/NavApp.vue";
 import Table from "../../components/main_component/Table.vue";
@@ -449,6 +453,7 @@ export default {
     NavApp,
     Table,
     CheckBoxWhite,
+    SavePopup,
   },
   mounted() {
     api_raw_material.get("category").then((response) => {
@@ -460,9 +465,6 @@ export default {
     });
     api_raw_material.get("raw-material/").then((response) => {
       this.all_raw_material = response.data;
-    });
-    api_raw_material.get("po/calc").then((response) => {
-      console.log(response.data)
     });
   },
 
@@ -485,6 +487,7 @@ export default {
       dict_list: {},
       all_raw_material: [],
       all_unit: [],
+      show_units: [],
       discount_choice: 0,
       all_supplier: [],
       price: 0,
@@ -499,6 +502,7 @@ export default {
       head_selected: [],
       selected: [],
       categories: [],
+      all_dressert: false,
     };
   },
   methods: {
@@ -568,6 +572,12 @@ export default {
         this.all_supplier = response.data;
       });
     },
+    calc_price_unit(unit_id){
+      console.log(unit_id)
+      // this.po_popup_item.raw_material_set.pricerawmaterial_set.forEach(prm => {
+
+      // })
+    },
     // get_min_sup(item) {
     //   api_raw_material.get("get-min-supplier/"+item.).then((response) => {
     //     return response.data.supplier;
@@ -575,8 +585,7 @@ export default {
     // },
     async get_po() {
       await api_raw_material.get("po/").then((response) => {
-        console.log(response.data, "po");
-        this.po = response.data;
+        this.po = response.data
       });
     },
     get_status(status) {
@@ -634,6 +643,7 @@ export default {
         };
         for (const item of this.po) {
           if (item.supplier_id == supplier.supplier_id) {
+            item.raw_material_set.must_buy = item.raw_material_set.maximum - item.raw_material_set.remain
             const data = {
               po_id: item.id,
               supplier_id: item.supplier_id,
@@ -660,6 +670,15 @@ export default {
       this.temp_all_recept = all_recept;
     },
     showPoPopup(item) {
+      this.show_units = []
+      var temp_units = [item.raw_material_set.unit_l_id, item.raw_material_set.unit_m_id, item.raw_material_set.unit_s_id,]
+      temp_units.forEach(unit_id => {
+        this.all_unit.forEach((unit) => {
+          if(unit_id == unit.id) {
+            this.show_units.push(unit)
+          }
+        })
+      })
       console.log(item, "item");
       this.supplier_id = item.supplier_id;
       this.temp_supplier_id = item.supplier_id;
@@ -672,52 +691,60 @@ export default {
       this.po_popup = true;
     },
     async edit() {
-      const data = new FormData();
-      data.append("id", this.po_popup_item.raw_material_set.id);
-      data.append("maximum", this.po_popup_item.raw_material_set.maximum);
-      data.append("minimum", this.po_popup_item.raw_material_set.minimum);
-      data.append("remain", this.po_popup_item.raw_material_set.remain);
-      data.append("category_id", this.po_popup_item.raw_material_set.category_id);
-      data.append("name", this.po_popup_item.raw_material_set.name);
-      data.append(
-        "in_refrigerator",
-        this.po_popup_item.raw_material_set.in_refrigerator
-      );
-      data.append("supplier_id", this.po_popup_item.supplier_id);
-      data.append("unit_l_id", this.po_popup_item.raw_material_set.unit_l_id);
-      data.append("unit_m_id", this.po_popup_item.raw_material_set.unit_m_id);
-      data.append("unit_s_id", this.po_popup_item.raw_material_set.unit_s_id);
-      data.append("m_to_l", this.po_popup_item.raw_material_set.m_to_l);
-      data.append("s_to_m", this.po_popup_item.raw_material_set.s_to_m);
-      data.append("avg_l", this.po_popup_item.raw_material_set.avg_l);
-      data.append("avg_m", this.po_popup_item.raw_material_set.avg_m);
-      data.append("avg_s", this.po_popup_item.raw_material_set.avg_s);
-      data.append("update_by_id", this.$store.state.auth.userInfo.id);
-      data.append("create_by_id", this.$store.state.auth.userInfo.id);
-      if (this.new_img) {
-        user_data.append(
-          "img",
-          this.po_popup_item.raw_material_set.img,
-          this.po_popup_item.raw_material_set.img.name
-        );
-      }
-      await api_raw_material.put("rm-update/", data).then((response) => {
-        console.log(response.data, "response data");
-      });
-      var po_data = {
-        id: this.po_popup_item.po_id,
-        amount: this.po_popup_item.amount,
-        create_at: this.po_popup_item.create_at,
-        create_by_id: this.po_popup_item.create_by_set.id,
-        last_price: this.po_popup_item.last_price,
-        raw_material_id: this.po_popup_item.raw_material_id,
-        supplier_id: this.po_popup_item.supplier_id,
-        unit_id: this.po_popup_item.unit_set.id,
-      }
-      api_raw_material.put("po/update/", po_data).then((response) => {
-        console.log(response.data, 'po update')
+      this.alert = true;
+      setTimeout(() => {
         this.po_popup = false
+        this.alert = false;
+      }, 2000)
+      api_raw_material.put("rm-update/", this.po_popup_item.raw_material_set).then((response) => {
+        console.log(response.data)
       })
+      // const data = new FormData();
+      // data.append("id", this.po_popup_item.raw_material_set.id);
+      // data.append("maximum", this.po_popup_item.raw_material_set.maximum);
+      // data.append("minimum", this.po_popup_item.raw_material_set.minimum);
+      // data.append("remain", this.po_popup_item.raw_material_set.remain);
+      // data.append("category_id", this.po_popup_item.raw_material_set.category_id);
+      // data.append("name", this.po_popup_item.raw_material_set.name);
+      // data.append(
+      //   "in_refrigerator",
+      //   this.po_popup_item.raw_material_set.in_refrigerator
+      // );
+      // data.append("supplier_id", this.po_popup_item.supplier_id);
+      // data.append("unit_l_id", this.po_popup_item.raw_material_set.unit_l_id);
+      // data.append("unit_m_id", this.po_popup_item.raw_material_set.unit_m_id);
+      // data.append("unit_s_id", this.po_popup_item.raw_material_set.unit_s_id);
+      // data.append("m_to_l", this.po_popup_item.raw_material_set.m_to_l);
+      // data.append("s_to_m", this.po_popup_item.raw_material_set.s_to_m);
+      // data.append("avg_l", this.po_popup_item.raw_material_set.avg_l);
+      // data.append("avg_m", this.po_popup_item.raw_material_set.avg_m);
+      // data.append("avg_s", this.po_popup_item.raw_material_set.avg_s);
+      // data.append("update_by_id", this.$store.state.auth.userInfo.id);
+      // data.append("create_by_id", this.$store.state.auth.userInfo.id);
+      // if (this.new_img) {
+      //   user_data.append(
+      //     "img",
+      //     this.po_popup_item.raw_material_set.img,
+      //     this.po_popup_item.raw_material_set.img.name
+      //   );
+      // }
+      // await api_raw_material.put("rm-update/", data).then((response) => {
+      //   console.log(response.data, "response data");
+      // });
+      // var po_data = {
+      //   id: this.po_popup_item.po_id,
+      //   amount: this.po_popup_item.amount,
+      //   create_at: this.po_popup_item.create_at,
+      //   create_by_id: this.po_popup_item.create_by_set.id,
+      //   last_price: this.po_popup_item.last_price,
+      //   raw_material_id: this.po_popup_item.raw_material_id,
+      //   supplier_id: this.po_popup_item.supplier_id,
+      //   unit_id: this.po_popup_item.unit_set.id,
+      // }
+      // api_raw_material.put("po/update/", po_data).then((response) => {
+      //   console.log(response.data, 'po update')
+      //   this.po_popup = false
+      // })
     },
     change_supplier() {
       console.log(this.po_popup_item, this.temp_supplier_id, "po_popup_item");

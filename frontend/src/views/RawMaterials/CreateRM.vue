@@ -126,21 +126,21 @@
           <div class="col-3 w-100">
             <input
               type="number"
-              v-model="options_s.price"
+              v-model="options_s.last_price"
               style="text-align: right; padding-right: 10px"
             />
           </div>
           <div class="col-3 w-100">
             <input
               type="number"
-              v-model="options_m.price"
+              v-model="options_m.last_price"
               style="text-align: right; padding-right: 10px"
             />
           </div>
           <div class="col-3 w-100">
             <input
               type="number"
-              v-model="options_l.price"
+              v-model="options_l.last_price"
               style="text-align: right; padding-right: 10px"
             />
           </div>
@@ -330,17 +330,17 @@ export default {
         ],
       },
       options_s: {
-        price: 0,
+        last_price: 0,
         supplier: null,
         remain: 0,
       },
       options_m: {
-        price: 0,
+        last_price: 0,
         supplier: null,
         remain: 0,
       },
       options_l: {
-        price: 0,
+        last_price: 0,
         supplier: null,
         remain: 0,
       },
@@ -357,20 +357,30 @@ export default {
       }
     },
     check_option() {
-      console.log("in check");
       for (var option of ["options_s", "options_m", "options_l"]) {
-        console.log(option);
-        if (this[option].supplier != null && this[option].price != 0) {
-          console.log("je;;p");
+        if (this[option].supplier != null && this[option].last_price != 0) {
           var data = this[option];
           const name = "unit_" + option.charAt(option.length - 1) + "_name";
-          console.log(this.raw_material[name]);
           data["unit_name"] = this.raw_material[name];
           this.raw_material.pricerawmaterial_set.push(
             JSON.parse(JSON.stringify(data))
           );
         }
       }
+      this.raw_material.pricerawmaterial_set.forEach((el) => {
+        this.units.forEach(unit => {
+          if(unit.unit == el.unit_name) {
+            el.unit_id = unit.id
+          }
+        })
+        if(el.last_price != 0 && el.remain != 0) {
+          el.avg_price = (el.last_price / el.remain).toFixed(2)
+        } else {
+          el.avg_price = 0
+        }
+      })
+
+      console.log(this.raw_material.pricerawmaterial_set, 'price rm')
       if (this.raw_material.pricerawmaterial_set.length != 0) {
         return true;
       } else {

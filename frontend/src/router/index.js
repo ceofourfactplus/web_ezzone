@@ -188,9 +188,9 @@ const routes = [
     path: "/promotion",
     name: "Promotion",
     component: Promotion,
-    // meta: {
-    //   requiresLogin: true,
-    // },
+    meta: {
+      requiresLogin: true,
+    },
   },
   {
     path: "/promotion/redemption",

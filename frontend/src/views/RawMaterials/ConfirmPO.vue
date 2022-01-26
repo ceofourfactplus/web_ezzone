@@ -73,7 +73,7 @@
             {{ recept_detail.raw_material_set.name }}
           </div>
           <div class="col-1 w-100 line-item" style="margin-left: -5px">
-            {{ recept_detail.raw_material_set.remain }}
+            {{ recept_detail.raw_material_set.must_buy }}
           </div>
           <div class="col-1 w-100 line-item" style="margin-right: -10px">
             {{ recept_detail.unit_set.unit }}
@@ -160,7 +160,7 @@ export default {
   },
   methods: {
     calc(item) {
-      item.total_price = item.last_price * item.raw_material_set.remain;
+      item.total_price = item.last_price * item.raw_material_set.must_buy;
       return item.total_price;
     },
     calc_total_price(item) {
