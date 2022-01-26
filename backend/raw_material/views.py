@@ -486,16 +486,16 @@ class CalcPOAvg(APIView):
                 po_items[i.raw_material_id].append(i)
             else:
                 po_items[i.raw_material_id] = [i]
-        print(po_items)
         for prop in po_items:
             for item in po_items[prop]:
-                sum_val += item.last_price
+                sum_val += int(item.last_price)
             avg[prop] = sum_val / len(po_items[prop])
             sum_val = 0
         print(avg, 'avg')
         for prop in avg:
             po_obj = PO.objects.filter(raw_material_id=prop)[0]
             rm = RawMaterial.objects.get(id=prop)
+            print(rm.unit_l_id, rm.unit_m_id, rm.unit_m_id, 'id')
             rm.avg_s = avg[prop]
             l_remain = rm.remain / rm.m_to_l
             prm_l = PriceRawMaterial.objects.get(

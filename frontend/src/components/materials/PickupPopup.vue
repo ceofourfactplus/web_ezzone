@@ -3,7 +3,7 @@
     <div class="show-pickup-popup">
       <!-- Nav -->
       <div class="row" style="margin-top: 10px;">
-        <div class="col-11 w-100 txt-for-add" style="width: 100%">{{item.name}}</div>
+        <div class="col-11 w-100 txt-for-add" style="width: 100%; white-space: nowrap; overflow-x: auto;">{{item.name}}</div>
         <div class="col-1 w-100">
           <img
             @click="$emit('show_status')"
@@ -63,7 +63,7 @@
     <!-- Card Popup -->
     <div class="card" :class="{ 'card-active': alert }">
       <div class="icon">
-        <img src="../../assets/icon/btn-pass.png" alt="" />
+        <img src="../../assets/icon/btn-pass.png" />
       </div>
       <div class="main-text">Pickup successfully</div>
     </div>
@@ -128,14 +128,18 @@ export default {
   box-sizing: border-box;
   border-radius: 10px;
   font-size: 24px;
+  padding-right: 3%;
   color: #50d1aa;
   background: transparent;
+  text-align: right;
+  line-height: 27px;
 }
 span.icon-save {
   background: url("../../assets/icon/correct.png") no-repeat transparent;
+  transform: rotate(180deg);
   background-size: 30px;
   float: left;
-  margin-left: 10px;
+  margin-left: -4px;
   width: 30px;
   height: 30px;
 }
@@ -155,14 +159,14 @@ span.icon-save {
 }
 .content-wrapper {
   width: 575px;
-  height: 220px;
-  margin: 15px 20px 0px 20px;
+  height: 205px;
+  margin: 20px 20px 5px 20px;
   background: #303344;
   border-radius: 30px;
 }
 .show-pickup-popup {
   width: 616.86px;
-  height: 380px;
+  height: 385px;
   top: 20%;
   left: 12%;
   position: absolute;
@@ -187,8 +191,11 @@ span.icon-save {
   font-size: 36px;
   line-height: 56px;
   text-align: center;
-  width: 100%;
+  width: 85%;
   color: white;
+  white-space: nowrap;
+  overflow-x: auto;
+  margin-left: 12%;
 }
 .edit-block {
   position: absolute;

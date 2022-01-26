@@ -5,8 +5,11 @@ from rest_framework.response import Response
 from customer.serializers import CustomerSerializer, CustomerImageSerializer
 from customer.models import Customer, AddressCustomer
 import datetime
+from django.db.models import F, Value
 from rest_framework.parsers import FormParser, MultiPartParser
-from pos.models import Order
+from pos.models import Order, OrderItem, OrderItemTopping
+from product.models import Product
+from product.serializers import ProductS
 
 # Create your views here.
 
@@ -82,6 +85,24 @@ from promotion.models import CustomerPoint,PointPromotion
 class GetCustomer(APIView):
 
     parser_classes = [MultiPartParser, FormParser]
+    
+    def get_favorite_menu(self, pk):
+        orders_id = [order.id for order in Order.objects.filter(customer_id=pk)]
+        order_items = OrderItem.objects.filter(order_id__in=orders_id)
+        products = {}
+        for i in order_items:
+            if not products.get(i.product_id):
+                products[i.product_id] = i.amount
+            else:
+                products[i.product_id] += i.amount
+        products = dict(sorted(products.items(), key=lambda item: item[1], reverse=True))
+        top_products = []
+        for i in products.keys():
+            product = Product.objects.get(id=i)
+            serializer = ProductS(product)
+            top_products.append(serializer.data)
+            
+        return top_products[:3]
 
     def get_object(self, pk):
         try:
@@ -100,9 +121,17 @@ class GetCustomer(APIView):
         else:
             data['point'] = 0
             data['total_promotion'] = 0 
+        orders = [order for order in Order.objects.filter(customer_id=pk)]
         customer = self.get_object(pk)
         data['customer'] = CustomerSerializer(customer, context={"request": request}).data
+        if len(orders) != 0:
+            data['customer']['date_joined'] = orders[0].create_at
+            data['customer']['last_joined'] = orders[-1].create_at
+        else:
+            data['customer']['date_joined'] = 'xxxx-xx-xx'
+            data['customer']['last_joined'] = 'xxxx-xx-xx'
         data['total_price'] = Order.objects.filter(customer_id=pk).aggregate(Sum('total_balance'))['total_balance__sum']
+        data['top_products'] = self.get_favorite_menu(pk)
         return Response(data, status=200)
 
 

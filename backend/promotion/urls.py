@@ -20,7 +20,7 @@ urlpatterns = [
     path('reward/<int:pk>', views.RewardGET().as_view()),
     path('condition-reward/', views.ConditionRewardAPI().as_view()),
     path('condition-reward/<int:pk>', views.ConditionRewardGET().as_view()),
-    # path('customer-point/', views.CustomerPointAPI().as_view()),
+    path('customer-point/', views.CustomerPointAPI().as_view()),
     path('customer-point/<int:pk>', views.CustomerPointGET().as_view()),
     path('exchange-history/', views.ExchangeHistoryAPI().as_view()),
     path('exchange-history/<int:pk>', views.ExchangeHistoryGET().as_view()),

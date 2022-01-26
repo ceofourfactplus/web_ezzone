@@ -4,7 +4,7 @@
     <div class="card-content">
       <div class="row">
         <!-- Left -->
-        <div class="col-6 w-100">
+        <div class="col-5 w-100">
           <div
             class="col-12 w-100 txt-promotion"
             style="font-size: 36px; font-weight: bold"
@@ -19,7 +19,7 @@
           <div class="col-12 w-100 txt-promotion">Status</div>
         </div>
         <!-- Middle -->
-        <div class="col-1 w-100" style="margin-top: -4px; margin-left: -40px;">
+        <div class="col-1 w-100">
           <div
             class="col-12 w-100 colon"
             style="font-size: 36px; font-weight: bold"
@@ -34,44 +34,48 @@
           <div class="col-12 w-100 colon">:</div>
         </div>
         <!-- Right -->
-        <div class="col-5 w-100" style="margin-left: -40px;">
+        <div class="col-6 w-100">
           <div
-            class="col-12 w-100 txt-promotion"
-            style="font-size: 36px; font-weight: bold; margin-left: -20px"
+            class="col-12 w-100"
+            id="txt-right-side"
+            style="font-size: 36px; font-weight: bold;"
           >
             <input
               type="text"
-              style="width: 200px"
+              style="width: 200px;"
               class="input-promotion"
               placeholder="Name"
               v-model="promotion"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side" >
             {{ temp_start }}
             <input
               type="date"
               class="input-date"
+              style="margin-top:7px"
               @change="format_date($event, 'start')"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side" >
             {{ temp_end }}
             <input
               type="date"
               class="input-date"
+              style="margin-top:7px"
               @change="format_date($event, 'end')"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side" >
             {{ temp_end_redeem }}
             <input
               type="date"
               class="input-date"
+              style="margin-top:7px"
               @change="format_date($event, 'endredeem')"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side">
             <input
               type="text"
               class="input-promotion"
@@ -79,7 +83,7 @@
               v-model="price_per_point"
             />
           </div>
-          <div class="col-12 w-100 txt-promotion" id="txt-right-side">
+          <div class="col-12 w-100" id="txt-right-side">
             <input
               type="text"
               class="input-promotion"
@@ -87,13 +91,11 @@
               v-model="point"
             />
           </div>
-          <div v-if="!point_promotions.some(x => x.status == true)" class="col-12 w-100 txt-promotion" id="txt-right-side">
-            <Switch @switch="switch_active" style="margin-top: 7px" />
+          <div v-if="!point_promotions.some(x => x.status == true)" class="col-12 w-100" id="txt-right-side">
+            <Switch @switch="switch_active" style="margin-top: 10px" />
           </div>
-          <div v-else class="col-12 w-100 txt-promotion" id="txt-right-side">
-            <label class="switch">
-              <span class="false-slider false-round"></span>
-            </label>
+          <div v-else class="col-12 w-100" id="txt-right-side">
+            .....
           </div>
         </div>
       </div>
@@ -256,6 +258,7 @@ export default {
 }
 
 .colon {
+  height: 55px;
   font-size: 30px;
   text-align: center;
   margin-top: 12px;
@@ -263,22 +266,38 @@ export default {
 }
 
 #txt-right-side {
-  height: 45px;
-  margin: 12px 0px 0px -20px;
-  font-size: 24px;
-  font-weight: normal;
-}
-.txt-promotion {
+  height: 55px;
   font-size: 30px;
   color: white;
+  margin: 12px 0px 0px 0px;
   text-align: left;
-  margin: 12px 0px 0px 90px;
+}
+.txt-promotion {
+  height: 55px;
+  font-size: 30px;
+  color: white;
+  text-align: right;
+  margin: 12px 0px 0px 0px;
 }
 .card-content {
   width: 765px;
-  height: 427px;
+  height: 477px;
   background: #303344;
   border-radius: 20px;
   margin: 15px 0px 0px 27px;
+}
+.input-date {
+  width: 30px;
+  height: 30px;
+  background: white;
+  background-image: url("../../assets/icon/calendar.png");
+  background-size: 20px 20px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  position:relative;
+  top: 5px;
+  margin-top:12px;
+  line-height: 10px;
+  display: inline-block;
 }
 </style>

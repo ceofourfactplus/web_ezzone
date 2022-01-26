@@ -3,7 +3,7 @@ export default {
         page: null,
         tab: "All",
         status_image: {
-            1: {img: require('../../assets/icon/correct.png'), txt: 'In Stock', class: 'btn-g', style: 'width: 50px; height: 50px;'} ,
+            1: {img: require('../../assets/icon/correct.png'), txt: 'In Stock', class: 'btn-g', style: 'width: 50px; height: 50px;transform:rotate(180deg);'} ,
             2: {img: require('../../assets/icon/warning.png'), txt: 'Minimum', class: 'btn-y', style: 'width: 50px; height: 50px;'} ,
             3: {img: require('../../assets/icon/incorrect.png'), txt: 'Out of Stock', class: 'btn-r', style: 'width: 50px; height: 50px;'} ,
         },

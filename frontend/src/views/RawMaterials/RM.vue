@@ -83,7 +83,7 @@
           <div
               class="col-6 w-100"
               @click="editRM(item)"
-              style="text-align: left;"
+              style="text-align: left; white-space:nowrap;overflow-x:auto;"
             >
               {{ item.name }}
             </div>
@@ -131,7 +131,7 @@
     </div>
 
     <!-- Show Pickup Popup -->
-    <div class="blur" v-if="show_pickup_status" @click="sjot = false">
+    <div class="blur" style="height:100%;" v-if="show_pickup_status" @click="sjot = false">
       <PickupPopup
         :item="raw_material_item"
         @show_status="hideShowPickup"

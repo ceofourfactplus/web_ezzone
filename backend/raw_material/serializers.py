@@ -124,7 +124,9 @@ class RawMaterialSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        print(validated_data, 'validated_data')
         price = validated_data.pop('pricerawmaterial_set')
+        print(price, 'price')
         raw_material = RawMaterial.objects.create(**validated_data)
         for p in price:
             PriceRawMaterial.objects.create(**p, raw_material=raw_material)

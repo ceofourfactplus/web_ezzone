@@ -88,8 +88,10 @@
             <SmallSwitch :value="item.status" @switch="change_status(item)" style="margin: 25px 0px 0px 80px;" />
           </div>
         </div>
+
         <div class="row" style="line-height: 110px;width100%;margin:0%;">
           <div
+            v-if="!used_point_promotions_id.includes(item.id)"
             class="col-2 w-100"
             style="margin-left: 15px"
             @click="delete_confirm(item)"
@@ -99,6 +101,7 @@
               style="width: 64px; height: 64px"
             />
           </div>
+          <div class="col-2 w-100" style="margin-left: 15px;" v-else></div>
           <div class="col-1 w-100">
             <img
               src="../../assets/icon/edit.png"
@@ -420,6 +423,7 @@ export default {
       is_staff: false,
       alert: false,
       point_item: {},
+      used_point_promotions_id: [],
       point_promotions: [],
       temp_point_promotions: [],
       vouchers: [],
@@ -540,6 +544,9 @@ export default {
         this.point_promotions = response.data;
         this.temp_point_promotions = response.data;
       });
+      api_promotion.get('customer-point/').then((response) => {
+        this.used_point_promotions_id = response.data.map(x => x.point_promotion_id)
+      })
     },
     format_date(date) {
       var temp_date = date.split("-");

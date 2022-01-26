@@ -9,6 +9,7 @@
         class="row"
         style="margin-top: 0px; margin-left: 20px; height: 230px"
       >
+
         <!-- img -->
         <div class="col-3 w-100" style="margin-right: 20px">
           <div class="row">
@@ -18,7 +19,6 @@
                   v-if="show_img == null"
                   width="160"
                   height="160"
-                  src="../../assets/icon/User.png"
                   style="border-radius: 50%"
                 />
                 <img
@@ -96,7 +96,7 @@
               </h2>
               <div class="btn w-100">
                 <h2>
-                  <span>{{ (point).toLocaleString() }}</span>
+                  <span>{{ format_locale_string(point) }}</span>
                 </h2>
               </div>
             </div>
@@ -113,7 +113,7 @@
               </h2>
               <div class="btn w-100">
                 <h2>
-                  <span>{{ (total_promotion).toLocaleString() }}</span>
+                  <span>{{ format_locale_string(total_promotion) }}</span>
                 </h2>
               </div>
             </div>
@@ -130,7 +130,7 @@
               </h2>
               <div class="btn w-100">
                 <h2>
-                  <span>{{(total_price).toLocaleString() }}</span>
+                  <span>{{ format_locale_string(total_price) }}</span>
                 </h2>
               </div>
               <h2>LOD&#160;{{ getDate(customer.last_joined) }}</h2>
@@ -138,16 +138,10 @@
           </div>
           <div class="row">
             <h2><span>Favorite&#160;Menu</span></h2>
-            <div class="row">
-              <div
-                v-for="(menu, index) in favorite_menu"
-                :key="menu.id"
-                class="col-4"
-              >
-                <h2 style="color: #fff">
-                  {{ index + 1 }}.&#160;{{ Menu(menu) }}
-                </h2>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-4 w-100" style="text-align: left;color: white; font-size: 20px; font-weight: 600;" v-for="(menu, idx) in favorite_menu" :key="menu.id">
+              {{ idx+1 }}.&nbsp;{{ menu.name }}
             </div>
           </div>
         </div>
@@ -305,11 +299,13 @@ export default {
     };
   },
   methods: {
+    format_locale_string(num) {
+      return (parseInt(num)).toLocaleString()
+    },
     getDate(date) {
       console.log(date);
-      return new Date(date).toLocaleString("th-TH", {
-        dateStyle: "short",
-      });
+      var temp_date = date.slice(0, 10).split('-')
+      return `${temp_date[2]}/${temp_date[1]}/${temp_date[0]}`
     },
     onFileChange(e) {
       this.customer.img = e.target.files[0];
@@ -362,28 +358,27 @@ export default {
           });
       }
     },
-    Menu(menu) {
-      return menu.id;
-    },
   },
-
-  beforeCreate() {
+  beforeMount() {
     api_customer
       .get("get-customer/" + this.$route.params.id)
-      .then((reponse) => {
-        this.customer = reponse.data.customer;
+      .then((response) => {
+        console.log(response.data, 'data')
+        this.customer = response.data.customer;
+        this.favorite_menu = response.data.top_products
         if (this.customer.img != null) {
           this.show_img = this.customer.img;
         }
-        this.total_price = reponse.data.total_price;
-        this.point = reponse.data.point;
-        this.total_promotion = reponse.data.total_promotion;
-        this.addresscustomer.customer_id = reponse.data.customer.id;
+        this.total_price = response.data.total_price;
+        this.point = response.data.point;
+        this.total_promotion = response.data.total_promotion;
+        this.addresscustomer.customer_id = response.data.customer.id;
       });
     api_customer.get("customer").then((response) => {
       this.all_cus = response.data;
     });
   },
+  mounted() {},
   watch: {
     "customer.phone_number"(number) {
       this.error.status = false;

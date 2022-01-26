@@ -4,7 +4,7 @@
     <div class="card-content">
       <div class="row">
         <!-- Left Side -->
-        <div class="col-8 w-100" style="margin-left: 38px;">
+        <div class="col-8 w-100" style="margin-left: 38px; margin-top:4%;">
           <!-- Input -->
           <div class="row">
             <div class="col-12 w-100">
@@ -81,7 +81,7 @@
           </div>
         </div>
         <!-- Right Side -->
-        <div class="col-4 w-100">
+        <div class="col-4 w-100" style="margin-top:3%;">
           <div
             class="col-12 w-100"
             style="color: white; margin: 15px 10px 0px 0px"

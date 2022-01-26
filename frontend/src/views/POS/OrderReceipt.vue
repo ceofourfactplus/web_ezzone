@@ -151,7 +151,7 @@
             <div class="col-6 w-100" style="margin: auto">Order Details</div>
             <div class="col-2 w-100" style="margin: auto">Qty</div>
             <div class="col-1 w-100" style="margin: auto">Price</div>
-            <div class="col-2 w-100" style="margin: auto">Total</div>
+            <div class="col-2 w-100" style="margin: auto">Amount</div>
           </div>
         </div>
         <div
