@@ -52,10 +52,12 @@ class ProductS(serializers.ModelSerializer):
             'update_by_id',
         ]
 
-class PricePackageS(serializers.Serializer):
+class PricePackageSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     class Meta:
         model = PricePackage
-        fields = '__all__'
+        fields = ['id',"package","sale_channel",'normal_price','discount_price']
+        read_only_fields = ('package',)
 
 class PointListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -180,7 +182,7 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
     description = serializers.CharField(required=False, allow_blank=True)
     packageitem_set = PackageItemSerializer(many=True)
     img = serializers.ImageField(read_only=True)
-    pricepackage_set = PricePackageS(many=True)
+    pricepackage_set = PricePackageSerializer(many=True,source='pricepackage')
 
     class Meta:
         model = PromotionPackage
@@ -204,7 +206,8 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         packageitem_set = validated_data.pop('packageitem_set')
-        pricepackage_set = validated_data.pop('pricepackage_set')
+        pricepackage_set = validated_data.pop('pricepackage')
+        pprint(pricepackage_set)
         pp = PromotionPackage.objects.create(**validated_data)
         if packageitem_set != []:
             for item in packageitem_set:
@@ -229,7 +232,7 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
         instance.save()
 
         package_item_id = [i['id']
-                           for i in validated_data['packageitem_set'] if i.get('id')]
+                           for i in validated_data['packageitem'] if i.get('id')]
         PackageItem.objects.filter(package_id=instance.id).exclude(
             id__in=package_item_id).delete()
         print(validated_data['packageitem_set'], 'validated_data')

@@ -773,8 +773,8 @@ export default {
         amount_day: this.amount_day,
         pricepackage_set: [
           {
-            normal_price: this.total_price,
-            discount_price: this.discount_price,
+            normal_price: this.total_price.toString(),
+            discount_price: this.discount_price.toString(),
             sale_channel: this.$store.state.ezzone_id,
           },
         ],
