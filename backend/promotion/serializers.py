@@ -1,12 +1,61 @@
-from pyexpat import model
 from django.db.models import fields
 from rest_framework import serializers
 from user.serializers import UserSerializer
-from product.serializers import ProductSerializer, ProductCategorySerializer, PriceProductSerializer, ToppingCategorySerializer, OnlyPriceProduct, ToppingSerializer
+from product.models import Product, Topping
 from customer.serializers import CustomerSerializer, AddressCustomerSerializer
-from .models import PointPromotion, Voucher, PromotionPackage, PackageItem, ItemTopping, Rewards, ConditionRewards, Redemption, CustomerPoint, ExchangeHistory, PricePackage
+from .models import PointPromotion, Voucher,PricePackage, PromotionPackage, PackageItem, ItemTopping, Rewards, ConditionRewards, Redemption, CustomerPoint, ExchangeHistory
 from pprint import pprint
 
+
+
+class ToppingS(serializers.ModelSerializer):
+
+    # all id
+    unit_id = serializers.IntegerField()
+    old_product_id = serializers.IntegerField(allow_null=True, required=False)
+    create_by_id = serializers.IntegerField()
+    update_by_id = serializers.IntegerField(allow_null=True, required=False)
+
+    class Meta:
+        model = Topping
+        fields = [
+            'id', 'img', 'code', 'name', 'is_active', 'status',
+            'remain', 'minimum', 'maximum', 'type_topping', 'warehouse', 'create_at',
+
+            # all id
+            'old_product_id',
+            'unit_id', 'create_by_id',
+            'update_by_id',
+        ]
+
+
+class ProductS(serializers.ModelSerializer):
+    category_id = serializers.IntegerField()
+    unit_id = serializers.IntegerField()
+    old_product_id = serializers.IntegerField(allow_null=True, required=False)
+    create_by_id = serializers.IntegerField()
+    update_by_id = serializers.IntegerField(allow_null=True, required=False)
+    topping_category_id = serializers.IntegerField(
+        allow_null=True, required=False)
+    class Meta:
+        model = Product
+        fields = [
+            'id', 'img', 'code', 'name',
+            'is_active', 'flavour_level', 'status',
+            'remain', 'flavour', 'minimum', 'maximum',
+            'topping_category_id', 'warehouse', 'create_at',
+            'update_at', 'type_product',
+
+            # all id
+            'old_product_id',
+            'unit_id', 'category_id', 'create_by_id',
+            'update_by_id',
+        ]
+
+class PricePackageS(serializers.Serializer):
+    class Meta:
+        model = PricePackage
+        fields = '__all__'
 
 class PointListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,7 +137,7 @@ class ItemToppingSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     topping_id = serializers.IntegerField()
     item_id = serializers.IntegerField(read_only=True)
-    topping_set = ToppingSerializer(read_only=True, source='topping')
+    topping_set = ToppingS(read_only=True, source='topping')
 
     class Meta:
         model = ItemTopping
@@ -106,7 +155,7 @@ class PackageItemSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     product_id = serializers.IntegerField()
     package_id = serializers.IntegerField(read_only=True)
-    product_set = ProductSerializer(read_only=True, source='product')
+    product_set = ProductS(read_only=True, source='product')
     itemtopping_set = ItemToppingSerializer(
         many=True, required=False, allow_null=True)
     description = serializers.CharField(required=False, allow_blank=True)
@@ -124,22 +173,6 @@ class PackageItemSerializer(serializers.ModelSerializer):
             'itemtopping_set',
         ]
 
-
-class PricePackageSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
-
-    class Meta:
-        model = PricePackage
-        fields = [
-            'id',
-            'normal_price',
-            'discount_price',
-            'sale_channel',
-            'package'
-        ]
-        read_only_fields = ('package',)
-
-
 class PromotionPackageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     create_by_id = serializers.IntegerField()
@@ -147,7 +180,7 @@ class PromotionPackageSerializer(serializers.ModelSerializer):
     description = serializers.CharField(required=False, allow_blank=True)
     packageitem_set = PackageItemSerializer(many=True)
     img = serializers.ImageField(read_only=True)
-    pricepackage_set = PricePackageSerializer(many=True)
+    pricepackage_set = PricePackageS(many=True)
 
     class Meta:
         model = PromotionPackage

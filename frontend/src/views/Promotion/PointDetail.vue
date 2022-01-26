@@ -218,8 +218,10 @@ export default {
   background-position: 50% 50%;
   background-repeat: no-repeat;
   position:relative;
-  top: -10px;
-  margin-top:21px;
+  top: 5px;
+  margin-top: 6px;
+  display: inline-block;
+
 }
 .colon {
   height: 55px;

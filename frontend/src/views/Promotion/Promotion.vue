@@ -314,10 +314,10 @@
             {{ item.promotion }}
           </div>
           <div class="col-2 w-100">
-            {{ get_price(item).normal_price }}
+            <!-- {{ get_price(item).normal_price }} -->
           </div>
           <div class="col-2 w-100">
-            {{ get_price(item).discount_price }}
+            <!-- {{ get_price(item).discount_price }} -->
           </div>
 
           <div class="col-2 w-100">

@@ -11,7 +11,7 @@ urlpatterns = [
     path('package-image/<int:pk>', views.PackageImage().as_view()),
     path('package/<int:pk>', views.PackageGET().as_view()),
     path('package-pos/<int:pk>', views.getPackagePOS().as_view()),
-    path('package-pos/', views.PackagePOS().as_view()),
+    path('package-by-sale-channel/<int:pk>', views.PackageBySaleChannel().as_view()),
     path('package-item/', views.PackageItemAPI().as_view()),
     path('package-item/<int:pk>', views.PackageItemGET().as_view()),
     path('package-item-topping/', views.ItemToppingToppingAPI().as_view()),

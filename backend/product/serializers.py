@@ -6,6 +6,38 @@ from product.models import ProductCategory, SaleChannel, Product, PriceProduct, 
 from raw_material.serializers import UnitSerializer
 from user.serializers import UserSerializer
 from pprint import pprint
+from promotion.models import PricePackage, PromotionPackage
+from promotion.serializers import PackageListSerializer
+
+class PricePackageS(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    package_set = PackageListSerializer()
+    class Meta: 
+        model = PricePackage
+        fields = [
+            'id',
+            'normal_price',
+            'discount_price',
+            'sale_channel',
+            'package',
+            'package_set'
+        ]
+        read_only_fields = ('package',)
+
+class PricePackageSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    packages = PackageListSerializer(read_only=True)
+    class Meta:
+        model = PricePackage
+        fields = [
+            'id',
+            'normal_price',
+            'discount_price',
+            'sale_channel',
+            'package',
+            'packages'
+        ]
+        read_only_fields = ('sale_channel',)
 
 
 class UpdateImageSaleS(serializers.ModelSerializer):
@@ -58,15 +90,6 @@ class ProductS(serializers.ModelSerializer):
     update_by_id = serializers.IntegerField(allow_null=True, required=False)
     topping_category_id = serializers.IntegerField(
         allow_null=True, required=False)
-    # all set
-    # category_set = ProductCategorySerializer(read_only=True, source='category')
-    # unit_set = UnitSerializer(read_only=True, source='unit')
-    # priceproduct_set = PriceProductSerializer(many=True, read_only=True)
-    # # old_product_set = serializers.IntegerField()
-    # topping_category_set = ToppingCategorySerializer(read_only=True,source="topping_category")
-    # create_by_set = UserSerializer(read_only=True, source='create_by')
-    # update_by_set = UserSerializer(read_only=True, source='update_by')
-
     class Meta:
         model = Product
         fields = [
@@ -75,11 +98,6 @@ class ProductS(serializers.ModelSerializer):
             'remain', 'flavour', 'minimum', 'maximum',
             'topping_category_id', 'warehouse', 'create_at',
             'update_at', 'type_product',
-
-            # # all set
-            # 'priceproduct_set',
-            # 'unit_set', 'category_set', 'create_by_set',
-            # 'update_by_set', 'topping_category_set',
 
             # all id
             'old_product_id',
@@ -179,10 +197,22 @@ class GetterSaleChannel(serializers.ModelSerializer):
                   'status', 'create_by', 'update_by',
                   'create_at', 'update_at']
 
+class SaleChannelS(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    img = serializers.ImageField(read_only=True)
+
+    class Meta:
+        model = SaleChannel
+        fields = ['id', 'sale_channel', 'gp', 'img',
+                  'status', 'create_by', 'update_by',
+                  'create_at', 'update_at',
+                  ]
+
 
 class SaleChannelSerializer(serializers.ModelSerializer):
     price_topping = PriceToppingSerializer(many=True, source="pricetopping")
     price_product = PriceProductSerializer(many=True, source="priceproduct")
+    price_package = PricePackageSerializer(many=True,source="pricepackage_set")
     id = serializers.IntegerField(required=False)
     img = serializers.ImageField(read_only=True)
     can_delete = serializers.BooleanField(read_only=True, required=False)
@@ -192,13 +222,15 @@ class SaleChannelSerializer(serializers.ModelSerializer):
         model = SaleChannel
         fields = ['id', 'sale_channel', 'gp', 'img',
                   'status', 'create_by', 'update_by',
-                  'create_at', 'update_at', 'price_topping', 'price_product', 'can_delete', 
+                  'create_at', 'update_at', 'price_topping', 'price_product', 
+                  'price_package', 'can_delete',
                   'qty'
                   ]
 
     def create(self, validated_data):
         price_toppings = validated_data.pop('pricetopping')
         price_products = validated_data.pop('priceproduct')
+        price_packages = validated_data.pop('pricepackage')
         sale_channel = SaleChannel.objects.create(**validated_data)
         print('finish')
         for price_topping in price_toppings:
@@ -208,6 +240,10 @@ class SaleChannelSerializer(serializers.ModelSerializer):
         for price_product in price_products:
             PriceProduct.objects.create(
                 **price_product, sale_channel=sale_channel)
+
+        for price_package in price_packages:
+            PricePackage.objects.create(
+                **price_package, sale_channel=sale_channel)
         return sale_channel
 
     def update(self, instance, validated_data):
@@ -250,6 +286,21 @@ class SaleChannelSerializer(serializers.ModelSerializer):
             c for c in validated_data['priceproduct'] if c.get('id')]
         for p in to_be_update:
             PriceProduct.objects.filter(id=p['id']).update(**p)
+
+        pricepackage_id = [c['id']
+                           for c in validated_data['pricepackage'] if c.get('id')]
+        PricePackage.objects.filter(sale_channel_id=instance.id).exclude(
+            id__in=pricepackage_id).delete()
+
+        to_be_create = [
+            c for c in validated_data['pricepackage'] if c.get('id') == None]
+        for p in to_be_create:
+            PricePackage.objects.create(**p, sale_channel_id=instance.id)
+
+        to_be_update = [
+            c for c in validated_data['pricepackage'] if c.get('id')]
+        for p in to_be_update:
+            PricePackage.objects.filter(id=p['id']).update(**p)
 
         return instance
 

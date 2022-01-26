@@ -260,7 +260,7 @@ export default {
     api_promotion.get("dbs/").then((response) => {
       this.dbs_item = response.data;
     });
-    api_product.get("sale-channel/").then((response) => {
+    api_product.get("read-sale-channel/").then((response) => {
       this.channels = response.data;
     });
     api_pos.get("payment/").then((response) => {
