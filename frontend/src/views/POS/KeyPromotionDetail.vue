@@ -327,7 +327,6 @@ export default {
       }
     },
     separate() {
-      console.log("lkadjfkajhdsfnlk");
       this.package.package_set.packageitem_set.forEach((item) => {
         console.log(item);
         if (item.product_set.type_product == 3) {

@@ -3,7 +3,7 @@ from pos.models import Order, OrderItem, OrderItemTopping, Payment
 from rest_framework import serializers
 from customer.serializers import CustomerSerializer, AddressCustomerSerializer
 from product.serializers import ProductSerializer, ToppingSerializer, GetterSaleChannel
-from promotion.serializers import PromotionPackageSerializer
+from product.serializers import PackageSerializer
 from pprint import pprint
 
 
@@ -36,7 +36,7 @@ class OrderItemToppingSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     product_set = ProductSerializer(read_only=True, source='product')
     topping_set = ToppingSerializer(read_only=True, source="topping")
-    package_set = PromotionPackageSerializer(read_only=True, source="package")
+    package_set = PackageSerializer(read_only=True, source="package")
     id = serializers.IntegerField(required=False)
     orderitemtopping_set = OrderItemToppingSerializer(
         many=True, required=False, allow_null=True)

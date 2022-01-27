@@ -3,38 +3,38 @@
     <nav-app :url_name="'DashBoard'">{{ $store.state.promotion.tab }}</nav-app>
     <!-- Head -->
     <div class="row" style="width94%;margin-left:3%;margin-right:3%;">
-      <div class="col-11 wrap-search">
+      <div class="col-9 w-100 p-0 pe-1">
         <SearchBar @search="search_by_typing" />
       </div>
-      <div style="padding: 0px;">
+      <div style="padding: 0px" class="col-3 w-100">
         <button
           v-if="$store.state.promotion.tab == 'Point'"
-          class="btn-ghost"
-          style="margin-right:0%;text-align:center;"
+          class="w-100 btn-ghost"
+          style="margin-right: 0%; text-align: center"
           @click="$router.push({ name: 'NewPoint' })"
         >
           + Point
         </button>
         <button
           v-if="$store.state.promotion.tab == 'Voucher'"
-          class="btn-ghost"
-          style="margin-right:0%;text-align:left;padding-left:8%;"
+          class="w-100 btn-ghost"
+          style="margin-right: 0%; text-align: center; padding-left: 8%"
           @click="$router.push({ name: 'NewVoucher' })"
         >
           + Voucher
         </button>
         <button
           v-if="$store.state.promotion.tab == 'Package'"
-          class="btn-ghost"
-          style="margin-right:0%;text-align:left;padding-left:8%;"
+          class="w-100 btn-ghost"
+          style="margin-right: 0%; text-align: center; padding-left: 8%"
           @click="$router.push({ name: 'NewPackage' })"
         >
           + Package
         </button>
         <button
           v-if="$store.state.promotion.tab == 'Rewards'"
-          class="btn-ghost"
-          style="margin-right:0%;text-align:left;padding-left:10%;"
+          class="w-100 btn-ghost"
+          style="margin-right: 0%; text-align: center; padding-left: 10%"
           @click="$router.push({ name: 'NewReward' })"
         >
           + Reward
@@ -85,7 +85,11 @@
             {{ item.promotion }}&nbsp;&nbsp;&nbsp;
           </div>
           <div class="col-4 w-100">
-            <SmallSwitch :value="item.status" @switch="change_status(item)" style="margin: 25px 0px 0px 80px;" />
+            <SmallSwitch
+              :value="item.status"
+              @switch="change_status(item)"
+              style="margin: 25px 0px 0px 80px"
+            />
           </div>
         </div>
 
@@ -101,7 +105,7 @@
               style="width: 64px; height: 64px"
             />
           </div>
-          <div class="col-2 w-100" style="margin-left: 15px;" v-else></div>
+          <div class="col-2 w-100" style="margin-left: 15px" v-else></div>
           <div class="col-1 w-100">
             <img
               src="../../assets/icon/edit.png"
@@ -137,7 +141,11 @@
             "
           >
             Baht <br />
-            /&nbsp;{{ item.point }} <img src="../../assets/icon/point_star.png" style="width: 40px; height: 40px; margin-bottom: 5px;">
+            /&nbsp;{{ item.point }}
+            <img
+              src="../../assets/icon/point_star.png"
+              style="width: 40px; height: 40px; margin-bottom: 5px"
+            />
           </div>
         </div>
         <div class="row" style="margin-top: 10px">
@@ -252,7 +260,15 @@
         :key="voucher.id"
       >
         <div class="row" style="font-size: 20px; color: white; line-height: 1">
-          <div class="col-4 w-100" style="padding-left: 10%; text-align: left; white-space: nowrap; overflow-x: auto;">
+          <div
+            class="col-4 w-100"
+            style="
+              padding-left: 10%;
+              text-align: left;
+              white-space: nowrap;
+              overflow-x: auto;
+            "
+          >
             {{ voucher.voucher }}
           </div>
           <div class="col-1 w-100">{{ voucher.qty }}</div>
@@ -262,7 +278,10 @@
           <div class="col-2 w-100" v-else>{{ parseInt(voucher.discount) }}</div>
           <div class="col-2 w-100">{{ format_date(voucher.end_date) }}</div>
           <div class="col-2 w-100">
-            <SmallSwitch :value="voucher.status" @switch="switch_active(voucher, 'voucher')" />
+            <SmallSwitch
+              :value="voucher.status"
+              @switch="switch_active(voucher, 'voucher')"
+            />
           </div>
           <div class="col-1 w-100">
             <img
@@ -305,7 +324,7 @@
       </div>
       <div
         class="table-item"
-        style="width: 760px; margin-left: 3%;"
+        style="width: 760px; margin-left: 3%"
         v-for="item in packages"
         :key="item.id"
       >
@@ -314,14 +333,17 @@
             {{ item.promotion }}
           </div>
           <div class="col-2 w-100">
-            <!-- {{ get_price(item).normal_price }} -->
+            {{ get_price(item).normal_price }}
           </div>
           <div class="col-2 w-100">
-            <!-- {{ get_price(item).discount_price }} -->
+            {{ get_price(item).discount_price }}
           </div>
 
           <div class="col-2 w-100">
-            <SmallSwitch :value="item.status" @switch="switch_active(item, 'package')" />
+            <SmallSwitch
+              :value="item.status"
+              @switch="switch_active(item, 'package')"
+            />
           </div>
           <div class="col-1 w-100">
             <img
@@ -375,7 +397,10 @@
         <div class="col-2 w-100">{{ reward.point }}</div>
         <div class="col-2 w-100">{{ reward.qty }}</div>
         <div class="col-2 w-100">
-          <SmallSwitch :value="reward.status" @switch="switch_active(reward, 'reward')" />
+          <SmallSwitch
+            :value="reward.status"
+            @switch="switch_active(reward, 'reward')"
+          />
         </div>
         <div class="col-1 w-100">
           <img
@@ -386,7 +411,7 @@
               })
             "
             src="../../assets/icon/edit.png"
-            style="width:95%; height:80%; margin-top:-5%;"
+            style="width: 95%; height: 80%; margin-top: -5%"
           />
         </div>
       </div>
@@ -436,24 +461,24 @@ export default {
   },
   methods: {
     change_status(item) {
-      console.log(item, "item")
-      if(item.status) {
-        item.status = false
-        const data = {status: item.status}
-        api_promotion.put(`point/${item.id}`, data).then(() => {})
+      console.log(item, "item");
+      if (item.status) {
+        item.status = false;
+        const data = { status: item.status };
+        api_promotion.put(`point/${item.id}`, data).then(() => {});
       } else {
-        if(!this.point_promotions.some(x => x.status == true)) {
-          item.status = true
-          const data = {status: item.status}
-          api_promotion.put(`point/${item.id}`, data).then(() => {})
+        if (!this.point_promotions.some((x) => x.status == true)) {
+          item.status = true;
+          const data = { status: item.status };
+          api_promotion.put(`point/${item.id}`, data).then(() => {});
         }
       }
     },
     switch_active(item, promotion) {
-      item.status = !item.status
+      item.status = !item.status;
       const data = new FormData();
-      data.append("status", item.status)
-      api_promotion.put(`${promotion}/${item.id}`, data).then(() => {})
+      data.append("status", item.status);
+      api_promotion.put(`${promotion}/${item.id}`, data).then(() => {});
     },
     select_item(item) {
       this.$store.state.promotion.tab = item;
@@ -544,9 +569,11 @@ export default {
         this.point_promotions = response.data;
         this.temp_point_promotions = response.data;
       });
-      api_promotion.get('customer-point/').then((response) => {
-        this.used_point_promotions_id = response.data.map(x => x.point_promotion_id)
-      })
+      api_promotion.get("customer-point/").then((response) => {
+        this.used_point_promotions_id = response.data.map(
+          (x) => x.point_promotion_id
+        );
+      });
     },
     format_date(date) {
       var temp_date = date.split("-");
