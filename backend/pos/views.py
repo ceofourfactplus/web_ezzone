@@ -436,7 +436,7 @@ class OrderList(APIView):
                     data = {
                         "code": i['product_set']['name'],
                         "flavour_level": 2,
-                        "product": i['product_id'],
+                        "product": i['product'],
                         "price_item": 0,
                         "total_price": 0,
                         "size": "M",
@@ -447,7 +447,7 @@ class OrderList(APIView):
                         } 
                     for t in i['itemtopping_set']:
                         data['orderitemtopping_set'].append({
-                            'topping':t['topping_id'],    
+                            'topping':t['topping'],    
                             'price_topping':0,
                             "total_price":0,
                             "amount":t['qty']
@@ -919,3 +919,4 @@ class delete_all_order(APIView):
         Order.objects.all().delete()
         Customer.objects.all().delete()
         return Response('oj')
+

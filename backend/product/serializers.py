@@ -8,6 +8,7 @@ from user.serializers import UserSerializer
 from pprint import pprint
 from promotion.models import PricePackage, PromotionPackage
 from promotion.serializers import PackageListSerializer
+from promotion.models import PackageItem, PromotionPackage,ItemTopping
 
 class PricePackageS(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
@@ -209,10 +210,112 @@ class SaleChannelS(serializers.ModelSerializer):
                   ]
 
 
+class PricePackageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PricePackage
+        fields = ['id', 'discount_price',
+                  'normal_price', 'sale_channel', 'package']
+        read_only_fields = ('package',)
+
+
+class ItemToppingSerializer(serializers.ModelSerializer):
+    topping_set = ToppingS(read_only=True,source='topping')
+    class Meta:
+        model = ItemTopping
+        read_only_fields = ('item',)
+        fields = ['id', 'item', 'total_price','topping', 'qty','topping_set']
+
+
+class PackageItemSerializer(serializers.ModelSerializer):
+    product_set = ProductS(read_only=True,source='product')
+    itemtopping_set = ItemToppingSerializer(many=True)
+    class Meta:
+        model = PackageItem
+        fields = ['id', 'qty', 'total_price', 'package',
+                  'description', 'product', 'itemtopping_set','product_set']
+        read_only_fields = ('package',)
+
+
+class PackageSerializer(serializers.ModelSerializer):
+    packageitem_set = PackageItemSerializer(many=True)
+    pricepackage_set = PricePackageSerializer(many=True)
+    img = serializers.ImageField(read_only=True)
+
+    class Meta:
+        model = PromotionPackage
+        fields = ['id', 'promotion', 'start_date', 'status',
+                  'description', 'create_at', 'create_by',
+                  'update_at', 'update_by', 'total_amount', 'amount_day', 'img', 'packageitem_set', 'pricepackage_set']
+
+    def create(self, validated_data):
+        packageitem_set = validated_data.pop('packageitem_set')
+        pricepackage_set = validated_data.pop('pricepackage_set')
+        package = PromotionPackage.objects.create(**validated_data)
+        for item in packageitem_set:
+            topping = item.pop('itemtopping_set')
+            items = PackageItem.objects.create(**item, package=package)
+            for t in topping:
+                ItemTopping.objects.create(**t, item=items)
+        for price in pricepackage_set:
+            PricePackage.objects.create(**price, package=package)
+        return package
+
+    def update(self, instance, validated_data):
+        print(validated_data.items())
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        package_item_id = [i['id']
+                           for i in validated_data['packageitem_set'] if i.get('id')]
+        PackageItem.objects.filter(package_id=instance.id).exclude(
+            id__in=package_item_id).delete()
+
+        to_be_create = [
+            i for i in validated_data['packageitem_set'] if i.get('id') == None]
+        for i in to_be_create:
+            if 'itemtopping_set' in i:
+                itemtopping_set = i.pop('itemtopping_set')
+            package_item = PackageItem.objects.create(
+                **i, package_id=instance.id)
+            for p in itemtopping_set:
+                ItemTopping.objects.create(**p, item_id=package_item.id)
+
+        to_be_update = [
+            i for i in validated_data['packageitem_set'] if i.get('id')]
+        for i in to_be_update:
+            if 'itemtopping_set' in i:
+                itemtopping_set = i.pop('itemtopping_set')
+            pi = PackageItem.objects.filter(
+                id=i['id']).update(**i, package_id=instance.id)
+            to_be_create_topping = [
+                i for i in itemtopping_set if i.get("id") == None]
+            for p in to_be_create_topping:
+                ItemTopping.objects.create(**p, item_id=pi.id)
+
+            to_be_delete_topping = [p['id'] for p in itemtopping_set]
+            for p in to_be_delete_topping:
+                ItemTopping.objects.filter(item_id=i['id']).exclude(
+                    id__in=to_be_delete_topping).delete()
+
+            to_be_update_topping = [p for p in itemtopping_set]
+            for p in to_be_update_topping:
+                print(p, 'p')
+                ItemTopping.objects.filter(id=p['id']).update(**p)
+        return validated_data
+
+class PricePackageForSaleChannel(serializers.ModelSerializer):
+    class Meta:
+        model = PricePackage
+        fields = ['id', 'discount_price',
+                  'normal_price', 'sale_channel', 'package']
+        read_only_fields = ('sale_channel',)
+
+
 class SaleChannelSerializer(serializers.ModelSerializer):
     price_topping = PriceToppingSerializer(many=True, source="pricetopping")
     price_product = PriceProductSerializer(many=True, source="priceproduct")
-    price_package = PricePackageSerializer(many=True,source="pricepackage_set")
+    price_package = PricePackageForSaleChannel(many=True,source="pricepackage_set")
     id = serializers.IntegerField(required=False)
     img = serializers.ImageField(read_only=True)
     can_delete = serializers.BooleanField(read_only=True, required=False)
@@ -230,7 +333,7 @@ class SaleChannelSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         price_toppings = validated_data.pop('pricetopping')
         price_products = validated_data.pop('priceproduct')
-        price_packages = validated_data.pop('pricepackage')
+        price_packages = validated_data.pop('pricepackage_set')
         sale_channel = SaleChannel.objects.create(**validated_data)
         print('finish')
         for price_topping in price_toppings:
@@ -288,17 +391,17 @@ class SaleChannelSerializer(serializers.ModelSerializer):
             PriceProduct.objects.filter(id=p['id']).update(**p)
 
         pricepackage_id = [c['id']
-                           for c in validated_data['pricepackage'] if c.get('id')]
+                           for c in validated_data['pricepackage_set'] if c.get('id')]
         PricePackage.objects.filter(sale_channel_id=instance.id).exclude(
             id__in=pricepackage_id).delete()
 
         to_be_create = [
-            c for c in validated_data['pricepackage'] if c.get('id') == None]
+            c for c in validated_data['pricepackage_set'] if c.get('id') == None]
         for p in to_be_create:
             PricePackage.objects.create(**p, sale_channel_id=instance.id)
 
         to_be_update = [
-            c for c in validated_data['pricepackage'] if c.get('id')]
+            c for c in validated_data['pricepackage_set'] if c.get('id')]
         for p in to_be_update:
             PricePackage.objects.filter(id=p['id']).update(**p)
 

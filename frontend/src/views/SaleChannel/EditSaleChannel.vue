@@ -375,7 +375,7 @@
               style="line-height: 100%; text-align: left"
               @click="select_product_update(item)"
             >
-              {{ item.package_set }}
+              {{ item.package_set.promotion }}
             </div>
             <div
               class="col-3 w-100"

@@ -746,16 +746,9 @@ export default {
       api_promotion.get(`package/${this.$route.params.id}`).then((response) => {
         console.log(response.data, "package");
         this.package_item = response.data;
+        this.package_items = response.data.packageitem_set;
         this.loading = false;
       });
-    },
-    fetchPackageItem() {
-      api_promotion
-        .get(`package-item/${this.$route.params.id}`)
-        .then((response) => {
-          console.log(response.data, "item");
-          this.package_items = response.data;
-        });
     },
     fetchItemTopping() {
       api_promotion
@@ -1025,9 +1018,6 @@ export default {
   },
   beforeMount() {
     this.fetchPackage();
-    this.fetchPackageItem();
-    // this.fetchItemTopping()
-    this.fetchProducts();
   },
 };
 </script>

@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 import ast
 from .models import PointPromotion, PricePackage, Rewards, ConditionRewards, Voucher, Redemption, PromotionPackage, PackageItem, ItemTopping, CustomerPoint, ExchangeHistory
-from .serializers import PackageListSerializer, PointSerializer, VoucherSerializer, PromotionPackageSerializer, PackageItemSerializer, ItemToppingSerializer, RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer, ExchangeHistorySerializer, PromotionPackageImage, PricePackageSerializer
-
+from .serializers import PackageListSerializer, PointSerializer, VoucherSerializer,  RewardsSerializer, ConditionRewardsSerializer, CustomerPointSerializer, ExchangeHistorySerializer, PromotionPackageImage, PricePackageSerializer,PromotionPackageImage
+from product.serializers import PackageSerializer, ItemToppingSerializer
 from rest_framework.parsers import FormParser, MultiPartParser
 
 
@@ -146,181 +146,47 @@ class getPackagePOS(APIView):
 
     def get(self, request, pk):
         package = PromotionPackage.objects.get(pk=pk)
-        serializer = PromotionPackageSerializer(
+        serializer = PackageSerializer(
             package, context={'request': request})
         return Response(serializer.data)
 
+class PackageImage(APIView):
+    def put(self, request, pk):
+        package = PromotionPackage.objects.get(pk=pk)
+        serializer = PromotionPackageImage(package,request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=200)
+        return Response(serializer.errors,status=400)
 
 class PackageAPI(APIView):
-    def get_object(self, pk):
-        try:
-            return PromotionPackage.objects.get(id=pk)
-        except PromotionPackage.DoesNotExist:
-            raise 404
-
     def get(self, request):
         package = PromotionPackage.objects.all()
-        serializer = PromotionPackageSerializer(package, many=True)
-        return Response(serializer.data)
-
-    def put(self, request):
-        package = PromotionPackage.objects.get(id=request.data['id'])
-        serializer = PromotionPackageSerializer(package, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        serializer = PackageSerializer(package,many=True)
+        return Response(serializer.data,status=200)
 
     def post(self, request):
-        serializer = PromotionPackageSerializer(data=request.data)
+        serializer = PackageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data,status=200)
+        return Response(serializer.errors ,status=400)
 
+class PackageDetailAPI(APIView):
 
-class PackageGET(APIView):
-    def get_object(self, pk):
-        try:
-            return PromotionPackage.objects.get(id=pk)
-        except PromotionPackage.DoesNotExist:
-            raise 404
-
-    def get(self, request, pk):
-        package = self.get_object(pk)
-        serializer = PromotionPackageSerializer(package)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        package = self.get_object(pk)
-        package.status = request.data['status']
-        package.save()
-        serializer = PromotionPackageSerializer(package)
-        return Response(serializer.data)
-
-
-class PackageImage(APIView):
-    def get_object(self, pk):
-        try:
-            return PromotionPackage.objects.get(id=pk)
-        except PromotionPackage.DoesNotExist:
-            raise 404
-
-    def put(self, request, pk):
-        package = self.get_object(pk)
-        serializer = PromotionPackageImage(package, data=request.data)
+    def put(self, request,pk):
+        package = PromotionPackage.objects.get(pk=pk)
+        serializer = PackageSerializer(package,request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=200)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data,status=200)
+        return Response(serializer.errors,status=400)
 
-        return Response(serializer.data)
-
-
-class PackageItemAPI(APIView):
-    def get_object(self, pk):
-        try:
-            return PackageItem.objects.get(id=pk)
-        except PackageItem.DoesNotExist:
-            raise 404
-
-    def get(self, request):
-        package = PackageItem.objects.all()
-        serializer = PackageItemSerializer(package, many=True)
-        return Response(serializer.data)
-
-    def put(self, request):
-        package = PackageItem.objects.get(id=request.data['id'])
-        serializer = PackageItemSerializer(package, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
-    def post(self, request):
-        serializer = PackageItemSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-class PackageItemGET(APIView):
-    def get_object(self, pk):
-        try:
-            return PackageItem.objects.filter(package_id=pk)
-        except PackageItem.DoesNotExist:
-            raise 404
-
-    def get(self, request, pk):
-        packages = self.get_object(pk)
-        print(packages, 'packages')
-        data = []
-        if len(packages) != 0:
-            for i in packages:
-                serializer = PackageItemSerializer(i)
-                data.append(serializer.data)
-        # serializer = PackageItemSerializer(packages[0])
-        return Response(data)
-
-    def put(self, request, pk):
-        toppings = ItemTopping.objects.filter(item_id=pk)
-        for i in toppings:
-            i.delete()
-        package = PackageItem.objects.get(id=pk).delete()
-        return Response('deleted')
-
-
-class ItemToppingToppingAPI(APIView):
-    def get_object(self, pk):
-        try:
-            return ItemTopping.objects.get(id=pk)
-        except ItemTopping.DoesNotExist:
-            raise 404
-
-    def get(self, request):
-        item_topping = ItemTopping.objects.all()
-        serializer = ItemToppingSerializer(item_topping, many=True)
-        return Response(serializer.data)
-
-    def put(self, request):
-        item_topping = ItemTopping.objects.get(id=request.data['id'])
-        serializer = ItemToppingSerializer(item_topping, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
-
-    def post(self, request):
-        serializer = ItemToppingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-class ItemToppingGET(APIView):
-    def get_object(self, pk):
-        data = []
-        try:
-            packages = PackageItem.objects.filter(package_id=pk)
-            for i in packages:
-                item = ItemTopping.objects.get(item_id=i.id)
-                data.append(item)
-            return data
-        except ItemTopping.DoesNotExist:
-            raise 404
-
-    def get(self, request, pk):
-        item_topping = self.get_object(pk)
-        print(item_topping, 'item_topping')
-        data = []
-        if len(item_topping) != 0:
-            for i in item_topping:
-                serializer = ItemToppingSerializer(i)
-                data.append(serializer.data)
-        return Response(data)
-
+    parser_classes = []
+    def get(self, request,pk):
+        package = PromotionPackage.objects.get(pk=pk)
+        serializer = PackageSerializer(package)
+        return Response(serializer.data,status=200)
 
 class RewardAPI(APIView):
     parser_classes = [FormParser, MultiPartParser]

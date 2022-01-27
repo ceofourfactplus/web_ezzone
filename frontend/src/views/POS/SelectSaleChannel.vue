@@ -24,15 +24,8 @@ import NavApp from "../../components/main_component/NavApp.vue";
 export default {
   components: { NavApp },
   mounted() {
-    api_product.get("sale-channel/").then((response) => {
+    api_product.get("read-sale-channel/").then((response) => {
       this.sale_channel = response.data;
-      this.sale_channel.forEach((element) => {
-        api_product
-          .get("sale-channel-update-img/" + element.id + "/")
-          .then((response) => {
-            element["img"] = response.data.img;
-          });
-      });
     });
   },
   data() {

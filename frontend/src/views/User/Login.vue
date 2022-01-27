@@ -98,9 +98,9 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          this.$router.push({ name: "DashBoard" });
           this.auth.accessToken = response.data.token;
           this.auth.userInfo = response.data.user_set;
+          this.$router.push({ name: "DashBoard" });
         })
         .catch((err) => {
           console.log(err);

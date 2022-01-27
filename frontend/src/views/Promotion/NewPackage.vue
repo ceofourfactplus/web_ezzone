@@ -114,10 +114,10 @@
         </button>
       </div>
       <div class="col-2 w-100" v-else>
-        <button class="btn-ghost" @click="add_menu = true">+ New</button>
+        <button class="btn-ghost" style="white-space: nowrap;" @click="add_menu = true">+ New</button>
       </div>
       <div class="col-3 w-100">
-        <button class="btn-save" @click="delete_pip()">
+        <button class="btn-save" style="white-space: nowrap;" @click="delete_pip()">
           <span class="icon-save"></span>Delete
         </button>
       </div>
@@ -750,7 +750,7 @@ export default {
       const packageitem = [];
       this.package_items.forEach((element) => {
         var pi = {
-          product_id: element.product.id,
+          product: element.product.id,
           qty: element.qty,
           total_price: element.price,
           description: element.description,
@@ -759,7 +759,7 @@ export default {
         if (element.topping.length != 0) {
           element.topping.forEach((el) => {
             pi.itemtopping_set.push({
-              topping_id: el.id,
+              topping: el.id,
               total_price: parseInt(el.pricetopping_set[0].price),
               qty: el.remain,
             });
@@ -781,8 +781,7 @@ export default {
         description: this.description,
         total_amount: this.package_items.length,
         status: this.status,
-        update_by_id: this.$store.state.auth.userInfo.id,
-        create_by_id: this.$store.state.auth.userInfo.id,
+        create_by: this.$store.state.auth.userInfo.id,
         packageitem_set: packageitem,
       };
       console.log(data, "data");

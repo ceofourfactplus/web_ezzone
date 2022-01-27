@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-app @back="$router.push({ name: 'SelectReport' })"
+    <nav-app :url_name="'SelectReport'"
       ><span style="text-transform: capitalize">{{ $route.params.type }}</span>
       Report</nav-app
     >
