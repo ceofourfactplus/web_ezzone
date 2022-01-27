@@ -260,7 +260,7 @@ export default {
               permissions: ["is_staff"],
               img: require("../../src/assets/icon/report.png"),
               txt: "Report",
-              link: "DashBoard",
+              link: "SelectReport",
             },
             {
               permissions: ["is_staff"],
